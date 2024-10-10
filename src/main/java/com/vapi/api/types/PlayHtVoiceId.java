@@ -13,13 +13,13 @@ import com.vapi.api.core.ObjectMappers;
 import java.io.IOException;
 import java.util.Objects;
 
-@JsonDeserialize(using = PlayHtVoiceVoiceId.Deserializer.class)
-public final class PlayHtVoiceVoiceId {
+@JsonDeserialize(using = PlayHtVoiceId.Deserializer.class)
+public final class PlayHtVoiceId {
     private final Object value;
 
     private final int type;
 
-    private PlayHtVoiceVoiceId(Object value, int type) {
+    private PlayHtVoiceId(Object value, int type) {
         this.value = value;
         this.type = type;
     }
@@ -31,7 +31,7 @@ public final class PlayHtVoiceVoiceId {
 
     public <T> T visit(Visitor<T> visitor) {
         if (this.type == 0) {
-            return visitor.visit((PlayHtVoiceVoiceId) this.value);
+            return visitor.visit((PlayHtVoiceIdEnum) this.value);
         } else if (this.type == 1) {
             return visitor.visit((String) this.value);
         }
@@ -41,10 +41,10 @@ public final class PlayHtVoiceVoiceId {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof PlayHtVoiceVoiceId && equalTo((PlayHtVoiceVoiceId) other);
+        return other instanceof PlayHtVoiceId && equalTo((PlayHtVoiceId) other);
     }
 
-    private boolean equalTo(PlayHtVoiceVoiceId other) {
+    private boolean equalTo(PlayHtVoiceId other) {
         return value.equals(other.value);
     }
 
@@ -58,30 +58,30 @@ public final class PlayHtVoiceVoiceId {
         return this.value.toString();
     }
 
-    public static PlayHtVoiceVoiceId of(PlayHtVoiceVoiceId value) {
-        return new PlayHtVoiceVoiceId(value, 0);
+    public static PlayHtVoiceId of(PlayHtVoiceIdEnum value) {
+        return new PlayHtVoiceId(value, 0);
     }
 
-    public static PlayHtVoiceVoiceId of(String value) {
-        return new PlayHtVoiceVoiceId(value, 1);
+    public static PlayHtVoiceId of(String value) {
+        return new PlayHtVoiceId(value, 1);
     }
 
     public interface Visitor<T> {
-        T visit(PlayHtVoiceVoiceId value);
+        T visit(PlayHtVoiceIdEnum value);
 
         T visit(String value);
     }
 
-    static final class Deserializer extends StdDeserializer<PlayHtVoiceVoiceId> {
+    static final class Deserializer extends StdDeserializer<PlayHtVoiceId> {
         Deserializer() {
-            super(PlayHtVoiceVoiceId.class);
+            super(PlayHtVoiceId.class);
         }
 
         @java.lang.Override
-        public PlayHtVoiceVoiceId deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public PlayHtVoiceId deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
-                return of(ObjectMappers.JSON_MAPPER.convertValue(value, PlayHtVoiceVoiceId.class));
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, PlayHtVoiceIdEnum.class));
             } catch (IllegalArgumentException e) {
             }
             try {

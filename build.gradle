@@ -45,14 +45,14 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'dev.vapi'
-            artifactId = 'vapi-java-sdk'
-            version = '0.0.0-alpha3'
+            artifactId = 'server-sdk'
+            version = '0.0.0-alpha6'
             from components.java
             pom {
                 scm {
-                    connection = 'scm:git:git://github.com/fern-demo/vapi-java-sdk.git'
-                    developerConnection = 'scm:git:git://github.com/fern-demo/vapi-java-sdk.git'
-                    url = 'https://github.com/fern-demo/vapi-java-sdk'
+                    connection = 'scm:git:git://github.com/VapiAI/server-sdk-java.git'
+                    developerConnection = 'scm:git:git://github.com/VapiAI/server-sdk-java.git'
+                    url = 'https://github.com/VapiAI/server-sdk-java'
                 }
             }
         }

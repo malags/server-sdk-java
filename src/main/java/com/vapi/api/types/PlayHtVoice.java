@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayHtVoice {
     private final Optional<Boolean> fillerInjectionEnabled;
 
-    private final PlayHtVoiceVoiceId voiceId;
+    private final PlayHtVoiceId voiceId;
 
     private final Optional<Double> speed;
 
@@ -43,7 +43,7 @@ public final class PlayHtVoice {
 
     private PlayHtVoice(
             Optional<Boolean> fillerInjectionEnabled,
-            PlayHtVoiceVoiceId voiceId,
+            PlayHtVoiceId voiceId,
             Optional<Double> speed,
             Optional<Double> temperature,
             Optional<PlayHtVoiceEmotion> emotion,
@@ -77,7 +77,7 @@ public final class PlayHtVoice {
      * @return This is the provider-specific ID that will be used.
      */
     @JsonProperty("voiceId")
-    public PlayHtVoiceVoiceId getVoiceId() {
+    public PlayHtVoiceId getVoiceId() {
         return voiceId;
     }
 
@@ -184,7 +184,7 @@ public final class PlayHtVoice {
     }
 
     public interface VoiceIdStage {
-        _FinalStage voiceId(@NotNull PlayHtVoiceVoiceId voiceId);
+        _FinalStage voiceId(@NotNull PlayHtVoiceId voiceId);
 
         Builder from(PlayHtVoice other);
     }
@@ -227,7 +227,7 @@ public final class PlayHtVoice {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements VoiceIdStage, _FinalStage {
-        private PlayHtVoiceVoiceId voiceId;
+        private PlayHtVoiceId voiceId;
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
@@ -270,7 +270,7 @@ public final class PlayHtVoice {
          */
         @java.lang.Override
         @JsonSetter("voiceId")
-        public _FinalStage voiceId(@NotNull PlayHtVoiceVoiceId voiceId) {
+        public _FinalStage voiceId(@NotNull PlayHtVoiceId voiceId) {
             this.voiceId = Objects.requireNonNull(voiceId, "voiceId must not be null");
             return this;
         }

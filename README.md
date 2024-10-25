@@ -11,7 +11,7 @@ Add the dependency in your `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.vapi:vapi-java:0.x.x'
+    implementation 'dev.vapi:server-sdk:0.x.x'
 }
 ```
 
@@ -21,8 +21,8 @@ Add the dependency in your `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>com.vapi</groupId>
-    <artifactId>vapi-java</artifactId>
+    <groupId>dev.vapi</groupId>
+    <artifactId>server-sdk</artifactId>
     <version>0.x.x</version>
 </dependency>
 ```

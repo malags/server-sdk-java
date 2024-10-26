@@ -37,7 +37,7 @@ public final class LogsGetRequest {
 
     private final Optional<String> callId;
 
-    private final Optional<Double> page;
+    private final Optional<Integer> page;
 
     private final Optional<LogsGetRequestSortOrder> sortOrder;
 
@@ -69,7 +69,7 @@ public final class LogsGetRequest {
             Optional<String> customerId,
             Optional<String> squadId,
             Optional<String> callId,
-            Optional<Double> page,
+            Optional<Integer> page,
             Optional<LogsGetRequestSortOrder> sortOrder,
             Optional<Double> limit,
             Optional<OffsetDateTime> createdAtGt,
@@ -162,7 +162,7 @@ public final class LogsGetRequest {
      * @return This is the page number to return. Defaults to 1.
      */
     @JsonProperty("page")
-    public Optional<Double> getPage() {
+    public Optional<Integer> getPage() {
         return page;
     }
 
@@ -326,7 +326,7 @@ public final class LogsGetRequest {
 
         private Optional<String> callId = Optional.empty();
 
-        private Optional<Double> page = Optional.empty();
+        private Optional<Integer> page = Optional.empty();
 
         private Optional<LogsGetRequestSortOrder> sortOrder = Optional.empty();
 
@@ -453,12 +453,12 @@ public final class LogsGetRequest {
         }
 
         @JsonSetter(value = "page", nulls = Nulls.SKIP)
-        public Builder page(Optional<Double> page) {
+        public Builder page(Optional<Integer> page) {
             this.page = page;
             return this;
         }
 
-        public Builder page(Double page) {
+        public Builder page(Integer page) {
             this.page = Optional.ofNullable(page);
             return this;
         }

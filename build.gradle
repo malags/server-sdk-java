@@ -46,7 +46,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'dev.vapi'
             artifactId = 'server-sdk'
-            version = '0.0.0-alpha6'
+            version = '0.1.0'
             from components.java
             pom {
                 scm {

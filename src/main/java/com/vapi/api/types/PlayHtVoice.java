@@ -21,8 +21,6 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlayHtVoice.Builder.class)
 public final class PlayHtVoice {
-    private final Optional<Boolean> fillerInjectionEnabled;
-
     private final PlayHtVoiceId voiceId;
 
     private final Optional<Double> speed;
@@ -37,12 +35,17 @@ public final class PlayHtVoice {
 
     private final Optional<Double> textGuidance;
 
+    private final Optional<PlayHtVoiceModel> model;
+
+    private final Optional<PlayHtVoiceLanguage> language;
+
     private final Optional<ChunkPlan> chunkPlan;
+
+    private final Optional<FallbackPlan> fallbackPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private PlayHtVoice(
-            Optional<Boolean> fillerInjectionEnabled,
             PlayHtVoiceId voiceId,
             Optional<Double> speed,
             Optional<Double> temperature,
@@ -50,9 +53,11 @@ public final class PlayHtVoice {
             Optional<Double> voiceGuidance,
             Optional<Double> styleGuidance,
             Optional<Double> textGuidance,
+            Optional<PlayHtVoiceModel> model,
+            Optional<PlayHtVoiceLanguage> language,
             Optional<ChunkPlan> chunkPlan,
+            Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
-        this.fillerInjectionEnabled = fillerInjectionEnabled;
         this.voiceId = voiceId;
         this.speed = speed;
         this.temperature = temperature;
@@ -60,17 +65,11 @@ public final class PlayHtVoice {
         this.voiceGuidance = voiceGuidance;
         this.styleGuidance = styleGuidance;
         this.textGuidance = textGuidance;
+        this.model = model;
+        this.language = language;
         this.chunkPlan = chunkPlan;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This determines whether fillers are injected into the model output before inputting it into the voice provider.
-     * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-     */
-    @JsonProperty("fillerInjectionEnabled")
-    public Optional<Boolean> getFillerInjectionEnabled() {
-        return fillerInjectionEnabled;
     }
 
     /**
@@ -130,11 +129,35 @@ public final class PlayHtVoice {
     }
 
     /**
+     * @return Playht voice model/engine to use.
+     */
+    @JsonProperty("model")
+    public Optional<PlayHtVoiceModel> getModel() {
+        return model;
+    }
+
+    /**
+     * @return The language to use for the speech.
+     */
+    @JsonProperty("language")
+    public Optional<PlayHtVoiceLanguage> getLanguage() {
+        return language;
+    }
+
+    /**
      * @return This is the plan for chunking the model output before it is sent to the voice provider.
      */
     @JsonProperty("chunkPlan")
     public Optional<ChunkPlan> getChunkPlan() {
         return chunkPlan;
+    }
+
+    /**
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+     */
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackPlan> getFallbackPlan() {
+        return fallbackPlan;
     }
 
     @java.lang.Override
@@ -149,21 +172,22 @@ public final class PlayHtVoice {
     }
 
     private boolean equalTo(PlayHtVoice other) {
-        return fillerInjectionEnabled.equals(other.fillerInjectionEnabled)
-                && voiceId.equals(other.voiceId)
+        return voiceId.equals(other.voiceId)
                 && speed.equals(other.speed)
                 && temperature.equals(other.temperature)
                 && emotion.equals(other.emotion)
                 && voiceGuidance.equals(other.voiceGuidance)
                 && styleGuidance.equals(other.styleGuidance)
                 && textGuidance.equals(other.textGuidance)
-                && chunkPlan.equals(other.chunkPlan);
+                && model.equals(other.model)
+                && language.equals(other.language)
+                && chunkPlan.equals(other.chunkPlan)
+                && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.fillerInjectionEnabled,
                 this.voiceId,
                 this.speed,
                 this.temperature,
@@ -171,7 +195,10 @@ public final class PlayHtVoice {
                 this.voiceGuidance,
                 this.styleGuidance,
                 this.textGuidance,
-                this.chunkPlan);
+                this.model,
+                this.language,
+                this.chunkPlan,
+                this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -191,10 +218,6 @@ public final class PlayHtVoice {
 
     public interface _FinalStage {
         PlayHtVoice build();
-
-        _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled);
-
-        _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled);
 
         _FinalStage speed(Optional<Double> speed);
 
@@ -220,16 +243,34 @@ public final class PlayHtVoice {
 
         _FinalStage textGuidance(Double textGuidance);
 
+        _FinalStage model(Optional<PlayHtVoiceModel> model);
+
+        _FinalStage model(PlayHtVoiceModel model);
+
+        _FinalStage language(Optional<PlayHtVoiceLanguage> language);
+
+        _FinalStage language(PlayHtVoiceLanguage language);
+
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
+
+        _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
+
+        _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements VoiceIdStage, _FinalStage {
         private PlayHtVoiceId voiceId;
 
+        private Optional<FallbackPlan> fallbackPlan = Optional.empty();
+
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
+
+        private Optional<PlayHtVoiceLanguage> language = Optional.empty();
+
+        private Optional<PlayHtVoiceModel> model = Optional.empty();
 
         private Optional<Double> textGuidance = Optional.empty();
 
@@ -243,8 +284,6 @@ public final class PlayHtVoice {
 
         private Optional<Double> speed = Optional.empty();
 
-        private Optional<Boolean> fillerInjectionEnabled = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -252,7 +291,6 @@ public final class PlayHtVoice {
 
         @java.lang.Override
         public Builder from(PlayHtVoice other) {
-            fillerInjectionEnabled(other.getFillerInjectionEnabled());
             voiceId(other.getVoiceId());
             speed(other.getSpeed());
             temperature(other.getTemperature());
@@ -260,7 +298,10 @@ public final class PlayHtVoice {
             voiceGuidance(other.getVoiceGuidance());
             styleGuidance(other.getStyleGuidance());
             textGuidance(other.getTextGuidance());
+            model(other.getModel());
+            language(other.getLanguage());
             chunkPlan(other.getChunkPlan());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -272,6 +313,23 @@ public final class PlayHtVoice {
         @JsonSetter("voiceId")
         public _FinalStage voiceId(@NotNull PlayHtVoiceId voiceId) {
             this.voiceId = Objects.requireNonNull(voiceId, "voiceId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackPlan(FallbackPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
             return this;
         }
 
@@ -289,6 +347,40 @@ public final class PlayHtVoice {
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
             this.chunkPlan = chunkPlan;
+            return this;
+        }
+
+        /**
+         * <p>The language to use for the speech.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage language(PlayHtVoiceLanguage language) {
+            this.language = Optional.ofNullable(language);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "language", nulls = Nulls.SKIP)
+        public _FinalStage language(Optional<PlayHtVoiceLanguage> language) {
+            this.language = language;
+            return this;
+        }
+
+        /**
+         * <p>Playht voice model/engine to use.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage model(PlayHtVoiceModel model) {
+            this.model = Optional.ofNullable(model);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "model", nulls = Nulls.SKIP)
+        public _FinalStage model(Optional<PlayHtVoiceModel> model) {
+            this.model = model;
             return this;
         }
 
@@ -394,28 +486,9 @@ public final class PlayHtVoice {
             return this;
         }
 
-        /**
-         * <p>This determines whether fillers are injected into the model output before inputting it into the voice provider.</p>
-         * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = Optional.ofNullable(fillerInjectionEnabled);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "fillerInjectionEnabled", nulls = Nulls.SKIP)
-        public _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = fillerInjectionEnabled;
-            return this;
-        }
-
         @java.lang.Override
         public PlayHtVoice build() {
             return new PlayHtVoice(
-                    fillerInjectionEnabled,
                     voiceId,
                     speed,
                     temperature,
@@ -423,7 +496,10 @@ public final class PlayHtVoice {
                     voiceGuidance,
                     styleGuidance,
                     textGuidance,
+                    model,
+                    language,
                     chunkPlan,
+                    fallbackPlan,
                     additionalProperties);
         }
     }

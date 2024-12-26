@@ -6,6 +6,8 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum OpenAiModelModel {
+    GPT_4_O_REALTIME_PREVIEW_20241001("gpt-4o-realtime-preview-2024-10-01"),
+
     GPT_4_O_MINI("gpt-4o-mini"),
 
     GPT_4_O_MINI_20240718("gpt-4o-mini-2024-07-18"),
@@ -15,6 +17,8 @@ public enum OpenAiModelModel {
     GPT_4_O_20240513("gpt-4o-2024-05-13"),
 
     GPT_4_O_20240806("gpt-4o-2024-08-06"),
+
+    GPT_4_O_20241120("gpt-4o-2024-11-20"),
 
     GPT_4_TURBO("gpt-4-turbo"),
 

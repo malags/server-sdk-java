@@ -17,24 +17,41 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BlockStartMessage.Builder.class)
 public final class BlockStartMessage {
+    private final Optional<List<TextContent>> contents;
+
     private final Optional<List<BlockStartMessageConditionsItem>> conditions;
 
-    private final String content;
+    private final Optional<String> content;
 
     private final Map<String, Object> additionalProperties;
 
     private BlockStartMessage(
+            Optional<List<TextContent>> contents,
             Optional<List<BlockStartMessageConditionsItem>> conditions,
-            String content,
+            Optional<String> content,
             Map<String, Object> additionalProperties) {
+        this.contents = contents;
         this.conditions = conditions;
         this.content = content;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is an alternative to the <code>content</code> property. It allows to specify variants of the same content, one per language.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>If your assistants are multilingual, you can provide content for each language.</li>
+     * <li>If you don't provide content for a language, the first item in the array will be automatically translated to the active language at that moment.</li>
+     * </ul>
+     * <p>This will override the <code>content</code> property.</p>
+     */
+    @JsonProperty("contents")
+    public Optional<List<TextContent>> getContents() {
+        return contents;
     }
 
     /**
@@ -49,7 +66,7 @@ public final class BlockStartMessage {
      * @return This is the content that the assistant will say when this message is triggered.
      */
     @JsonProperty("content")
-    public String getContent() {
+    public Optional<String> getContent() {
         return content;
     }
 
@@ -65,12 +82,12 @@ public final class BlockStartMessage {
     }
 
     private boolean equalTo(BlockStartMessage other) {
-        return conditions.equals(other.conditions) && content.equals(other.content);
+        return contents.equals(other.contents) && conditions.equals(other.conditions) && content.equals(other.content);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conditions, this.content);
+        return Objects.hash(this.contents, this.conditions, this.content);
     }
 
     @java.lang.Override
@@ -78,73 +95,65 @@ public final class BlockStartMessage {
         return ObjectMappers.stringify(this);
     }
 
-    public static ContentStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ContentStage {
-        _FinalStage content(@NotNull String content);
-
-        Builder from(BlockStartMessage other);
-    }
-
-    public interface _FinalStage {
-        BlockStartMessage build();
-
-        _FinalStage conditions(Optional<List<BlockStartMessageConditionsItem>> conditions);
-
-        _FinalStage conditions(List<BlockStartMessageConditionsItem> conditions);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ContentStage, _FinalStage {
-        private String content;
+    public static final class Builder {
+        private Optional<List<TextContent>> contents = Optional.empty();
 
         private Optional<List<BlockStartMessageConditionsItem>> conditions = Optional.empty();
+
+        private Optional<String> content = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(BlockStartMessage other) {
+            contents(other.getContents());
             conditions(other.getConditions());
             content(other.getContent());
             return this;
         }
 
-        /**
-         * <p>This is the content that the assistant will say when this message is triggered.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("content")
-        public _FinalStage content(@NotNull String content) {
-            this.content = Objects.requireNonNull(content, "content must not be null");
+        @JsonSetter(value = "contents", nulls = Nulls.SKIP)
+        public Builder contents(Optional<List<TextContent>> contents) {
+            this.contents = contents;
             return this;
         }
 
-        /**
-         * <p>This is an optional array of conditions that must be met for this message to be triggered.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage conditions(List<BlockStartMessageConditionsItem> conditions) {
-            this.conditions = Optional.ofNullable(conditions);
+        public Builder contents(List<TextContent> contents) {
+            this.contents = Optional.ofNullable(contents);
             return this;
         }
 
-        @java.lang.Override
         @JsonSetter(value = "conditions", nulls = Nulls.SKIP)
-        public _FinalStage conditions(Optional<List<BlockStartMessageConditionsItem>> conditions) {
+        public Builder conditions(Optional<List<BlockStartMessageConditionsItem>> conditions) {
             this.conditions = conditions;
             return this;
         }
 
-        @java.lang.Override
+        public Builder conditions(List<BlockStartMessageConditionsItem> conditions) {
+            this.conditions = Optional.ofNullable(conditions);
+            return this;
+        }
+
+        @JsonSetter(value = "content", nulls = Nulls.SKIP)
+        public Builder content(Optional<String> content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder content(String content) {
+            this.content = Optional.ofNullable(content);
+            return this;
+        }
+
         public BlockStartMessage build() {
-            return new BlockStartMessage(conditions, content, additionalProperties);
+            return new BlockStartMessage(contents, conditions, content, additionalProperties);
         }
     }
 }

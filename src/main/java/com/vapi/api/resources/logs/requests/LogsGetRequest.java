@@ -27,6 +27,8 @@ public final class LogsGetRequest {
 
     private final Optional<LogsGetRequestType> type;
 
+    private final Optional<String> webhookType;
+
     private final Optional<String> assistantId;
 
     private final Optional<String> phoneNumberId;
@@ -37,7 +39,7 @@ public final class LogsGetRequest {
 
     private final Optional<String> callId;
 
-    private final Optional<Integer> page;
+    private final Optional<Double> page;
 
     private final Optional<LogsGetRequestSortOrder> sortOrder;
 
@@ -64,12 +66,13 @@ public final class LogsGetRequest {
     private LogsGetRequest(
             Optional<String> orgId,
             Optional<LogsGetRequestType> type,
+            Optional<String> webhookType,
             Optional<String> assistantId,
             Optional<String> phoneNumberId,
             Optional<String> customerId,
             Optional<String> squadId,
             Optional<String> callId,
-            Optional<Integer> page,
+            Optional<Double> page,
             Optional<LogsGetRequestSortOrder> sortOrder,
             Optional<Double> limit,
             Optional<OffsetDateTime> createdAtGt,
@@ -83,6 +86,7 @@ public final class LogsGetRequest {
             Map<String, Object> additionalProperties) {
         this.orgId = orgId;
         this.type = type;
+        this.webhookType = webhookType;
         this.assistantId = assistantId;
         this.phoneNumberId = phoneNumberId;
         this.customerId = customerId;
@@ -116,6 +120,14 @@ public final class LogsGetRequest {
     @JsonProperty("type")
     public Optional<LogsGetRequestType> getType() {
         return type;
+    }
+
+    /**
+     * @return This is the type of the webhook, given the log is from a webhook.
+     */
+    @JsonProperty("webhookType")
+    public Optional<String> getWebhookType() {
+        return webhookType;
     }
 
     /**
@@ -162,7 +174,7 @@ public final class LogsGetRequest {
      * @return This is the page number to return. Defaults to 1.
      */
     @JsonProperty("page")
-    public Optional<Integer> getPage() {
+    public Optional<Double> getPage() {
         return page;
     }
 
@@ -260,6 +272,7 @@ public final class LogsGetRequest {
     private boolean equalTo(LogsGetRequest other) {
         return orgId.equals(other.orgId)
                 && type.equals(other.type)
+                && webhookType.equals(other.webhookType)
                 && assistantId.equals(other.assistantId)
                 && phoneNumberId.equals(other.phoneNumberId)
                 && customerId.equals(other.customerId)
@@ -283,6 +296,7 @@ public final class LogsGetRequest {
         return Objects.hash(
                 this.orgId,
                 this.type,
+                this.webhookType,
                 this.assistantId,
                 this.phoneNumberId,
                 this.customerId,
@@ -316,6 +330,8 @@ public final class LogsGetRequest {
 
         private Optional<LogsGetRequestType> type = Optional.empty();
 
+        private Optional<String> webhookType = Optional.empty();
+
         private Optional<String> assistantId = Optional.empty();
 
         private Optional<String> phoneNumberId = Optional.empty();
@@ -326,7 +342,7 @@ public final class LogsGetRequest {
 
         private Optional<String> callId = Optional.empty();
 
-        private Optional<Integer> page = Optional.empty();
+        private Optional<Double> page = Optional.empty();
 
         private Optional<LogsGetRequestSortOrder> sortOrder = Optional.empty();
 
@@ -356,6 +372,7 @@ public final class LogsGetRequest {
         public Builder from(LogsGetRequest other) {
             orgId(other.getOrgId());
             type(other.getType());
+            webhookType(other.getWebhookType());
             assistantId(other.getAssistantId());
             phoneNumberId(other.getPhoneNumberId());
             customerId(other.getCustomerId());
@@ -394,6 +411,17 @@ public final class LogsGetRequest {
 
         public Builder type(LogsGetRequestType type) {
             this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        @JsonSetter(value = "webhookType", nulls = Nulls.SKIP)
+        public Builder webhookType(Optional<String> webhookType) {
+            this.webhookType = webhookType;
+            return this;
+        }
+
+        public Builder webhookType(String webhookType) {
+            this.webhookType = Optional.ofNullable(webhookType);
             return this;
         }
 
@@ -453,12 +481,12 @@ public final class LogsGetRequest {
         }
 
         @JsonSetter(value = "page", nulls = Nulls.SKIP)
-        public Builder page(Optional<Integer> page) {
+        public Builder page(Optional<Double> page) {
             this.page = page;
             return this;
         }
 
-        public Builder page(Integer page) {
+        public Builder page(Double page) {
             this.page = Optional.ofNullable(page);
             return this;
         }
@@ -577,6 +605,7 @@ public final class LogsGetRequest {
             return new LogsGetRequest(
                     orgId,
                     type,
+                    webhookType,
                     assistantId,
                     phoneNumberId,
                     customerId,

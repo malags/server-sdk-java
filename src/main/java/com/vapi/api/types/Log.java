@@ -22,11 +22,13 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Log.Builder.class)
 public final class Log {
-    private final double time;
+    private final String time;
 
     private final String orgId;
 
     private final LogType type;
+
+    private final Optional<String> webhookType;
 
     private final Optional<LogResource> resource;
 
@@ -71,9 +73,10 @@ public final class Log {
     private final Map<String, Object> additionalProperties;
 
     private Log(
-            double time,
+            String time,
             String orgId,
             LogType type,
+            Optional<String> webhookType,
             Optional<LogResource> resource,
             double requestDurationSeconds,
             String requestStartedAt,
@@ -98,6 +101,7 @@ public final class Log {
         this.time = time;
         this.orgId = orgId;
         this.type = type;
+        this.webhookType = webhookType;
         this.resource = resource;
         this.requestDurationSeconds = requestDurationSeconds;
         this.requestStartedAt = requestStartedAt;
@@ -125,7 +129,7 @@ public final class Log {
      * @return This is the timestamp at which the log was written.
      */
     @JsonProperty("time")
-    public double getTime() {
+    public String getTime() {
         return time;
     }
 
@@ -143,6 +147,14 @@ public final class Log {
     @JsonProperty("type")
     public LogType getType() {
         return type;
+    }
+
+    /**
+     * @return This is the type of the webhook, given the log is from a webhook.
+     */
+    @JsonProperty("webhookType")
+    public Optional<String> getWebhookType() {
+        return webhookType;
     }
 
     /**
@@ -317,9 +329,10 @@ public final class Log {
     }
 
     private boolean equalTo(Log other) {
-        return time == other.time
+        return time.equals(other.time)
                 && orgId.equals(other.orgId)
                 && type.equals(other.type)
+                && webhookType.equals(other.webhookType)
                 && resource.equals(other.resource)
                 && requestDurationSeconds == other.requestDurationSeconds
                 && requestStartedAt.equals(other.requestStartedAt)
@@ -348,6 +361,7 @@ public final class Log {
                 this.time,
                 this.orgId,
                 this.type,
+                this.webhookType,
                 this.resource,
                 this.requestDurationSeconds,
                 this.requestStartedAt,
@@ -380,7 +394,7 @@ public final class Log {
     }
 
     public interface TimeStage {
-        OrgIdStage time(double time);
+        OrgIdStage time(@NotNull String time);
 
         Builder from(Log other);
     }
@@ -423,6 +437,10 @@ public final class Log {
 
     public interface _FinalStage {
         Log build();
+
+        _FinalStage webhookType(Optional<String> webhookType);
+
+        _FinalStage webhookType(String webhookType);
 
         _FinalStage resource(Optional<LogResource> resource);
 
@@ -492,7 +510,7 @@ public final class Log {
                     RequestPathStage,
                     ResponseHttpCodeStage,
                     _FinalStage {
-        private double time;
+        private String time;
 
         private String orgId;
 
@@ -538,6 +556,8 @@ public final class Log {
 
         private Optional<LogResource> resource = Optional.empty();
 
+        private Optional<String> webhookType = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -548,6 +568,7 @@ public final class Log {
             time(other.getTime());
             orgId(other.getOrgId());
             type(other.getType());
+            webhookType(other.getWebhookType());
             resource(other.getResource());
             requestDurationSeconds(other.getRequestDurationSeconds());
             requestStartedAt(other.getRequestStartedAt());
@@ -577,8 +598,8 @@ public final class Log {
          */
         @java.lang.Override
         @JsonSetter("time")
-        public OrgIdStage time(double time) {
-            this.time = time;
+        public OrgIdStage time(@NotNull String time) {
+            this.time = Objects.requireNonNull(time, "time must not be null");
             return this;
         }
 
@@ -913,12 +934,30 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the type of the webhook, given the log is from a webhook.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage webhookType(String webhookType) {
+            this.webhookType = Optional.ofNullable(webhookType);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "webhookType", nulls = Nulls.SKIP)
+        public _FinalStage webhookType(Optional<String> webhookType) {
+            this.webhookType = webhookType;
+            return this;
+        }
+
         @java.lang.Override
         public Log build() {
             return new Log(
                     time,
                     orgId,
                     type,
+                    webhookType,
                     resource,
                     requestDurationSeconds,
                     requestStartedAt,

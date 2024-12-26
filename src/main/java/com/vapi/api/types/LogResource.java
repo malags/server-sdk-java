@@ -6,11 +6,27 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum LogResource {
+    ORG("org"),
+
     ASSISTANT("assistant"),
+
+    ANALYTICS("analytics"),
+
+    CREDENTIAL("credential"),
 
     PHONE_NUMBER("phone-number"),
 
+    BLOCK("block"),
+
+    VOICE_LIBRARY("voice-library"),
+
+    PROVIDER("provider"),
+
     TOOL("tool"),
+
+    TOKEN("token"),
+
+    TEMPLATE("template"),
 
     SQUAD("squad"),
 

@@ -21,36 +21,27 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AzureVoice.Builder.class)
 public final class AzureVoice {
-    private final Optional<Boolean> fillerInjectionEnabled;
-
     private final AzureVoiceId voiceId;
+
+    private final Optional<ChunkPlan> chunkPlan;
 
     private final Optional<Double> speed;
 
-    private final Optional<ChunkPlan> chunkPlan;
+    private final Optional<FallbackPlan> fallbackPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private AzureVoice(
-            Optional<Boolean> fillerInjectionEnabled,
             AzureVoiceId voiceId,
-            Optional<Double> speed,
             Optional<ChunkPlan> chunkPlan,
+            Optional<Double> speed,
+            Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
-        this.fillerInjectionEnabled = fillerInjectionEnabled;
         this.voiceId = voiceId;
-        this.speed = speed;
         this.chunkPlan = chunkPlan;
+        this.speed = speed;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This determines whether fillers are injected into the model output before inputting it into the voice provider.
-     * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-     */
-    @JsonProperty("fillerInjectionEnabled")
-    public Optional<Boolean> getFillerInjectionEnabled() {
-        return fillerInjectionEnabled;
     }
 
     /**
@@ -62,6 +53,14 @@ public final class AzureVoice {
     }
 
     /**
+     * @return This is the plan for chunking the model output before it is sent to the voice provider.
+     */
+    @JsonProperty("chunkPlan")
+    public Optional<ChunkPlan> getChunkPlan() {
+        return chunkPlan;
+    }
+
+    /**
      * @return This is the speed multiplier that will be used.
      */
     @JsonProperty("speed")
@@ -70,11 +69,11 @@ public final class AzureVoice {
     }
 
     /**
-     * @return This is the plan for chunking the model output before it is sent to the voice provider.
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
      */
-    @JsonProperty("chunkPlan")
-    public Optional<ChunkPlan> getChunkPlan() {
-        return chunkPlan;
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackPlan> getFallbackPlan() {
+        return fallbackPlan;
     }
 
     @java.lang.Override
@@ -89,15 +88,15 @@ public final class AzureVoice {
     }
 
     private boolean equalTo(AzureVoice other) {
-        return fillerInjectionEnabled.equals(other.fillerInjectionEnabled)
-                && voiceId.equals(other.voiceId)
+        return voiceId.equals(other.voiceId)
+                && chunkPlan.equals(other.chunkPlan)
                 && speed.equals(other.speed)
-                && chunkPlan.equals(other.chunkPlan);
+                && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.fillerInjectionEnabled, this.voiceId, this.speed, this.chunkPlan);
+        return Objects.hash(this.voiceId, this.chunkPlan, this.speed, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -118,28 +117,28 @@ public final class AzureVoice {
     public interface _FinalStage {
         AzureVoice build();
 
-        _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled);
+        _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
-        _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled);
+        _FinalStage chunkPlan(ChunkPlan chunkPlan);
 
         _FinalStage speed(Optional<Double> speed);
 
         _FinalStage speed(Double speed);
 
-        _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
+        _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
 
-        _FinalStage chunkPlan(ChunkPlan chunkPlan);
+        _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements VoiceIdStage, _FinalStage {
         private AzureVoiceId voiceId;
 
-        private Optional<ChunkPlan> chunkPlan = Optional.empty();
+        private Optional<FallbackPlan> fallbackPlan = Optional.empty();
 
         private Optional<Double> speed = Optional.empty();
 
-        private Optional<Boolean> fillerInjectionEnabled = Optional.empty();
+        private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -148,10 +147,10 @@ public final class AzureVoice {
 
         @java.lang.Override
         public Builder from(AzureVoice other) {
-            fillerInjectionEnabled(other.getFillerInjectionEnabled());
             voiceId(other.getVoiceId());
-            speed(other.getSpeed());
             chunkPlan(other.getChunkPlan());
+            speed(other.getSpeed());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -167,19 +166,19 @@ public final class AzureVoice {
         }
 
         /**
-         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage chunkPlan(ChunkPlan chunkPlan) {
-            this.chunkPlan = Optional.ofNullable(chunkPlan);
+        public _FinalStage fallbackPlan(FallbackPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
-        public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
-            this.chunkPlan = chunkPlan;
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
             return this;
         }
 
@@ -201,26 +200,25 @@ public final class AzureVoice {
         }
 
         /**
-         * <p>This determines whether fillers are injected into the model output before inputting it into the voice provider.</p>
-         * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = Optional.ofNullable(fillerInjectionEnabled);
+        public _FinalStage chunkPlan(ChunkPlan chunkPlan) {
+            this.chunkPlan = Optional.ofNullable(chunkPlan);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "fillerInjectionEnabled", nulls = Nulls.SKIP)
-        public _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = fillerInjectionEnabled;
+        @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
+        public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
+            this.chunkPlan = chunkPlan;
             return this;
         }
 
         @java.lang.Override
         public AzureVoice build() {
-            return new AzureVoice(fillerInjectionEnabled, voiceId, speed, chunkPlan, additionalProperties);
+            return new AzureVoice(voiceId, chunkPlan, speed, fallbackPlan, additionalProperties);
         }
     }
 }

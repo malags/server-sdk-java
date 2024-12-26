@@ -26,30 +26,38 @@ public final class CreateByoSipTrunkCredentialDto {
 
     private final List<SipTrunkGateway> gateways;
 
-    private final Optional<String> name;
-
     private final Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan;
 
     private final Optional<Boolean> outboundLeadingPlusEnabled;
 
+    private final Optional<String> techPrefix;
+
+    private final Optional<String> sipDiversionHeader;
+
     private final Optional<SbcConfiguration> sbcConfiguration;
+
+    private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateByoSipTrunkCredentialDto(
             Optional<String> provider,
             List<SipTrunkGateway> gateways,
-            Optional<String> name,
             Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan,
             Optional<Boolean> outboundLeadingPlusEnabled,
+            Optional<String> techPrefix,
+            Optional<String> sipDiversionHeader,
             Optional<SbcConfiguration> sbcConfiguration,
+            Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.provider = provider;
         this.gateways = gateways;
-        this.name = name;
         this.outboundAuthenticationPlan = outboundAuthenticationPlan;
         this.outboundLeadingPlusEnabled = outboundLeadingPlusEnabled;
+        this.techPrefix = techPrefix;
+        this.sipDiversionHeader = sipDiversionHeader;
         this.sbcConfiguration = sbcConfiguration;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -67,14 +75,6 @@ public final class CreateByoSipTrunkCredentialDto {
     @JsonProperty("gateways")
     public List<SipTrunkGateway> getGateways() {
         return gateways;
-    }
-
-    /**
-     * @return This is the name of the SIP trunk. This is just for your reference.
-     */
-    @JsonProperty("name")
-    public Optional<String> getName() {
-        return name;
     }
 
     /**
@@ -99,11 +99,35 @@ public final class CreateByoSipTrunkCredentialDto {
     }
 
     /**
+     * @return This can be used to configure the tech prefix on outbound calls. This is an advanced property.
+     */
+    @JsonProperty("techPrefix")
+    public Optional<String> getTechPrefix() {
+        return techPrefix;
+    }
+
+    /**
+     * @return This can be used to enable the SIP diversion header for authenticating the calling number if the SIP trunk supports it. This is an advanced property.
+     */
+    @JsonProperty("sipDiversionHeader")
+    public Optional<String> getSipDiversionHeader() {
+        return sipDiversionHeader;
+    }
+
+    /**
      * @return This is an advanced configuration for enterprise deployments. This uses the onprem SBC to trunk into the SIP trunk's <code>gateways</code>, rather than the managed SBC provided by Vapi.
      */
     @JsonProperty("sbcConfiguration")
     public Optional<SbcConfiguration> getSbcConfiguration() {
         return sbcConfiguration;
+    }
+
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
     }
 
     @java.lang.Override
@@ -120,10 +144,12 @@ public final class CreateByoSipTrunkCredentialDto {
     private boolean equalTo(CreateByoSipTrunkCredentialDto other) {
         return provider.equals(other.provider)
                 && gateways.equals(other.gateways)
-                && name.equals(other.name)
                 && outboundAuthenticationPlan.equals(other.outboundAuthenticationPlan)
                 && outboundLeadingPlusEnabled.equals(other.outboundLeadingPlusEnabled)
-                && sbcConfiguration.equals(other.sbcConfiguration);
+                && techPrefix.equals(other.techPrefix)
+                && sipDiversionHeader.equals(other.sipDiversionHeader)
+                && sbcConfiguration.equals(other.sbcConfiguration)
+                && name.equals(other.name);
     }
 
     @java.lang.Override
@@ -131,10 +157,12 @@ public final class CreateByoSipTrunkCredentialDto {
         return Objects.hash(
                 this.provider,
                 this.gateways,
-                this.name,
                 this.outboundAuthenticationPlan,
                 this.outboundLeadingPlusEnabled,
-                this.sbcConfiguration);
+                this.techPrefix,
+                this.sipDiversionHeader,
+                this.sbcConfiguration,
+                this.name);
     }
 
     @java.lang.Override
@@ -152,13 +180,17 @@ public final class CreateByoSipTrunkCredentialDto {
 
         private List<SipTrunkGateway> gateways = new ArrayList<>();
 
-        private Optional<String> name = Optional.empty();
-
         private Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan = Optional.empty();
 
         private Optional<Boolean> outboundLeadingPlusEnabled = Optional.empty();
 
+        private Optional<String> techPrefix = Optional.empty();
+
+        private Optional<String> sipDiversionHeader = Optional.empty();
+
         private Optional<SbcConfiguration> sbcConfiguration = Optional.empty();
+
+        private Optional<String> name = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -168,10 +200,12 @@ public final class CreateByoSipTrunkCredentialDto {
         public Builder from(CreateByoSipTrunkCredentialDto other) {
             provider(other.getProvider());
             gateways(other.getGateways());
-            name(other.getName());
             outboundAuthenticationPlan(other.getOutboundAuthenticationPlan());
             outboundLeadingPlusEnabled(other.getOutboundLeadingPlusEnabled());
+            techPrefix(other.getTechPrefix());
+            sipDiversionHeader(other.getSipDiversionHeader());
             sbcConfiguration(other.getSbcConfiguration());
+            name(other.getName());
             return this;
         }
 
@@ -203,17 +237,6 @@ public final class CreateByoSipTrunkCredentialDto {
             return this;
         }
 
-        @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public Builder name(Optional<String> name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
         @JsonSetter(value = "outboundAuthenticationPlan", nulls = Nulls.SKIP)
         public Builder outboundAuthenticationPlan(
                 Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan) {
@@ -237,6 +260,28 @@ public final class CreateByoSipTrunkCredentialDto {
             return this;
         }
 
+        @JsonSetter(value = "techPrefix", nulls = Nulls.SKIP)
+        public Builder techPrefix(Optional<String> techPrefix) {
+            this.techPrefix = techPrefix;
+            return this;
+        }
+
+        public Builder techPrefix(String techPrefix) {
+            this.techPrefix = Optional.ofNullable(techPrefix);
+            return this;
+        }
+
+        @JsonSetter(value = "sipDiversionHeader", nulls = Nulls.SKIP)
+        public Builder sipDiversionHeader(Optional<String> sipDiversionHeader) {
+            this.sipDiversionHeader = sipDiversionHeader;
+            return this;
+        }
+
+        public Builder sipDiversionHeader(String sipDiversionHeader) {
+            this.sipDiversionHeader = Optional.ofNullable(sipDiversionHeader);
+            return this;
+        }
+
         @JsonSetter(value = "sbcConfiguration", nulls = Nulls.SKIP)
         public Builder sbcConfiguration(Optional<SbcConfiguration> sbcConfiguration) {
             this.sbcConfiguration = sbcConfiguration;
@@ -248,14 +293,27 @@ public final class CreateByoSipTrunkCredentialDto {
             return this;
         }
 
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public Builder name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
         public CreateByoSipTrunkCredentialDto build() {
             return new CreateByoSipTrunkCredentialDto(
                     provider,
                     gateways,
-                    name,
                     outboundAuthenticationPlan,
                     outboundLeadingPlusEnabled,
+                    techPrefix,
+                    sipDiversionHeader,
                     sbcConfiguration,
+                    name,
                     additionalProperties);
         }
     }

@@ -24,7 +24,9 @@ public enum SyncVoiceLibraryDtoProvidersItem {
 
     PLAYHT("playht"),
 
-    RIME_AI("rime-ai");
+    RIME_AI("rime-ai"),
+
+    TAVUS("tavus");
 
     private final String value;
 

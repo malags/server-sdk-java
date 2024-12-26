@@ -45,7 +45,6 @@ public final class FormatPlan {
      * <p>Usage:</p>
      * <ul>
      * <li>To rely on the voice provider's formatting logic, set this to <code>false</code>.</li>
-     * <li>To use ElevenLabs's <code>enableSsmlParsing</code> feature, set this to <code>false</code>.</li>
      * </ul>
      * <p>If <code>voice.chunkPlan.enabled</code> is <code>false</code>, this is automatically <code>false</code> since there's no chunk to format.</p>
      * <p>@default true</p>

@@ -28,11 +28,13 @@ public final class PerplexityAiModel {
 
     private final Optional<List<String>> toolIds;
 
+    private final Optional<CreateCustomKnowledgeBaseDto> knowledgeBase;
+
+    private final Optional<String> knowledgeBaseId;
+
     private final String model;
 
     private final Optional<Double> temperature;
-
-    private final Optional<KnowledgeBase> knowledgeBase;
 
     private final Optional<Double> maxTokens;
 
@@ -46,9 +48,10 @@ public final class PerplexityAiModel {
             Optional<List<OpenAiMessage>> messages,
             Optional<List<PerplexityAiModelToolsItem>> tools,
             Optional<List<String>> toolIds,
+            Optional<CreateCustomKnowledgeBaseDto> knowledgeBase,
+            Optional<String> knowledgeBaseId,
             String model,
             Optional<Double> temperature,
-            Optional<KnowledgeBase> knowledgeBase,
             Optional<Double> maxTokens,
             Optional<Boolean> emotionRecognitionEnabled,
             Optional<Double> numFastTurns,
@@ -56,9 +59,10 @@ public final class PerplexityAiModel {
         this.messages = messages;
         this.tools = tools;
         this.toolIds = toolIds;
+        this.knowledgeBase = knowledgeBase;
+        this.knowledgeBaseId = knowledgeBaseId;
         this.model = model;
         this.temperature = temperature;
-        this.knowledgeBase = knowledgeBase;
         this.maxTokens = maxTokens;
         this.emotionRecognitionEnabled = emotionRecognitionEnabled;
         this.numFastTurns = numFastTurns;
@@ -92,6 +96,22 @@ public final class PerplexityAiModel {
     }
 
     /**
+     * @return These are the options for the knowledge base.
+     */
+    @JsonProperty("knowledgeBase")
+    public Optional<CreateCustomKnowledgeBaseDto> getKnowledgeBase() {
+        return knowledgeBase;
+    }
+
+    /**
+     * @return This is the ID of the knowledge base the model will use.
+     */
+    @JsonProperty("knowledgeBaseId")
+    public Optional<String> getKnowledgeBaseId() {
+        return knowledgeBaseId;
+    }
+
+    /**
      * @return This is the name of the model. Ex. cognitivecomputations/dolphin-mixtral-8x7b
      */
     @JsonProperty("model")
@@ -105,14 +125,6 @@ public final class PerplexityAiModel {
     @JsonProperty("temperature")
     public Optional<Double> getTemperature() {
         return temperature;
-    }
-
-    /**
-     * @return These are the options for the knowledge base.
-     */
-    @JsonProperty("knowledgeBase")
-    public Optional<KnowledgeBase> getKnowledgeBase() {
-        return knowledgeBase;
     }
 
     /**
@@ -158,9 +170,10 @@ public final class PerplexityAiModel {
         return messages.equals(other.messages)
                 && tools.equals(other.tools)
                 && toolIds.equals(other.toolIds)
+                && knowledgeBase.equals(other.knowledgeBase)
+                && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && model.equals(other.model)
                 && temperature.equals(other.temperature)
-                && knowledgeBase.equals(other.knowledgeBase)
                 && maxTokens.equals(other.maxTokens)
                 && emotionRecognitionEnabled.equals(other.emotionRecognitionEnabled)
                 && numFastTurns.equals(other.numFastTurns);
@@ -172,9 +185,10 @@ public final class PerplexityAiModel {
                 this.messages,
                 this.tools,
                 this.toolIds,
+                this.knowledgeBase,
+                this.knowledgeBaseId,
                 this.model,
                 this.temperature,
-                this.knowledgeBase,
                 this.maxTokens,
                 this.emotionRecognitionEnabled,
                 this.numFastTurns);
@@ -210,13 +224,17 @@ public final class PerplexityAiModel {
 
         _FinalStage toolIds(List<String> toolIds);
 
+        _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase);
+
+        _FinalStage knowledgeBase(CreateCustomKnowledgeBaseDto knowledgeBase);
+
+        _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId);
+
+        _FinalStage knowledgeBaseId(String knowledgeBaseId);
+
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
-
-        _FinalStage knowledgeBase(Optional<KnowledgeBase> knowledgeBase);
-
-        _FinalStage knowledgeBase(KnowledgeBase knowledgeBase);
 
         _FinalStage maxTokens(Optional<Double> maxTokens);
 
@@ -241,9 +259,11 @@ public final class PerplexityAiModel {
 
         private Optional<Double> maxTokens = Optional.empty();
 
-        private Optional<KnowledgeBase> knowledgeBase = Optional.empty();
-
         private Optional<Double> temperature = Optional.empty();
+
+        private Optional<String> knowledgeBaseId = Optional.empty();
+
+        private Optional<CreateCustomKnowledgeBaseDto> knowledgeBase = Optional.empty();
 
         private Optional<List<String>> toolIds = Optional.empty();
 
@@ -261,9 +281,10 @@ public final class PerplexityAiModel {
             messages(other.getMessages());
             tools(other.getTools());
             toolIds(other.getToolIds());
+            knowledgeBase(other.getKnowledgeBase());
+            knowledgeBaseId(other.getKnowledgeBaseId());
             model(other.getModel());
             temperature(other.getTemperature());
-            knowledgeBase(other.getKnowledgeBase());
             maxTokens(other.getMaxTokens());
             emotionRecognitionEnabled(other.getEmotionRecognitionEnabled());
             numFastTurns(other.getNumFastTurns());
@@ -337,23 +358,6 @@ public final class PerplexityAiModel {
         }
 
         /**
-         * <p>These are the options for the knowledge base.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage knowledgeBase(KnowledgeBase knowledgeBase) {
-            this.knowledgeBase = Optional.ofNullable(knowledgeBase);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "knowledgeBase", nulls = Nulls.SKIP)
-        public _FinalStage knowledgeBase(Optional<KnowledgeBase> knowledgeBase) {
-            this.knowledgeBase = knowledgeBase;
-            return this;
-        }
-
-        /**
          * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -367,6 +371,40 @@ public final class PerplexityAiModel {
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
             this.temperature = temperature;
+            return this;
+        }
+
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage knowledgeBaseId(String knowledgeBaseId) {
+            this.knowledgeBaseId = Optional.ofNullable(knowledgeBaseId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "knowledgeBaseId", nulls = Nulls.SKIP)
+        public _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId) {
+            this.knowledgeBaseId = knowledgeBaseId;
+            return this;
+        }
+
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage knowledgeBase(CreateCustomKnowledgeBaseDto knowledgeBase) {
+            this.knowledgeBase = Optional.ofNullable(knowledgeBase);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "knowledgeBase", nulls = Nulls.SKIP)
+        public _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase) {
+            this.knowledgeBase = knowledgeBase;
             return this;
         }
 
@@ -429,9 +467,10 @@ public final class PerplexityAiModel {
                     messages,
                     tools,
                     toolIds,
+                    knowledgeBase,
+                    knowledgeBaseId,
                     model,
                     temperature,
-                    knowledgeBase,
                     maxTokens,
                     emotionRecognitionEnabled,
                     numFastTurns,

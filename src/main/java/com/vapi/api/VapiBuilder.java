@@ -32,9 +32,6 @@ public final class VapiBuilder {
     }
 
     public Vapi build() {
-        if (token == null) {
-            throw new RuntimeException("Please provide token");
-        }
         this.clientOptionsBuilder.addHeader("Authorization", "Bearer " + this.token);
         clientOptionsBuilder.environment(this.environment);
         return new Vapi(clientOptionsBuilder.build());

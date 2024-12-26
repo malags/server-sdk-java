@@ -9,12 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -30,6 +32,8 @@ public final class PlayHtCredential {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> name;
+
     private final String userId;
 
     private final Map<String, Object> additionalProperties;
@@ -40,6 +44,7 @@ public final class PlayHtCredential {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<String> name,
             String userId,
             Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
@@ -47,6 +52,7 @@ public final class PlayHtCredential {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.name = name;
         this.userId = userId;
         this.additionalProperties = additionalProperties;
     }
@@ -96,6 +102,14 @@ public final class PlayHtCredential {
         return updatedAt;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @JsonProperty("userId")
     public String getUserId() {
         return userId;
@@ -118,12 +132,13 @@ public final class PlayHtCredential {
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && name.equals(other.name)
                 && userId.equals(other.userId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.id, this.orgId, this.createdAt, this.updatedAt, this.userId);
+        return Objects.hash(this.apiKey, this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.userId);
     }
 
     @java.lang.Override
@@ -163,6 +178,10 @@ public final class PlayHtCredential {
 
     public interface _FinalStage {
         PlayHtCredential build();
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -180,6 +199,8 @@ public final class PlayHtCredential {
 
         private String userId;
 
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -192,6 +213,7 @@ public final class PlayHtCredential {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            name(other.getName());
             userId(other.getUserId());
             return this;
         }
@@ -258,9 +280,26 @@ public final class PlayHtCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public PlayHtCredential build() {
-            return new PlayHtCredential(apiKey, id, orgId, createdAt, updatedAt, userId, additionalProperties);
+            return new PlayHtCredential(apiKey, id, orgId, createdAt, updatedAt, name, userId, additionalProperties);
         }
     }
 }

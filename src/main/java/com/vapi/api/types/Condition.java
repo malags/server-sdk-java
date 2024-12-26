@@ -9,9 +9,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -19,28 +21,23 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Condition.Builder.class)
 public final class Condition {
-    private final String value;
-
     private final ConditionOperator operator;
 
     private final String param;
 
+    private final Map<String, Object> value;
+
     private final Map<String, Object> additionalProperties;
 
     private Condition(
-            String value, ConditionOperator operator, String param, Map<String, Object> additionalProperties) {
-        this.value = value;
+            ConditionOperator operator,
+            String param,
+            Map<String, Object> value,
+            Map<String, Object> additionalProperties) {
         this.operator = operator;
         this.param = param;
+        this.value = value;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This is the value you want to compare against the parameter.
-     */
-    @JsonProperty("value")
-    public String getValue() {
-        return value;
     }
 
     /**
@@ -59,6 +56,14 @@ public final class Condition {
         return param;
     }
 
+    /**
+     * @return This is the value you want to compare against the parameter.
+     */
+    @JsonProperty("value")
+    public Map<String, Object> getValue() {
+        return value;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -71,12 +76,12 @@ public final class Condition {
     }
 
     private boolean equalTo(Condition other) {
-        return value.equals(other.value) && operator.equals(other.operator) && param.equals(other.param);
+        return operator.equals(other.operator) && param.equals(other.param) && value.equals(other.value);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.value, this.operator, this.param);
+        return Objects.hash(this.operator, this.param, this.value);
     }
 
     @java.lang.Override
@@ -84,18 +89,14 @@ public final class Condition {
         return ObjectMappers.stringify(this);
     }
 
-    public static ValueStage builder() {
+    public static OperatorStage builder() {
         return new Builder();
-    }
-
-    public interface ValueStage {
-        OperatorStage value(@NotNull String value);
-
-        Builder from(Condition other);
     }
 
     public interface OperatorStage {
         ParamStage operator(@NotNull ConditionOperator operator);
+
+        Builder from(Condition other);
     }
 
     public interface ParamStage {
@@ -104,15 +105,21 @@ public final class Condition {
 
     public interface _FinalStage {
         Condition build();
+
+        _FinalStage value(Map<String, Object> value);
+
+        _FinalStage putAllValue(Map<String, Object> value);
+
+        _FinalStage value(String key, Object value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ValueStage, OperatorStage, ParamStage, _FinalStage {
-        private String value;
-
+    public static final class Builder implements OperatorStage, ParamStage, _FinalStage {
         private ConditionOperator operator;
 
         private String param;
+
+        private Map<String, Object> value = new LinkedHashMap<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -121,20 +128,9 @@ public final class Condition {
 
         @java.lang.Override
         public Builder from(Condition other) {
-            value(other.getValue());
             operator(other.getOperator());
             param(other.getParam());
-            return this;
-        }
-
-        /**
-         * <p>This is the value you want to compare against the parameter.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("value")
-        public OperatorStage value(@NotNull String value) {
-            this.value = Objects.requireNonNull(value, "value must not be null");
+            value(other.getValue());
             return this;
         }
 
@@ -160,9 +156,37 @@ public final class Condition {
             return this;
         }
 
+        /**
+         * <p>This is the value you want to compare against the parameter.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage value(String key, Object value) {
+            this.value.put(key, value);
+            return this;
+        }
+
+        /**
+         * <p>This is the value you want to compare against the parameter.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage putAllValue(Map<String, Object> value) {
+            this.value.putAll(value);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "value", nulls = Nulls.SKIP)
+        public _FinalStage value(Map<String, Object> value) {
+            this.value.clear();
+            this.value.putAll(value);
+            return this;
+        }
+
         @java.lang.Override
         public Condition build() {
-            return new Condition(value, operator, param, additionalProperties);
+            return new Condition(operator, param, value, additionalProperties);
         }
     }
 }

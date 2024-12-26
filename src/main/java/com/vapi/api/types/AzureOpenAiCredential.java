@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -37,6 +38,8 @@ public final class AzureOpenAiCredential {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> name;
+
     private final String openAiEndpoint;
 
     private final Map<String, Object> additionalProperties;
@@ -49,6 +52,7 @@ public final class AzureOpenAiCredential {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<String> name,
             String openAiEndpoint,
             Map<String, Object> additionalProperties) {
         this.region = region;
@@ -58,6 +62,7 @@ public final class AzureOpenAiCredential {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.name = name;
         this.openAiEndpoint = openAiEndpoint;
         this.additionalProperties = additionalProperties;
     }
@@ -117,6 +122,14 @@ public final class AzureOpenAiCredential {
         return updatedAt;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @JsonProperty("openAIEndpoint")
     public String getOpenAiEndpoint() {
         return openAiEndpoint;
@@ -141,6 +154,7 @@ public final class AzureOpenAiCredential {
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && name.equals(other.name)
                 && openAiEndpoint.equals(other.openAiEndpoint);
     }
 
@@ -154,6 +168,7 @@ public final class AzureOpenAiCredential {
                 this.orgId,
                 this.createdAt,
                 this.updatedAt,
+                this.name,
                 this.openAiEndpoint);
     }
 
@@ -204,6 +219,10 @@ public final class AzureOpenAiCredential {
         _FinalStage addModels(AzureOpenAiCredentialModelsItem models);
 
         _FinalStage addAllModels(List<AzureOpenAiCredentialModelsItem> models);
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -230,6 +249,8 @@ public final class AzureOpenAiCredential {
 
         private String openAiEndpoint;
 
+        private Optional<String> name = Optional.empty();
+
         private List<AzureOpenAiCredentialModelsItem> models = new ArrayList<>();
 
         @JsonAnySetter
@@ -246,6 +267,7 @@ public final class AzureOpenAiCredential {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            name(other.getName());
             openAiEndpoint(other.getOpenAiEndpoint());
             return this;
         }
@@ -319,6 +341,23 @@ public final class AzureOpenAiCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllModels(List<AzureOpenAiCredentialModelsItem> models) {
             this.models.addAll(models);
@@ -342,7 +381,16 @@ public final class AzureOpenAiCredential {
         @java.lang.Override
         public AzureOpenAiCredential build() {
             return new AzureOpenAiCredential(
-                    region, models, openAiKey, id, orgId, createdAt, updatedAt, openAiEndpoint, additionalProperties);
+                    region,
+                    models,
+                    openAiKey,
+                    id,
+                    orgId,
+                    createdAt,
+                    updatedAt,
+                    name,
+                    openAiEndpoint,
+                    additionalProperties);
         }
     }
 }

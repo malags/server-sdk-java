@@ -9,12 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -38,6 +40,8 @@ public final class S3Credential {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
     private S3Credential(
@@ -50,6 +54,7 @@ public final class S3Credential {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.awsAccessKeyId = awsAccessKeyId;
         this.awsSecretAccessKey = awsSecretAccessKey;
@@ -60,6 +65,7 @@ public final class S3Credential {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -143,6 +149,14 @@ public final class S3Credential {
         return updatedAt;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -163,7 +177,8 @@ public final class S3Credential {
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && name.equals(other.name);
     }
 
     @java.lang.Override
@@ -177,7 +192,8 @@ public final class S3Credential {
                 this.id,
                 this.orgId,
                 this.createdAt,
-                this.updatedAt);
+                this.updatedAt,
+                this.name);
     }
 
     @java.lang.Override
@@ -229,6 +245,10 @@ public final class S3Credential {
 
     public interface _FinalStage {
         S3Credential build();
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -261,6 +281,8 @@ public final class S3Credential {
 
         private OffsetDateTime updatedAt;
 
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -277,6 +299,7 @@ public final class S3Credential {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            name(other.getName());
             return this;
         }
 
@@ -379,6 +402,23 @@ public final class S3Credential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public S3Credential build() {
             return new S3Credential(
@@ -391,6 +431,7 @@ public final class S3Credential {
                     orgId,
                     createdAt,
                     updatedAt,
+                    name,
                     additionalProperties);
         }
     }

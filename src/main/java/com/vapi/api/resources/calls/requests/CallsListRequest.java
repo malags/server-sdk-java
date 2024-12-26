@@ -21,7 +21,11 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CallsListRequest.Builder.class)
 public final class CallsListRequest {
+    private final Optional<String> id;
+
     private final Optional<String> assistantId;
+
+    private final Optional<String> phoneNumberId;
 
     private final Optional<Double> limit;
 
@@ -44,7 +48,9 @@ public final class CallsListRequest {
     private final Map<String, Object> additionalProperties;
 
     private CallsListRequest(
+            Optional<String> id,
             Optional<String> assistantId,
+            Optional<String> phoneNumberId,
             Optional<Double> limit,
             Optional<OffsetDateTime> createdAtGt,
             Optional<OffsetDateTime> createdAtLt,
@@ -55,7 +61,9 @@ public final class CallsListRequest {
             Optional<OffsetDateTime> updatedAtGe,
             Optional<OffsetDateTime> updatedAtLe,
             Map<String, Object> additionalProperties) {
+        this.id = id;
         this.assistantId = assistantId;
+        this.phoneNumberId = phoneNumberId;
         this.limit = limit;
         this.createdAtGt = createdAtGt;
         this.createdAtLt = createdAtLt;
@@ -69,11 +77,28 @@ public final class CallsListRequest {
     }
 
     /**
+     * @return This is the unique identifier for the call.
+     */
+    @JsonProperty("id")
+    public Optional<String> getId() {
+        return id;
+    }
+
+    /**
      * @return This will return calls with the specified assistantId.
      */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
         return assistantId;
+    }
+
+    /**
+     * @return This is the phone number that will be used for the call. To use a transient number, use <code>phoneNumber</code> instead.
+     * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+     */
+    @JsonProperty("phoneNumberId")
+    public Optional<String> getPhoneNumberId() {
+        return phoneNumberId;
     }
 
     /**
@@ -160,7 +185,9 @@ public final class CallsListRequest {
     }
 
     private boolean equalTo(CallsListRequest other) {
-        return assistantId.equals(other.assistantId)
+        return id.equals(other.id)
+                && assistantId.equals(other.assistantId)
+                && phoneNumberId.equals(other.phoneNumberId)
                 && limit.equals(other.limit)
                 && createdAtGt.equals(other.createdAtGt)
                 && createdAtLt.equals(other.createdAtLt)
@@ -175,7 +202,9 @@ public final class CallsListRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.id,
                 this.assistantId,
+                this.phoneNumberId,
                 this.limit,
                 this.createdAtGt,
                 this.createdAtLt,
@@ -198,7 +227,11 @@ public final class CallsListRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> id = Optional.empty();
+
         private Optional<String> assistantId = Optional.empty();
+
+        private Optional<String> phoneNumberId = Optional.empty();
 
         private Optional<Double> limit = Optional.empty();
 
@@ -224,7 +257,9 @@ public final class CallsListRequest {
         private Builder() {}
 
         public Builder from(CallsListRequest other) {
+            id(other.getId());
             assistantId(other.getAssistantId());
+            phoneNumberId(other.getPhoneNumberId());
             limit(other.getLimit());
             createdAtGt(other.getCreatedAtGt());
             createdAtLt(other.getCreatedAtLt());
@@ -237,6 +272,17 @@ public final class CallsListRequest {
             return this;
         }
 
+        @JsonSetter(value = "id", nulls = Nulls.SKIP)
+        public Builder id(Optional<String> id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder id(String id) {
+            this.id = Optional.ofNullable(id);
+            return this;
+        }
+
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -245,6 +291,17 @@ public final class CallsListRequest {
 
         public Builder assistantId(String assistantId) {
             this.assistantId = Optional.ofNullable(assistantId);
+            return this;
+        }
+
+        @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
+        public Builder phoneNumberId(Optional<String> phoneNumberId) {
+            this.phoneNumberId = phoneNumberId;
+            return this;
+        }
+
+        public Builder phoneNumberId(String phoneNumberId) {
+            this.phoneNumberId = Optional.ofNullable(phoneNumberId);
             return this;
         }
 
@@ -349,7 +406,9 @@ public final class CallsListRequest {
 
         public CallsListRequest build() {
             return new CallsListRequest(
+                    id,
                     assistantId,
+                    phoneNumberId,
                     limit,
                     createdAtGt,
                     createdAtLt,

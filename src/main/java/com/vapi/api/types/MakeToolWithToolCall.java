@@ -73,6 +73,14 @@ public final class MakeToolWithToolCall {
         return messages;
     }
 
+    /**
+     * @return The type of tool. &quot;make&quot; for Make tool.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "make";
+    }
+
     @JsonProperty("toolCall")
     public ToolCall getToolCall() {
         return toolCall;

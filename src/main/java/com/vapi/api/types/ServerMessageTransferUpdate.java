@@ -38,6 +38,10 @@ public final class ServerMessageTransferUpdate {
 
     private final Optional<CreateAssistantDto> fromAssistant;
 
+    private final Optional<Map<String, Object>> toStepRecord;
+
+    private final Optional<Map<String, Object>> fromStepRecord;
+
     private final Map<String, Object> additionalProperties;
 
     private ServerMessageTransferUpdate(
@@ -50,6 +54,8 @@ public final class ServerMessageTransferUpdate {
             Optional<Call> call,
             Optional<CreateAssistantDto> toAssistant,
             Optional<CreateAssistantDto> fromAssistant,
+            Optional<Map<String, Object>> toStepRecord,
+            Optional<Map<String, Object>> fromStepRecord,
             Map<String, Object> additionalProperties) {
         this.phoneNumber = phoneNumber;
         this.destination = destination;
@@ -60,6 +66,8 @@ public final class ServerMessageTransferUpdate {
         this.call = call;
         this.toAssistant = toAssistant;
         this.fromAssistant = fromAssistant;
+        this.toStepRecord = toStepRecord;
+        this.fromStepRecord = fromStepRecord;
         this.additionalProperties = additionalProperties;
     }
 
@@ -157,6 +165,22 @@ public final class ServerMessageTransferUpdate {
         return fromAssistant;
     }
 
+    /**
+     * @return This is the step that the conversation moved to.
+     */
+    @JsonProperty("toStepRecord")
+    public Optional<Map<String, Object>> getToStepRecord() {
+        return toStepRecord;
+    }
+
+    /**
+     * @return This is the step that the conversation moved from. =
+     */
+    @JsonProperty("fromStepRecord")
+    public Optional<Map<String, Object>> getFromStepRecord() {
+        return fromStepRecord;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -177,7 +201,9 @@ public final class ServerMessageTransferUpdate {
                 && customer.equals(other.customer)
                 && call.equals(other.call)
                 && toAssistant.equals(other.toAssistant)
-                && fromAssistant.equals(other.fromAssistant);
+                && fromAssistant.equals(other.fromAssistant)
+                && toStepRecord.equals(other.toStepRecord)
+                && fromStepRecord.equals(other.fromStepRecord);
     }
 
     @java.lang.Override
@@ -191,7 +217,9 @@ public final class ServerMessageTransferUpdate {
                 this.customer,
                 this.call,
                 this.toAssistant,
-                this.fromAssistant);
+                this.fromAssistant,
+                this.toStepRecord,
+                this.fromStepRecord);
     }
 
     @java.lang.Override
@@ -223,6 +251,10 @@ public final class ServerMessageTransferUpdate {
 
         private Optional<CreateAssistantDto> fromAssistant = Optional.empty();
 
+        private Optional<Map<String, Object>> toStepRecord = Optional.empty();
+
+        private Optional<Map<String, Object>> fromStepRecord = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -238,6 +270,8 @@ public final class ServerMessageTransferUpdate {
             call(other.getCall());
             toAssistant(other.getToAssistant());
             fromAssistant(other.getFromAssistant());
+            toStepRecord(other.getToStepRecord());
+            fromStepRecord(other.getFromStepRecord());
             return this;
         }
 
@@ -340,6 +374,28 @@ public final class ServerMessageTransferUpdate {
             return this;
         }
 
+        @JsonSetter(value = "toStepRecord", nulls = Nulls.SKIP)
+        public Builder toStepRecord(Optional<Map<String, Object>> toStepRecord) {
+            this.toStepRecord = toStepRecord;
+            return this;
+        }
+
+        public Builder toStepRecord(Map<String, Object> toStepRecord) {
+            this.toStepRecord = Optional.ofNullable(toStepRecord);
+            return this;
+        }
+
+        @JsonSetter(value = "fromStepRecord", nulls = Nulls.SKIP)
+        public Builder fromStepRecord(Optional<Map<String, Object>> fromStepRecord) {
+            this.fromStepRecord = fromStepRecord;
+            return this;
+        }
+
+        public Builder fromStepRecord(Map<String, Object> fromStepRecord) {
+            this.fromStepRecord = Optional.ofNullable(fromStepRecord);
+            return this;
+        }
+
         public ServerMessageTransferUpdate build() {
             return new ServerMessageTransferUpdate(
                     phoneNumber,
@@ -351,6 +407,8 @@ public final class ServerMessageTransferUpdate {
                     call,
                     toAssistant,
                     fromAssistant,
+                    toStepRecord,
+                    fromStepRecord,
                     additionalProperties);
         }
     }

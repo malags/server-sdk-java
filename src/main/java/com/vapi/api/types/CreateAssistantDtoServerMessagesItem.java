@@ -16,6 +16,8 @@ public enum CreateAssistantDtoServerMessagesItem {
 
     LANGUAGE_CHANGED("language-changed"),
 
+    LANGUAGE_CHANGE_DETECTED("language-change-detected"),
+
     MODEL_OUTPUT("model-output"),
 
     PHONE_CALL_CONTROL("phone-call-control"),

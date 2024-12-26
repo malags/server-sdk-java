@@ -46,6 +46,9 @@ public class LogsClient {
         if (request.getType().isPresent()) {
             httpUrl.addQueryParameter("type", request.getType().get().toString());
         }
+        if (request.getWebhookType().isPresent()) {
+            httpUrl.addQueryParameter("webhookType", request.getWebhookType().get());
+        }
         if (request.getAssistantId().isPresent()) {
             httpUrl.addQueryParameter("assistantId", request.getAssistantId().get());
         }
@@ -118,7 +121,7 @@ public class LogsClient {
             if (response.isSuccessful()) {
                 LogsPaginatedResponse parsedResponse =
                         ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), LogsPaginatedResponse.class);
-                int newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
+                double newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
                 LogsGetRequest nextRequest = LogsGetRequest.builder()
                         .from(request)
                         .page(newPageNumber)

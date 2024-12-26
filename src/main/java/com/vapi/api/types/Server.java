@@ -27,16 +27,20 @@ public final class Server {
 
     private final Optional<String> secret;
 
+    private final Optional<Map<String, Object>> headers;
+
     private final Map<String, Object> additionalProperties;
 
     private Server(
             Optional<Double> timeoutSeconds,
             String url,
             Optional<String> secret,
+            Optional<Map<String, Object>> headers,
             Map<String, Object> additionalProperties) {
         this.timeoutSeconds = timeoutSeconds;
         this.url = url;
         this.secret = secret;
+        this.headers = headers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -66,6 +70,15 @@ public final class Server {
         return secret;
     }
 
+    /**
+     * @return These are the custom headers to include in the request sent to your server.
+     * <p>Each key-value pair represents a header name and its value.</p>
+     */
+    @JsonProperty("headers")
+    public Optional<Map<String, Object>> getHeaders() {
+        return headers;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -78,12 +91,15 @@ public final class Server {
     }
 
     private boolean equalTo(Server other) {
-        return timeoutSeconds.equals(other.timeoutSeconds) && url.equals(other.url) && secret.equals(other.secret);
+        return timeoutSeconds.equals(other.timeoutSeconds)
+                && url.equals(other.url)
+                && secret.equals(other.secret)
+                && headers.equals(other.headers);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.timeoutSeconds, this.url, this.secret);
+        return Objects.hash(this.timeoutSeconds, this.url, this.secret, this.headers);
     }
 
     @java.lang.Override
@@ -111,11 +127,17 @@ public final class Server {
         _FinalStage secret(Optional<String> secret);
 
         _FinalStage secret(String secret);
+
+        _FinalStage headers(Optional<Map<String, Object>> headers);
+
+        _FinalStage headers(Map<String, Object> headers);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements UrlStage, _FinalStage {
         private String url;
+
+        private Optional<Map<String, Object>> headers = Optional.empty();
 
         private Optional<String> secret = Optional.empty();
 
@@ -131,6 +153,7 @@ public final class Server {
             timeoutSeconds(other.getTimeoutSeconds());
             url(other.getUrl());
             secret(other.getSecret());
+            headers(other.getHeaders());
             return this;
         }
 
@@ -142,6 +165,24 @@ public final class Server {
         @JsonSetter("url")
         public _FinalStage url(@NotNull String url) {
             this.url = Objects.requireNonNull(url, "url must not be null");
+            return this;
+        }
+
+        /**
+         * <p>These are the custom headers to include in the request sent to your server.</p>
+         * <p>Each key-value pair represents a header name and its value.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage headers(Map<String, Object> headers) {
+            this.headers = Optional.ofNullable(headers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "headers", nulls = Nulls.SKIP)
+        public _FinalStage headers(Optional<Map<String, Object>> headers) {
+            this.headers = headers;
             return this;
         }
 
@@ -183,7 +224,7 @@ public final class Server {
 
         @java.lang.Override
         public Server build() {
-            return new Server(timeoutSeconds, url, secret, additionalProperties);
+            return new Server(timeoutSeconds, url, secret, headers, additionalProperties);
         }
     }
 }

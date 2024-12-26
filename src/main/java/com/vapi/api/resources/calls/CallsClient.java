@@ -44,8 +44,15 @@ public class CallsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("call");
+        if (request.getId().isPresent()) {
+            httpUrl.addQueryParameter("id", request.getId().get());
+        }
         if (request.getAssistantId().isPresent()) {
             httpUrl.addQueryParameter("assistantId", request.getAssistantId().get());
+        }
+        if (request.getPhoneNumberId().isPresent()) {
+            httpUrl.addQueryParameter(
+                    "phoneNumberId", request.getPhoneNumberId().get());
         }
         if (request.getLimit().isPresent()) {
             httpUrl.addQueryParameter("limit", request.getLimit().get().toString());

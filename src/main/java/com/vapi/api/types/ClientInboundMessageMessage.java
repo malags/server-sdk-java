@@ -38,6 +38,10 @@ public final class ClientInboundMessageMessage {
         return new ClientInboundMessageMessage(new SayValue(value));
     }
 
+    public static ClientInboundMessageMessage transfer(ClientInboundMessageTransfer value) {
+        return new ClientInboundMessageMessage(new TransferValue(value));
+    }
+
     public boolean isAddMessage() {
         return value instanceof AddMessageValue;
     }
@@ -48,6 +52,10 @@ public final class ClientInboundMessageMessage {
 
     public boolean isSay() {
         return value instanceof SayValue;
+    }
+
+    public boolean isTransfer() {
+        return value instanceof TransferValue;
     }
 
     public boolean _isUnknown() {
@@ -75,6 +83,13 @@ public final class ClientInboundMessageMessage {
         return Optional.empty();
     }
 
+    public Optional<ClientInboundMessageTransfer> getTransfer() {
+        if (isTransfer()) {
+            return Optional.of(((TransferValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -94,6 +109,8 @@ public final class ClientInboundMessageMessage {
 
         T visitSay(ClientInboundMessageSay say);
 
+        T visitTransfer(ClientInboundMessageTransfer transfer);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -101,7 +118,8 @@ public final class ClientInboundMessageMessage {
     @JsonSubTypes({
         @JsonSubTypes.Type(AddMessageValue.class),
         @JsonSubTypes.Type(ControlValue.class),
-        @JsonSubTypes.Type(SayValue.class)
+        @JsonSubTypes.Type(SayValue.class),
+        @JsonSubTypes.Type(TransferValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -208,6 +226,44 @@ public final class ClientInboundMessageMessage {
         }
 
         private boolean equalTo(SayValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ClientInboundMessageMessage{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("transfer")
+    private static final class TransferValue implements Value {
+        @JsonUnwrapped
+        private ClientInboundMessageTransfer value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TransferValue() {}
+
+        private TransferValue(ClientInboundMessageTransfer value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTransfer(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TransferValue && equalTo((TransferValue) other);
+        }
+
+        private boolean equalTo(TransferValue other) {
             return value.equals(other.value);
         }
 

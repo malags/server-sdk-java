@@ -3,257 +3,142 @@
  */
 package com.vapi.api.types;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.vapi.api.core.ObjectMappers;
+import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
+@JsonDeserialize(using = ClientMessageToolCallsToolWithToolCallListItem.Deserializer.class)
 public final class ClientMessageToolCallsToolWithToolCallListItem {
-    private final Value value;
+    private final Object value;
 
-    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    private ClientMessageToolCallsToolWithToolCallListItem(Value value) {
+    private final int type;
+
+    private ClientMessageToolCallsToolWithToolCallListItem(Object value, int type) {
         this.value = value;
-    }
-
-    public <T> T visit(Visitor<T> visitor) {
-        return value.visit(visitor);
-    }
-
-    public static ClientMessageToolCallsToolWithToolCallListItem function(FunctionToolWithToolCall value) {
-        return new ClientMessageToolCallsToolWithToolCallListItem(new FunctionValue(value));
-    }
-
-    public static ClientMessageToolCallsToolWithToolCallListItem ghl(GhlToolWithToolCall value) {
-        return new ClientMessageToolCallsToolWithToolCallListItem(new GhlValue(value));
-    }
-
-    public static ClientMessageToolCallsToolWithToolCallListItem make(MakeToolWithToolCall value) {
-        return new ClientMessageToolCallsToolWithToolCallListItem(new MakeValue(value));
-    }
-
-    public boolean isFunction() {
-        return value instanceof FunctionValue;
-    }
-
-    public boolean isGhl() {
-        return value instanceof GhlValue;
-    }
-
-    public boolean isMake() {
-        return value instanceof MakeValue;
-    }
-
-    public boolean _isUnknown() {
-        return value instanceof _UnknownValue;
-    }
-
-    public Optional<FunctionToolWithToolCall> getFunction() {
-        if (isFunction()) {
-            return Optional.of(((FunctionValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<GhlToolWithToolCall> getGhl() {
-        if (isGhl()) {
-            return Optional.of(((GhlValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<MakeToolWithToolCall> getMake() {
-        if (isMake()) {
-            return Optional.of(((MakeValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<Object> _getUnknown() {
-        if (_isUnknown()) {
-            return Optional.of(((_UnknownValue) value).value);
-        }
-        return Optional.empty();
+        this.type = type;
     }
 
     @JsonValue
-    private Value getValue() {
+    public Object get() {
         return this.value;
     }
 
+    public <T> T visit(Visitor<T> visitor) {
+        if (this.type == 0) {
+            return visitor.visit((FunctionToolWithToolCall) this.value);
+        } else if (this.type == 1) {
+            return visitor.visit((GhlToolWithToolCall) this.value);
+        } else if (this.type == 2) {
+            return visitor.visit((MakeToolWithToolCall) this.value);
+        } else if (this.type == 3) {
+            return visitor.visit((Object) this.value);
+        } else if (this.type == 4) {
+            return visitor.visit((Object) this.value);
+        } else if (this.type == 5) {
+            return visitor.visit((Object) this.value);
+        }
+        throw new IllegalStateException("Failed to visit value. This should never happen.");
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        return other instanceof ClientMessageToolCallsToolWithToolCallListItem
+                && equalTo((ClientMessageToolCallsToolWithToolCallListItem) other);
+    }
+
+    private boolean equalTo(ClientMessageToolCallsToolWithToolCallListItem other) {
+        return value.equals(other.value);
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return Objects.hash(this.value);
+    }
+
+    @java.lang.Override
+    public String toString() {
+        return this.value.toString();
+    }
+
+    public static ClientMessageToolCallsToolWithToolCallListItem of(FunctionToolWithToolCall value) {
+        return new ClientMessageToolCallsToolWithToolCallListItem(value, 0);
+    }
+
+    public static ClientMessageToolCallsToolWithToolCallListItem of(GhlToolWithToolCall value) {
+        return new ClientMessageToolCallsToolWithToolCallListItem(value, 1);
+    }
+
+    public static ClientMessageToolCallsToolWithToolCallListItem of(MakeToolWithToolCall value) {
+        return new ClientMessageToolCallsToolWithToolCallListItem(value, 2);
+    }
+
+    public static ClientMessageToolCallsToolWithToolCallListItem of(Object value) {
+        return new ClientMessageToolCallsToolWithToolCallListItem(value, 3);
+    }
+
+    public static ClientMessageToolCallsToolWithToolCallListItem of(Object value) {
+        return new ClientMessageToolCallsToolWithToolCallListItem(value, 4);
+    }
+
+    public static ClientMessageToolCallsToolWithToolCallListItem of(Object value) {
+        return new ClientMessageToolCallsToolWithToolCallListItem(value, 5);
+    }
+
     public interface Visitor<T> {
-        T visitFunction(FunctionToolWithToolCall function);
+        T visit(FunctionToolWithToolCall value);
 
-        T visitGhl(GhlToolWithToolCall ghl);
+        T visit(GhlToolWithToolCall value);
 
-        T visitMake(MakeToolWithToolCall make);
+        T visit(MakeToolWithToolCall value);
 
-        T _visitUnknown(Object unknownType);
+        T visit(Object value);
+
+        T visit(Object value);
+
+        T visit(Object value);
     }
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({
-        @JsonSubTypes.Type(FunctionValue.class),
-        @JsonSubTypes.Type(GhlValue.class),
-        @JsonSubTypes.Type(MakeValue.class)
-    })
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private interface Value {
-        <T> T visit(Visitor<T> visitor);
-    }
-
-    @JsonTypeName("function")
-    private static final class FunctionValue implements Value {
-        @JsonUnwrapped
-        private FunctionToolWithToolCall value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private FunctionValue() {}
-
-        private FunctionValue(FunctionToolWithToolCall value) {
-            this.value = value;
+    static final class Deserializer extends StdDeserializer<ClientMessageToolCallsToolWithToolCallListItem> {
+        Deserializer() {
+            super(ClientMessageToolCallsToolWithToolCallListItem.class);
         }
 
         @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitFunction(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof FunctionValue && equalTo((FunctionValue) other);
-        }
-
-        private boolean equalTo(FunctionValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ClientMessageToolCallsToolWithToolCallListItem{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("ghl")
-    private static final class GhlValue implements Value {
-        @JsonUnwrapped
-        private GhlToolWithToolCall value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private GhlValue() {}
-
-        private GhlValue(GhlToolWithToolCall value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitGhl(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof GhlValue && equalTo((GhlValue) other);
-        }
-
-        private boolean equalTo(GhlValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ClientMessageToolCallsToolWithToolCallListItem{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("make")
-    private static final class MakeValue implements Value {
-        @JsonUnwrapped
-        private MakeToolWithToolCall value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private MakeValue() {}
-
-        private MakeValue(MakeToolWithToolCall value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitMake(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof MakeValue && equalTo((MakeValue) other);
-        }
-
-        private boolean equalTo(MakeValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ClientMessageToolCallsToolWithToolCallListItem{" + "value: " + value + "}";
-        }
-    }
-
-    private static final class _UnknownValue implements Value {
-        private String type;
-
-        @JsonValue
-        private Object value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private _UnknownValue(@JsonProperty("value") Object value) {}
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor._visitUnknown(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof _UnknownValue && equalTo((_UnknownValue) other);
-        }
-
-        private boolean equalTo(_UnknownValue other) {
-            return type.equals(other.type) && value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.type, this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ClientMessageToolCallsToolWithToolCallListItem{" + "type: " + type + ", value: " + value + "}";
+        public ClientMessageToolCallsToolWithToolCallListItem deserialize(JsonParser p, DeserializationContext ctxt)
+                throws IOException {
+            Object value = p.readValueAs(Object.class);
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, FunctionToolWithToolCall.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, GhlToolWithToolCall.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, MakeToolWithToolCall.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, Object.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, Object.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, Object.class));
+            } catch (IllegalArgumentException e) {
+            }
+            throw new JsonParseException(p, "Failed to deserialize");
         }
     }
 }

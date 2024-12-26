@@ -24,6 +24,10 @@ import org.jetbrains.annotations.NotNull;
 public final class Org {
     private final Optional<Boolean> hipaaEnabled;
 
+    private final Optional<Subscription> subscription;
+
+    private final Optional<String> subscriptionId;
+
     private final String id;
 
     private final OffsetDateTime createdAt;
@@ -44,6 +48,8 @@ public final class Org {
 
     private final Optional<String> name;
 
+    private final Optional<OrgChannel> channel;
+
     private final Optional<Double> billingLimit;
 
     private final Optional<String> serverUrl;
@@ -56,6 +62,8 @@ public final class Org {
 
     private Org(
             Optional<Boolean> hipaaEnabled,
+            Optional<Subscription> subscription,
+            Optional<String> subscriptionId,
             String id,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
@@ -66,12 +74,15 @@ public final class Org {
             Optional<String> stripeSubscriptionStatus,
             Optional<OrgPlan> plan,
             Optional<String> name,
+            Optional<OrgChannel> channel,
             Optional<Double> billingLimit,
             Optional<String> serverUrl,
             Optional<String> serverUrlSecret,
             Optional<Double> concurrencyLimit,
             Map<String, Object> additionalProperties) {
         this.hipaaEnabled = hipaaEnabled;
+        this.subscription = subscription;
+        this.subscriptionId = subscriptionId;
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -82,6 +93,7 @@ public final class Org {
         this.stripeSubscriptionStatus = stripeSubscriptionStatus;
         this.plan = plan;
         this.name = name;
+        this.channel = channel;
         this.billingLimit = billingLimit;
         this.serverUrl = serverUrl;
         this.serverUrlSecret = serverUrlSecret;
@@ -97,6 +109,19 @@ public final class Org {
     @JsonProperty("hipaaEnabled")
     public Optional<Boolean> getHipaaEnabled() {
         return hipaaEnabled;
+    }
+
+    @JsonProperty("subscription")
+    public Optional<Subscription> getSubscription() {
+        return subscription;
+    }
+
+    /**
+     * @return This is the ID of the subscription the org belongs to.
+     */
+    @JsonProperty("subscriptionId")
+    public Optional<String> getSubscriptionId() {
+        return subscriptionId;
     }
 
     /**
@@ -180,6 +205,14 @@ public final class Org {
     }
 
     /**
+     * @return This is the channel of the org. There is the cluster the API traffic for the org will be directed.
+     */
+    @JsonProperty("channel")
+    public Optional<OrgChannel> getChannel() {
+        return channel;
+    }
+
+    /**
      * @return This is the monthly billing limit for the org. To go beyond $1000/mo, please contact us at support@vapi.ai.
      */
     @JsonProperty("billingLimit")
@@ -225,6 +258,8 @@ public final class Org {
 
     private boolean equalTo(Org other) {
         return hipaaEnabled.equals(other.hipaaEnabled)
+                && subscription.equals(other.subscription)
+                && subscriptionId.equals(other.subscriptionId)
                 && id.equals(other.id)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
@@ -235,6 +270,7 @@ public final class Org {
                 && stripeSubscriptionStatus.equals(other.stripeSubscriptionStatus)
                 && plan.equals(other.plan)
                 && name.equals(other.name)
+                && channel.equals(other.channel)
                 && billingLimit.equals(other.billingLimit)
                 && serverUrl.equals(other.serverUrl)
                 && serverUrlSecret.equals(other.serverUrlSecret)
@@ -245,6 +281,8 @@ public final class Org {
     public int hashCode() {
         return Objects.hash(
                 this.hipaaEnabled,
+                this.subscription,
+                this.subscriptionId,
                 this.id,
                 this.createdAt,
                 this.updatedAt,
@@ -255,6 +293,7 @@ public final class Org {
                 this.stripeSubscriptionStatus,
                 this.plan,
                 this.name,
+                this.channel,
                 this.billingLimit,
                 this.serverUrl,
                 this.serverUrlSecret,
@@ -291,6 +330,14 @@ public final class Org {
 
         _FinalStage hipaaEnabled(Boolean hipaaEnabled);
 
+        _FinalStage subscription(Optional<Subscription> subscription);
+
+        _FinalStage subscription(Subscription subscription);
+
+        _FinalStage subscriptionId(Optional<String> subscriptionId);
+
+        _FinalStage subscriptionId(String subscriptionId);
+
         _FinalStage stripeCustomerId(Optional<String> stripeCustomerId);
 
         _FinalStage stripeCustomerId(String stripeCustomerId);
@@ -318,6 +365,10 @@ public final class Org {
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
+
+        _FinalStage channel(Optional<OrgChannel> channel);
+
+        _FinalStage channel(OrgChannel channel);
 
         _FinalStage billingLimit(Optional<Double> billingLimit);
 
@@ -352,6 +403,8 @@ public final class Org {
 
         private Optional<Double> billingLimit = Optional.empty();
 
+        private Optional<OrgChannel> channel = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<OrgPlan> plan = Optional.empty();
@@ -366,6 +419,10 @@ public final class Org {
 
         private Optional<String> stripeCustomerId = Optional.empty();
 
+        private Optional<String> subscriptionId = Optional.empty();
+
+        private Optional<Subscription> subscription = Optional.empty();
+
         private Optional<Boolean> hipaaEnabled = Optional.empty();
 
         @JsonAnySetter
@@ -376,6 +433,8 @@ public final class Org {
         @java.lang.Override
         public Builder from(Org other) {
             hipaaEnabled(other.getHipaaEnabled());
+            subscription(other.getSubscription());
+            subscriptionId(other.getSubscriptionId());
             id(other.getId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
@@ -386,6 +445,7 @@ public final class Org {
             stripeSubscriptionStatus(other.getStripeSubscriptionStatus());
             plan(other.getPlan());
             name(other.getName());
+            channel(other.getChannel());
             billingLimit(other.getBillingLimit());
             serverUrl(other.getServerUrl());
             serverUrlSecret(other.getServerUrlSecret());
@@ -492,6 +552,23 @@ public final class Org {
         @JsonSetter(value = "billingLimit", nulls = Nulls.SKIP)
         public _FinalStage billingLimit(Optional<Double> billingLimit) {
             this.billingLimit = billingLimit;
+            return this;
+        }
+
+        /**
+         * <p>This is the channel of the org. There is the cluster the API traffic for the org will be directed.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage channel(OrgChannel channel) {
+            this.channel = Optional.ofNullable(channel);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "channel", nulls = Nulls.SKIP)
+        public _FinalStage channel(Optional<OrgChannel> channel) {
+            this.channel = channel;
             return this;
         }
 
@@ -616,6 +693,36 @@ public final class Org {
         }
 
         /**
+         * <p>This is the ID of the subscription the org belongs to.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage subscriptionId(String subscriptionId) {
+            this.subscriptionId = Optional.ofNullable(subscriptionId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "subscriptionId", nulls = Nulls.SKIP)
+        public _FinalStage subscriptionId(Optional<String> subscriptionId) {
+            this.subscriptionId = subscriptionId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage subscription(Subscription subscription) {
+            this.subscription = Optional.ofNullable(subscription);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "subscription", nulls = Nulls.SKIP)
+        public _FinalStage subscription(Optional<Subscription> subscription) {
+            this.subscription = subscription;
+            return this;
+        }
+
+        /**
          * <p>When this is enabled, no logs, recordings, or transcriptions will be stored. At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.
          * When HIPAA is enabled, only OpenAI/Custom LLM or Azure Providers will be available for LLM and Voice respectively.
          * This is due to the compliance requirements of HIPAA. Other providers may not meet these requirements.</p>
@@ -638,6 +745,8 @@ public final class Org {
         public Org build() {
             return new Org(
                     hipaaEnabled,
+                    subscription,
+                    subscriptionId,
                     id,
                     createdAt,
                     updatedAt,
@@ -648,6 +757,7 @@ public final class Org {
                     stripeSubscriptionStatus,
                     plan,
                     name,
+                    channel,
                     billingLimit,
                     serverUrl,
                     serverUrlSecret,

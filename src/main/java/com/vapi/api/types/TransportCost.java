@@ -9,25 +9,39 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TransportCost.Builder.class)
 public final class TransportCost {
+    private final Optional<TransportCostProvider> provider;
+
     private final double minutes;
 
     private final double cost;
 
     private final Map<String, Object> additionalProperties;
 
-    private TransportCost(double minutes, double cost, Map<String, Object> additionalProperties) {
+    private TransportCost(
+            Optional<TransportCostProvider> provider,
+            double minutes,
+            double cost,
+            Map<String, Object> additionalProperties) {
+        this.provider = provider;
         this.minutes = minutes;
         this.cost = cost;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("provider")
+    public Optional<TransportCostProvider> getProvider() {
+        return provider;
     }
 
     /**
@@ -58,12 +72,12 @@ public final class TransportCost {
     }
 
     private boolean equalTo(TransportCost other) {
-        return minutes == other.minutes && cost == other.cost;
+        return provider.equals(other.provider) && minutes == other.minutes && cost == other.cost;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.minutes, this.cost);
+        return Objects.hash(this.provider, this.minutes, this.cost);
     }
 
     @java.lang.Override
@@ -87,6 +101,10 @@ public final class TransportCost {
 
     public interface _FinalStage {
         TransportCost build();
+
+        _FinalStage provider(Optional<TransportCostProvider> provider);
+
+        _FinalStage provider(TransportCostProvider provider);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -95,6 +113,8 @@ public final class TransportCost {
 
         private double cost;
 
+        private Optional<TransportCostProvider> provider = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -102,6 +122,7 @@ public final class TransportCost {
 
         @java.lang.Override
         public Builder from(TransportCost other) {
+            provider(other.getProvider());
             minutes(other.getMinutes());
             cost(other.getCost());
             return this;
@@ -130,8 +151,21 @@ public final class TransportCost {
         }
 
         @java.lang.Override
+        public _FinalStage provider(TransportCostProvider provider) {
+            this.provider = Optional.ofNullable(provider);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "provider", nulls = Nulls.SKIP)
+        public _FinalStage provider(Optional<TransportCostProvider> provider) {
+            this.provider = provider;
+            return this;
+        }
+
+        @java.lang.Override
         public TransportCost build() {
-            return new TransportCost(minutes, cost, additionalProperties);
+            return new TransportCost(provider, minutes, cost, additionalProperties);
         }
     }
 }

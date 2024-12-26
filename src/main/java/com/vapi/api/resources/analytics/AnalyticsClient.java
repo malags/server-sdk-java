@@ -3,18 +3,12 @@
  */
 package com.vapi.api.resources.analytics;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.vapi.api.core.ClientOptions;
-import com.vapi.api.core.MediaTypes;
 import com.vapi.api.core.ObjectMappers;
 import com.vapi.api.core.RequestOptions;
 import com.vapi.api.core.VapiApiException;
 import com.vapi.api.core.VapiException;
-import com.vapi.api.resources.analytics.requests.AnalyticsQueryDto;
-import com.vapi.api.types.AnalyticsQueryResult;
 import java.io.IOException;
-import java.util.List;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -30,27 +24,19 @@ public class AnalyticsClient {
         this.clientOptions = clientOptions;
     }
 
-    public List<AnalyticsQueryResult> get(AnalyticsQueryDto request) {
-        return get(request, null);
+    public void get() {
+        get(null);
     }
 
-    public List<AnalyticsQueryResult> get(AnalyticsQueryDto request, RequestOptions requestOptions) {
+    public void get(RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("analytics")
                 .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new VapiException("Failed to serialize request", e);
-        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("POST", body)
+                .method("POST", RequestBody.create("", null))
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -59,8 +45,7 @@ public class AnalyticsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(
-                        responseBody.string(), new TypeReference<List<AnalyticsQueryResult>>() {});
+                return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new VapiApiException(

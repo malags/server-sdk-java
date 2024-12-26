@@ -44,6 +44,8 @@ public final class VapiPhoneNumber {
 
     private final String sipUri;
 
+    private final Optional<SipAuthentication> authentication;
+
     private final Map<String, Object> additionalProperties;
 
     private VapiPhoneNumber(
@@ -58,6 +60,7 @@ public final class VapiPhoneNumber {
             Optional<String> serverUrl,
             Optional<String> serverUrlSecret,
             String sipUri,
+            Optional<SipAuthentication> authentication,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
         this.id = id;
@@ -70,6 +73,7 @@ public final class VapiPhoneNumber {
         this.serverUrl = serverUrl;
         this.serverUrlSecret = serverUrlSecret;
         this.sipUri = sipUri;
+        this.authentication = authentication;
         this.additionalProperties = additionalProperties;
     }
 
@@ -173,6 +177,15 @@ public final class VapiPhoneNumber {
         return sipUri;
     }
 
+    /**
+     * @return This enables authentication for incoming SIP INVITE requests to the <code>sipUri</code>.
+     * <p>If not set, any username/password to the 401 challenge of the SIP INVITE will be accepted.</p>
+     */
+    @JsonProperty("authentication")
+    public Optional<SipAuthentication> getAuthentication() {
+        return authentication;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -195,7 +208,8 @@ public final class VapiPhoneNumber {
                 && squadId.equals(other.squadId)
                 && serverUrl.equals(other.serverUrl)
                 && serverUrlSecret.equals(other.serverUrlSecret)
-                && sipUri.equals(other.sipUri);
+                && sipUri.equals(other.sipUri)
+                && authentication.equals(other.authentication);
     }
 
     @java.lang.Override
@@ -211,7 +225,8 @@ public final class VapiPhoneNumber {
                 this.squadId,
                 this.serverUrl,
                 this.serverUrlSecret,
-                this.sipUri);
+                this.sipUri,
+                this.authentication);
     }
 
     @java.lang.Override
@@ -271,6 +286,10 @@ public final class VapiPhoneNumber {
         _FinalStage serverUrlSecret(Optional<String> serverUrlSecret);
 
         _FinalStage serverUrlSecret(String serverUrlSecret);
+
+        _FinalStage authentication(Optional<SipAuthentication> authentication);
+
+        _FinalStage authentication(SipAuthentication authentication);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -285,6 +304,8 @@ public final class VapiPhoneNumber {
         private OffsetDateTime updatedAt;
 
         private String sipUri;
+
+        private Optional<SipAuthentication> authentication = Optional.empty();
 
         private Optional<String> serverUrlSecret = Optional.empty();
 
@@ -316,6 +337,7 @@ public final class VapiPhoneNumber {
             serverUrl(other.getServerUrl());
             serverUrlSecret(other.getServerUrlSecret());
             sipUri(other.getSipUri());
+            authentication(other.getAuthentication());
             return this;
         }
 
@@ -372,6 +394,24 @@ public final class VapiPhoneNumber {
         @JsonSetter("sipUri")
         public _FinalStage sipUri(@NotNull String sipUri) {
             this.sipUri = Objects.requireNonNull(sipUri, "sipUri must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This enables authentication for incoming SIP INVITE requests to the <code>sipUri</code>.</p>
+         * <p>If not set, any username/password to the 401 challenge of the SIP INVITE will be accepted.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage authentication(SipAuthentication authentication) {
+            this.authentication = Optional.ofNullable(authentication);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
+        public _FinalStage authentication(Optional<SipAuthentication> authentication) {
+            this.authentication = authentication;
             return this;
         }
 
@@ -502,6 +542,7 @@ public final class VapiPhoneNumber {
                     serverUrl,
                     serverUrlSecret,
                     sipUri,
+                    authentication,
                     additionalProperties);
         }
     }

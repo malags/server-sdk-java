@@ -63,6 +63,8 @@ public final class Call {
 
     private final Optional<Artifact> artifact;
 
+    private final Optional<Transport> transport;
+
     private final Optional<String> phoneCallProviderId;
 
     private final Optional<String> assistantId;
@@ -108,6 +110,7 @@ public final class Call {
             Optional<Analysis> analysis,
             Optional<Monitor> monitor,
             Optional<Artifact> artifact,
+            Optional<Transport> transport,
             Optional<String> phoneCallProviderId,
             Optional<String> assistantId,
             Optional<CreateAssistantDto> assistant,
@@ -140,6 +143,7 @@ public final class Call {
         this.analysis = analysis;
         this.monitor = monitor;
         this.artifact = artifact;
+        this.transport = transport;
         this.phoneCallProviderId = phoneCallProviderId;
         this.assistantId = assistantId;
         this.assistant = assistant;
@@ -314,6 +318,14 @@ public final class Call {
     }
 
     /**
+     * @return This is the transport used for the call.
+     */
+    @JsonProperty("transport")
+    public Optional<Transport> getTransport() {
+        return transport;
+    }
+
+    /**
      * @return The ID of the call as provided by the phone number service. callSid in Twilio. conversationUuid in Vonage.
      * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
      */
@@ -438,6 +450,7 @@ public final class Call {
                 && analysis.equals(other.analysis)
                 && monitor.equals(other.monitor)
                 && artifact.equals(other.artifact)
+                && transport.equals(other.transport)
                 && phoneCallProviderId.equals(other.phoneCallProviderId)
                 && assistantId.equals(other.assistantId)
                 && assistant.equals(other.assistant)
@@ -474,6 +487,7 @@ public final class Call {
                 this.analysis,
                 this.monitor,
                 this.artifact,
+                this.transport,
                 this.phoneCallProviderId,
                 this.assistantId,
                 this.assistant,
@@ -581,6 +595,10 @@ public final class Call {
 
         _FinalStage artifact(Artifact artifact);
 
+        _FinalStage transport(Optional<Transport> transport);
+
+        _FinalStage transport(Transport transport);
+
         _FinalStage phoneCallProviderId(Optional<String> phoneCallProviderId);
 
         _FinalStage phoneCallProviderId(String phoneCallProviderId);
@@ -658,6 +676,8 @@ public final class Call {
 
         private Optional<String> phoneCallProviderId = Optional.empty();
 
+        private Optional<Transport> transport = Optional.empty();
+
         private Optional<Artifact> artifact = Optional.empty();
 
         private Optional<Monitor> monitor = Optional.empty();
@@ -717,6 +737,7 @@ public final class Call {
             analysis(other.getAnalysis());
             monitor(other.getMonitor());
             artifact(other.getArtifact());
+            transport(other.getTransport());
             phoneCallProviderId(other.getPhoneCallProviderId());
             assistantId(other.getAssistantId());
             assistant(other.getAssistant());
@@ -964,6 +985,23 @@ public final class Call {
         @JsonSetter(value = "phoneCallProviderId", nulls = Nulls.SKIP)
         public _FinalStage phoneCallProviderId(Optional<String> phoneCallProviderId) {
             this.phoneCallProviderId = phoneCallProviderId;
+            return this;
+        }
+
+        /**
+         * <p>This is the transport used for the call.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage transport(Transport transport) {
+            this.transport = Optional.ofNullable(transport);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "transport", nulls = Nulls.SKIP)
+        public _FinalStage transport(Optional<Transport> transport) {
+            this.transport = transport;
             return this;
         }
 
@@ -1260,6 +1298,7 @@ public final class Call {
                     analysis,
                     monitor,
                     artifact,
+                    transport,
                     phoneCallProviderId,
                     assistantId,
                     assistant,

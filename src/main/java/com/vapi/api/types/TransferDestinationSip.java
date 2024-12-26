@@ -21,23 +21,45 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TransferDestinationSip.Builder.class)
 public final class TransferDestinationSip {
+    private final Optional<TransferDestinationSipMessage> message;
+
     private final String sipUri;
 
-    private final Optional<String> message;
+    private final Optional<TransferPlan> transferPlan;
+
+    private final Optional<Map<String, Object>> sipHeaders;
 
     private final Optional<String> description;
 
     private final Map<String, Object> additionalProperties;
 
     private TransferDestinationSip(
+            Optional<TransferDestinationSipMessage> message,
             String sipUri,
-            Optional<String> message,
+            Optional<TransferPlan> transferPlan,
+            Optional<Map<String, Object>> sipHeaders,
             Optional<String> description,
             Map<String, Object> additionalProperties) {
-        this.sipUri = sipUri;
         this.message = message;
+        this.sipUri = sipUri;
+        this.transferPlan = transferPlan;
+        this.sipHeaders = sipHeaders;
         this.description = description;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is spoken to the customer before connecting them to the destination.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+     * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+     * </ul>
+     * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+     */
+    @JsonProperty("message")
+    public Optional<TransferDestinationSipMessage> getMessage() {
+        return message;
     }
 
     /**
@@ -49,13 +71,20 @@ public final class TransferDestinationSip {
     }
 
     /**
-     * @return This is the message to say before transferring the call to the destination.
-     * <p>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</p>
-     * <p>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</p>
+     * @return This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to <code>blind-transfer</code>.
+     * <p>@default <code>transferPlan.mode='blind-transfer'</code></p>
      */
-    @JsonProperty("message")
-    public Optional<String> getMessage() {
-        return message;
+    @JsonProperty("transferPlan")
+    public Optional<TransferPlan> getTransferPlan() {
+        return transferPlan;
+    }
+
+    /**
+     * @return These are custom headers to be added to SIP refer during transfer call.
+     */
+    @JsonProperty("sipHeaders")
+    public Optional<Map<String, Object>> getSipHeaders() {
+        return sipHeaders;
     }
 
     /**
@@ -78,12 +107,16 @@ public final class TransferDestinationSip {
     }
 
     private boolean equalTo(TransferDestinationSip other) {
-        return sipUri.equals(other.sipUri) && message.equals(other.message) && description.equals(other.description);
+        return message.equals(other.message)
+                && sipUri.equals(other.sipUri)
+                && transferPlan.equals(other.transferPlan)
+                && sipHeaders.equals(other.sipHeaders)
+                && description.equals(other.description);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.sipUri, this.message, this.description);
+        return Objects.hash(this.message, this.sipUri, this.transferPlan, this.sipHeaders, this.description);
     }
 
     @java.lang.Override
@@ -104,9 +137,17 @@ public final class TransferDestinationSip {
     public interface _FinalStage {
         TransferDestinationSip build();
 
-        _FinalStage message(Optional<String> message);
+        _FinalStage message(Optional<TransferDestinationSipMessage> message);
 
-        _FinalStage message(String message);
+        _FinalStage message(TransferDestinationSipMessage message);
+
+        _FinalStage transferPlan(Optional<TransferPlan> transferPlan);
+
+        _FinalStage transferPlan(TransferPlan transferPlan);
+
+        _FinalStage sipHeaders(Optional<Map<String, Object>> sipHeaders);
+
+        _FinalStage sipHeaders(Map<String, Object> sipHeaders);
 
         _FinalStage description(Optional<String> description);
 
@@ -119,7 +160,11 @@ public final class TransferDestinationSip {
 
         private Optional<String> description = Optional.empty();
 
-        private Optional<String> message = Optional.empty();
+        private Optional<Map<String, Object>> sipHeaders = Optional.empty();
+
+        private Optional<TransferPlan> transferPlan = Optional.empty();
+
+        private Optional<TransferDestinationSipMessage> message = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -128,8 +173,10 @@ public final class TransferDestinationSip {
 
         @java.lang.Override
         public Builder from(TransferDestinationSip other) {
-            sipUri(other.getSipUri());
             message(other.getMessage());
+            sipUri(other.getSipUri());
+            transferPlan(other.getTransferPlan());
+            sipHeaders(other.getSipHeaders());
             description(other.getDescription());
             return this;
         }
@@ -163,27 +210,67 @@ public final class TransferDestinationSip {
         }
 
         /**
-         * <p>This is the message to say before transferring the call to the destination.</p>
-         * <p>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</p>
-         * <p>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</p>
+         * <p>These are custom headers to be added to SIP refer during transfer call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage message(String message) {
+        public _FinalStage sipHeaders(Map<String, Object> sipHeaders) {
+            this.sipHeaders = Optional.ofNullable(sipHeaders);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "sipHeaders", nulls = Nulls.SKIP)
+        public _FinalStage sipHeaders(Optional<Map<String, Object>> sipHeaders) {
+            this.sipHeaders = sipHeaders;
+            return this;
+        }
+
+        /**
+         * <p>This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to <code>blind-transfer</code>.</p>
+         * <p>@default <code>transferPlan.mode='blind-transfer'</code></p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage transferPlan(TransferPlan transferPlan) {
+            this.transferPlan = Optional.ofNullable(transferPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "transferPlan", nulls = Nulls.SKIP)
+        public _FinalStage transferPlan(Optional<TransferPlan> transferPlan) {
+            this.transferPlan = transferPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage message(TransferDestinationSipMessage message) {
             this.message = Optional.ofNullable(message);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
-        public _FinalStage message(Optional<String> message) {
+        public _FinalStage message(Optional<TransferDestinationSipMessage> message) {
             this.message = message;
             return this;
         }
 
         @java.lang.Override
         public TransferDestinationSip build() {
-            return new TransferDestinationSip(sipUri, message, description, additionalProperties);
+            return new TransferDestinationSip(
+                    message, sipUri, transferPlan, sipHeaders, description, additionalProperties);
         }
     }
 }

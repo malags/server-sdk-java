@@ -21,23 +21,37 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TransferDestinationStep.Builder.class)
 public final class TransferDestinationStep {
-    private final String stepName;
+    private final Optional<TransferDestinationStepMessage> message;
 
-    private final Optional<String> message;
+    private final String stepName;
 
     private final Optional<String> description;
 
     private final Map<String, Object> additionalProperties;
 
     private TransferDestinationStep(
+            Optional<TransferDestinationStepMessage> message,
             String stepName,
-            Optional<String> message,
             Optional<String> description,
             Map<String, Object> additionalProperties) {
-        this.stepName = stepName;
         this.message = message;
+        this.stepName = stepName;
         this.description = description;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is spoken to the customer before connecting them to the destination.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+     * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+     * </ul>
+     * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+     */
+    @JsonProperty("message")
+    public Optional<TransferDestinationStepMessage> getMessage() {
+        return message;
     }
 
     /**
@@ -46,16 +60,6 @@ public final class TransferDestinationStep {
     @JsonProperty("stepName")
     public String getStepName() {
         return stepName;
-    }
-
-    /**
-     * @return This is the message to say before transferring the call to the destination.
-     * <p>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</p>
-     * <p>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</p>
-     */
-    @JsonProperty("message")
-    public Optional<String> getMessage() {
-        return message;
     }
 
     /**
@@ -78,14 +82,14 @@ public final class TransferDestinationStep {
     }
 
     private boolean equalTo(TransferDestinationStep other) {
-        return stepName.equals(other.stepName)
-                && message.equals(other.message)
+        return message.equals(other.message)
+                && stepName.equals(other.stepName)
                 && description.equals(other.description);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.stepName, this.message, this.description);
+        return Objects.hash(this.message, this.stepName, this.description);
     }
 
     @java.lang.Override
@@ -106,9 +110,9 @@ public final class TransferDestinationStep {
     public interface _FinalStage {
         TransferDestinationStep build();
 
-        _FinalStage message(Optional<String> message);
+        _FinalStage message(Optional<TransferDestinationStepMessage> message);
 
-        _FinalStage message(String message);
+        _FinalStage message(TransferDestinationStepMessage message);
 
         _FinalStage description(Optional<String> description);
 
@@ -121,7 +125,7 @@ public final class TransferDestinationStep {
 
         private Optional<String> description = Optional.empty();
 
-        private Optional<String> message = Optional.empty();
+        private Optional<TransferDestinationStepMessage> message = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -130,8 +134,8 @@ public final class TransferDestinationStep {
 
         @java.lang.Override
         public Builder from(TransferDestinationStep other) {
-            stepName(other.getStepName());
             message(other.getMessage());
+            stepName(other.getStepName());
             description(other.getDescription());
             return this;
         }
@@ -165,27 +169,31 @@ public final class TransferDestinationStep {
         }
 
         /**
-         * <p>This is the message to say before transferring the call to the destination.</p>
-         * <p>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</p>
-         * <p>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</p>
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage message(String message) {
+        public _FinalStage message(TransferDestinationStepMessage message) {
             this.message = Optional.ofNullable(message);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
-        public _FinalStage message(Optional<String> message) {
+        public _FinalStage message(Optional<TransferDestinationStepMessage> message) {
             this.message = message;
             return this;
         }
 
         @java.lang.Override
         public TransferDestinationStep build() {
-            return new TransferDestinationStep(stepName, message, description, additionalProperties);
+            return new TransferDestinationStep(message, stepName, description, additionalProperties);
         }
     }
 }

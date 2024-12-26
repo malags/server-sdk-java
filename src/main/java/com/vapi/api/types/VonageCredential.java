@@ -9,12 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -34,6 +36,8 @@ public final class VonageCredential {
 
     private final String vonageApplicationId;
 
+    private final Optional<String> name;
+
     private final String apiKey;
 
     private final Map<String, Object> additionalProperties;
@@ -46,6 +50,7 @@ public final class VonageCredential {
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             String vonageApplicationId,
+            Optional<String> name,
             String apiKey,
             Map<String, Object> additionalProperties) {
         this.vonageApplicationPrivateKey = vonageApplicationPrivateKey;
@@ -55,6 +60,7 @@ public final class VonageCredential {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.vonageApplicationId = vonageApplicationId;
+        this.name = name;
         this.apiKey = apiKey;
         this.additionalProperties = additionalProperties;
     }
@@ -121,6 +127,14 @@ public final class VonageCredential {
         return vonageApplicationId;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @JsonProperty("apiKey")
     public String getApiKey() {
         return apiKey;
@@ -145,6 +159,7 @@ public final class VonageCredential {
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && vonageApplicationId.equals(other.vonageApplicationId)
+                && name.equals(other.name)
                 && apiKey.equals(other.apiKey);
     }
 
@@ -158,6 +173,7 @@ public final class VonageCredential {
                 this.createdAt,
                 this.updatedAt,
                 this.vonageApplicationId,
+                this.name,
                 this.apiKey);
     }
 
@@ -206,6 +222,10 @@ public final class VonageCredential {
 
     public interface _FinalStage {
         VonageCredential build();
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -235,6 +255,8 @@ public final class VonageCredential {
 
         private String apiKey;
 
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -249,6 +271,7 @@ public final class VonageCredential {
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             vonageApplicationId(other.getVonageApplicationId());
+            name(other.getName());
             apiKey(other.getApiKey());
             return this;
         }
@@ -340,6 +363,23 @@ public final class VonageCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public VonageCredential build() {
             return new VonageCredential(
@@ -350,6 +390,7 @@ public final class VonageCredential {
                     createdAt,
                     updatedAt,
                     vonageApplicationId,
+                    name,
                     apiKey,
                     additionalProperties);
         }

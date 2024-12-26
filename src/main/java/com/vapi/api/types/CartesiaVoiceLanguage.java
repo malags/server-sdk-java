@@ -6,9 +6,9 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CartesiaVoiceLanguage {
-    DE("de"),
-
     EN("en"),
+
+    DE("de"),
 
     ES("es"),
 
@@ -18,7 +18,23 @@ public enum CartesiaVoiceLanguage {
 
     PT("pt"),
 
-    ZH("zh");
+    ZH("zh"),
+
+    HI("hi"),
+
+    IT("it"),
+
+    KO("ko"),
+
+    NL("nl"),
+
+    PL("pl"),
+
+    RU("ru"),
+
+    SV("sv"),
+
+    TR("tr");
 
     private final String value;
 

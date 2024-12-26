@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -23,11 +25,15 @@ public final class UpdatePlayHtCredentialDto {
 
     private final String userId;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
-    private UpdatePlayHtCredentialDto(String apiKey, String userId, Map<String, Object> additionalProperties) {
+    private UpdatePlayHtCredentialDto(
+            String apiKey, String userId, Optional<String> name, Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
         this.userId = userId;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,6 +55,14 @@ public final class UpdatePlayHtCredentialDto {
         return userId;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -61,12 +75,12 @@ public final class UpdatePlayHtCredentialDto {
     }
 
     private boolean equalTo(UpdatePlayHtCredentialDto other) {
-        return apiKey.equals(other.apiKey) && userId.equals(other.userId);
+        return apiKey.equals(other.apiKey) && userId.equals(other.userId) && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.userId);
+        return Objects.hash(this.apiKey, this.userId, this.name);
     }
 
     @java.lang.Override
@@ -90,6 +104,10 @@ public final class UpdatePlayHtCredentialDto {
 
     public interface _FinalStage {
         UpdatePlayHtCredentialDto build();
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -97,6 +115,8 @@ public final class UpdatePlayHtCredentialDto {
         private String apiKey;
 
         private String userId;
+
+        private Optional<String> name = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -107,6 +127,7 @@ public final class UpdatePlayHtCredentialDto {
         public Builder from(UpdatePlayHtCredentialDto other) {
             apiKey(other.getApiKey());
             userId(other.getUserId());
+            name(other.getName());
             return this;
         }
 
@@ -128,9 +149,26 @@ public final class UpdatePlayHtCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public UpdatePlayHtCredentialDto build() {
-            return new UpdatePlayHtCredentialDto(apiKey, userId, additionalProperties);
+            return new UpdatePlayHtCredentialDto(apiKey, userId, name, additionalProperties);
         }
     }
 }

@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,10 +23,14 @@ import org.jetbrains.annotations.NotNull;
 public final class ClientInboundMessageAddMessage {
     private final OpenAiMessage message;
 
+    private final Optional<Boolean> triggerResponseEnabled;
+
     private final Map<String, Object> additionalProperties;
 
-    private ClientInboundMessageAddMessage(OpenAiMessage message, Map<String, Object> additionalProperties) {
+    private ClientInboundMessageAddMessage(
+            OpenAiMessage message, Optional<Boolean> triggerResponseEnabled, Map<String, Object> additionalProperties) {
         this.message = message;
+        this.triggerResponseEnabled = triggerResponseEnabled;
         this.additionalProperties = additionalProperties;
     }
 
@@ -34,6 +40,20 @@ public final class ClientInboundMessageAddMessage {
     @JsonProperty("message")
     public OpenAiMessage getMessage() {
         return message;
+    }
+
+    /**
+     * @return This is the flag to trigger a response, or to insert the message into the conversation history silently. Defaults to <code>true</code>.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>Use <code>true</code> to trigger a response.</li>
+     * <li>Use <code>false</code> to insert the message into the conversation history silently.</li>
+     * </ul>
+     * <p>@default true</p>
+     */
+    @JsonProperty("triggerResponseEnabled")
+    public Optional<Boolean> getTriggerResponseEnabled() {
+        return triggerResponseEnabled;
     }
 
     @java.lang.Override
@@ -48,12 +68,12 @@ public final class ClientInboundMessageAddMessage {
     }
 
     private boolean equalTo(ClientInboundMessageAddMessage other) {
-        return message.equals(other.message);
+        return message.equals(other.message) && triggerResponseEnabled.equals(other.triggerResponseEnabled);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.message);
+        return Objects.hash(this.message, this.triggerResponseEnabled);
     }
 
     @java.lang.Override
@@ -73,11 +93,17 @@ public final class ClientInboundMessageAddMessage {
 
     public interface _FinalStage {
         ClientInboundMessageAddMessage build();
+
+        _FinalStage triggerResponseEnabled(Optional<Boolean> triggerResponseEnabled);
+
+        _FinalStage triggerResponseEnabled(Boolean triggerResponseEnabled);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MessageStage, _FinalStage {
         private OpenAiMessage message;
+
+        private Optional<Boolean> triggerResponseEnabled = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -87,6 +113,7 @@ public final class ClientInboundMessageAddMessage {
         @java.lang.Override
         public Builder from(ClientInboundMessageAddMessage other) {
             message(other.getMessage());
+            triggerResponseEnabled(other.getTriggerResponseEnabled());
             return this;
         }
 
@@ -101,9 +128,32 @@ public final class ClientInboundMessageAddMessage {
             return this;
         }
 
+        /**
+         * <p>This is the flag to trigger a response, or to insert the message into the conversation history silently. Defaults to <code>true</code>.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Use <code>true</code> to trigger a response.</li>
+         * <li>Use <code>false</code> to insert the message into the conversation history silently.</li>
+         * </ul>
+         * <p>@default true</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage triggerResponseEnabled(Boolean triggerResponseEnabled) {
+            this.triggerResponseEnabled = Optional.ofNullable(triggerResponseEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "triggerResponseEnabled", nulls = Nulls.SKIP)
+        public _FinalStage triggerResponseEnabled(Optional<Boolean> triggerResponseEnabled) {
+            this.triggerResponseEnabled = triggerResponseEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public ClientInboundMessageAddMessage build() {
-            return new ClientInboundMessageAddMessage(message, additionalProperties);
+            return new ClientInboundMessageAddMessage(message, triggerResponseEnabled, additionalProperties);
         }
     }
 }

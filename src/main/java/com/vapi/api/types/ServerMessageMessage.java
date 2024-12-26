@@ -42,6 +42,10 @@ public final class ServerMessageMessage {
         return new ServerMessageMessage(new HangValue(value));
     }
 
+    public static ServerMessageMessage knowledgeBaseRequest(ServerMessageKnowledgeBaseRequest value) {
+        return new ServerMessageMessage(new KnowledgeBaseRequestValue(value));
+    }
+
     public static ServerMessageMessage modelOutput(ServerMessageModelOutput value) {
         return new ServerMessageMessage(new ModelOutputValue(value));
     }
@@ -78,8 +82,8 @@ public final class ServerMessageMessage {
         return new ServerMessageMessage(new UserInterruptedValue(value));
     }
 
-    public static ServerMessageMessage languageChanged(ServerMessageLanguageChanged value) {
-        return new ServerMessageMessage(new LanguageChangedValue(value));
+    public static ServerMessageMessage languageChangeDetected(ServerMessageLanguageChangeDetected value) {
+        return new ServerMessageMessage(new LanguageChangeDetectedValue(value));
     }
 
     public static ServerMessageMessage voiceInput(ServerMessageVoiceInput value) {
@@ -104,6 +108,10 @@ public final class ServerMessageMessage {
 
     public boolean isHang() {
         return value instanceof HangValue;
+    }
+
+    public boolean isKnowledgeBaseRequest() {
+        return value instanceof KnowledgeBaseRequestValue;
     }
 
     public boolean isModelOutput() {
@@ -142,8 +150,8 @@ public final class ServerMessageMessage {
         return value instanceof UserInterruptedValue;
     }
 
-    public boolean isLanguageChanged() {
-        return value instanceof LanguageChangedValue;
+    public boolean isLanguageChangeDetected() {
+        return value instanceof LanguageChangeDetectedValue;
     }
 
     public boolean isVoiceInput() {
@@ -182,6 +190,13 @@ public final class ServerMessageMessage {
     public Optional<ServerMessageHang> getHang() {
         if (isHang()) {
             return Optional.of(((HangValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ServerMessageKnowledgeBaseRequest> getKnowledgeBaseRequest() {
+        if (isKnowledgeBaseRequest()) {
+            return Optional.of(((KnowledgeBaseRequestValue) value).value);
         }
         return Optional.empty();
     }
@@ -249,9 +264,9 @@ public final class ServerMessageMessage {
         return Optional.empty();
     }
 
-    public Optional<ServerMessageLanguageChanged> getLanguageChanged() {
-        if (isLanguageChanged()) {
-            return Optional.of(((LanguageChangedValue) value).value);
+    public Optional<ServerMessageLanguageChangeDetected> getLanguageChangeDetected() {
+        if (isLanguageChangeDetected()) {
+            return Optional.of(((LanguageChangeDetectedValue) value).value);
         }
         return Optional.empty();
     }
@@ -291,6 +306,8 @@ public final class ServerMessageMessage {
 
         T visitHang(ServerMessageHang hang);
 
+        T visitKnowledgeBaseRequest(ServerMessageKnowledgeBaseRequest knowledgeBaseRequest);
+
         T visitModelOutput(ServerMessageModelOutput modelOutput);
 
         T visitPhoneCallControl(ServerMessagePhoneCallControl phoneCallControl);
@@ -309,7 +326,7 @@ public final class ServerMessageMessage {
 
         T visitUserInterrupted(ServerMessageUserInterrupted userInterrupted);
 
-        T visitLanguageChanged(ServerMessageLanguageChanged languageChanged);
+        T visitLanguageChangeDetected(ServerMessageLanguageChangeDetected languageChangeDetected);
 
         T visitVoiceInput(ServerMessageVoiceInput voiceInput);
 
@@ -324,6 +341,7 @@ public final class ServerMessageMessage {
         @JsonSubTypes.Type(ConversationUpdateValue.class),
         @JsonSubTypes.Type(EndOfCallReportValue.class),
         @JsonSubTypes.Type(HangValue.class),
+        @JsonSubTypes.Type(KnowledgeBaseRequestValue.class),
         @JsonSubTypes.Type(ModelOutputValue.class),
         @JsonSubTypes.Type(PhoneCallControlValue.class),
         @JsonSubTypes.Type(SpeechUpdateValue.class),
@@ -333,7 +351,7 @@ public final class ServerMessageMessage {
         @JsonSubTypes.Type(TransferUpdateValue.class),
         @JsonSubTypes.Type(TranscriptValue.class),
         @JsonSubTypes.Type(UserInterruptedValue.class),
-        @JsonSubTypes.Type(LanguageChangedValue.class),
+        @JsonSubTypes.Type(LanguageChangeDetectedValue.class),
         @JsonSubTypes.Type(VoiceInputValue.class),
         @JsonSubTypes.Type(VoiceRequestValue.class)
     })
@@ -480,6 +498,44 @@ public final class ServerMessageMessage {
         }
 
         private boolean equalTo(HangValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ServerMessageMessage{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("knowledge-base-request")
+    private static final class KnowledgeBaseRequestValue implements Value {
+        @JsonUnwrapped
+        private ServerMessageKnowledgeBaseRequest value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private KnowledgeBaseRequestValue() {}
+
+        private KnowledgeBaseRequestValue(ServerMessageKnowledgeBaseRequest value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitKnowledgeBaseRequest(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof KnowledgeBaseRequestValue && equalTo((KnowledgeBaseRequestValue) other);
+        }
+
+        private boolean equalTo(KnowledgeBaseRequestValue other) {
             return value.equals(other.value);
         }
 
@@ -836,30 +892,30 @@ public final class ServerMessageMessage {
         }
     }
 
-    @JsonTypeName("language-changed")
-    private static final class LanguageChangedValue implements Value {
+    @JsonTypeName("language-change-detected")
+    private static final class LanguageChangeDetectedValue implements Value {
         @JsonUnwrapped
-        private ServerMessageLanguageChanged value;
+        private ServerMessageLanguageChangeDetected value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private LanguageChangedValue() {}
+        private LanguageChangeDetectedValue() {}
 
-        private LanguageChangedValue(ServerMessageLanguageChanged value) {
+        private LanguageChangeDetectedValue(ServerMessageLanguageChangeDetected value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitLanguageChanged(value);
+            return visitor.visitLanguageChangeDetected(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof LanguageChangedValue && equalTo((LanguageChangedValue) other);
+            return other instanceof LanguageChangeDetectedValue && equalTo((LanguageChangeDetectedValue) other);
         }
 
-        private boolean equalTo(LanguageChangedValue other) {
+        private boolean equalTo(LanguageChangeDetectedValue other) {
             return value.equals(other.value);
         }
 

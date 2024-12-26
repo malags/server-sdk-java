@@ -58,12 +58,16 @@ public final class ClientMessageMessage {
         return new ClientMessageMessage(new ToolCallsResultValue(value));
     }
 
+    public static ClientMessageMessage transferUpdate(ClientMessageTransferUpdate value) {
+        return new ClientMessageMessage(new TransferUpdateValue(value));
+    }
+
     public static ClientMessageMessage userInterrupted(ClientMessageUserInterrupted value) {
         return new ClientMessageMessage(new UserInterruptedValue(value));
     }
 
-    public static ClientMessageMessage languageChanged(ClientMessageLanguageChanged value) {
-        return new ClientMessageMessage(new LanguageChangedValue(value));
+    public static ClientMessageMessage languageChangeDetected(ClientMessageLanguageChangeDetected value) {
+        return new ClientMessageMessage(new LanguageChangeDetectedValue(value));
     }
 
     public static ClientMessageMessage voiceInput(ClientMessageVoiceInput value) {
@@ -102,12 +106,16 @@ public final class ClientMessageMessage {
         return value instanceof ToolCallsResultValue;
     }
 
+    public boolean isTransferUpdate() {
+        return value instanceof TransferUpdateValue;
+    }
+
     public boolean isUserInterrupted() {
         return value instanceof UserInterruptedValue;
     }
 
-    public boolean isLanguageChanged() {
-        return value instanceof LanguageChangedValue;
+    public boolean isLanguageChangeDetected() {
+        return value instanceof LanguageChangeDetectedValue;
     }
 
     public boolean isVoiceInput() {
@@ -174,6 +182,13 @@ public final class ClientMessageMessage {
         return Optional.empty();
     }
 
+    public Optional<ClientMessageTransferUpdate> getTransferUpdate() {
+        if (isTransferUpdate()) {
+            return Optional.of(((TransferUpdateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<ClientMessageUserInterrupted> getUserInterrupted() {
         if (isUserInterrupted()) {
             return Optional.of(((UserInterruptedValue) value).value);
@@ -181,9 +196,9 @@ public final class ClientMessageMessage {
         return Optional.empty();
     }
 
-    public Optional<ClientMessageLanguageChanged> getLanguageChanged() {
-        if (isLanguageChanged()) {
-            return Optional.of(((LanguageChangedValue) value).value);
+    public Optional<ClientMessageLanguageChangeDetected> getLanguageChangeDetected() {
+        if (isLanguageChangeDetected()) {
+            return Optional.of(((LanguageChangeDetectedValue) value).value);
         }
         return Optional.empty();
     }
@@ -224,9 +239,11 @@ public final class ClientMessageMessage {
 
         T visitToolCallsResult(ClientMessageToolCallsResult toolCallsResult);
 
+        T visitTransferUpdate(ClientMessageTransferUpdate transferUpdate);
+
         T visitUserInterrupted(ClientMessageUserInterrupted userInterrupted);
 
-        T visitLanguageChanged(ClientMessageLanguageChanged languageChanged);
+        T visitLanguageChangeDetected(ClientMessageLanguageChangeDetected languageChangeDetected);
 
         T visitVoiceInput(ClientMessageVoiceInput voiceInput);
 
@@ -243,8 +260,9 @@ public final class ClientMessageMessage {
         @JsonSubTypes.Type(TranscriptValue.class),
         @JsonSubTypes.Type(ToolCallsValue.class),
         @JsonSubTypes.Type(ToolCallsResultValue.class),
+        @JsonSubTypes.Type(TransferUpdateValue.class),
         @JsonSubTypes.Type(UserInterruptedValue.class),
-        @JsonSubTypes.Type(LanguageChangedValue.class),
+        @JsonSubTypes.Type(LanguageChangeDetectedValue.class),
         @JsonSubTypes.Type(VoiceInputValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -556,6 +574,44 @@ public final class ClientMessageMessage {
         }
     }
 
+    @JsonTypeName("transfer-update")
+    private static final class TransferUpdateValue implements Value {
+        @JsonUnwrapped
+        private ClientMessageTransferUpdate value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TransferUpdateValue() {}
+
+        private TransferUpdateValue(ClientMessageTransferUpdate value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTransferUpdate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TransferUpdateValue && equalTo((TransferUpdateValue) other);
+        }
+
+        private boolean equalTo(TransferUpdateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ClientMessageMessage{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("user-interrupted")
     private static final class UserInterruptedValue implements Value {
         @JsonUnwrapped
@@ -594,30 +650,30 @@ public final class ClientMessageMessage {
         }
     }
 
-    @JsonTypeName("language-changed")
-    private static final class LanguageChangedValue implements Value {
+    @JsonTypeName("language-change-detected")
+    private static final class LanguageChangeDetectedValue implements Value {
         @JsonUnwrapped
-        private ClientMessageLanguageChanged value;
+        private ClientMessageLanguageChangeDetected value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private LanguageChangedValue() {}
+        private LanguageChangeDetectedValue() {}
 
-        private LanguageChangedValue(ClientMessageLanguageChanged value) {
+        private LanguageChangeDetectedValue(ClientMessageLanguageChangeDetected value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitLanguageChanged(value);
+            return visitor.visitLanguageChangeDetected(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof LanguageChangedValue && equalTo((LanguageChangedValue) other);
+            return other instanceof LanguageChangeDetectedValue && equalTo((LanguageChangeDetectedValue) other);
         }
 
-        private boolean equalTo(LanguageChangedValue other) {
+        private boolean equalTo(LanguageChangeDetectedValue other) {
             return value.equals(other.value);
         }
 

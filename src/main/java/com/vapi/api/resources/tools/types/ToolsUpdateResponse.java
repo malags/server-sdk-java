@@ -11,12 +11,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.vapi.api.types.BashTool;
+import com.vapi.api.types.ComputerTool;
 import com.vapi.api.types.DtmfTool;
 import com.vapi.api.types.EndCallTool;
 import com.vapi.api.types.FunctionTool;
 import com.vapi.api.types.GhlTool;
 import com.vapi.api.types.MakeTool;
 import com.vapi.api.types.OutputTool;
+import com.vapi.api.types.TextEditorTool;
 import com.vapi.api.types.TransferCallTool;
 import java.util.Objects;
 import java.util.Optional;
@@ -61,6 +64,18 @@ public final class ToolsUpdateResponse {
         return new ToolsUpdateResponse(new OutputValue(value));
     }
 
+    public static ToolsUpdateResponse bash(BashTool value) {
+        return new ToolsUpdateResponse(new BashValue(value));
+    }
+
+    public static ToolsUpdateResponse computer(ComputerTool value) {
+        return new ToolsUpdateResponse(new ComputerValue(value));
+    }
+
+    public static ToolsUpdateResponse textEditor(TextEditorTool value) {
+        return new ToolsUpdateResponse(new TextEditorValue(value));
+    }
+
     public boolean isDtmf() {
         return value instanceof DtmfValue;
     }
@@ -87,6 +102,18 @@ public final class ToolsUpdateResponse {
 
     public boolean isOutput() {
         return value instanceof OutputValue;
+    }
+
+    public boolean isBash() {
+        return value instanceof BashValue;
+    }
+
+    public boolean isComputer() {
+        return value instanceof ComputerValue;
+    }
+
+    public boolean isTextEditor() {
+        return value instanceof TextEditorValue;
     }
 
     public boolean _isUnknown() {
@@ -142,6 +169,27 @@ public final class ToolsUpdateResponse {
         return Optional.empty();
     }
 
+    public Optional<BashTool> getBash() {
+        if (isBash()) {
+            return Optional.of(((BashValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ComputerTool> getComputer() {
+        if (isComputer()) {
+            return Optional.of(((ComputerValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<TextEditorTool> getTextEditor() {
+        if (isTextEditor()) {
+            return Optional.of(((TextEditorValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -169,6 +217,12 @@ public final class ToolsUpdateResponse {
 
         T visitOutput(OutputTool output);
 
+        T visitBash(BashTool bash);
+
+        T visitComputer(ComputerTool computer);
+
+        T visitTextEditor(TextEditorTool textEditor);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -180,7 +234,10 @@ public final class ToolsUpdateResponse {
         @JsonSubTypes.Type(GhlValue.class),
         @JsonSubTypes.Type(MakeValue.class),
         @JsonSubTypes.Type(TransferCallValue.class),
-        @JsonSubTypes.Type(OutputValue.class)
+        @JsonSubTypes.Type(OutputValue.class),
+        @JsonSubTypes.Type(BashValue.class),
+        @JsonSubTypes.Type(ComputerValue.class),
+        @JsonSubTypes.Type(TextEditorValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -439,6 +496,120 @@ public final class ToolsUpdateResponse {
         }
 
         private boolean equalTo(OutputValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsUpdateResponse{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("bash")
+    private static final class BashValue implements Value {
+        @JsonUnwrapped
+        private BashTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private BashValue() {}
+
+        private BashValue(BashTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitBash(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof BashValue && equalTo((BashValue) other);
+        }
+
+        private boolean equalTo(BashValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsUpdateResponse{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("computer")
+    private static final class ComputerValue implements Value {
+        @JsonUnwrapped
+        private ComputerTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ComputerValue() {}
+
+        private ComputerValue(ComputerTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitComputer(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ComputerValue && equalTo((ComputerValue) other);
+        }
+
+        private boolean equalTo(ComputerValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsUpdateResponse{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("textEditor")
+    private static final class TextEditorValue implements Value {
+        @JsonUnwrapped
+        private TextEditorTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TextEditorValue() {}
+
+        private TextEditorValue(TextEditorTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTextEditor(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TextEditorValue && equalTo((TextEditorValue) other);
+        }
+
+        private boolean equalTo(TextEditorValue other) {
             return value.equals(other.value);
         }
 

@@ -20,6 +20,8 @@ public enum UpdateAzureOpenAiCredentialDtoRegion {
 
     JAPAN("japan"),
 
+    UAENORTH("uaenorth"),
+
     NORTHCENTRALUS("northcentralus"),
 
     NORWAY("norway"),

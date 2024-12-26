@@ -95,7 +95,7 @@ public final class GcpCredential {
     }
 
     /**
-     * @return This is the name of the GCP credential. This is just for your reference.
+     * @return This is the name of credential. This is just for your reference.
      */
     @JsonProperty("name")
     public Optional<String> getName() {
@@ -297,7 +297,7 @@ public final class GcpCredential {
         }
 
         /**
-         * <p>This is the name of the GCP credential. This is just for your reference.</p>
+         * <p>This is the name of credential. This is just for your reference.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

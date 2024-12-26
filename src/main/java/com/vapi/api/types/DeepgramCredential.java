@@ -32,6 +32,8 @@ public final class DeepgramCredential {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> name;
+
     private final Optional<String> apiUrl;
 
     private final Map<String, Object> additionalProperties;
@@ -42,6 +44,7 @@ public final class DeepgramCredential {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<String> name,
             Optional<String> apiUrl,
             Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
@@ -49,6 +52,7 @@ public final class DeepgramCredential {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.name = name;
         this.apiUrl = apiUrl;
         this.additionalProperties = additionalProperties;
     }
@@ -99,6 +103,14 @@ public final class DeepgramCredential {
     }
 
     /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
+    /**
      * @return This can be used to point to an onprem Deepgram instance. Defaults to api.deepgram.com.
      */
     @JsonProperty("apiUrl")
@@ -123,12 +135,13 @@ public final class DeepgramCredential {
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && name.equals(other.name)
                 && apiUrl.equals(other.apiUrl);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.id, this.orgId, this.createdAt, this.updatedAt, this.apiUrl);
+        return Objects.hash(this.apiKey, this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.apiUrl);
     }
 
     @java.lang.Override
@@ -165,6 +178,10 @@ public final class DeepgramCredential {
     public interface _FinalStage {
         DeepgramCredential build();
 
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
+
         _FinalStage apiUrl(Optional<String> apiUrl);
 
         _FinalStage apiUrl(String apiUrl);
@@ -185,6 +202,8 @@ public final class DeepgramCredential {
 
         private Optional<String> apiUrl = Optional.empty();
 
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -197,6 +216,7 @@ public final class DeepgramCredential {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            name(other.getName());
             apiUrl(other.getApiUrl());
             return this;
         }
@@ -273,9 +293,26 @@ public final class DeepgramCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public DeepgramCredential build() {
-            return new DeepgramCredential(apiKey, id, orgId, createdAt, updatedAt, apiUrl, additionalProperties);
+            return new DeepgramCredential(apiKey, id, orgId, createdAt, updatedAt, name, apiUrl, additionalProperties);
         }
     }
 }

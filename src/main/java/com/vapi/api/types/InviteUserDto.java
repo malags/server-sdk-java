@@ -9,9 +9,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -19,21 +22,21 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InviteUserDto.Builder.class)
 public final class InviteUserDto {
-    private final String email;
+    private final List<String> emails;
 
     private final InviteUserDtoRole role;
 
     private final Map<String, Object> additionalProperties;
 
-    private InviteUserDto(String email, InviteUserDtoRole role, Map<String, Object> additionalProperties) {
-        this.email = email;
+    private InviteUserDto(List<String> emails, InviteUserDtoRole role, Map<String, Object> additionalProperties) {
+        this.emails = emails;
         this.role = role;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("email")
-    public String getEmail() {
-        return email;
+    @JsonProperty("emails")
+    public List<String> getEmails() {
+        return emails;
     }
 
     @JsonProperty("role")
@@ -53,12 +56,12 @@ public final class InviteUserDto {
     }
 
     private boolean equalTo(InviteUserDto other) {
-        return email.equals(other.email) && role.equals(other.role);
+        return emails.equals(other.emails) && role.equals(other.role);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.email, this.role);
+        return Objects.hash(this.emails, this.role);
     }
 
     @java.lang.Override
@@ -66,29 +69,31 @@ public final class InviteUserDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static EmailStage builder() {
+    public static RoleStage builder() {
         return new Builder();
-    }
-
-    public interface EmailStage {
-        RoleStage email(@NotNull String email);
-
-        Builder from(InviteUserDto other);
     }
 
     public interface RoleStage {
         _FinalStage role(@NotNull InviteUserDtoRole role);
+
+        Builder from(InviteUserDto other);
     }
 
     public interface _FinalStage {
         InviteUserDto build();
+
+        _FinalStage emails(List<String> emails);
+
+        _FinalStage addEmails(String emails);
+
+        _FinalStage addAllEmails(List<String> emails);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements EmailStage, RoleStage, _FinalStage {
-        private String email;
-
+    public static final class Builder implements RoleStage, _FinalStage {
         private InviteUserDtoRole role;
+
+        private List<String> emails = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -97,15 +102,8 @@ public final class InviteUserDto {
 
         @java.lang.Override
         public Builder from(InviteUserDto other) {
-            email(other.getEmail());
+            emails(other.getEmails());
             role(other.getRole());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("email")
-        public RoleStage email(@NotNull String email) {
-            this.email = Objects.requireNonNull(email, "email must not be null");
             return this;
         }
 
@@ -117,8 +115,28 @@ public final class InviteUserDto {
         }
 
         @java.lang.Override
+        public _FinalStage addAllEmails(List<String> emails) {
+            this.emails.addAll(emails);
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addEmails(String emails) {
+            this.emails.add(emails);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "emails", nulls = Nulls.SKIP)
+        public _FinalStage emails(List<String> emails) {
+            this.emails.clear();
+            this.emails.addAll(emails);
+            return this;
+        }
+
+        @java.lang.Override
         public InviteUserDto build() {
-            return new InviteUserDto(email, role, additionalProperties);
+            return new InviteUserDto(emails, role, additionalProperties);
         }
     }
 }

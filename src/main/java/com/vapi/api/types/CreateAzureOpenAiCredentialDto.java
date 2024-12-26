@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -30,6 +31,8 @@ public final class CreateAzureOpenAiCredentialDto {
 
     private final String openAiEndpoint;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateAzureOpenAiCredentialDto(
@@ -37,11 +40,13 @@ public final class CreateAzureOpenAiCredentialDto {
             List<CreateAzureOpenAiCredentialDtoModelsItem> models,
             String openAiKey,
             String openAiEndpoint,
+            Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.region = region;
         this.models = models;
         this.openAiKey = openAiKey;
         this.openAiEndpoint = openAiEndpoint;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -73,6 +78,14 @@ public final class CreateAzureOpenAiCredentialDto {
         return openAiEndpoint;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -88,12 +101,13 @@ public final class CreateAzureOpenAiCredentialDto {
         return region.equals(other.region)
                 && models.equals(other.models)
                 && openAiKey.equals(other.openAiKey)
-                && openAiEndpoint.equals(other.openAiEndpoint);
+                && openAiEndpoint.equals(other.openAiEndpoint)
+                && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.region, this.models, this.openAiKey, this.openAiEndpoint);
+        return Objects.hash(this.region, this.models, this.openAiKey, this.openAiEndpoint, this.name);
     }
 
     @java.lang.Override
@@ -127,6 +141,10 @@ public final class CreateAzureOpenAiCredentialDto {
         _FinalStage addModels(CreateAzureOpenAiCredentialDtoModelsItem models);
 
         _FinalStage addAllModels(List<CreateAzureOpenAiCredentialDtoModelsItem> models);
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -136,6 +154,8 @@ public final class CreateAzureOpenAiCredentialDto {
         private String openAiKey;
 
         private String openAiEndpoint;
+
+        private Optional<String> name = Optional.empty();
 
         private List<CreateAzureOpenAiCredentialDtoModelsItem> models = new ArrayList<>();
 
@@ -150,6 +170,7 @@ public final class CreateAzureOpenAiCredentialDto {
             models(other.getModels());
             openAiKey(other.getOpenAiKey());
             openAiEndpoint(other.getOpenAiEndpoint());
+            name(other.getName());
             return this;
         }
 
@@ -178,6 +199,23 @@ public final class CreateAzureOpenAiCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllModels(List<CreateAzureOpenAiCredentialDtoModelsItem> models) {
             this.models.addAll(models);
@@ -200,7 +238,8 @@ public final class CreateAzureOpenAiCredentialDto {
 
         @java.lang.Override
         public CreateAzureOpenAiCredentialDto build() {
-            return new CreateAzureOpenAiCredentialDto(region, models, openAiKey, openAiEndpoint, additionalProperties);
+            return new CreateAzureOpenAiCredentialDto(
+                    region, models, openAiKey, openAiEndpoint, name, additionalProperties);
         }
     }
 }

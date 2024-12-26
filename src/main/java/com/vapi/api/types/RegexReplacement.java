@@ -40,6 +40,14 @@ public final class RegexReplacement {
 
     /**
      * @return This is the regex pattern to replace.
+     * <p>Note:</p>
+     * <ul>
+     * <li>This works by using the <code>string.replace</code> method in Node.JS. Eg. <code>&quot;hello there&quot;.replace(/hello/g, &quot;hi&quot;)</code> will return <code>&quot;hi there&quot;</code>.</li>
+     * </ul>
+     * <p>Hot tip:</p>
+     * <ul>
+     * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
+     * </ul>
      */
     @JsonProperty("regex")
     public String getRegex() {
@@ -47,7 +55,7 @@ public final class RegexReplacement {
     }
 
     /**
-     * @return These are the options for the regex replacement. Default all options are disabled.
+     * @return These are the options for the regex replacement. Defaults to all disabled.
      * <p>@default []</p>
      */
     @JsonProperty("options")
@@ -133,6 +141,14 @@ public final class RegexReplacement {
 
         /**
          * <p>This is the regex pattern to replace.</p>
+         * <p>Note:</p>
+         * <ul>
+         * <li>This works by using the <code>string.replace</code> method in Node.JS. Eg. <code>&quot;hello there&quot;.replace(/hello/g, &quot;hi&quot;)</code> will return <code>&quot;hi there&quot;</code>.</li>
+         * </ul>
+         * <p>Hot tip:</p>
+         * <ul>
+         * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -154,7 +170,7 @@ public final class RegexReplacement {
         }
 
         /**
-         * <p>These are the options for the regex replacement. Default all options are disabled.</p>
+         * <p>These are the options for the regex replacement. Defaults to all disabled.</p>
          * <p>@default []</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

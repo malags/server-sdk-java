@@ -16,7 +16,17 @@ public enum OpenAiVoiceId {
 
     NOVA("nova"),
 
-    SHIMMER("shimmer");
+    SHIMMER("shimmer"),
+
+    ASH("ash"),
+
+    BALLAD("ballad"),
+
+    CORAL("coral"),
+
+    SAGE("sage"),
+
+    VERSE("verse");
 
     private final String value;
 

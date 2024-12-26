@@ -73,6 +73,14 @@ public final class GhlToolWithToolCall {
         return messages;
     }
 
+    /**
+     * @return The type of tool. &quot;ghl&quot; for GHL tool.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "ghl";
+    }
+
     @JsonProperty("toolCall")
     public ToolCall getToolCall() {
         return toolCall;

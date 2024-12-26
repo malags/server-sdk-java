@@ -11,12 +11,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.vapi.api.types.CreateBashToolDto;
+import com.vapi.api.types.CreateComputerToolDto;
 import com.vapi.api.types.CreateDtmfToolDto;
 import com.vapi.api.types.CreateEndCallToolDto;
 import com.vapi.api.types.CreateFunctionToolDto;
 import com.vapi.api.types.CreateGhlToolDto;
 import com.vapi.api.types.CreateMakeToolDto;
 import com.vapi.api.types.CreateOutputToolDto;
+import com.vapi.api.types.CreateTextEditorToolDto;
 import com.vapi.api.types.CreateTransferCallToolDto;
 import java.util.Objects;
 import java.util.Optional;
@@ -61,6 +64,18 @@ public final class ToolsCreateRequest {
         return new ToolsCreateRequest(new OutputValue(value));
     }
 
+    public static ToolsCreateRequest bash(CreateBashToolDto value) {
+        return new ToolsCreateRequest(new BashValue(value));
+    }
+
+    public static ToolsCreateRequest computer(CreateComputerToolDto value) {
+        return new ToolsCreateRequest(new ComputerValue(value));
+    }
+
+    public static ToolsCreateRequest textEditor(CreateTextEditorToolDto value) {
+        return new ToolsCreateRequest(new TextEditorValue(value));
+    }
+
     public boolean isDtmf() {
         return value instanceof DtmfValue;
     }
@@ -87,6 +102,18 @@ public final class ToolsCreateRequest {
 
     public boolean isOutput() {
         return value instanceof OutputValue;
+    }
+
+    public boolean isBash() {
+        return value instanceof BashValue;
+    }
+
+    public boolean isComputer() {
+        return value instanceof ComputerValue;
+    }
+
+    public boolean isTextEditor() {
+        return value instanceof TextEditorValue;
     }
 
     public boolean _isUnknown() {
@@ -142,6 +169,27 @@ public final class ToolsCreateRequest {
         return Optional.empty();
     }
 
+    public Optional<CreateBashToolDto> getBash() {
+        if (isBash()) {
+            return Optional.of(((BashValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateComputerToolDto> getComputer() {
+        if (isComputer()) {
+            return Optional.of(((ComputerValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateTextEditorToolDto> getTextEditor() {
+        if (isTextEditor()) {
+            return Optional.of(((TextEditorValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -169,6 +217,12 @@ public final class ToolsCreateRequest {
 
         T visitOutput(CreateOutputToolDto output);
 
+        T visitBash(CreateBashToolDto bash);
+
+        T visitComputer(CreateComputerToolDto computer);
+
+        T visitTextEditor(CreateTextEditorToolDto textEditor);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -180,7 +234,10 @@ public final class ToolsCreateRequest {
         @JsonSubTypes.Type(GhlValue.class),
         @JsonSubTypes.Type(MakeValue.class),
         @JsonSubTypes.Type(TransferCallValue.class),
-        @JsonSubTypes.Type(OutputValue.class)
+        @JsonSubTypes.Type(OutputValue.class),
+        @JsonSubTypes.Type(BashValue.class),
+        @JsonSubTypes.Type(ComputerValue.class),
+        @JsonSubTypes.Type(TextEditorValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -439,6 +496,120 @@ public final class ToolsCreateRequest {
         }
 
         private boolean equalTo(OutputValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsCreateRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("bash")
+    private static final class BashValue implements Value {
+        @JsonUnwrapped
+        private CreateBashToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private BashValue() {}
+
+        private BashValue(CreateBashToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitBash(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof BashValue && equalTo((BashValue) other);
+        }
+
+        private boolean equalTo(BashValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsCreateRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("computer")
+    private static final class ComputerValue implements Value {
+        @JsonUnwrapped
+        private CreateComputerToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ComputerValue() {}
+
+        private ComputerValue(CreateComputerToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitComputer(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ComputerValue && equalTo((ComputerValue) other);
+        }
+
+        private boolean equalTo(ComputerValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsCreateRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("textEditor")
+    private static final class TextEditorValue implements Value {
+        @JsonUnwrapped
+        private CreateTextEditorToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TextEditorValue() {}
+
+        private TextEditorValue(CreateTextEditorToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTextEditor(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TextEditorValue && equalTo((TextEditorValue) other);
+        }
+
+        private boolean equalTo(TextEditorValue other) {
             return value.equals(other.value);
         }
 

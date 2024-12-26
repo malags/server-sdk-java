@@ -34,7 +34,7 @@ public final class RegexOption {
     /**
      * @return This is the type of the regex option. Options are:
      * <ul>
-     * <li><code>ignore-case</code>: Ignores the case of the text being matched.</li>
+     * <li><code>ignore-case</code>: Ignores the case of the text being matched. Add</li>
      * <li><code>whole-word</code>: Matches whole words only.</li>
      * <li><code>multi-line</code>: Matches across multiple lines.</li>
      * </ul>
@@ -117,7 +117,7 @@ public final class RegexOption {
         /**
          * <p>This is the type of the regex option. Options are:</p>
          * <ul>
-         * <li><code>ignore-case</code>: Ignores the case of the text being matched.</li>
+         * <li><code>ignore-case</code>: Ignores the case of the text being matched. Add</li>
          * <li><code>whole-word</code>: Matches whole words only.</li>
          * <li><code>multi-line</code>: Matches across multiple lines.</li>
          * </ul>

@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = OpenAiFunction.Builder.class)
 public final class OpenAiFunction {
+    private final Optional<Boolean> strict;
+
     private final String name;
 
     private final Optional<String> description;
@@ -30,14 +32,25 @@ public final class OpenAiFunction {
     private final Map<String, Object> additionalProperties;
 
     private OpenAiFunction(
+            Optional<Boolean> strict,
             String name,
             Optional<String> description,
             Optional<OpenAiFunctionParameters> parameters,
             Map<String, Object> additionalProperties) {
+        this.strict = strict;
         this.name = name;
         this.description = description;
         this.parameters = parameters;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is a boolean that controls whether to enable strict schema adherence when generating the function call. If set to true, the model will follow the exact schema defined in the parameters field. Only a subset of JSON Schema is supported when strict is true. Learn more about Structured Outputs in the <a href="https://openai.com/index/introducing-structured-outputs-in-the-api/">OpenAI guide</a>.
+     * <p>@default false</p>
+     */
+    @JsonProperty("strict")
+    public Optional<Boolean> getStrict() {
+        return strict;
     }
 
     /**
@@ -49,6 +62,9 @@ public final class OpenAiFunction {
         return name;
     }
 
+    /**
+     * @return This is the description of what the function does, used by the AI to choose when and how to call the function.
+     */
     @JsonProperty("description")
     public Optional<String> getDescription() {
         return description;
@@ -76,12 +92,15 @@ public final class OpenAiFunction {
     }
 
     private boolean equalTo(OpenAiFunction other) {
-        return name.equals(other.name) && description.equals(other.description) && parameters.equals(other.parameters);
+        return strict.equals(other.strict)
+                && name.equals(other.name)
+                && description.equals(other.description)
+                && parameters.equals(other.parameters);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.description, this.parameters);
+        return Objects.hash(this.strict, this.name, this.description, this.parameters);
     }
 
     @java.lang.Override
@@ -102,6 +121,10 @@ public final class OpenAiFunction {
     public interface _FinalStage {
         OpenAiFunction build();
 
+        _FinalStage strict(Optional<Boolean> strict);
+
+        _FinalStage strict(Boolean strict);
+
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
@@ -119,6 +142,8 @@ public final class OpenAiFunction {
 
         private Optional<String> description = Optional.empty();
 
+        private Optional<Boolean> strict = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -126,6 +151,7 @@ public final class OpenAiFunction {
 
         @java.lang.Override
         public Builder from(OpenAiFunction other) {
+            strict(other.getStrict());
             name(other.getName());
             description(other.getDescription());
             parameters(other.getParameters());
@@ -163,6 +189,10 @@ public final class OpenAiFunction {
             return this;
         }
 
+        /**
+         * <p>This is the description of what the function does, used by the AI to choose when and how to call the function.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage description(String description) {
             this.description = Optional.ofNullable(description);
@@ -176,9 +206,27 @@ public final class OpenAiFunction {
             return this;
         }
 
+        /**
+         * <p>This is a boolean that controls whether to enable strict schema adherence when generating the function call. If set to true, the model will follow the exact schema defined in the parameters field. Only a subset of JSON Schema is supported when strict is true. Learn more about Structured Outputs in the <a href="https://openai.com/index/introducing-structured-outputs-in-the-api/">OpenAI guide</a>.</p>
+         * <p>@default false</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage strict(Boolean strict) {
+            this.strict = Optional.ofNullable(strict);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "strict", nulls = Nulls.SKIP)
+        public _FinalStage strict(Optional<Boolean> strict) {
+            this.strict = strict;
+            return this;
+        }
+
         @java.lang.Override
         public OpenAiFunction build() {
-            return new OpenAiFunction(name, description, parameters, additionalProperties);
+            return new OpenAiFunction(strict, name, description, parameters, additionalProperties);
         }
     }
 }

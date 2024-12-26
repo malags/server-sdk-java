@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TransferDestinationNumber.Builder.class)
 public final class TransferDestinationNumber {
+    private final Optional<TransferDestinationNumberMessage> message;
+
     private final Optional<Boolean> numberE164CheckEnabled;
 
     private final String number;
@@ -29,27 +31,43 @@ public final class TransferDestinationNumber {
 
     private final Optional<String> callerId;
 
-    private final Optional<String> message;
+    private final Optional<TransferPlan> transferPlan;
 
     private final Optional<String> description;
 
     private final Map<String, Object> additionalProperties;
 
     private TransferDestinationNumber(
+            Optional<TransferDestinationNumberMessage> message,
             Optional<Boolean> numberE164CheckEnabled,
             String number,
             Optional<String> extension,
             Optional<String> callerId,
-            Optional<String> message,
+            Optional<TransferPlan> transferPlan,
             Optional<String> description,
             Map<String, Object> additionalProperties) {
+        this.message = message;
         this.numberE164CheckEnabled = numberE164CheckEnabled;
         this.number = number;
         this.extension = extension;
         this.callerId = callerId;
-        this.message = message;
+        this.transferPlan = transferPlan;
         this.description = description;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is spoken to the customer before connecting them to the destination.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+     * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+     * </ul>
+     * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+     */
+    @JsonProperty("message")
+    public Optional<TransferDestinationNumberMessage> getMessage() {
+        return message;
     }
 
     /**
@@ -101,13 +119,12 @@ public final class TransferDestinationNumber {
     }
 
     /**
-     * @return This is the message to say before transferring the call to the destination.
-     * <p>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</p>
-     * <p>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</p>
+     * @return This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to <code>blind-transfer</code>.
+     * <p>@default <code>transferPlan.mode='blind-transfer'</code></p>
      */
-    @JsonProperty("message")
-    public Optional<String> getMessage() {
-        return message;
+    @JsonProperty("transferPlan")
+    public Optional<TransferPlan> getTransferPlan() {
+        return transferPlan;
     }
 
     /**
@@ -130,22 +147,24 @@ public final class TransferDestinationNumber {
     }
 
     private boolean equalTo(TransferDestinationNumber other) {
-        return numberE164CheckEnabled.equals(other.numberE164CheckEnabled)
+        return message.equals(other.message)
+                && numberE164CheckEnabled.equals(other.numberE164CheckEnabled)
                 && number.equals(other.number)
                 && extension.equals(other.extension)
                 && callerId.equals(other.callerId)
-                && message.equals(other.message)
+                && transferPlan.equals(other.transferPlan)
                 && description.equals(other.description);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.message,
                 this.numberE164CheckEnabled,
                 this.number,
                 this.extension,
                 this.callerId,
-                this.message,
+                this.transferPlan,
                 this.description);
     }
 
@@ -167,6 +186,10 @@ public final class TransferDestinationNumber {
     public interface _FinalStage {
         TransferDestinationNumber build();
 
+        _FinalStage message(Optional<TransferDestinationNumberMessage> message);
+
+        _FinalStage message(TransferDestinationNumberMessage message);
+
         _FinalStage numberE164CheckEnabled(Optional<Boolean> numberE164CheckEnabled);
 
         _FinalStage numberE164CheckEnabled(Boolean numberE164CheckEnabled);
@@ -179,9 +202,9 @@ public final class TransferDestinationNumber {
 
         _FinalStage callerId(String callerId);
 
-        _FinalStage message(Optional<String> message);
+        _FinalStage transferPlan(Optional<TransferPlan> transferPlan);
 
-        _FinalStage message(String message);
+        _FinalStage transferPlan(TransferPlan transferPlan);
 
         _FinalStage description(Optional<String> description);
 
@@ -194,13 +217,15 @@ public final class TransferDestinationNumber {
 
         private Optional<String> description = Optional.empty();
 
-        private Optional<String> message = Optional.empty();
+        private Optional<TransferPlan> transferPlan = Optional.empty();
 
         private Optional<String> callerId = Optional.empty();
 
         private Optional<String> extension = Optional.empty();
 
         private Optional<Boolean> numberE164CheckEnabled = Optional.empty();
+
+        private Optional<TransferDestinationNumberMessage> message = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -209,11 +234,12 @@ public final class TransferDestinationNumber {
 
         @java.lang.Override
         public Builder from(TransferDestinationNumber other) {
+            message(other.getMessage());
             numberE164CheckEnabled(other.getNumberE164CheckEnabled());
             number(other.getNumber());
             extension(other.getExtension());
             callerId(other.getCallerId());
-            message(other.getMessage());
+            transferPlan(other.getTransferPlan());
             description(other.getDescription());
             return this;
         }
@@ -247,21 +273,20 @@ public final class TransferDestinationNumber {
         }
 
         /**
-         * <p>This is the message to say before transferring the call to the destination.</p>
-         * <p>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</p>
-         * <p>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</p>
+         * <p>This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to <code>blind-transfer</code>.</p>
+         * <p>@default <code>transferPlan.mode='blind-transfer'</code></p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage message(String message) {
-            this.message = Optional.ofNullable(message);
+        public _FinalStage transferPlan(TransferPlan transferPlan) {
+            this.transferPlan = Optional.ofNullable(transferPlan);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "message", nulls = Nulls.SKIP)
-        public _FinalStage message(Optional<String> message) {
-            this.message = message;
+        @JsonSetter(value = "transferPlan", nulls = Nulls.SKIP)
+        public _FinalStage transferPlan(Optional<TransferPlan> transferPlan) {
+            this.transferPlan = transferPlan;
             return this;
         }
 
@@ -332,10 +357,40 @@ public final class TransferDestinationNumber {
             return this;
         }
 
+        /**
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage message(TransferDestinationNumberMessage message) {
+            this.message = Optional.ofNullable(message);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "message", nulls = Nulls.SKIP)
+        public _FinalStage message(Optional<TransferDestinationNumberMessage> message) {
+            this.message = message;
+            return this;
+        }
+
         @java.lang.Override
         public TransferDestinationNumber build() {
             return new TransferDestinationNumber(
-                    numberE164CheckEnabled, number, extension, callerId, message, description, additionalProperties);
+                    message,
+                    numberE164CheckEnabled,
+                    number,
+                    extension,
+                    callerId,
+                    transferPlan,
+                    description,
+                    additionalProperties);
         }
     }
 }

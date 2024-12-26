@@ -14,20 +14,32 @@ import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = VapiCost.Builder.class)
 public final class VapiCost {
+    private final VapiCostSubType subType;
+
     private final double minutes;
 
     private final double cost;
 
     private final Map<String, Object> additionalProperties;
 
-    private VapiCost(double minutes, double cost, Map<String, Object> additionalProperties) {
+    private VapiCost(VapiCostSubType subType, double minutes, double cost, Map<String, Object> additionalProperties) {
+        this.subType = subType;
         this.minutes = minutes;
         this.cost = cost;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the sub type of the cost.
+     */
+    @JsonProperty("subType")
+    public VapiCostSubType getSubType() {
+        return subType;
     }
 
     /**
@@ -58,12 +70,12 @@ public final class VapiCost {
     }
 
     private boolean equalTo(VapiCost other) {
-        return minutes == other.minutes && cost == other.cost;
+        return subType.equals(other.subType) && minutes == other.minutes && cost == other.cost;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.minutes, this.cost);
+        return Objects.hash(this.subType, this.minutes, this.cost);
     }
 
     @java.lang.Override
@@ -71,14 +83,18 @@ public final class VapiCost {
         return ObjectMappers.stringify(this);
     }
 
-    public static MinutesStage builder() {
+    public static SubTypeStage builder() {
         return new Builder();
+    }
+
+    public interface SubTypeStage {
+        MinutesStage subType(@NotNull VapiCostSubType subType);
+
+        Builder from(VapiCost other);
     }
 
     public interface MinutesStage {
         CostStage minutes(double minutes);
-
-        Builder from(VapiCost other);
     }
 
     public interface CostStage {
@@ -90,7 +106,9 @@ public final class VapiCost {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements MinutesStage, CostStage, _FinalStage {
+    public static final class Builder implements SubTypeStage, MinutesStage, CostStage, _FinalStage {
+        private VapiCostSubType subType;
+
         private double minutes;
 
         private double cost;
@@ -102,8 +120,20 @@ public final class VapiCost {
 
         @java.lang.Override
         public Builder from(VapiCost other) {
+            subType(other.getSubType());
             minutes(other.getMinutes());
             cost(other.getCost());
+            return this;
+        }
+
+        /**
+         * <p>This is the sub type of the cost.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("subType")
+        public MinutesStage subType(@NotNull VapiCostSubType subType) {
+            this.subType = Objects.requireNonNull(subType, "subType must not be null");
             return this;
         }
 
@@ -131,7 +161,7 @@ public final class VapiCost {
 
         @java.lang.Override
         public VapiCost build() {
-            return new VapiCost(minutes, cost, additionalProperties);
+            return new VapiCost(subType, minutes, cost, additionalProperties);
         }
     }
 }

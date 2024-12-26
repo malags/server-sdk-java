@@ -28,6 +28,10 @@ public final class OpenAiModel {
 
     private final Optional<List<String>> toolIds;
 
+    private final Optional<CreateCustomKnowledgeBaseDto> knowledgeBase;
+
+    private final Optional<String> knowledgeBaseId;
+
     private final OpenAiModelModel model;
 
     private final Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels;
@@ -35,8 +39,6 @@ public final class OpenAiModel {
     private final Optional<Boolean> semanticCachingEnabled;
 
     private final Optional<Double> temperature;
-
-    private final Optional<KnowledgeBase> knowledgeBase;
 
     private final Optional<Double> maxTokens;
 
@@ -50,11 +52,12 @@ public final class OpenAiModel {
             Optional<List<OpenAiMessage>> messages,
             Optional<List<OpenAiModelToolsItem>> tools,
             Optional<List<String>> toolIds,
+            Optional<CreateCustomKnowledgeBaseDto> knowledgeBase,
+            Optional<String> knowledgeBaseId,
             OpenAiModelModel model,
             Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels,
             Optional<Boolean> semanticCachingEnabled,
             Optional<Double> temperature,
-            Optional<KnowledgeBase> knowledgeBase,
             Optional<Double> maxTokens,
             Optional<Boolean> emotionRecognitionEnabled,
             Optional<Double> numFastTurns,
@@ -62,11 +65,12 @@ public final class OpenAiModel {
         this.messages = messages;
         this.tools = tools;
         this.toolIds = toolIds;
+        this.knowledgeBase = knowledgeBase;
+        this.knowledgeBaseId = knowledgeBaseId;
         this.model = model;
         this.fallbackModels = fallbackModels;
         this.semanticCachingEnabled = semanticCachingEnabled;
         this.temperature = temperature;
-        this.knowledgeBase = knowledgeBase;
         this.maxTokens = maxTokens;
         this.emotionRecognitionEnabled = emotionRecognitionEnabled;
         this.numFastTurns = numFastTurns;
@@ -100,6 +104,22 @@ public final class OpenAiModel {
     }
 
     /**
+     * @return These are the options for the knowledge base.
+     */
+    @JsonProperty("knowledgeBase")
+    public Optional<CreateCustomKnowledgeBaseDto> getKnowledgeBase() {
+        return knowledgeBase;
+    }
+
+    /**
+     * @return This is the ID of the knowledge base the model will use.
+     */
+    @JsonProperty("knowledgeBaseId")
+    public Optional<String> getKnowledgeBaseId() {
+        return knowledgeBaseId;
+    }
+
+    /**
      * @return This is the OpenAI model that will be used.
      */
     @JsonProperty("model")
@@ -126,14 +146,6 @@ public final class OpenAiModel {
     @JsonProperty("temperature")
     public Optional<Double> getTemperature() {
         return temperature;
-    }
-
-    /**
-     * @return These are the options for the knowledge base.
-     */
-    @JsonProperty("knowledgeBase")
-    public Optional<KnowledgeBase> getKnowledgeBase() {
-        return knowledgeBase;
     }
 
     /**
@@ -179,11 +191,12 @@ public final class OpenAiModel {
         return messages.equals(other.messages)
                 && tools.equals(other.tools)
                 && toolIds.equals(other.toolIds)
+                && knowledgeBase.equals(other.knowledgeBase)
+                && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && model.equals(other.model)
                 && fallbackModels.equals(other.fallbackModels)
                 && semanticCachingEnabled.equals(other.semanticCachingEnabled)
                 && temperature.equals(other.temperature)
-                && knowledgeBase.equals(other.knowledgeBase)
                 && maxTokens.equals(other.maxTokens)
                 && emotionRecognitionEnabled.equals(other.emotionRecognitionEnabled)
                 && numFastTurns.equals(other.numFastTurns);
@@ -195,11 +208,12 @@ public final class OpenAiModel {
                 this.messages,
                 this.tools,
                 this.toolIds,
+                this.knowledgeBase,
+                this.knowledgeBaseId,
                 this.model,
                 this.fallbackModels,
                 this.semanticCachingEnabled,
                 this.temperature,
-                this.knowledgeBase,
                 this.maxTokens,
                 this.emotionRecognitionEnabled,
                 this.numFastTurns);
@@ -235,6 +249,14 @@ public final class OpenAiModel {
 
         _FinalStage toolIds(List<String> toolIds);
 
+        _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase);
+
+        _FinalStage knowledgeBase(CreateCustomKnowledgeBaseDto knowledgeBase);
+
+        _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId);
+
+        _FinalStage knowledgeBaseId(String knowledgeBaseId);
+
         _FinalStage fallbackModels(Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels);
 
         _FinalStage fallbackModels(List<OpenAiModelFallbackModelsItem> fallbackModels);
@@ -246,10 +268,6 @@ public final class OpenAiModel {
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
-
-        _FinalStage knowledgeBase(Optional<KnowledgeBase> knowledgeBase);
-
-        _FinalStage knowledgeBase(KnowledgeBase knowledgeBase);
 
         _FinalStage maxTokens(Optional<Double> maxTokens);
 
@@ -274,13 +292,15 @@ public final class OpenAiModel {
 
         private Optional<Double> maxTokens = Optional.empty();
 
-        private Optional<KnowledgeBase> knowledgeBase = Optional.empty();
-
         private Optional<Double> temperature = Optional.empty();
 
         private Optional<Boolean> semanticCachingEnabled = Optional.empty();
 
         private Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels = Optional.empty();
+
+        private Optional<String> knowledgeBaseId = Optional.empty();
+
+        private Optional<CreateCustomKnowledgeBaseDto> knowledgeBase = Optional.empty();
 
         private Optional<List<String>> toolIds = Optional.empty();
 
@@ -298,11 +318,12 @@ public final class OpenAiModel {
             messages(other.getMessages());
             tools(other.getTools());
             toolIds(other.getToolIds());
+            knowledgeBase(other.getKnowledgeBase());
+            knowledgeBaseId(other.getKnowledgeBaseId());
             model(other.getModel());
             fallbackModels(other.getFallbackModels());
             semanticCachingEnabled(other.getSemanticCachingEnabled());
             temperature(other.getTemperature());
-            knowledgeBase(other.getKnowledgeBase());
             maxTokens(other.getMaxTokens());
             emotionRecognitionEnabled(other.getEmotionRecognitionEnabled());
             numFastTurns(other.getNumFastTurns());
@@ -376,23 +397,6 @@ public final class OpenAiModel {
         }
 
         /**
-         * <p>These are the options for the knowledge base.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage knowledgeBase(KnowledgeBase knowledgeBase) {
-            this.knowledgeBase = Optional.ofNullable(knowledgeBase);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "knowledgeBase", nulls = Nulls.SKIP)
-        public _FinalStage knowledgeBase(Optional<KnowledgeBase> knowledgeBase) {
-            this.knowledgeBase = knowledgeBase;
-            return this;
-        }
-
-        /**
          * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -436,6 +440,40 @@ public final class OpenAiModel {
         @JsonSetter(value = "fallbackModels", nulls = Nulls.SKIP)
         public _FinalStage fallbackModels(Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels) {
             this.fallbackModels = fallbackModels;
+            return this;
+        }
+
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage knowledgeBaseId(String knowledgeBaseId) {
+            this.knowledgeBaseId = Optional.ofNullable(knowledgeBaseId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "knowledgeBaseId", nulls = Nulls.SKIP)
+        public _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId) {
+            this.knowledgeBaseId = knowledgeBaseId;
+            return this;
+        }
+
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage knowledgeBase(CreateCustomKnowledgeBaseDto knowledgeBase) {
+            this.knowledgeBase = Optional.ofNullable(knowledgeBase);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "knowledgeBase", nulls = Nulls.SKIP)
+        public _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase) {
+            this.knowledgeBase = knowledgeBase;
             return this;
         }
 
@@ -498,11 +536,12 @@ public final class OpenAiModel {
                     messages,
                     tools,
                     toolIds,
+                    knowledgeBase,
+                    knowledgeBaseId,
                     model,
                     fallbackModels,
                     semanticCachingEnabled,
                     temperature,
-                    knowledgeBase,
                     maxTokens,
                     emotionRecognitionEnabled,
                     numFastTurns,

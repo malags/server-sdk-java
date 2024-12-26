@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -29,6 +31,8 @@ public final class UpdateS3CredentialDto {
 
     private final String s3PathPrefix;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateS3CredentialDto(
@@ -37,12 +41,14 @@ public final class UpdateS3CredentialDto {
             String region,
             String s3BucketName,
             String s3PathPrefix,
+            Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.awsAccessKeyId = awsAccessKeyId;
         this.awsSecretAccessKey = awsSecretAccessKey;
         this.region = region;
         this.s3BucketName = s3BucketName;
         this.s3PathPrefix = s3PathPrefix;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -94,6 +100,14 @@ public final class UpdateS3CredentialDto {
         return s3PathPrefix;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -110,13 +124,19 @@ public final class UpdateS3CredentialDto {
                 && awsSecretAccessKey.equals(other.awsSecretAccessKey)
                 && region.equals(other.region)
                 && s3BucketName.equals(other.s3BucketName)
-                && s3PathPrefix.equals(other.s3PathPrefix);
+                && s3PathPrefix.equals(other.s3PathPrefix)
+                && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.awsAccessKeyId, this.awsSecretAccessKey, this.region, this.s3BucketName, this.s3PathPrefix);
+                this.awsAccessKeyId,
+                this.awsSecretAccessKey,
+                this.region,
+                this.s3BucketName,
+                this.s3PathPrefix,
+                this.name);
     }
 
     @java.lang.Override
@@ -152,6 +172,10 @@ public final class UpdateS3CredentialDto {
 
     public interface _FinalStage {
         UpdateS3CredentialDto build();
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -172,6 +196,8 @@ public final class UpdateS3CredentialDto {
 
         private String s3PathPrefix;
 
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -184,6 +210,7 @@ public final class UpdateS3CredentialDto {
             region(other.getRegion());
             s3BucketName(other.getS3BucketName());
             s3PathPrefix(other.getS3PathPrefix());
+            name(other.getName());
             return this;
         }
 
@@ -242,10 +269,27 @@ public final class UpdateS3CredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public UpdateS3CredentialDto build() {
             return new UpdateS3CredentialDto(
-                    awsAccessKeyId, awsSecretAccessKey, region, s3BucketName, s3PathPrefix, additionalProperties);
+                    awsAccessKeyId, awsSecretAccessKey, region, s3BucketName, s3PathPrefix, name, additionalProperties);
         }
     }
 }

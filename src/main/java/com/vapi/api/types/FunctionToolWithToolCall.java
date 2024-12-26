@@ -69,6 +69,14 @@ public final class FunctionToolWithToolCall {
         return messages;
     }
 
+    /**
+     * @return The type of tool. &quot;function&quot; for Function tool.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "function";
+    }
+
     @JsonProperty("toolCall")
     public ToolCall getToolCall() {
         return toolCall;

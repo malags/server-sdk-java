@@ -29,6 +29,8 @@ public final class Assistant {
 
     private final Optional<AssistantVoice> voice;
 
+    private final Optional<String> firstMessage;
+
     private final Optional<AssistantFirstMessageMode> firstMessageMode;
 
     private final Optional<Boolean> hipaaEnabled;
@@ -43,8 +45,6 @@ public final class Assistant {
 
     private final Optional<AssistantBackgroundSound> backgroundSound;
 
-    private final Optional<Boolean> backchannelingEnabled;
-
     private final Optional<Boolean> backgroundDenoisingEnabled;
 
     private final Optional<Boolean> modelOutputInMessagesEnabled;
@@ -52,8 +52,6 @@ public final class Assistant {
     private final Optional<List<TransportConfigurationTwilio>> transportConfigurations;
 
     private final Optional<String> name;
-
-    private final Optional<String> firstMessage;
 
     private final Optional<TwilioVoicemailDetection> voicemailDetection;
 
@@ -64,10 +62,6 @@ public final class Assistant {
     private final Optional<List<String>> endCallPhrases;
 
     private final Optional<Map<String, Object>> metadata;
-
-    private final Optional<String> serverUrl;
-
-    private final Optional<String> serverUrlSecret;
 
     private final Optional<AnalysisPlan> analysisPlan;
 
@@ -83,6 +77,8 @@ public final class Assistant {
 
     private final Optional<List<String>> credentialIds;
 
+    private final Optional<Server> server;
+
     private final String id;
 
     private final String orgId;
@@ -97,6 +93,7 @@ public final class Assistant {
             Optional<AssistantTranscriber> transcriber,
             Optional<AssistantModel> model,
             Optional<AssistantVoice> voice,
+            Optional<String> firstMessage,
             Optional<AssistantFirstMessageMode> firstMessageMode,
             Optional<Boolean> hipaaEnabled,
             Optional<List<AssistantClientMessagesItem>> clientMessages,
@@ -104,19 +101,15 @@ public final class Assistant {
             Optional<Double> silenceTimeoutSeconds,
             Optional<Double> maxDurationSeconds,
             Optional<AssistantBackgroundSound> backgroundSound,
-            Optional<Boolean> backchannelingEnabled,
             Optional<Boolean> backgroundDenoisingEnabled,
             Optional<Boolean> modelOutputInMessagesEnabled,
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
             Optional<String> name,
-            Optional<String> firstMessage,
             Optional<TwilioVoicemailDetection> voicemailDetection,
             Optional<String> voicemailMessage,
             Optional<String> endCallMessage,
             Optional<List<String>> endCallPhrases,
             Optional<Map<String, Object>> metadata,
-            Optional<String> serverUrl,
-            Optional<String> serverUrlSecret,
             Optional<AnalysisPlan> analysisPlan,
             Optional<ArtifactPlan> artifactPlan,
             Optional<MessagePlan> messagePlan,
@@ -124,6 +117,7 @@ public final class Assistant {
             Optional<StopSpeakingPlan> stopSpeakingPlan,
             Optional<MonitorPlan> monitorPlan,
             Optional<List<String>> credentialIds,
+            Optional<Server> server,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -132,6 +126,7 @@ public final class Assistant {
         this.transcriber = transcriber;
         this.model = model;
         this.voice = voice;
+        this.firstMessage = firstMessage;
         this.firstMessageMode = firstMessageMode;
         this.hipaaEnabled = hipaaEnabled;
         this.clientMessages = clientMessages;
@@ -139,19 +134,15 @@ public final class Assistant {
         this.silenceTimeoutSeconds = silenceTimeoutSeconds;
         this.maxDurationSeconds = maxDurationSeconds;
         this.backgroundSound = backgroundSound;
-        this.backchannelingEnabled = backchannelingEnabled;
         this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
         this.modelOutputInMessagesEnabled = modelOutputInMessagesEnabled;
         this.transportConfigurations = transportConfigurations;
         this.name = name;
-        this.firstMessage = firstMessage;
         this.voicemailDetection = voicemailDetection;
         this.voicemailMessage = voicemailMessage;
         this.endCallMessage = endCallMessage;
         this.endCallPhrases = endCallPhrases;
         this.metadata = metadata;
-        this.serverUrl = serverUrl;
-        this.serverUrlSecret = serverUrlSecret;
         this.analysisPlan = analysisPlan;
         this.artifactPlan = artifactPlan;
         this.messagePlan = messagePlan;
@@ -159,6 +150,7 @@ public final class Assistant {
         this.stopSpeakingPlan = stopSpeakingPlan;
         this.monitorPlan = monitorPlan;
         this.credentialIds = credentialIds;
+        this.server = server;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -191,6 +183,15 @@ public final class Assistant {
     }
 
     /**
+     * @return This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).
+     * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
+     */
+    @JsonProperty("firstMessage")
+    public Optional<String> getFirstMessage() {
+        return firstMessage;
+    }
+
+    /**
      * @return This is the mode for the first message. Default is 'assistant-speaks-first'.
      * <p>Use:</p>
      * <ul>
@@ -214,7 +215,7 @@ public final class Assistant {
     }
 
     /**
-     * @return These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transcript,tool-calls,user-interrupted,voice-input. You can check the shape of the messages in ClientMessage schema.
+     * @return These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input. You can check the shape of the messages in ClientMessage schema.
      */
     @JsonProperty("clientMessages")
     public Optional<List<AssistantClientMessagesItem>> getClientMessages() {
@@ -256,16 +257,6 @@ public final class Assistant {
     }
 
     /**
-     * @return This determines whether the model says 'mhmm', 'ahem' etc. while user is speaking.
-     * <p>Default <code>false</code> while in beta.</p>
-     * <p>@default false</p>
-     */
-    @JsonProperty("backchannelingEnabled")
-    public Optional<Boolean> getBackchannelingEnabled() {
-        return backchannelingEnabled;
-    }
-
-    /**
      * @return This enables filtering of noise and background speech while the user is talking.
      * <p>Default <code>false</code> while in beta.</p>
      * <p>@default false</p>
@@ -300,15 +291,6 @@ public final class Assistant {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
-    }
-
-    /**
-     * @return This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).
-     * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
-     */
-    @JsonProperty("firstMessage")
-    public Optional<String> getFirstMessage() {
-        return firstMessage;
     }
 
     /**
@@ -353,25 +335,6 @@ public final class Assistant {
     @JsonProperty("metadata")
     public Optional<Map<String, Object>> getMetadata() {
         return metadata;
-    }
-
-    /**
-     * @return This is the URL Vapi will communicate with via HTTP GET and POST Requests. This is used for retrieving context, function calling, and end-of-call reports.
-     * <p>All requests will be sent with the call object among other things relevant to that message. You can find more details in the Server URL documentation.</p>
-     * <p>This overrides the serverUrl set on the org and the phoneNumber. Order of precedence: tool.server.url &gt; assistant.serverUrl &gt; phoneNumber.serverUrl &gt; org.serverUrl</p>
-     */
-    @JsonProperty("serverUrl")
-    public Optional<String> getServerUrl() {
-        return serverUrl;
-    }
-
-    /**
-     * @return This is the secret you can set that Vapi will send with every request to your server. Will be sent as a header called x-vapi-secret.
-     * <p>Same precedence logic as serverUrl.</p>
-     */
-    @JsonProperty("serverUrlSecret")
-    public Optional<String> getServerUrlSecret() {
-        return serverUrlSecret;
     }
 
     /**
@@ -453,6 +416,20 @@ public final class Assistant {
     }
 
     /**
+     * @return This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.
+     * <p>The order of precedence is:</p>
+     * <ol>
+     * <li>assistant.server.url</li>
+     * <li>phoneNumber.serverUrl</li>
+     * <li>org.serverUrl</li>
+     * </ol>
+     */
+    @JsonProperty("server")
+    public Optional<Server> getServer() {
+        return server;
+    }
+
+    /**
      * @return This is the unique identifier for the assistant.
      */
     @JsonProperty("id")
@@ -499,6 +476,7 @@ public final class Assistant {
         return transcriber.equals(other.transcriber)
                 && model.equals(other.model)
                 && voice.equals(other.voice)
+                && firstMessage.equals(other.firstMessage)
                 && firstMessageMode.equals(other.firstMessageMode)
                 && hipaaEnabled.equals(other.hipaaEnabled)
                 && clientMessages.equals(other.clientMessages)
@@ -506,19 +484,15 @@ public final class Assistant {
                 && silenceTimeoutSeconds.equals(other.silenceTimeoutSeconds)
                 && maxDurationSeconds.equals(other.maxDurationSeconds)
                 && backgroundSound.equals(other.backgroundSound)
-                && backchannelingEnabled.equals(other.backchannelingEnabled)
                 && backgroundDenoisingEnabled.equals(other.backgroundDenoisingEnabled)
                 && modelOutputInMessagesEnabled.equals(other.modelOutputInMessagesEnabled)
                 && transportConfigurations.equals(other.transportConfigurations)
                 && name.equals(other.name)
-                && firstMessage.equals(other.firstMessage)
                 && voicemailDetection.equals(other.voicemailDetection)
                 && voicemailMessage.equals(other.voicemailMessage)
                 && endCallMessage.equals(other.endCallMessage)
                 && endCallPhrases.equals(other.endCallPhrases)
                 && metadata.equals(other.metadata)
-                && serverUrl.equals(other.serverUrl)
-                && serverUrlSecret.equals(other.serverUrlSecret)
                 && analysisPlan.equals(other.analysisPlan)
                 && artifactPlan.equals(other.artifactPlan)
                 && messagePlan.equals(other.messagePlan)
@@ -526,6 +500,7 @@ public final class Assistant {
                 && stopSpeakingPlan.equals(other.stopSpeakingPlan)
                 && monitorPlan.equals(other.monitorPlan)
                 && credentialIds.equals(other.credentialIds)
+                && server.equals(other.server)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
@@ -538,6 +513,7 @@ public final class Assistant {
                 this.transcriber,
                 this.model,
                 this.voice,
+                this.firstMessage,
                 this.firstMessageMode,
                 this.hipaaEnabled,
                 this.clientMessages,
@@ -545,19 +521,15 @@ public final class Assistant {
                 this.silenceTimeoutSeconds,
                 this.maxDurationSeconds,
                 this.backgroundSound,
-                this.backchannelingEnabled,
                 this.backgroundDenoisingEnabled,
                 this.modelOutputInMessagesEnabled,
                 this.transportConfigurations,
                 this.name,
-                this.firstMessage,
                 this.voicemailDetection,
                 this.voicemailMessage,
                 this.endCallMessage,
                 this.endCallPhrases,
                 this.metadata,
-                this.serverUrl,
-                this.serverUrlSecret,
                 this.analysisPlan,
                 this.artifactPlan,
                 this.messagePlan,
@@ -565,6 +537,7 @@ public final class Assistant {
                 this.stopSpeakingPlan,
                 this.monitorPlan,
                 this.credentialIds,
+                this.server,
                 this.id,
                 this.orgId,
                 this.createdAt,
@@ -613,6 +586,10 @@ public final class Assistant {
 
         _FinalStage voice(AssistantVoice voice);
 
+        _FinalStage firstMessage(Optional<String> firstMessage);
+
+        _FinalStage firstMessage(String firstMessage);
+
         _FinalStage firstMessageMode(Optional<AssistantFirstMessageMode> firstMessageMode);
 
         _FinalStage firstMessageMode(AssistantFirstMessageMode firstMessageMode);
@@ -641,10 +618,6 @@ public final class Assistant {
 
         _FinalStage backgroundSound(AssistantBackgroundSound backgroundSound);
 
-        _FinalStage backchannelingEnabled(Optional<Boolean> backchannelingEnabled);
-
-        _FinalStage backchannelingEnabled(Boolean backchannelingEnabled);
-
         _FinalStage backgroundDenoisingEnabled(Optional<Boolean> backgroundDenoisingEnabled);
 
         _FinalStage backgroundDenoisingEnabled(Boolean backgroundDenoisingEnabled);
@@ -660,10 +633,6 @@ public final class Assistant {
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
-
-        _FinalStage firstMessage(Optional<String> firstMessage);
-
-        _FinalStage firstMessage(String firstMessage);
 
         _FinalStage voicemailDetection(Optional<TwilioVoicemailDetection> voicemailDetection);
 
@@ -684,14 +653,6 @@ public final class Assistant {
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
         _FinalStage metadata(Map<String, Object> metadata);
-
-        _FinalStage serverUrl(Optional<String> serverUrl);
-
-        _FinalStage serverUrl(String serverUrl);
-
-        _FinalStage serverUrlSecret(Optional<String> serverUrlSecret);
-
-        _FinalStage serverUrlSecret(String serverUrlSecret);
 
         _FinalStage analysisPlan(Optional<AnalysisPlan> analysisPlan);
 
@@ -720,6 +681,10 @@ public final class Assistant {
         _FinalStage credentialIds(Optional<List<String>> credentialIds);
 
         _FinalStage credentialIds(List<String> credentialIds);
+
+        _FinalStage server(Optional<Server> server);
+
+        _FinalStage server(Server server);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -731,6 +696,8 @@ public final class Assistant {
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<Server> server = Optional.empty();
 
         private Optional<List<String>> credentialIds = Optional.empty();
 
@@ -746,10 +713,6 @@ public final class Assistant {
 
         private Optional<AnalysisPlan> analysisPlan = Optional.empty();
 
-        private Optional<String> serverUrlSecret = Optional.empty();
-
-        private Optional<String> serverUrl = Optional.empty();
-
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
         private Optional<List<String>> endCallPhrases = Optional.empty();
@@ -760,8 +723,6 @@ public final class Assistant {
 
         private Optional<TwilioVoicemailDetection> voicemailDetection = Optional.empty();
 
-        private Optional<String> firstMessage = Optional.empty();
-
         private Optional<String> name = Optional.empty();
 
         private Optional<List<TransportConfigurationTwilio>> transportConfigurations = Optional.empty();
@@ -769,8 +730,6 @@ public final class Assistant {
         private Optional<Boolean> modelOutputInMessagesEnabled = Optional.empty();
 
         private Optional<Boolean> backgroundDenoisingEnabled = Optional.empty();
-
-        private Optional<Boolean> backchannelingEnabled = Optional.empty();
 
         private Optional<AssistantBackgroundSound> backgroundSound = Optional.empty();
 
@@ -785,6 +744,8 @@ public final class Assistant {
         private Optional<Boolean> hipaaEnabled = Optional.empty();
 
         private Optional<AssistantFirstMessageMode> firstMessageMode = Optional.empty();
+
+        private Optional<String> firstMessage = Optional.empty();
 
         private Optional<AssistantVoice> voice = Optional.empty();
 
@@ -802,6 +763,7 @@ public final class Assistant {
             transcriber(other.getTranscriber());
             model(other.getModel());
             voice(other.getVoice());
+            firstMessage(other.getFirstMessage());
             firstMessageMode(other.getFirstMessageMode());
             hipaaEnabled(other.getHipaaEnabled());
             clientMessages(other.getClientMessages());
@@ -809,19 +771,15 @@ public final class Assistant {
             silenceTimeoutSeconds(other.getSilenceTimeoutSeconds());
             maxDurationSeconds(other.getMaxDurationSeconds());
             backgroundSound(other.getBackgroundSound());
-            backchannelingEnabled(other.getBackchannelingEnabled());
             backgroundDenoisingEnabled(other.getBackgroundDenoisingEnabled());
             modelOutputInMessagesEnabled(other.getModelOutputInMessagesEnabled());
             transportConfigurations(other.getTransportConfigurations());
             name(other.getName());
-            firstMessage(other.getFirstMessage());
             voicemailDetection(other.getVoicemailDetection());
             voicemailMessage(other.getVoicemailMessage());
             endCallMessage(other.getEndCallMessage());
             endCallPhrases(other.getEndCallPhrases());
             metadata(other.getMetadata());
-            serverUrl(other.getServerUrl());
-            serverUrlSecret(other.getServerUrlSecret());
             analysisPlan(other.getAnalysisPlan());
             artifactPlan(other.getArtifactPlan());
             messagePlan(other.getMessagePlan());
@@ -829,6 +787,7 @@ public final class Assistant {
             stopSpeakingPlan(other.getStopSpeakingPlan());
             monitorPlan(other.getMonitorPlan());
             credentialIds(other.getCredentialIds());
+            server(other.getServer());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -877,6 +836,29 @@ public final class Assistant {
         @JsonSetter("updatedAt")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server.url</li>
+         * <li>phoneNumber.serverUrl</li>
+         * <li>org.serverUrl</li>
+         * </ol>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage server(Server server) {
+            this.server = Optional.ofNullable(server);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "server", nulls = Nulls.SKIP)
+        public _FinalStage server(Optional<Server> server) {
+            this.server = server;
             return this;
         }
 
@@ -1022,43 +1004,6 @@ public final class Assistant {
         }
 
         /**
-         * <p>This is the secret you can set that Vapi will send with every request to your server. Will be sent as a header called x-vapi-secret.</p>
-         * <p>Same precedence logic as serverUrl.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage serverUrlSecret(String serverUrlSecret) {
-            this.serverUrlSecret = Optional.ofNullable(serverUrlSecret);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "serverUrlSecret", nulls = Nulls.SKIP)
-        public _FinalStage serverUrlSecret(Optional<String> serverUrlSecret) {
-            this.serverUrlSecret = serverUrlSecret;
-            return this;
-        }
-
-        /**
-         * <p>This is the URL Vapi will communicate with via HTTP GET and POST Requests. This is used for retrieving context, function calling, and end-of-call reports.</p>
-         * <p>All requests will be sent with the call object among other things relevant to that message. You can find more details in the Server URL documentation.</p>
-         * <p>This overrides the serverUrl set on the org and the phoneNumber. Order of precedence: tool.server.url &gt; assistant.serverUrl &gt; phoneNumber.serverUrl &gt; org.serverUrl</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage serverUrl(String serverUrl) {
-            this.serverUrl = Optional.ofNullable(serverUrl);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "serverUrl", nulls = Nulls.SKIP)
-        public _FinalStage serverUrl(Optional<String> serverUrl) {
-            this.serverUrl = serverUrl;
-            return this;
-        }
-
-        /**
          * <p>This is for metadata you want to store on the assistant.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -1148,24 +1093,6 @@ public final class Assistant {
         }
 
         /**
-         * <p>This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).</p>
-         * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage firstMessage(String firstMessage) {
-            this.firstMessage = Optional.ofNullable(firstMessage);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "firstMessage", nulls = Nulls.SKIP)
-        public _FinalStage firstMessage(Optional<String> firstMessage) {
-            this.firstMessage = firstMessage;
-            return this;
-        }
-
-        /**
          * <p>This is the name of the assistant.</p>
          * <p>This is required when you want to transfer between assistants in a call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -1240,25 +1167,6 @@ public final class Assistant {
         }
 
         /**
-         * <p>This determines whether the model says 'mhmm', 'ahem' etc. while user is speaking.</p>
-         * <p>Default <code>false</code> while in beta.</p>
-         * <p>@default false</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage backchannelingEnabled(Boolean backchannelingEnabled) {
-            this.backchannelingEnabled = Optional.ofNullable(backchannelingEnabled);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "backchannelingEnabled", nulls = Nulls.SKIP)
-        public _FinalStage backchannelingEnabled(Optional<Boolean> backchannelingEnabled) {
-            this.backchannelingEnabled = backchannelingEnabled;
-            return this;
-        }
-
-        /**
          * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -1329,7 +1237,7 @@ public final class Assistant {
         }
 
         /**
-         * <p>These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transcript,tool-calls,user-interrupted,voice-input. You can check the shape of the messages in ClientMessage schema.</p>
+         * <p>These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input. You can check the shape of the messages in ClientMessage schema.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1383,6 +1291,24 @@ public final class Assistant {
         @JsonSetter(value = "firstMessageMode", nulls = Nulls.SKIP)
         public _FinalStage firstMessageMode(Optional<AssistantFirstMessageMode> firstMessageMode) {
             this.firstMessageMode = firstMessageMode;
+            return this;
+        }
+
+        /**
+         * <p>This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).</p>
+         * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage firstMessage(String firstMessage) {
+            this.firstMessage = Optional.ofNullable(firstMessage);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "firstMessage", nulls = Nulls.SKIP)
+        public _FinalStage firstMessage(Optional<String> firstMessage) {
+            this.firstMessage = firstMessage;
             return this;
         }
 
@@ -1443,6 +1369,7 @@ public final class Assistant {
                     transcriber,
                     model,
                     voice,
+                    firstMessage,
                     firstMessageMode,
                     hipaaEnabled,
                     clientMessages,
@@ -1450,19 +1377,15 @@ public final class Assistant {
                     silenceTimeoutSeconds,
                     maxDurationSeconds,
                     backgroundSound,
-                    backchannelingEnabled,
                     backgroundDenoisingEnabled,
                     modelOutputInMessagesEnabled,
                     transportConfigurations,
                     name,
-                    firstMessage,
                     voicemailDetection,
                     voicemailMessage,
                     endCallMessage,
                     endCallPhrases,
                     metadata,
-                    serverUrl,
-                    serverUrlSecret,
                     analysisPlan,
                     artifactPlan,
                     messagePlan,
@@ -1470,6 +1393,7 @@ public final class Assistant {
                     stopSpeakingPlan,
                     monitorPlan,
                     credentialIds,
+                    server,
                     id,
                     orgId,
                     createdAt,

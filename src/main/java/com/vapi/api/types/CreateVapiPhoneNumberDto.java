@@ -25,6 +25,8 @@ public final class CreateVapiPhoneNumberDto {
 
     private final String sipUri;
 
+    private final Optional<SipAuthentication> authentication;
+
     private final Optional<String> name;
 
     private final Optional<String> assistantId;
@@ -40,6 +42,7 @@ public final class CreateVapiPhoneNumberDto {
     private CreateVapiPhoneNumberDto(
             Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination,
             String sipUri,
+            Optional<SipAuthentication> authentication,
             Optional<String> name,
             Optional<String> assistantId,
             Optional<String> squadId,
@@ -48,6 +51,7 @@ public final class CreateVapiPhoneNumberDto {
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
         this.sipUri = sipUri;
+        this.authentication = authentication;
         this.name = name;
         this.assistantId = assistantId;
         this.squadId = squadId;
@@ -77,6 +81,15 @@ public final class CreateVapiPhoneNumberDto {
     @JsonProperty("sipUri")
     public String getSipUri() {
         return sipUri;
+    }
+
+    /**
+     * @return This enables authentication for incoming SIP INVITE requests to the <code>sipUri</code>.
+     * <p>If not set, any username/password to the 401 challenge of the SIP INVITE will be accepted.</p>
+     */
+    @JsonProperty("authentication")
+    public Optional<SipAuthentication> getAuthentication() {
+        return authentication;
     }
 
     /**
@@ -138,6 +151,7 @@ public final class CreateVapiPhoneNumberDto {
     private boolean equalTo(CreateVapiPhoneNumberDto other) {
         return fallbackDestination.equals(other.fallbackDestination)
                 && sipUri.equals(other.sipUri)
+                && authentication.equals(other.authentication)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
                 && squadId.equals(other.squadId)
@@ -150,6 +164,7 @@ public final class CreateVapiPhoneNumberDto {
         return Objects.hash(
                 this.fallbackDestination,
                 this.sipUri,
+                this.authentication,
                 this.name,
                 this.assistantId,
                 this.squadId,
@@ -178,6 +193,10 @@ public final class CreateVapiPhoneNumberDto {
         _FinalStage fallbackDestination(Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination);
 
         _FinalStage fallbackDestination(CreateVapiPhoneNumberDtoFallbackDestination fallbackDestination);
+
+        _FinalStage authentication(Optional<SipAuthentication> authentication);
+
+        _FinalStage authentication(SipAuthentication authentication);
 
         _FinalStage name(Optional<String> name);
 
@@ -214,6 +233,8 @@ public final class CreateVapiPhoneNumberDto {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<SipAuthentication> authentication = Optional.empty();
+
         private Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination = Optional.empty();
 
         @JsonAnySetter
@@ -225,6 +246,7 @@ public final class CreateVapiPhoneNumberDto {
         public Builder from(CreateVapiPhoneNumberDto other) {
             fallbackDestination(other.getFallbackDestination());
             sipUri(other.getSipUri());
+            authentication(other.getAuthentication());
             name(other.getName());
             assistantId(other.getAssistantId());
             squadId(other.getSquadId());
@@ -336,6 +358,24 @@ public final class CreateVapiPhoneNumberDto {
         }
 
         /**
+         * <p>This enables authentication for incoming SIP INVITE requests to the <code>sipUri</code>.</p>
+         * <p>If not set, any username/password to the 401 challenge of the SIP INVITE will be accepted.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage authentication(SipAuthentication authentication) {
+            this.authentication = Optional.ofNullable(authentication);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
+        public _FinalStage authentication(Optional<SipAuthentication> authentication) {
+            this.authentication = authentication;
+            return this;
+        }
+
+        /**
          * <p>This is the fallback destination an inbound call will be transferred to if:</p>
          * <ol>
          * <li><code>assistantId</code> is not set</li>
@@ -364,6 +404,7 @@ public final class CreateVapiPhoneNumberDto {
             return new CreateVapiPhoneNumberDto(
                     fallbackDestination,
                     sipUri,
+                    authentication,
                     name,
                     assistantId,
                     squadId,

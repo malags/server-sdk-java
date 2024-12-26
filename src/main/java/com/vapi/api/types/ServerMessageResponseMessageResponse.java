@@ -33,10 +33,12 @@ public final class ServerMessageResponseMessageResponse {
         if (this.type == 0) {
             return visitor.visit((ServerMessageResponseAssistantRequest) this.value);
         } else if (this.type == 1) {
-            return visitor.visit((ServerMessageResponseToolCalls) this.value);
+            return visitor.visit((ServerMessageResponseKnowledgeBaseRequest) this.value);
         } else if (this.type == 2) {
-            return visitor.visit((ServerMessageResponseTransferDestinationRequest) this.value);
+            return visitor.visit((ServerMessageResponseToolCalls) this.value);
         } else if (this.type == 3) {
+            return visitor.visit((ServerMessageResponseTransferDestinationRequest) this.value);
+        } else if (this.type == 4) {
             return visitor.visit((ServerMessageResponseVoiceRequest) this.value);
         }
         throw new IllegalStateException("Failed to visit value. This should never happen.");
@@ -67,20 +69,26 @@ public final class ServerMessageResponseMessageResponse {
         return new ServerMessageResponseMessageResponse(value, 0);
     }
 
-    public static ServerMessageResponseMessageResponse of(ServerMessageResponseToolCalls value) {
+    public static ServerMessageResponseMessageResponse of(ServerMessageResponseKnowledgeBaseRequest value) {
         return new ServerMessageResponseMessageResponse(value, 1);
     }
 
-    public static ServerMessageResponseMessageResponse of(ServerMessageResponseTransferDestinationRequest value) {
+    public static ServerMessageResponseMessageResponse of(ServerMessageResponseToolCalls value) {
         return new ServerMessageResponseMessageResponse(value, 2);
     }
 
-    public static ServerMessageResponseMessageResponse of(ServerMessageResponseVoiceRequest value) {
+    public static ServerMessageResponseMessageResponse of(ServerMessageResponseTransferDestinationRequest value) {
         return new ServerMessageResponseMessageResponse(value, 3);
+    }
+
+    public static ServerMessageResponseMessageResponse of(ServerMessageResponseVoiceRequest value) {
+        return new ServerMessageResponseMessageResponse(value, 4);
     }
 
     public interface Visitor<T> {
         T visit(ServerMessageResponseAssistantRequest value);
+
+        T visit(ServerMessageResponseKnowledgeBaseRequest value);
 
         T visit(ServerMessageResponseToolCalls value);
 
@@ -100,6 +108,11 @@ public final class ServerMessageResponseMessageResponse {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageResponseAssistantRequest.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(
+                        ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageResponseKnowledgeBaseRequest.class));
             } catch (IllegalArgumentException e) {
             }
             try {

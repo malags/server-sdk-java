@@ -24,15 +24,39 @@ dependencies {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+tasks.withType(Javadoc) {
+    failOnError false
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 spotless {
     java {
         palantirJavaFormat()
     }
 }
 
+
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+
+group = 'dev.vapi'
+
+version = '0.2.0'
+
+jar {
+    dependsOn(":generatePomFileForMavenPublication")
+    archiveBaseName = "server-sdk"
+}
+
+sourcesJar {
+    archiveBaseName = "server-sdk"
+}
+
+javadocJar {
+    archiveBaseName = "server-sdk"
 }
 
 test {
@@ -41,14 +65,21 @@ test {
         showStandardStreams = true
     }
 }
+
 publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'dev.vapi'
             artifactId = 'server-sdk'
-            version = '0.1.0'
+            version = '0.2.0'
             from components.java
             pom {
+                licenses {
+                    license {
+                        name = 'The MIT License (MIT)'
+                        url = 'https://mit-license.org/'
+                    }
+                }
                 scm {
                     connection = 'scm:git:git://github.com/VapiAI/server-sdk-java.git'
                     developerConnection = 'scm:git:git://github.com/VapiAI/server-sdk-java.git'

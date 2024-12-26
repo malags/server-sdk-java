@@ -9,12 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -30,6 +32,8 @@ public final class TwilioCredential {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<String> name;
+
     private final String accountSid;
 
     private final Map<String, Object> additionalProperties;
@@ -40,6 +44,7 @@ public final class TwilioCredential {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<String> name,
             String accountSid,
             Map<String, Object> additionalProperties) {
         this.authToken = authToken;
@@ -47,6 +52,7 @@ public final class TwilioCredential {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.name = name;
         this.accountSid = accountSid;
         this.additionalProperties = additionalProperties;
     }
@@ -96,6 +102,14 @@ public final class TwilioCredential {
         return updatedAt;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @JsonProperty("accountSid")
     public String getAccountSid() {
         return accountSid;
@@ -118,12 +132,14 @@ public final class TwilioCredential {
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && name.equals(other.name)
                 && accountSid.equals(other.accountSid);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.authToken, this.id, this.orgId, this.createdAt, this.updatedAt, this.accountSid);
+        return Objects.hash(
+                this.authToken, this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.accountSid);
     }
 
     @java.lang.Override
@@ -163,6 +179,10 @@ public final class TwilioCredential {
 
     public interface _FinalStage {
         TwilioCredential build();
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -186,6 +206,8 @@ public final class TwilioCredential {
 
         private String accountSid;
 
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -198,6 +220,7 @@ public final class TwilioCredential {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            name(other.getName());
             accountSid(other.getAccountSid());
             return this;
         }
@@ -264,9 +287,27 @@ public final class TwilioCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public TwilioCredential build() {
-            return new TwilioCredential(authToken, id, orgId, createdAt, updatedAt, accountSid, additionalProperties);
+            return new TwilioCredential(
+                    authToken, id, orgId, createdAt, updatedAt, name, accountSid, additionalProperties);
         }
     }
 }

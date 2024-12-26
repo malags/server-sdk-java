@@ -21,32 +21,23 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DeepgramVoice.Builder.class)
 public final class DeepgramVoice {
-    private final Optional<Boolean> fillerInjectionEnabled;
-
     private final DeepgramVoiceId voiceId;
 
     private final Optional<ChunkPlan> chunkPlan;
 
+    private final Optional<FallbackPlan> fallbackPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private DeepgramVoice(
-            Optional<Boolean> fillerInjectionEnabled,
             DeepgramVoiceId voiceId,
             Optional<ChunkPlan> chunkPlan,
+            Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
-        this.fillerInjectionEnabled = fillerInjectionEnabled;
         this.voiceId = voiceId;
         this.chunkPlan = chunkPlan;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This determines whether fillers are injected into the model output before inputting it into the voice provider.
-     * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-     */
-    @JsonProperty("fillerInjectionEnabled")
-    public Optional<Boolean> getFillerInjectionEnabled() {
-        return fillerInjectionEnabled;
     }
 
     /**
@@ -65,6 +56,14 @@ public final class DeepgramVoice {
         return chunkPlan;
     }
 
+    /**
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+     */
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackPlan> getFallbackPlan() {
+        return fallbackPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -77,14 +76,14 @@ public final class DeepgramVoice {
     }
 
     private boolean equalTo(DeepgramVoice other) {
-        return fillerInjectionEnabled.equals(other.fillerInjectionEnabled)
-                && voiceId.equals(other.voiceId)
-                && chunkPlan.equals(other.chunkPlan);
+        return voiceId.equals(other.voiceId)
+                && chunkPlan.equals(other.chunkPlan)
+                && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.fillerInjectionEnabled, this.voiceId, this.chunkPlan);
+        return Objects.hash(this.voiceId, this.chunkPlan, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -105,22 +104,22 @@ public final class DeepgramVoice {
     public interface _FinalStage {
         DeepgramVoice build();
 
-        _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled);
-
-        _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled);
-
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
+
+        _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
+
+        _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements VoiceIdStage, _FinalStage {
         private DeepgramVoiceId voiceId;
 
-        private Optional<ChunkPlan> chunkPlan = Optional.empty();
+        private Optional<FallbackPlan> fallbackPlan = Optional.empty();
 
-        private Optional<Boolean> fillerInjectionEnabled = Optional.empty();
+        private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -129,9 +128,9 @@ public final class DeepgramVoice {
 
         @java.lang.Override
         public Builder from(DeepgramVoice other) {
-            fillerInjectionEnabled(other.getFillerInjectionEnabled());
             voiceId(other.getVoiceId());
             chunkPlan(other.getChunkPlan());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -143,6 +142,23 @@ public final class DeepgramVoice {
         @JsonSetter("voiceId")
         public _FinalStage voiceId(@NotNull DeepgramVoiceId voiceId) {
             this.voiceId = Objects.requireNonNull(voiceId, "voiceId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackPlan(FallbackPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
             return this;
         }
 
@@ -163,27 +179,9 @@ public final class DeepgramVoice {
             return this;
         }
 
-        /**
-         * <p>This determines whether fillers are injected into the model output before inputting it into the voice provider.</p>
-         * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = Optional.ofNullable(fillerInjectionEnabled);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "fillerInjectionEnabled", nulls = Nulls.SKIP)
-        public _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = fillerInjectionEnabled;
-            return this;
-        }
-
         @java.lang.Override
         public DeepgramVoice build() {
-            return new DeepgramVoice(fillerInjectionEnabled, voiceId, chunkPlan, additionalProperties);
+            return new DeepgramVoice(voiceId, chunkPlan, fallbackPlan, additionalProperties);
         }
     }
 }

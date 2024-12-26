@@ -25,12 +25,15 @@ public final class UpdateDeepgramCredentialDto {
 
     private final Optional<String> apiUrl;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateDeepgramCredentialDto(
-            String apiKey, Optional<String> apiUrl, Map<String, Object> additionalProperties) {
+            String apiKey, Optional<String> apiUrl, Optional<String> name, Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
         this.apiUrl = apiUrl;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -55,6 +58,14 @@ public final class UpdateDeepgramCredentialDto {
         return apiUrl;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -67,12 +78,12 @@ public final class UpdateDeepgramCredentialDto {
     }
 
     private boolean equalTo(UpdateDeepgramCredentialDto other) {
-        return apiKey.equals(other.apiKey) && apiUrl.equals(other.apiUrl);
+        return apiKey.equals(other.apiKey) && apiUrl.equals(other.apiUrl) && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.apiUrl);
+        return Objects.hash(this.apiKey, this.apiUrl, this.name);
     }
 
     @java.lang.Override
@@ -96,11 +107,17 @@ public final class UpdateDeepgramCredentialDto {
         _FinalStage apiUrl(Optional<String> apiUrl);
 
         _FinalStage apiUrl(String apiUrl);
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ApiKeyStage, _FinalStage {
         private String apiKey;
+
+        private Optional<String> name = Optional.empty();
 
         private Optional<String> apiUrl = Optional.empty();
 
@@ -113,6 +130,7 @@ public final class UpdateDeepgramCredentialDto {
         public Builder from(UpdateDeepgramCredentialDto other) {
             apiKey(other.getApiKey());
             apiUrl(other.getApiUrl());
+            name(other.getName());
             return this;
         }
 
@@ -124,6 +142,23 @@ public final class UpdateDeepgramCredentialDto {
         @JsonSetter("apiKey")
         public _FinalStage apiKey(@NotNull String apiKey) {
             this.apiKey = Objects.requireNonNull(apiKey, "apiKey must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
             return this;
         }
 
@@ -146,7 +181,7 @@ public final class UpdateDeepgramCredentialDto {
 
         @java.lang.Override
         public UpdateDeepgramCredentialDto build() {
-            return new UpdateDeepgramCredentialDto(apiKey, apiUrl, additionalProperties);
+            return new UpdateDeepgramCredentialDto(apiKey, apiUrl, name, additionalProperties);
         }
     }
 }

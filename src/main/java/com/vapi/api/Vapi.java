@@ -10,6 +10,7 @@ import com.vapi.api.resources.assistants.AssistantsClient;
 import com.vapi.api.resources.blocks.BlocksClient;
 import com.vapi.api.resources.calls.CallsClient;
 import com.vapi.api.resources.files.FilesClient;
+import com.vapi.api.resources.knowledgebases.KnowledgeBasesClient;
 import com.vapi.api.resources.logs.LogsClient;
 import com.vapi.api.resources.phonenumbers.PhoneNumbersClient;
 import com.vapi.api.resources.squads.SquadsClient;
@@ -27,6 +28,8 @@ public class Vapi {
 
     protected final Supplier<SquadsClient> squadsClient;
 
+    protected final Supplier<KnowledgeBasesClient> knowledgeBasesClient;
+
     protected final Supplier<BlocksClient> blocksClient;
 
     protected final Supplier<ToolsClient> toolsClient;
@@ -43,6 +46,7 @@ public class Vapi {
         this.assistantsClient = Suppliers.memoize(() -> new AssistantsClient(clientOptions));
         this.phoneNumbersClient = Suppliers.memoize(() -> new PhoneNumbersClient(clientOptions));
         this.squadsClient = Suppliers.memoize(() -> new SquadsClient(clientOptions));
+        this.knowledgeBasesClient = Suppliers.memoize(() -> new KnowledgeBasesClient(clientOptions));
         this.blocksClient = Suppliers.memoize(() -> new BlocksClient(clientOptions));
         this.toolsClient = Suppliers.memoize(() -> new ToolsClient(clientOptions));
         this.filesClient = Suppliers.memoize(() -> new FilesClient(clientOptions));
@@ -64,6 +68,10 @@ public class Vapi {
 
     public SquadsClient squads() {
         return this.squadsClient.get();
+    }
+
+    public KnowledgeBasesClient knowledgeBases() {
+        return this.knowledgeBasesClient.get();
     }
 
     public BlocksClient blocks() {

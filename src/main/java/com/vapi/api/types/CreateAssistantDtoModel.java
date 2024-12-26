@@ -42,8 +42,16 @@ public final class CreateAssistantDtoModel {
         return new CreateAssistantDtoModel(new DeepinfraValue(value));
     }
 
+    public static CreateAssistantDtoModel google(GoogleModel value) {
+        return new CreateAssistantDtoModel(new GoogleValue(value));
+    }
+
     public static CreateAssistantDtoModel groq(GroqModel value) {
         return new CreateAssistantDtoModel(new GroqValue(value));
+    }
+
+    public static CreateAssistantDtoModel inflectionAi(InflectionAiModel value) {
+        return new CreateAssistantDtoModel(new InflectionAiValue(value));
     }
 
     public static CreateAssistantDtoModel openai(OpenAiModel value) {
@@ -66,6 +74,10 @@ public final class CreateAssistantDtoModel {
         return new CreateAssistantDtoModel(new VapiValue(value));
     }
 
+    public static CreateAssistantDtoModel xai(XaiModel value) {
+        return new CreateAssistantDtoModel(new XaiValue(value));
+    }
+
     public boolean isAnyscale() {
         return value instanceof AnyscaleValue;
     }
@@ -82,8 +94,16 @@ public final class CreateAssistantDtoModel {
         return value instanceof DeepinfraValue;
     }
 
+    public boolean isGoogle() {
+        return value instanceof GoogleValue;
+    }
+
     public boolean isGroq() {
         return value instanceof GroqValue;
+    }
+
+    public boolean isInflectionAi() {
+        return value instanceof InflectionAiValue;
     }
 
     public boolean isOpenai() {
@@ -104,6 +124,10 @@ public final class CreateAssistantDtoModel {
 
     public boolean isVapi() {
         return value instanceof VapiValue;
+    }
+
+    public boolean isXai() {
+        return value instanceof XaiValue;
     }
 
     public boolean _isUnknown() {
@@ -138,9 +162,23 @@ public final class CreateAssistantDtoModel {
         return Optional.empty();
     }
 
+    public Optional<GoogleModel> getGoogle() {
+        if (isGoogle()) {
+            return Optional.of(((GoogleValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<GroqModel> getGroq() {
         if (isGroq()) {
             return Optional.of(((GroqValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<InflectionAiModel> getInflectionAi() {
+        if (isInflectionAi()) {
+            return Optional.of(((InflectionAiValue) value).value);
         }
         return Optional.empty();
     }
@@ -180,6 +218,13 @@ public final class CreateAssistantDtoModel {
         return Optional.empty();
     }
 
+    public Optional<XaiModel> getXai() {
+        if (isXai()) {
+            return Optional.of(((XaiValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -201,7 +246,11 @@ public final class CreateAssistantDtoModel {
 
         T visitDeepinfra(DeepInfraModel deepinfra);
 
+        T visitGoogle(GoogleModel google);
+
         T visitGroq(GroqModel groq);
+
+        T visitInflectionAi(InflectionAiModel inflectionAi);
 
         T visitOpenai(OpenAiModel openai);
 
@@ -213,6 +262,8 @@ public final class CreateAssistantDtoModel {
 
         T visitVapi(VapiModel vapi);
 
+        T visitXai(XaiModel xai);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -222,12 +273,15 @@ public final class CreateAssistantDtoModel {
         @JsonSubTypes.Type(AnthropicValue.class),
         @JsonSubTypes.Type(CustomLlmValue.class),
         @JsonSubTypes.Type(DeepinfraValue.class),
+        @JsonSubTypes.Type(GoogleValue.class),
         @JsonSubTypes.Type(GroqValue.class),
+        @JsonSubTypes.Type(InflectionAiValue.class),
         @JsonSubTypes.Type(OpenaiValue.class),
         @JsonSubTypes.Type(OpenrouterValue.class),
         @JsonSubTypes.Type(PerplexityAiValue.class),
         @JsonSubTypes.Type(TogetherAiValue.class),
-        @JsonSubTypes.Type(VapiValue.class)
+        @JsonSubTypes.Type(VapiValue.class),
+        @JsonSubTypes.Type(XaiValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -386,6 +440,44 @@ public final class CreateAssistantDtoModel {
         }
     }
 
+    @JsonTypeName("google")
+    private static final class GoogleValue implements Value {
+        @JsonUnwrapped
+        private GoogleModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleValue() {}
+
+        private GoogleValue(GoogleModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogle(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleValue && equalTo((GoogleValue) other);
+        }
+
+        private boolean equalTo(GoogleValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "CreateAssistantDtoModel{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("groq")
     private static final class GroqValue implements Value {
         @JsonUnwrapped
@@ -410,6 +502,44 @@ public final class CreateAssistantDtoModel {
         }
 
         private boolean equalTo(GroqValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "CreateAssistantDtoModel{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("inflection-ai")
+    private static final class InflectionAiValue implements Value {
+        @JsonUnwrapped
+        private InflectionAiModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private InflectionAiValue() {}
+
+        private InflectionAiValue(InflectionAiModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitInflectionAi(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof InflectionAiValue && equalTo((InflectionAiValue) other);
+        }
+
+        private boolean equalTo(InflectionAiValue other) {
             return value.equals(other.value);
         }
 
@@ -600,6 +730,44 @@ public final class CreateAssistantDtoModel {
         }
 
         private boolean equalTo(VapiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "CreateAssistantDtoModel{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("xai")
+    private static final class XaiValue implements Value {
+        @JsonUnwrapped
+        private XaiModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private XaiValue() {}
+
+        private XaiValue(XaiModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitXai(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof XaiValue && equalTo((XaiValue) other);
+        }
+
+        private boolean equalTo(XaiValue other) {
             return value.equals(other.value);
         }
 

@@ -27,7 +27,7 @@ public final class DeepgramTranscriber {
 
     private final Optional<Boolean> smartFormat;
 
-    private final Optional<Boolean> languageDetectionEnabled;
+    private final Optional<Boolean> codeSwitchingEnabled;
 
     private final Optional<List<String>> keywords;
 
@@ -39,14 +39,14 @@ public final class DeepgramTranscriber {
             Optional<DeepgramTranscriberModel> model,
             Optional<DeepgramTranscriberLanguage> language,
             Optional<Boolean> smartFormat,
-            Optional<Boolean> languageDetectionEnabled,
+            Optional<Boolean> codeSwitchingEnabled,
             Optional<List<String>> keywords,
             Optional<Double> endpointing,
             Map<String, Object> additionalProperties) {
         this.model = model;
         this.language = language;
         this.smartFormat = smartFormat;
-        this.languageDetectionEnabled = languageDetectionEnabled;
+        this.codeSwitchingEnabled = codeSwitchingEnabled;
         this.keywords = keywords;
         this.endpointing = endpointing;
         this.additionalProperties = additionalProperties;
@@ -77,11 +77,45 @@ public final class DeepgramTranscriber {
     }
 
     /**
-     * @return This enables or disables language detection. If true, swaps transcribers to detected language automatically. Defaults to false.
+     * @return This automatically switches the transcriber's language when the customer's language changes. Defaults to false.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>If your customers switch languages mid-call, you can set this to true.</li>
+     * </ul>
+     * <p>Note:</p>
+     * <ul>
+     * <li>To detect language changes, Vapi uses a custom trained model. Languages supported (X = limited support):
+     * <ol>
+     * <li>Arabic</li>
+     * <li>Bengali</li>
+     * <li>Cantonese</li>
+     * <li>Chinese</li>
+     * <li>Chinese Simplified (X)</li>
+     * <li>Chinese Traditional (X)</li>
+     * <li>English</li>
+     * <li>Farsi (X)</li>
+     * <li>French</li>
+     * <li>German</li>
+     * <li>Haitian Creole (X)</li>
+     * <li>Hindi</li>
+     * <li>Italian</li>
+     * <li>Japanese</li>
+     * <li>Korean</li>
+     * <li>Portuguese</li>
+     * <li>Russian</li>
+     * <li>Spanish</li>
+     * <li>Thai</li>
+     * <li>Urdu</li>
+     * <li>Vietnamese</li>
+     * </ol>
+     * </li>
+     * <li>To receive <code>language-change-detected</code> webhook events, add it to <code>assistant.serverMessages</code>.</li>
+     * </ul>
+     * <p>@default false</p>
      */
-    @JsonProperty("languageDetectionEnabled")
-    public Optional<Boolean> getLanguageDetectionEnabled() {
-        return languageDetectionEnabled;
+    @JsonProperty("codeSwitchingEnabled")
+    public Optional<Boolean> getCodeSwitchingEnabled() {
+        return codeSwitchingEnabled;
     }
 
     /**
@@ -122,7 +156,7 @@ public final class DeepgramTranscriber {
         return model.equals(other.model)
                 && language.equals(other.language)
                 && smartFormat.equals(other.smartFormat)
-                && languageDetectionEnabled.equals(other.languageDetectionEnabled)
+                && codeSwitchingEnabled.equals(other.codeSwitchingEnabled)
                 && keywords.equals(other.keywords)
                 && endpointing.equals(other.endpointing);
     }
@@ -133,7 +167,7 @@ public final class DeepgramTranscriber {
                 this.model,
                 this.language,
                 this.smartFormat,
-                this.languageDetectionEnabled,
+                this.codeSwitchingEnabled,
                 this.keywords,
                 this.endpointing);
     }
@@ -155,7 +189,7 @@ public final class DeepgramTranscriber {
 
         private Optional<Boolean> smartFormat = Optional.empty();
 
-        private Optional<Boolean> languageDetectionEnabled = Optional.empty();
+        private Optional<Boolean> codeSwitchingEnabled = Optional.empty();
 
         private Optional<List<String>> keywords = Optional.empty();
 
@@ -170,7 +204,7 @@ public final class DeepgramTranscriber {
             model(other.getModel());
             language(other.getLanguage());
             smartFormat(other.getSmartFormat());
-            languageDetectionEnabled(other.getLanguageDetectionEnabled());
+            codeSwitchingEnabled(other.getCodeSwitchingEnabled());
             keywords(other.getKeywords());
             endpointing(other.getEndpointing());
             return this;
@@ -209,14 +243,14 @@ public final class DeepgramTranscriber {
             return this;
         }
 
-        @JsonSetter(value = "languageDetectionEnabled", nulls = Nulls.SKIP)
-        public Builder languageDetectionEnabled(Optional<Boolean> languageDetectionEnabled) {
-            this.languageDetectionEnabled = languageDetectionEnabled;
+        @JsonSetter(value = "codeSwitchingEnabled", nulls = Nulls.SKIP)
+        public Builder codeSwitchingEnabled(Optional<Boolean> codeSwitchingEnabled) {
+            this.codeSwitchingEnabled = codeSwitchingEnabled;
             return this;
         }
 
-        public Builder languageDetectionEnabled(Boolean languageDetectionEnabled) {
-            this.languageDetectionEnabled = Optional.ofNullable(languageDetectionEnabled);
+        public Builder codeSwitchingEnabled(Boolean codeSwitchingEnabled) {
+            this.codeSwitchingEnabled = Optional.ofNullable(codeSwitchingEnabled);
             return this;
         }
 
@@ -244,13 +278,7 @@ public final class DeepgramTranscriber {
 
         public DeepgramTranscriber build() {
             return new DeepgramTranscriber(
-                    model,
-                    language,
-                    smartFormat,
-                    languageDetectionEnabled,
-                    keywords,
-                    endpointing,
-                    additionalProperties);
+                    model, language, smartFormat, codeSwitchingEnabled, keywords, endpointing, additionalProperties);
         }
     }
 }

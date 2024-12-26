@@ -21,8 +21,6 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElevenLabsVoice.Builder.class)
 public final class ElevenLabsVoice {
-    private final Optional<Boolean> fillerInjectionEnabled;
-
     private final ElevenLabsVoiceId voiceId;
 
     private final Optional<Double> stability;
@@ -39,14 +37,15 @@ public final class ElevenLabsVoice {
 
     private final Optional<ElevenLabsVoiceModel> model;
 
+    private final Optional<ChunkPlan> chunkPlan;
+
     private final Optional<String> language;
 
-    private final Optional<ChunkPlan> chunkPlan;
+    private final Optional<FallbackPlan> fallbackPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private ElevenLabsVoice(
-            Optional<Boolean> fillerInjectionEnabled,
             ElevenLabsVoiceId voiceId,
             Optional<Double> stability,
             Optional<Double> similarityBoost,
@@ -55,10 +54,10 @@ public final class ElevenLabsVoice {
             Optional<Double> optimizeStreamingLatency,
             Optional<Boolean> enableSsmlParsing,
             Optional<ElevenLabsVoiceModel> model,
-            Optional<String> language,
             Optional<ChunkPlan> chunkPlan,
+            Optional<String> language,
+            Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
-        this.fillerInjectionEnabled = fillerInjectionEnabled;
         this.voiceId = voiceId;
         this.stability = stability;
         this.similarityBoost = similarityBoost;
@@ -67,18 +66,10 @@ public final class ElevenLabsVoice {
         this.optimizeStreamingLatency = optimizeStreamingLatency;
         this.enableSsmlParsing = enableSsmlParsing;
         this.model = model;
-        this.language = language;
         this.chunkPlan = chunkPlan;
+        this.language = language;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This determines whether fillers are injected into the model output before inputting it into the voice provider.
-     * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-     */
-    @JsonProperty("fillerInjectionEnabled")
-    public Optional<Boolean> getFillerInjectionEnabled() {
-        return fillerInjectionEnabled;
     }
 
     /**
@@ -147,6 +138,14 @@ public final class ElevenLabsVoice {
     }
 
     /**
+     * @return This is the plan for chunking the model output before it is sent to the voice provider.
+     */
+    @JsonProperty("chunkPlan")
+    public Optional<ChunkPlan> getChunkPlan() {
+        return chunkPlan;
+    }
+
+    /**
      * @return This is the language (ISO 639-1) that is enforced for the model. Currently only Turbo v2.5 supports language enforcement. For other models, an error will be returned if language code is provided.
      */
     @JsonProperty("language")
@@ -155,11 +154,11 @@ public final class ElevenLabsVoice {
     }
 
     /**
-     * @return This is the plan for chunking the model output before it is sent to the voice provider.
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
      */
-    @JsonProperty("chunkPlan")
-    public Optional<ChunkPlan> getChunkPlan() {
-        return chunkPlan;
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackPlan> getFallbackPlan() {
+        return fallbackPlan;
     }
 
     @java.lang.Override
@@ -174,8 +173,7 @@ public final class ElevenLabsVoice {
     }
 
     private boolean equalTo(ElevenLabsVoice other) {
-        return fillerInjectionEnabled.equals(other.fillerInjectionEnabled)
-                && voiceId.equals(other.voiceId)
+        return voiceId.equals(other.voiceId)
                 && stability.equals(other.stability)
                 && similarityBoost.equals(other.similarityBoost)
                 && style.equals(other.style)
@@ -183,14 +181,14 @@ public final class ElevenLabsVoice {
                 && optimizeStreamingLatency.equals(other.optimizeStreamingLatency)
                 && enableSsmlParsing.equals(other.enableSsmlParsing)
                 && model.equals(other.model)
+                && chunkPlan.equals(other.chunkPlan)
                 && language.equals(other.language)
-                && chunkPlan.equals(other.chunkPlan);
+                && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.fillerInjectionEnabled,
                 this.voiceId,
                 this.stability,
                 this.similarityBoost,
@@ -199,8 +197,9 @@ public final class ElevenLabsVoice {
                 this.optimizeStreamingLatency,
                 this.enableSsmlParsing,
                 this.model,
+                this.chunkPlan,
                 this.language,
-                this.chunkPlan);
+                this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -220,10 +219,6 @@ public final class ElevenLabsVoice {
 
     public interface _FinalStage {
         ElevenLabsVoice build();
-
-        _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled);
-
-        _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled);
 
         _FinalStage stability(Optional<Double> stability);
 
@@ -253,22 +248,28 @@ public final class ElevenLabsVoice {
 
         _FinalStage model(ElevenLabsVoiceModel model);
 
+        _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
+
+        _FinalStage chunkPlan(ChunkPlan chunkPlan);
+
         _FinalStage language(Optional<String> language);
 
         _FinalStage language(String language);
 
-        _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
+        _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
 
-        _FinalStage chunkPlan(ChunkPlan chunkPlan);
+        _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements VoiceIdStage, _FinalStage {
         private ElevenLabsVoiceId voiceId;
 
-        private Optional<ChunkPlan> chunkPlan = Optional.empty();
+        private Optional<FallbackPlan> fallbackPlan = Optional.empty();
 
         private Optional<String> language = Optional.empty();
+
+        private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
         private Optional<ElevenLabsVoiceModel> model = Optional.empty();
 
@@ -284,8 +285,6 @@ public final class ElevenLabsVoice {
 
         private Optional<Double> stability = Optional.empty();
 
-        private Optional<Boolean> fillerInjectionEnabled = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -293,7 +292,6 @@ public final class ElevenLabsVoice {
 
         @java.lang.Override
         public Builder from(ElevenLabsVoice other) {
-            fillerInjectionEnabled(other.getFillerInjectionEnabled());
             voiceId(other.getVoiceId());
             stability(other.getStability());
             similarityBoost(other.getSimilarityBoost());
@@ -302,8 +300,9 @@ public final class ElevenLabsVoice {
             optimizeStreamingLatency(other.getOptimizeStreamingLatency());
             enableSsmlParsing(other.getEnableSsmlParsing());
             model(other.getModel());
-            language(other.getLanguage());
             chunkPlan(other.getChunkPlan());
+            language(other.getLanguage());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -319,19 +318,19 @@ public final class ElevenLabsVoice {
         }
 
         /**
-         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage chunkPlan(ChunkPlan chunkPlan) {
-            this.chunkPlan = Optional.ofNullable(chunkPlan);
+        public _FinalStage fallbackPlan(FallbackPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
-        public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
-            this.chunkPlan = chunkPlan;
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
             return this;
         }
 
@@ -349,6 +348,23 @@ public final class ElevenLabsVoice {
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public _FinalStage language(Optional<String> language) {
             this.language = language;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage chunkPlan(ChunkPlan chunkPlan) {
+            this.chunkPlan = Optional.ofNullable(chunkPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
+        public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
+            this.chunkPlan = chunkPlan;
             return this;
         }
 
@@ -472,28 +488,9 @@ public final class ElevenLabsVoice {
             return this;
         }
 
-        /**
-         * <p>This determines whether fillers are injected into the model output before inputting it into the voice provider.</p>
-         * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = Optional.ofNullable(fillerInjectionEnabled);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "fillerInjectionEnabled", nulls = Nulls.SKIP)
-        public _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = fillerInjectionEnabled;
-            return this;
-        }
-
         @java.lang.Override
         public ElevenLabsVoice build() {
             return new ElevenLabsVoice(
-                    fillerInjectionEnabled,
                     voiceId,
                     stability,
                     similarityBoost,
@@ -502,8 +499,9 @@ public final class ElevenLabsVoice {
                     optimizeStreamingLatency,
                     enableSsmlParsing,
                     model,
-                    language,
                     chunkPlan,
+                    language,
+                    fallbackPlan,
                     additionalProperties);
         }
     }

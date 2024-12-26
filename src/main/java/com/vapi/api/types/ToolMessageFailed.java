@@ -17,28 +17,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ToolMessageFailed.Builder.class)
 public final class ToolMessageFailed {
+    private final Optional<List<TextContent>> contents;
+
     private final Optional<Boolean> endCallAfterSpokenEnabled;
 
-    private final String content;
+    private final Optional<String> content;
 
     private final Optional<List<Condition>> conditions;
 
     private final Map<String, Object> additionalProperties;
 
     private ToolMessageFailed(
+            Optional<List<TextContent>> contents,
             Optional<Boolean> endCallAfterSpokenEnabled,
-            String content,
+            Optional<String> content,
             Optional<List<Condition>> conditions,
             Map<String, Object> additionalProperties) {
+        this.contents = contents;
         this.endCallAfterSpokenEnabled = endCallAfterSpokenEnabled;
         this.content = content;
         this.conditions = conditions;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is an alternative to the <code>content</code> property. It allows to specify variants of the same content, one per language.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>If your assistants are multilingual, you can provide content for each language.</li>
+     * <li>If you don't provide content for a language, the first item in the array will be automatically translated to the active language at that moment.</li>
+     * </ul>
+     * <p>This will override the <code>content</code> property.</p>
+     */
+    @JsonProperty("contents")
+    public Optional<List<TextContent>> getContents() {
+        return contents;
     }
 
     /**
@@ -54,7 +71,7 @@ public final class ToolMessageFailed {
      * @return This is the content that the assistant says when this message is triggered.
      */
     @JsonProperty("content")
-    public String getContent() {
+    public Optional<String> getContent() {
         return content;
     }
 
@@ -78,14 +95,15 @@ public final class ToolMessageFailed {
     }
 
     private boolean equalTo(ToolMessageFailed other) {
-        return endCallAfterSpokenEnabled.equals(other.endCallAfterSpokenEnabled)
+        return contents.equals(other.contents)
+                && endCallAfterSpokenEnabled.equals(other.endCallAfterSpokenEnabled)
                 && content.equals(other.content)
                 && conditions.equals(other.conditions);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.endCallAfterSpokenEnabled, this.content, this.conditions);
+        return Objects.hash(this.contents, this.endCallAfterSpokenEnabled, this.content, this.conditions);
     }
 
     @java.lang.Override
@@ -93,98 +111,80 @@ public final class ToolMessageFailed {
         return ObjectMappers.stringify(this);
     }
 
-    public static ContentStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ContentStage {
-        _FinalStage content(@NotNull String content);
-
-        Builder from(ToolMessageFailed other);
-    }
-
-    public interface _FinalStage {
-        ToolMessageFailed build();
-
-        _FinalStage endCallAfterSpokenEnabled(Optional<Boolean> endCallAfterSpokenEnabled);
-
-        _FinalStage endCallAfterSpokenEnabled(Boolean endCallAfterSpokenEnabled);
-
-        _FinalStage conditions(Optional<List<Condition>> conditions);
-
-        _FinalStage conditions(List<Condition> conditions);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ContentStage, _FinalStage {
-        private String content;
-
-        private Optional<List<Condition>> conditions = Optional.empty();
+    public static final class Builder {
+        private Optional<List<TextContent>> contents = Optional.empty();
 
         private Optional<Boolean> endCallAfterSpokenEnabled = Optional.empty();
+
+        private Optional<String> content = Optional.empty();
+
+        private Optional<List<Condition>> conditions = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(ToolMessageFailed other) {
+            contents(other.getContents());
             endCallAfterSpokenEnabled(other.getEndCallAfterSpokenEnabled());
             content(other.getContent());
             conditions(other.getConditions());
             return this;
         }
 
-        /**
-         * <p>This is the content that the assistant says when this message is triggered.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("content")
-        public _FinalStage content(@NotNull String content) {
-            this.content = Objects.requireNonNull(content, "content must not be null");
+        @JsonSetter(value = "contents", nulls = Nulls.SKIP)
+        public Builder contents(Optional<List<TextContent>> contents) {
+            this.contents = contents;
             return this;
         }
 
-        /**
-         * <p>This is an optional array of conditions that the tool call arguments must meet in order for this message to be triggered.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage conditions(List<Condition> conditions) {
-            this.conditions = Optional.ofNullable(conditions);
+        public Builder contents(List<TextContent> contents) {
+            this.contents = Optional.ofNullable(contents);
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter(value = "conditions", nulls = Nulls.SKIP)
-        public _FinalStage conditions(Optional<List<Condition>> conditions) {
-            this.conditions = conditions;
-            return this;
-        }
-
-        /**
-         * <p>This is an optional boolean that if true, the call will end after the message is spoken. Default is false.</p>
-         * <p>@default false</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage endCallAfterSpokenEnabled(Boolean endCallAfterSpokenEnabled) {
-            this.endCallAfterSpokenEnabled = Optional.ofNullable(endCallAfterSpokenEnabled);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "endCallAfterSpokenEnabled", nulls = Nulls.SKIP)
-        public _FinalStage endCallAfterSpokenEnabled(Optional<Boolean> endCallAfterSpokenEnabled) {
+        public Builder endCallAfterSpokenEnabled(Optional<Boolean> endCallAfterSpokenEnabled) {
             this.endCallAfterSpokenEnabled = endCallAfterSpokenEnabled;
             return this;
         }
 
-        @java.lang.Override
+        public Builder endCallAfterSpokenEnabled(Boolean endCallAfterSpokenEnabled) {
+            this.endCallAfterSpokenEnabled = Optional.ofNullable(endCallAfterSpokenEnabled);
+            return this;
+        }
+
+        @JsonSetter(value = "content", nulls = Nulls.SKIP)
+        public Builder content(Optional<String> content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder content(String content) {
+            this.content = Optional.ofNullable(content);
+            return this;
+        }
+
+        @JsonSetter(value = "conditions", nulls = Nulls.SKIP)
+        public Builder conditions(Optional<List<Condition>> conditions) {
+            this.conditions = conditions;
+            return this;
+        }
+
+        public Builder conditions(List<Condition> conditions) {
+            this.conditions = Optional.ofNullable(conditions);
+            return this;
+        }
+
         public ToolMessageFailed build() {
-            return new ToolMessageFailed(endCallAfterSpokenEnabled, content, conditions, additionalProperties);
+            return new ToolMessageFailed(
+                    contents, endCallAfterSpokenEnabled, content, conditions, additionalProperties);
         }
     }
 }

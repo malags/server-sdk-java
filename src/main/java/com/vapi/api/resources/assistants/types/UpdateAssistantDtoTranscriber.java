@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.vapi.api.types.AssemblyAiTranscriber;
+import com.vapi.api.types.CustomTranscriber;
 import com.vapi.api.types.DeepgramTranscriber;
 import com.vapi.api.types.GladiaTranscriber;
 import com.vapi.api.types.TalkscriberTranscriber;
@@ -29,6 +31,14 @@ public final class UpdateAssistantDtoTranscriber {
         return value.visit(visitor);
     }
 
+    public static UpdateAssistantDtoTranscriber assemblyAi(AssemblyAiTranscriber value) {
+        return new UpdateAssistantDtoTranscriber(new AssemblyAiValue(value));
+    }
+
+    public static UpdateAssistantDtoTranscriber customTranscriber(CustomTranscriber value) {
+        return new UpdateAssistantDtoTranscriber(new CustomTranscriberValue(value));
+    }
+
     public static UpdateAssistantDtoTranscriber deepgram(DeepgramTranscriber value) {
         return new UpdateAssistantDtoTranscriber(new DeepgramValue(value));
     }
@@ -39,6 +49,14 @@ public final class UpdateAssistantDtoTranscriber {
 
     public static UpdateAssistantDtoTranscriber talkscriber(TalkscriberTranscriber value) {
         return new UpdateAssistantDtoTranscriber(new TalkscriberValue(value));
+    }
+
+    public boolean isAssemblyAi() {
+        return value instanceof AssemblyAiValue;
+    }
+
+    public boolean isCustomTranscriber() {
+        return value instanceof CustomTranscriberValue;
     }
 
     public boolean isDeepgram() {
@@ -55,6 +73,20 @@ public final class UpdateAssistantDtoTranscriber {
 
     public boolean _isUnknown() {
         return value instanceof _UnknownValue;
+    }
+
+    public Optional<AssemblyAiTranscriber> getAssemblyAi() {
+        if (isAssemblyAi()) {
+            return Optional.of(((AssemblyAiValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CustomTranscriber> getCustomTranscriber() {
+        if (isCustomTranscriber()) {
+            return Optional.of(((CustomTranscriberValue) value).value);
+        }
+        return Optional.empty();
     }
 
     public Optional<DeepgramTranscriber> getDeepgram() {
@@ -91,6 +123,10 @@ public final class UpdateAssistantDtoTranscriber {
     }
 
     public interface Visitor<T> {
+        T visitAssemblyAi(AssemblyAiTranscriber assemblyAi);
+
+        T visitCustomTranscriber(CustomTranscriber customTranscriber);
+
         T visitDeepgram(DeepgramTranscriber deepgram);
 
         T visitGladia(GladiaTranscriber gladia);
@@ -102,6 +138,8 @@ public final class UpdateAssistantDtoTranscriber {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "provider", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
+        @JsonSubTypes.Type(AssemblyAiValue.class),
+        @JsonSubTypes.Type(CustomTranscriberValue.class),
         @JsonSubTypes.Type(DeepgramValue.class),
         @JsonSubTypes.Type(GladiaValue.class),
         @JsonSubTypes.Type(TalkscriberValue.class)
@@ -109,6 +147,82 @@ public final class UpdateAssistantDtoTranscriber {
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
+    }
+
+    @JsonTypeName("assembly-ai")
+    private static final class AssemblyAiValue implements Value {
+        @JsonUnwrapped
+        private AssemblyAiTranscriber value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private AssemblyAiValue() {}
+
+        private AssemblyAiValue(AssemblyAiTranscriber value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitAssemblyAi(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof AssemblyAiValue && equalTo((AssemblyAiValue) other);
+        }
+
+        private boolean equalTo(AssemblyAiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoTranscriber{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("custom-transcriber")
+    private static final class CustomTranscriberValue implements Value {
+        @JsonUnwrapped
+        private CustomTranscriber value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private CustomTranscriberValue() {}
+
+        private CustomTranscriberValue(CustomTranscriber value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCustomTranscriber(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof CustomTranscriberValue && equalTo((CustomTranscriberValue) other);
+        }
+
+        private boolean equalTo(CustomTranscriberValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoTranscriber{" + "value: " + value + "}";
+        }
     }
 
     @JsonTypeName("deepgram")

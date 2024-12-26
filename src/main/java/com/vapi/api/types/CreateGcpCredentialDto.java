@@ -21,36 +21,28 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateGcpCredentialDto.Builder.class)
 public final class CreateGcpCredentialDto {
-    private final Optional<String> name;
-
     private final GcpKey gcpKey;
 
     private final Optional<BucketPlan> bucketPlan;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateGcpCredentialDto(
-            Optional<String> name,
             GcpKey gcpKey,
             Optional<BucketPlan> bucketPlan,
+            Optional<String> name,
             Map<String, Object> additionalProperties) {
-        this.name = name;
         this.gcpKey = gcpKey;
         this.bucketPlan = bucketPlan;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("provider")
     public String getProvider() {
         return "gcp";
-    }
-
-    /**
-     * @return This is the name of the GCP credential. This is just for your reference.
-     */
-    @JsonProperty("name")
-    public Optional<String> getName() {
-        return name;
     }
 
     /**
@@ -70,6 +62,14 @@ public final class CreateGcpCredentialDto {
         return bucketPlan;
     }
 
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -82,12 +82,12 @@ public final class CreateGcpCredentialDto {
     }
 
     private boolean equalTo(CreateGcpCredentialDto other) {
-        return name.equals(other.name) && gcpKey.equals(other.gcpKey) && bucketPlan.equals(other.bucketPlan);
+        return gcpKey.equals(other.gcpKey) && bucketPlan.equals(other.bucketPlan) && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.gcpKey, this.bucketPlan);
+        return Objects.hash(this.gcpKey, this.bucketPlan, this.name);
     }
 
     @java.lang.Override
@@ -108,22 +108,22 @@ public final class CreateGcpCredentialDto {
     public interface _FinalStage {
         CreateGcpCredentialDto build();
 
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-
         _FinalStage bucketPlan(Optional<BucketPlan> bucketPlan);
 
         _FinalStage bucketPlan(BucketPlan bucketPlan);
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements GcpKeyStage, _FinalStage {
         private GcpKey gcpKey;
 
-        private Optional<BucketPlan> bucketPlan = Optional.empty();
-
         private Optional<String> name = Optional.empty();
+
+        private Optional<BucketPlan> bucketPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -132,9 +132,9 @@ public final class CreateGcpCredentialDto {
 
         @java.lang.Override
         public Builder from(CreateGcpCredentialDto other) {
-            name(other.getName());
             gcpKey(other.getGcpKey());
             bucketPlan(other.getBucketPlan());
+            name(other.getName());
             return this;
         }
 
@@ -147,6 +147,23 @@ public final class CreateGcpCredentialDto {
         @JsonSetter("gcpKey")
         public _FinalStage gcpKey(@NotNull GcpKey gcpKey) {
             this.gcpKey = Objects.requireNonNull(gcpKey, "gcpKey must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
             return this;
         }
 
@@ -167,26 +184,9 @@ public final class CreateGcpCredentialDto {
             return this;
         }
 
-        /**
-         * <p>This is the name of the GCP credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
-            this.name = name;
-            return this;
-        }
-
         @java.lang.Override
         public CreateGcpCredentialDto build() {
-            return new CreateGcpCredentialDto(name, gcpKey, bucketPlan, additionalProperties);
+            return new CreateGcpCredentialDto(gcpKey, bucketPlan, name, additionalProperties);
         }
     }
 }

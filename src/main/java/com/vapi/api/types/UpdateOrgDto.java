@@ -22,7 +22,11 @@ import java.util.Optional;
 public final class UpdateOrgDto {
     private final Optional<Boolean> hipaaEnabled;
 
+    private final Optional<String> subscriptionId;
+
     private final Optional<String> name;
+
+    private final Optional<UpdateOrgDtoChannel> channel;
 
     private final Optional<Double> billingLimit;
 
@@ -36,14 +40,18 @@ public final class UpdateOrgDto {
 
     private UpdateOrgDto(
             Optional<Boolean> hipaaEnabled,
+            Optional<String> subscriptionId,
             Optional<String> name,
+            Optional<UpdateOrgDtoChannel> channel,
             Optional<Double> billingLimit,
             Optional<String> serverUrl,
             Optional<String> serverUrlSecret,
             Optional<Double> concurrencyLimit,
             Map<String, Object> additionalProperties) {
         this.hipaaEnabled = hipaaEnabled;
+        this.subscriptionId = subscriptionId;
         this.name = name;
+        this.channel = channel;
         this.billingLimit = billingLimit;
         this.serverUrl = serverUrl;
         this.serverUrlSecret = serverUrlSecret;
@@ -62,11 +70,27 @@ public final class UpdateOrgDto {
     }
 
     /**
+     * @return This is the ID of the subscription the org belongs to.
+     */
+    @JsonProperty("subscriptionId")
+    public Optional<String> getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    /**
      * @return This is the name of the org. This is just for your own reference.
      */
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    /**
+     * @return This is the channel of the org. There is the cluster the API traffic for the org will be directed.
+     */
+    @JsonProperty("channel")
+    public Optional<UpdateOrgDtoChannel> getChannel() {
+        return channel;
     }
 
     /**
@@ -115,7 +139,9 @@ public final class UpdateOrgDto {
 
     private boolean equalTo(UpdateOrgDto other) {
         return hipaaEnabled.equals(other.hipaaEnabled)
+                && subscriptionId.equals(other.subscriptionId)
                 && name.equals(other.name)
+                && channel.equals(other.channel)
                 && billingLimit.equals(other.billingLimit)
                 && serverUrl.equals(other.serverUrl)
                 && serverUrlSecret.equals(other.serverUrlSecret)
@@ -126,7 +152,9 @@ public final class UpdateOrgDto {
     public int hashCode() {
         return Objects.hash(
                 this.hipaaEnabled,
+                this.subscriptionId,
                 this.name,
+                this.channel,
                 this.billingLimit,
                 this.serverUrl,
                 this.serverUrlSecret,
@@ -146,7 +174,11 @@ public final class UpdateOrgDto {
     public static final class Builder {
         private Optional<Boolean> hipaaEnabled = Optional.empty();
 
+        private Optional<String> subscriptionId = Optional.empty();
+
         private Optional<String> name = Optional.empty();
+
+        private Optional<UpdateOrgDtoChannel> channel = Optional.empty();
 
         private Optional<Double> billingLimit = Optional.empty();
 
@@ -163,7 +195,9 @@ public final class UpdateOrgDto {
 
         public Builder from(UpdateOrgDto other) {
             hipaaEnabled(other.getHipaaEnabled());
+            subscriptionId(other.getSubscriptionId());
             name(other.getName());
+            channel(other.getChannel());
             billingLimit(other.getBillingLimit());
             serverUrl(other.getServerUrl());
             serverUrlSecret(other.getServerUrlSecret());
@@ -182,6 +216,17 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        @JsonSetter(value = "subscriptionId", nulls = Nulls.SKIP)
+        public Builder subscriptionId(Optional<String> subscriptionId) {
+            this.subscriptionId = subscriptionId;
+            return this;
+        }
+
+        public Builder subscriptionId(String subscriptionId) {
+            this.subscriptionId = Optional.ofNullable(subscriptionId);
+            return this;
+        }
+
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -190,6 +235,17 @@ public final class UpdateOrgDto {
 
         public Builder name(String name) {
             this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @JsonSetter(value = "channel", nulls = Nulls.SKIP)
+        public Builder channel(Optional<UpdateOrgDtoChannel> channel) {
+            this.channel = channel;
+            return this;
+        }
+
+        public Builder channel(UpdateOrgDtoChannel channel) {
+            this.channel = Optional.ofNullable(channel);
             return this;
         }
 
@@ -240,7 +296,9 @@ public final class UpdateOrgDto {
         public UpdateOrgDto build() {
             return new UpdateOrgDto(
                     hipaaEnabled,
+                    subscriptionId,
                     name,
+                    channel,
                     billingLimit,
                     serverUrl,
                     serverUrlSecret,

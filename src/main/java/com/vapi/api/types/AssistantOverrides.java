@@ -27,6 +27,8 @@ public final class AssistantOverrides {
 
     private final Optional<AssistantOverridesVoice> voice;
 
+    private final Optional<String> firstMessage;
+
     private final Optional<AssistantOverridesFirstMessageMode> firstMessageMode;
 
     private final Optional<Boolean> hipaaEnabled;
@@ -41,8 +43,6 @@ public final class AssistantOverrides {
 
     private final Optional<AssistantOverridesBackgroundSound> backgroundSound;
 
-    private final Optional<Boolean> backchannelingEnabled;
-
     private final Optional<Boolean> backgroundDenoisingEnabled;
 
     private final Optional<Boolean> modelOutputInMessagesEnabled;
@@ -53,8 +53,6 @@ public final class AssistantOverrides {
 
     private final Optional<String> name;
 
-    private final Optional<String> firstMessage;
-
     private final Optional<TwilioVoicemailDetection> voicemailDetection;
 
     private final Optional<String> voicemailMessage;
@@ -64,10 +62,6 @@ public final class AssistantOverrides {
     private final Optional<List<String>> endCallPhrases;
 
     private final Optional<Map<String, Object>> metadata;
-
-    private final Optional<String> serverUrl;
-
-    private final Optional<String> serverUrlSecret;
 
     private final Optional<AnalysisPlan> analysisPlan;
 
@@ -83,12 +77,15 @@ public final class AssistantOverrides {
 
     private final Optional<List<String>> credentialIds;
 
+    private final Optional<Server> server;
+
     private final Map<String, Object> additionalProperties;
 
     private AssistantOverrides(
             Optional<AssistantOverridesTranscriber> transcriber,
             Optional<AssistantOverridesModel> model,
             Optional<AssistantOverridesVoice> voice,
+            Optional<String> firstMessage,
             Optional<AssistantOverridesFirstMessageMode> firstMessageMode,
             Optional<Boolean> hipaaEnabled,
             Optional<List<AssistantOverridesClientMessagesItem>> clientMessages,
@@ -96,20 +93,16 @@ public final class AssistantOverrides {
             Optional<Double> silenceTimeoutSeconds,
             Optional<Double> maxDurationSeconds,
             Optional<AssistantOverridesBackgroundSound> backgroundSound,
-            Optional<Boolean> backchannelingEnabled,
             Optional<Boolean> backgroundDenoisingEnabled,
             Optional<Boolean> modelOutputInMessagesEnabled,
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
             Optional<Map<String, Object>> variableValues,
             Optional<String> name,
-            Optional<String> firstMessage,
             Optional<TwilioVoicemailDetection> voicemailDetection,
             Optional<String> voicemailMessage,
             Optional<String> endCallMessage,
             Optional<List<String>> endCallPhrases,
             Optional<Map<String, Object>> metadata,
-            Optional<String> serverUrl,
-            Optional<String> serverUrlSecret,
             Optional<AnalysisPlan> analysisPlan,
             Optional<ArtifactPlan> artifactPlan,
             Optional<MessagePlan> messagePlan,
@@ -117,10 +110,12 @@ public final class AssistantOverrides {
             Optional<StopSpeakingPlan> stopSpeakingPlan,
             Optional<MonitorPlan> monitorPlan,
             Optional<List<String>> credentialIds,
+            Optional<Server> server,
             Map<String, Object> additionalProperties) {
         this.transcriber = transcriber;
         this.model = model;
         this.voice = voice;
+        this.firstMessage = firstMessage;
         this.firstMessageMode = firstMessageMode;
         this.hipaaEnabled = hipaaEnabled;
         this.clientMessages = clientMessages;
@@ -128,20 +123,16 @@ public final class AssistantOverrides {
         this.silenceTimeoutSeconds = silenceTimeoutSeconds;
         this.maxDurationSeconds = maxDurationSeconds;
         this.backgroundSound = backgroundSound;
-        this.backchannelingEnabled = backchannelingEnabled;
         this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
         this.modelOutputInMessagesEnabled = modelOutputInMessagesEnabled;
         this.transportConfigurations = transportConfigurations;
         this.variableValues = variableValues;
         this.name = name;
-        this.firstMessage = firstMessage;
         this.voicemailDetection = voicemailDetection;
         this.voicemailMessage = voicemailMessage;
         this.endCallMessage = endCallMessage;
         this.endCallPhrases = endCallPhrases;
         this.metadata = metadata;
-        this.serverUrl = serverUrl;
-        this.serverUrlSecret = serverUrlSecret;
         this.analysisPlan = analysisPlan;
         this.artifactPlan = artifactPlan;
         this.messagePlan = messagePlan;
@@ -149,6 +140,7 @@ public final class AssistantOverrides {
         this.stopSpeakingPlan = stopSpeakingPlan;
         this.monitorPlan = monitorPlan;
         this.credentialIds = credentialIds;
+        this.server = server;
         this.additionalProperties = additionalProperties;
     }
 
@@ -177,6 +169,15 @@ public final class AssistantOverrides {
     }
 
     /**
+     * @return This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).
+     * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
+     */
+    @JsonProperty("firstMessage")
+    public Optional<String> getFirstMessage() {
+        return firstMessage;
+    }
+
+    /**
      * @return This is the mode for the first message. Default is 'assistant-speaks-first'.
      * <p>Use:</p>
      * <ul>
@@ -200,7 +201,7 @@ public final class AssistantOverrides {
     }
 
     /**
-     * @return These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transcript,tool-calls,user-interrupted,voice-input. You can check the shape of the messages in ClientMessage schema.
+     * @return These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input. You can check the shape of the messages in ClientMessage schema.
      */
     @JsonProperty("clientMessages")
     public Optional<List<AssistantOverridesClientMessagesItem>> getClientMessages() {
@@ -242,16 +243,6 @@ public final class AssistantOverrides {
     }
 
     /**
-     * @return This determines whether the model says 'mhmm', 'ahem' etc. while user is speaking.
-     * <p>Default <code>false</code> while in beta.</p>
-     * <p>@default false</p>
-     */
-    @JsonProperty("backchannelingEnabled")
-    public Optional<Boolean> getBackchannelingEnabled() {
-        return backchannelingEnabled;
-    }
-
-    /**
      * @return This enables filtering of noise and background speech while the user is talking.
      * <p>Default <code>false</code> while in beta.</p>
      * <p>@default false</p>
@@ -281,6 +272,13 @@ public final class AssistantOverrides {
 
     /**
      * @return These are values that will be used to replace the template variables in the assistant messages and other text-based fields.
+     * This uses LiquidJS syntax. https://liquidjs.com/tutorials/intro-to-liquid.html
+     * <p>So for example, <code>{{ name }}</code> will be replaced with the value of <code>name</code> in <code>variableValues</code>.
+     * <code>{{&quot;now&quot; | date: &quot;%b %d, %Y, %I:%M %p&quot;, &quot;America/New_York&quot;}}</code> will be replaced with the current date and time in New York.
+     * Some VAPI reserved defaults:</p>
+     * <ul>
+     * <li><em>customer</em> - the customer object</li>
+     * </ul>
      */
     @JsonProperty("variableValues")
     public Optional<Map<String, Object>> getVariableValues() {
@@ -294,15 +292,6 @@ public final class AssistantOverrides {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
-    }
-
-    /**
-     * @return This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).
-     * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
-     */
-    @JsonProperty("firstMessage")
-    public Optional<String> getFirstMessage() {
-        return firstMessage;
     }
 
     /**
@@ -347,25 +336,6 @@ public final class AssistantOverrides {
     @JsonProperty("metadata")
     public Optional<Map<String, Object>> getMetadata() {
         return metadata;
-    }
-
-    /**
-     * @return This is the URL Vapi will communicate with via HTTP GET and POST Requests. This is used for retrieving context, function calling, and end-of-call reports.
-     * <p>All requests will be sent with the call object among other things relevant to that message. You can find more details in the Server URL documentation.</p>
-     * <p>This overrides the serverUrl set on the org and the phoneNumber. Order of precedence: tool.server.url &gt; assistant.serverUrl &gt; phoneNumber.serverUrl &gt; org.serverUrl</p>
-     */
-    @JsonProperty("serverUrl")
-    public Optional<String> getServerUrl() {
-        return serverUrl;
-    }
-
-    /**
-     * @return This is the secret you can set that Vapi will send with every request to your server. Will be sent as a header called x-vapi-secret.
-     * <p>Same precedence logic as serverUrl.</p>
-     */
-    @JsonProperty("serverUrlSecret")
-    public Optional<String> getServerUrlSecret() {
-        return serverUrlSecret;
     }
 
     /**
@@ -446,6 +416,20 @@ public final class AssistantOverrides {
         return credentialIds;
     }
 
+    /**
+     * @return This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.
+     * <p>The order of precedence is:</p>
+     * <ol>
+     * <li>assistant.server.url</li>
+     * <li>phoneNumber.serverUrl</li>
+     * <li>org.serverUrl</li>
+     * </ol>
+     */
+    @JsonProperty("server")
+    public Optional<Server> getServer() {
+        return server;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -461,6 +445,7 @@ public final class AssistantOverrides {
         return transcriber.equals(other.transcriber)
                 && model.equals(other.model)
                 && voice.equals(other.voice)
+                && firstMessage.equals(other.firstMessage)
                 && firstMessageMode.equals(other.firstMessageMode)
                 && hipaaEnabled.equals(other.hipaaEnabled)
                 && clientMessages.equals(other.clientMessages)
@@ -468,27 +453,24 @@ public final class AssistantOverrides {
                 && silenceTimeoutSeconds.equals(other.silenceTimeoutSeconds)
                 && maxDurationSeconds.equals(other.maxDurationSeconds)
                 && backgroundSound.equals(other.backgroundSound)
-                && backchannelingEnabled.equals(other.backchannelingEnabled)
                 && backgroundDenoisingEnabled.equals(other.backgroundDenoisingEnabled)
                 && modelOutputInMessagesEnabled.equals(other.modelOutputInMessagesEnabled)
                 && transportConfigurations.equals(other.transportConfigurations)
                 && variableValues.equals(other.variableValues)
                 && name.equals(other.name)
-                && firstMessage.equals(other.firstMessage)
                 && voicemailDetection.equals(other.voicemailDetection)
                 && voicemailMessage.equals(other.voicemailMessage)
                 && endCallMessage.equals(other.endCallMessage)
                 && endCallPhrases.equals(other.endCallPhrases)
                 && metadata.equals(other.metadata)
-                && serverUrl.equals(other.serverUrl)
-                && serverUrlSecret.equals(other.serverUrlSecret)
                 && analysisPlan.equals(other.analysisPlan)
                 && artifactPlan.equals(other.artifactPlan)
                 && messagePlan.equals(other.messagePlan)
                 && startSpeakingPlan.equals(other.startSpeakingPlan)
                 && stopSpeakingPlan.equals(other.stopSpeakingPlan)
                 && monitorPlan.equals(other.monitorPlan)
-                && credentialIds.equals(other.credentialIds);
+                && credentialIds.equals(other.credentialIds)
+                && server.equals(other.server);
     }
 
     @java.lang.Override
@@ -497,6 +479,7 @@ public final class AssistantOverrides {
                 this.transcriber,
                 this.model,
                 this.voice,
+                this.firstMessage,
                 this.firstMessageMode,
                 this.hipaaEnabled,
                 this.clientMessages,
@@ -504,27 +487,24 @@ public final class AssistantOverrides {
                 this.silenceTimeoutSeconds,
                 this.maxDurationSeconds,
                 this.backgroundSound,
-                this.backchannelingEnabled,
                 this.backgroundDenoisingEnabled,
                 this.modelOutputInMessagesEnabled,
                 this.transportConfigurations,
                 this.variableValues,
                 this.name,
-                this.firstMessage,
                 this.voicemailDetection,
                 this.voicemailMessage,
                 this.endCallMessage,
                 this.endCallPhrases,
                 this.metadata,
-                this.serverUrl,
-                this.serverUrlSecret,
                 this.analysisPlan,
                 this.artifactPlan,
                 this.messagePlan,
                 this.startSpeakingPlan,
                 this.stopSpeakingPlan,
                 this.monitorPlan,
-                this.credentialIds);
+                this.credentialIds,
+                this.server);
     }
 
     @java.lang.Override
@@ -544,6 +524,8 @@ public final class AssistantOverrides {
 
         private Optional<AssistantOverridesVoice> voice = Optional.empty();
 
+        private Optional<String> firstMessage = Optional.empty();
+
         private Optional<AssistantOverridesFirstMessageMode> firstMessageMode = Optional.empty();
 
         private Optional<Boolean> hipaaEnabled = Optional.empty();
@@ -558,8 +540,6 @@ public final class AssistantOverrides {
 
         private Optional<AssistantOverridesBackgroundSound> backgroundSound = Optional.empty();
 
-        private Optional<Boolean> backchannelingEnabled = Optional.empty();
-
         private Optional<Boolean> backgroundDenoisingEnabled = Optional.empty();
 
         private Optional<Boolean> modelOutputInMessagesEnabled = Optional.empty();
@@ -570,8 +550,6 @@ public final class AssistantOverrides {
 
         private Optional<String> name = Optional.empty();
 
-        private Optional<String> firstMessage = Optional.empty();
-
         private Optional<TwilioVoicemailDetection> voicemailDetection = Optional.empty();
 
         private Optional<String> voicemailMessage = Optional.empty();
@@ -581,10 +559,6 @@ public final class AssistantOverrides {
         private Optional<List<String>> endCallPhrases = Optional.empty();
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
-
-        private Optional<String> serverUrl = Optional.empty();
-
-        private Optional<String> serverUrlSecret = Optional.empty();
 
         private Optional<AnalysisPlan> analysisPlan = Optional.empty();
 
@@ -600,6 +574,8 @@ public final class AssistantOverrides {
 
         private Optional<List<String>> credentialIds = Optional.empty();
 
+        private Optional<Server> server = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -609,6 +585,7 @@ public final class AssistantOverrides {
             transcriber(other.getTranscriber());
             model(other.getModel());
             voice(other.getVoice());
+            firstMessage(other.getFirstMessage());
             firstMessageMode(other.getFirstMessageMode());
             hipaaEnabled(other.getHipaaEnabled());
             clientMessages(other.getClientMessages());
@@ -616,20 +593,16 @@ public final class AssistantOverrides {
             silenceTimeoutSeconds(other.getSilenceTimeoutSeconds());
             maxDurationSeconds(other.getMaxDurationSeconds());
             backgroundSound(other.getBackgroundSound());
-            backchannelingEnabled(other.getBackchannelingEnabled());
             backgroundDenoisingEnabled(other.getBackgroundDenoisingEnabled());
             modelOutputInMessagesEnabled(other.getModelOutputInMessagesEnabled());
             transportConfigurations(other.getTransportConfigurations());
             variableValues(other.getVariableValues());
             name(other.getName());
-            firstMessage(other.getFirstMessage());
             voicemailDetection(other.getVoicemailDetection());
             voicemailMessage(other.getVoicemailMessage());
             endCallMessage(other.getEndCallMessage());
             endCallPhrases(other.getEndCallPhrases());
             metadata(other.getMetadata());
-            serverUrl(other.getServerUrl());
-            serverUrlSecret(other.getServerUrlSecret());
             analysisPlan(other.getAnalysisPlan());
             artifactPlan(other.getArtifactPlan());
             messagePlan(other.getMessagePlan());
@@ -637,6 +610,7 @@ public final class AssistantOverrides {
             stopSpeakingPlan(other.getStopSpeakingPlan());
             monitorPlan(other.getMonitorPlan());
             credentialIds(other.getCredentialIds());
+            server(other.getServer());
             return this;
         }
 
@@ -670,6 +644,17 @@ public final class AssistantOverrides {
 
         public Builder voice(AssistantOverridesVoice voice) {
             this.voice = Optional.ofNullable(voice);
+            return this;
+        }
+
+        @JsonSetter(value = "firstMessage", nulls = Nulls.SKIP)
+        public Builder firstMessage(Optional<String> firstMessage) {
+            this.firstMessage = firstMessage;
+            return this;
+        }
+
+        public Builder firstMessage(String firstMessage) {
+            this.firstMessage = Optional.ofNullable(firstMessage);
             return this;
         }
 
@@ -750,17 +735,6 @@ public final class AssistantOverrides {
             return this;
         }
 
-        @JsonSetter(value = "backchannelingEnabled", nulls = Nulls.SKIP)
-        public Builder backchannelingEnabled(Optional<Boolean> backchannelingEnabled) {
-            this.backchannelingEnabled = backchannelingEnabled;
-            return this;
-        }
-
-        public Builder backchannelingEnabled(Boolean backchannelingEnabled) {
-            this.backchannelingEnabled = Optional.ofNullable(backchannelingEnabled);
-            return this;
-        }
-
         @JsonSetter(value = "backgroundDenoisingEnabled", nulls = Nulls.SKIP)
         public Builder backgroundDenoisingEnabled(Optional<Boolean> backgroundDenoisingEnabled) {
             this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
@@ -816,17 +790,6 @@ public final class AssistantOverrides {
             return this;
         }
 
-        @JsonSetter(value = "firstMessage", nulls = Nulls.SKIP)
-        public Builder firstMessage(Optional<String> firstMessage) {
-            this.firstMessage = firstMessage;
-            return this;
-        }
-
-        public Builder firstMessage(String firstMessage) {
-            this.firstMessage = Optional.ofNullable(firstMessage);
-            return this;
-        }
-
         @JsonSetter(value = "voicemailDetection", nulls = Nulls.SKIP)
         public Builder voicemailDetection(Optional<TwilioVoicemailDetection> voicemailDetection) {
             this.voicemailDetection = voicemailDetection;
@@ -879,28 +842,6 @@ public final class AssistantOverrides {
 
         public Builder metadata(Map<String, Object> metadata) {
             this.metadata = Optional.ofNullable(metadata);
-            return this;
-        }
-
-        @JsonSetter(value = "serverUrl", nulls = Nulls.SKIP)
-        public Builder serverUrl(Optional<String> serverUrl) {
-            this.serverUrl = serverUrl;
-            return this;
-        }
-
-        public Builder serverUrl(String serverUrl) {
-            this.serverUrl = Optional.ofNullable(serverUrl);
-            return this;
-        }
-
-        @JsonSetter(value = "serverUrlSecret", nulls = Nulls.SKIP)
-        public Builder serverUrlSecret(Optional<String> serverUrlSecret) {
-            this.serverUrlSecret = serverUrlSecret;
-            return this;
-        }
-
-        public Builder serverUrlSecret(String serverUrlSecret) {
-            this.serverUrlSecret = Optional.ofNullable(serverUrlSecret);
             return this;
         }
 
@@ -981,11 +922,23 @@ public final class AssistantOverrides {
             return this;
         }
 
+        @JsonSetter(value = "server", nulls = Nulls.SKIP)
+        public Builder server(Optional<Server> server) {
+            this.server = server;
+            return this;
+        }
+
+        public Builder server(Server server) {
+            this.server = Optional.ofNullable(server);
+            return this;
+        }
+
         public AssistantOverrides build() {
             return new AssistantOverrides(
                     transcriber,
                     model,
                     voice,
+                    firstMessage,
                     firstMessageMode,
                     hipaaEnabled,
                     clientMessages,
@@ -993,20 +946,16 @@ public final class AssistantOverrides {
                     silenceTimeoutSeconds,
                     maxDurationSeconds,
                     backgroundSound,
-                    backchannelingEnabled,
                     backgroundDenoisingEnabled,
                     modelOutputInMessagesEnabled,
                     transportConfigurations,
                     variableValues,
                     name,
-                    firstMessage,
                     voicemailDetection,
                     voicemailMessage,
                     endCallMessage,
                     endCallPhrases,
                     metadata,
-                    serverUrl,
-                    serverUrlSecret,
                     analysisPlan,
                     artifactPlan,
                     messagePlan,
@@ -1014,6 +963,7 @@ public final class AssistantOverrides {
                     stopSpeakingPlan,
                     monitorPlan,
                     credentialIds,
+                    server,
                     additionalProperties);
         }
     }

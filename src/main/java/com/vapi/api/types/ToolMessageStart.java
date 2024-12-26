@@ -17,29 +17,48 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ToolMessageStart.Builder.class)
 public final class ToolMessageStart {
-    private final String content;
+    private final Optional<List<TextContent>> contents;
+
+    private final Optional<String> content;
 
     private final Optional<List<Condition>> conditions;
 
     private final Map<String, Object> additionalProperties;
 
     private ToolMessageStart(
-            String content, Optional<List<Condition>> conditions, Map<String, Object> additionalProperties) {
+            Optional<List<TextContent>> contents,
+            Optional<String> content,
+            Optional<List<Condition>> conditions,
+            Map<String, Object> additionalProperties) {
+        this.contents = contents;
         this.content = content;
         this.conditions = conditions;
         this.additionalProperties = additionalProperties;
     }
 
     /**
+     * @return This is an alternative to the <code>content</code> property. It allows to specify variants of the same content, one per language.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>If your assistants are multilingual, you can provide content for each language.</li>
+     * <li>If you don't provide content for a language, the first item in the array will be automatically translated to the active language at that moment.</li>
+     * </ul>
+     * <p>This will override the <code>content</code> property.</p>
+     */
+    @JsonProperty("contents")
+    public Optional<List<TextContent>> getContents() {
+        return contents;
+    }
+
+    /**
      * @return This is the content that the assistant says when this message is triggered.
      */
     @JsonProperty("content")
-    public String getContent() {
+    public Optional<String> getContent() {
         return content;
     }
 
@@ -63,12 +82,12 @@ public final class ToolMessageStart {
     }
 
     private boolean equalTo(ToolMessageStart other) {
-        return content.equals(other.content) && conditions.equals(other.conditions);
+        return contents.equals(other.contents) && content.equals(other.content) && conditions.equals(other.conditions);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.content, this.conditions);
+        return Objects.hash(this.contents, this.content, this.conditions);
     }
 
     @java.lang.Override
@@ -76,27 +95,15 @@ public final class ToolMessageStart {
         return ObjectMappers.stringify(this);
     }
 
-    public static ContentStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ContentStage {
-        _FinalStage content(@NotNull String content);
-
-        Builder from(ToolMessageStart other);
-    }
-
-    public interface _FinalStage {
-        ToolMessageStart build();
-
-        _FinalStage conditions(Optional<List<Condition>> conditions);
-
-        _FinalStage conditions(List<Condition> conditions);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ContentStage, _FinalStage {
-        private String content;
+    public static final class Builder {
+        private Optional<List<TextContent>> contents = Optional.empty();
+
+        private Optional<String> content = Optional.empty();
 
         private Optional<List<Condition>> conditions = Optional.empty();
 
@@ -105,44 +112,48 @@ public final class ToolMessageStart {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(ToolMessageStart other) {
+            contents(other.getContents());
             content(other.getContent());
             conditions(other.getConditions());
             return this;
         }
 
-        /**
-         * <p>This is the content that the assistant says when this message is triggered.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("content")
-        public _FinalStage content(@NotNull String content) {
-            this.content = Objects.requireNonNull(content, "content must not be null");
+        @JsonSetter(value = "contents", nulls = Nulls.SKIP)
+        public Builder contents(Optional<List<TextContent>> contents) {
+            this.contents = contents;
             return this;
         }
 
-        /**
-         * <p>This is an optional array of conditions that the tool call arguments must meet in order for this message to be triggered.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage conditions(List<Condition> conditions) {
-            this.conditions = Optional.ofNullable(conditions);
+        public Builder contents(List<TextContent> contents) {
+            this.contents = Optional.ofNullable(contents);
             return this;
         }
 
-        @java.lang.Override
+        @JsonSetter(value = "content", nulls = Nulls.SKIP)
+        public Builder content(Optional<String> content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder content(String content) {
+            this.content = Optional.ofNullable(content);
+            return this;
+        }
+
         @JsonSetter(value = "conditions", nulls = Nulls.SKIP)
-        public _FinalStage conditions(Optional<List<Condition>> conditions) {
+        public Builder conditions(Optional<List<Condition>> conditions) {
             this.conditions = conditions;
             return this;
         }
 
-        @java.lang.Override
+        public Builder conditions(List<Condition> conditions) {
+            this.conditions = Optional.ofNullable(conditions);
+            return this;
+        }
+
         public ToolMessageStart build() {
-            return new ToolMessageStart(content, conditions, additionalProperties);
+            return new ToolMessageStart(contents, content, conditions, additionalProperties);
         }
     }
 }

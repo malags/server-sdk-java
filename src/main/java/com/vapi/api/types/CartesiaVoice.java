@@ -21,40 +21,31 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CartesiaVoice.Builder.class)
 public final class CartesiaVoice {
-    private final Optional<Boolean> fillerInjectionEnabled;
-
     private final Optional<CartesiaVoiceModel> model;
 
     private final Optional<CartesiaVoiceLanguage> language;
 
+    private final Optional<ChunkPlan> chunkPlan;
+
     private final String voiceId;
 
-    private final Optional<ChunkPlan> chunkPlan;
+    private final Optional<FallbackPlan> fallbackPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private CartesiaVoice(
-            Optional<Boolean> fillerInjectionEnabled,
             Optional<CartesiaVoiceModel> model,
             Optional<CartesiaVoiceLanguage> language,
-            String voiceId,
             Optional<ChunkPlan> chunkPlan,
+            String voiceId,
+            Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
-        this.fillerInjectionEnabled = fillerInjectionEnabled;
         this.model = model;
         this.language = language;
-        this.voiceId = voiceId;
         this.chunkPlan = chunkPlan;
+        this.voiceId = voiceId;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This determines whether fillers are injected into the model output before inputting it into the voice provider.
-     * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-     */
-    @JsonProperty("fillerInjectionEnabled")
-    public Optional<Boolean> getFillerInjectionEnabled() {
-        return fillerInjectionEnabled;
     }
 
     /**
@@ -74,6 +65,14 @@ public final class CartesiaVoice {
     }
 
     /**
+     * @return This is the plan for chunking the model output before it is sent to the voice provider.
+     */
+    @JsonProperty("chunkPlan")
+    public Optional<ChunkPlan> getChunkPlan() {
+        return chunkPlan;
+    }
+
+    /**
      * @return This is the provider-specific ID that will be used.
      */
     @JsonProperty("voiceId")
@@ -82,11 +81,11 @@ public final class CartesiaVoice {
     }
 
     /**
-     * @return This is the plan for chunking the model output before it is sent to the voice provider.
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
      */
-    @JsonProperty("chunkPlan")
-    public Optional<ChunkPlan> getChunkPlan() {
-        return chunkPlan;
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackPlan> getFallbackPlan() {
+        return fallbackPlan;
     }
 
     @java.lang.Override
@@ -101,16 +100,16 @@ public final class CartesiaVoice {
     }
 
     private boolean equalTo(CartesiaVoice other) {
-        return fillerInjectionEnabled.equals(other.fillerInjectionEnabled)
-                && model.equals(other.model)
+        return model.equals(other.model)
                 && language.equals(other.language)
+                && chunkPlan.equals(other.chunkPlan)
                 && voiceId.equals(other.voiceId)
-                && chunkPlan.equals(other.chunkPlan);
+                && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.fillerInjectionEnabled, this.model, this.language, this.voiceId, this.chunkPlan);
+        return Objects.hash(this.model, this.language, this.chunkPlan, this.voiceId, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -131,10 +130,6 @@ public final class CartesiaVoice {
     public interface _FinalStage {
         CartesiaVoice build();
 
-        _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled);
-
-        _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled);
-
         _FinalStage model(Optional<CartesiaVoiceModel> model);
 
         _FinalStage model(CartesiaVoiceModel model);
@@ -146,19 +141,23 @@ public final class CartesiaVoice {
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
+
+        _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
+
+        _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements VoiceIdStage, _FinalStage {
         private String voiceId;
 
+        private Optional<FallbackPlan> fallbackPlan = Optional.empty();
+
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
         private Optional<CartesiaVoiceLanguage> language = Optional.empty();
 
         private Optional<CartesiaVoiceModel> model = Optional.empty();
-
-        private Optional<Boolean> fillerInjectionEnabled = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -167,11 +166,11 @@ public final class CartesiaVoice {
 
         @java.lang.Override
         public Builder from(CartesiaVoice other) {
-            fillerInjectionEnabled(other.getFillerInjectionEnabled());
             model(other.getModel());
             language(other.getLanguage());
-            voiceId(other.getVoiceId());
             chunkPlan(other.getChunkPlan());
+            voiceId(other.getVoiceId());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -183,6 +182,23 @@ public final class CartesiaVoice {
         @JsonSetter("voiceId")
         public _FinalStage voiceId(@NotNull String voiceId) {
             this.voiceId = Objects.requireNonNull(voiceId, "voiceId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackPlan(FallbackPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
             return this;
         }
 
@@ -237,27 +253,9 @@ public final class CartesiaVoice {
             return this;
         }
 
-        /**
-         * <p>This determines whether fillers are injected into the model output before inputting it into the voice provider.</p>
-         * <p>Default <code>false</code> because you can achieve better results with prompting the model.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage fillerInjectionEnabled(Boolean fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = Optional.ofNullable(fillerInjectionEnabled);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "fillerInjectionEnabled", nulls = Nulls.SKIP)
-        public _FinalStage fillerInjectionEnabled(Optional<Boolean> fillerInjectionEnabled) {
-            this.fillerInjectionEnabled = fillerInjectionEnabled;
-            return this;
-        }
-
         @java.lang.Override
         public CartesiaVoice build() {
-            return new CartesiaVoice(fillerInjectionEnabled, model, language, voiceId, chunkPlan, additionalProperties);
+            return new CartesiaVoice(model, language, chunkPlan, voiceId, fallbackPlan, additionalProperties);
         }
     }
 }

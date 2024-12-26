@@ -9,18 +9,22 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CustomLlmCredential.Builder.class)
 public final class CustomLlmCredential {
     private final String apiKey;
+
+    private final Optional<OAuth2AuthenticationPlan> authenticationPlan;
 
     private final String id;
 
@@ -30,20 +34,30 @@ public final class CustomLlmCredential {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<Oauth2AuthenticationSession> authenticationSession;
+
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
     private CustomLlmCredential(
             String apiKey,
+            Optional<OAuth2AuthenticationPlan> authenticationPlan,
             String id,
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<Oauth2AuthenticationSession> authenticationSession,
+            Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
+        this.authenticationPlan = authenticationPlan;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.authenticationSession = authenticationSession;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -58,6 +72,14 @@ public final class CustomLlmCredential {
     @JsonProperty("apiKey")
     public String getApiKey() {
         return apiKey;
+    }
+
+    /**
+     * @return This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey
+     */
+    @JsonProperty("authenticationPlan")
+    public Optional<OAuth2AuthenticationPlan> getAuthenticationPlan() {
+        return authenticationPlan;
     }
 
     /**
@@ -92,6 +114,22 @@ public final class CustomLlmCredential {
         return updatedAt;
     }
 
+    /**
+     * @return This is the authentication session for the credential. Available for credentials that have an authentication plan.
+     */
+    @JsonProperty("authenticationSession")
+    public Optional<Oauth2AuthenticationSession> getAuthenticationSession() {
+        return authenticationSession;
+    }
+
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -105,15 +143,26 @@ public final class CustomLlmCredential {
 
     private boolean equalTo(CustomLlmCredential other) {
         return apiKey.equals(other.apiKey)
+                && authenticationPlan.equals(other.authenticationPlan)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && authenticationSession.equals(other.authenticationSession)
+                && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.id, this.orgId, this.createdAt, this.updatedAt);
+        return Objects.hash(
+                this.apiKey,
+                this.authenticationPlan,
+                this.id,
+                this.orgId,
+                this.createdAt,
+                this.updatedAt,
+                this.authenticationSession,
+                this.name);
     }
 
     @java.lang.Override
@@ -149,6 +198,18 @@ public final class CustomLlmCredential {
 
     public interface _FinalStage {
         CustomLlmCredential build();
+
+        _FinalStage authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan);
+
+        _FinalStage authenticationPlan(OAuth2AuthenticationPlan authenticationPlan);
+
+        _FinalStage authenticationSession(Optional<Oauth2AuthenticationSession> authenticationSession);
+
+        _FinalStage authenticationSession(Oauth2AuthenticationSession authenticationSession);
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -164,6 +225,12 @@ public final class CustomLlmCredential {
 
         private OffsetDateTime updatedAt;
 
+        private Optional<String> name = Optional.empty();
+
+        private Optional<Oauth2AuthenticationSession> authenticationSession = Optional.empty();
+
+        private Optional<OAuth2AuthenticationPlan> authenticationPlan = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -172,10 +239,13 @@ public final class CustomLlmCredential {
         @java.lang.Override
         public Builder from(CustomLlmCredential other) {
             apiKey(other.getApiKey());
+            authenticationPlan(other.getAuthenticationPlan());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            authenticationSession(other.getAuthenticationSession());
+            name(other.getName());
             return this;
         }
 
@@ -234,9 +304,69 @@ public final class CustomLlmCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
+         * <p>This is the authentication session for the credential. Available for credentials that have an authentication plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage authenticationSession(Oauth2AuthenticationSession authenticationSession) {
+            this.authenticationSession = Optional.ofNullable(authenticationSession);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "authenticationSession", nulls = Nulls.SKIP)
+        public _FinalStage authenticationSession(Optional<Oauth2AuthenticationSession> authenticationSession) {
+            this.authenticationSession = authenticationSession;
+            return this;
+        }
+
+        /**
+         * <p>This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage authenticationPlan(OAuth2AuthenticationPlan authenticationPlan) {
+            this.authenticationPlan = Optional.ofNullable(authenticationPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "authenticationPlan", nulls = Nulls.SKIP)
+        public _FinalStage authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan) {
+            this.authenticationPlan = authenticationPlan;
+            return this;
+        }
+
         @java.lang.Override
         public CustomLlmCredential build() {
-            return new CustomLlmCredential(apiKey, id, orgId, createdAt, updatedAt, additionalProperties);
+            return new CustomLlmCredential(
+                    apiKey,
+                    authenticationPlan,
+                    id,
+                    orgId,
+                    createdAt,
+                    updatedAt,
+                    authenticationSession,
+                    name,
+                    additionalProperties);
         }
     }
 }

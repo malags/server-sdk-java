@@ -51,6 +51,8 @@ public final class Assistant {
 
     private final Optional<List<TransportConfigurationTwilio>> transportConfigurations;
 
+    private final Optional<List<AssistantCredentialsItem>> credentials;
+
     private final Optional<String> name;
 
     private final Optional<TwilioVoicemailDetection> voicemailDetection;
@@ -104,6 +106,7 @@ public final class Assistant {
             Optional<Boolean> backgroundDenoisingEnabled,
             Optional<Boolean> modelOutputInMessagesEnabled,
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
+            Optional<List<AssistantCredentialsItem>> credentials,
             Optional<String> name,
             Optional<TwilioVoicemailDetection> voicemailDetection,
             Optional<String> voicemailMessage,
@@ -137,6 +140,7 @@ public final class Assistant {
         this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
         this.modelOutputInMessagesEnabled = modelOutputInMessagesEnabled;
         this.transportConfigurations = transportConfigurations;
+        this.credentials = credentials;
         this.name = name;
         this.voicemailDetection = voicemailDetection;
         this.voicemailMessage = voicemailMessage;
@@ -282,6 +286,14 @@ public final class Assistant {
     @JsonProperty("transportConfigurations")
     public Optional<List<TransportConfigurationTwilio>> getTransportConfigurations() {
         return transportConfigurations;
+    }
+
+    /**
+     * @return These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.
+     */
+    @JsonProperty("credentials")
+    public Optional<List<AssistantCredentialsItem>> getCredentials() {
+        return credentials;
     }
 
     /**
@@ -487,6 +499,7 @@ public final class Assistant {
                 && backgroundDenoisingEnabled.equals(other.backgroundDenoisingEnabled)
                 && modelOutputInMessagesEnabled.equals(other.modelOutputInMessagesEnabled)
                 && transportConfigurations.equals(other.transportConfigurations)
+                && credentials.equals(other.credentials)
                 && name.equals(other.name)
                 && voicemailDetection.equals(other.voicemailDetection)
                 && voicemailMessage.equals(other.voicemailMessage)
@@ -524,6 +537,7 @@ public final class Assistant {
                 this.backgroundDenoisingEnabled,
                 this.modelOutputInMessagesEnabled,
                 this.transportConfigurations,
+                this.credentials,
                 this.name,
                 this.voicemailDetection,
                 this.voicemailMessage,
@@ -630,6 +644,10 @@ public final class Assistant {
 
         _FinalStage transportConfigurations(List<TransportConfigurationTwilio> transportConfigurations);
 
+        _FinalStage credentials(Optional<List<AssistantCredentialsItem>> credentials);
+
+        _FinalStage credentials(List<AssistantCredentialsItem> credentials);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -725,6 +743,8 @@ public final class Assistant {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<List<AssistantCredentialsItem>> credentials = Optional.empty();
+
         private Optional<List<TransportConfigurationTwilio>> transportConfigurations = Optional.empty();
 
         private Optional<Boolean> modelOutputInMessagesEnabled = Optional.empty();
@@ -774,6 +794,7 @@ public final class Assistant {
             backgroundDenoisingEnabled(other.getBackgroundDenoisingEnabled());
             modelOutputInMessagesEnabled(other.getModelOutputInMessagesEnabled());
             transportConfigurations(other.getTransportConfigurations());
+            credentials(other.getCredentials());
             name(other.getName());
             voicemailDetection(other.getVoicemailDetection());
             voicemailMessage(other.getVoicemailMessage());
@@ -1111,6 +1132,23 @@ public final class Assistant {
         }
 
         /**
+         * <p>These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage credentials(List<AssistantCredentialsItem> credentials) {
+            this.credentials = Optional.ofNullable(credentials);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "credentials", nulls = Nulls.SKIP)
+        public _FinalStage credentials(Optional<List<AssistantCredentialsItem>> credentials) {
+            this.credentials = credentials;
+            return this;
+        }
+
+        /**
          * <p>These are the configurations to be passed to the transport providers of assistant's calls, like Twilio. You can store multiple configurations for different transport providers. For a call, only the configuration matching the call transport provider is used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -1380,6 +1418,7 @@ public final class Assistant {
                     backgroundDenoisingEnabled,
                     modelOutputInMessagesEnabled,
                     transportConfigurations,
+                    credentials,
                     name,
                     voicemailDetection,
                     voicemailMessage,

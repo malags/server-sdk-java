@@ -49,6 +49,8 @@ public final class AssistantOverrides {
 
     private final Optional<List<TransportConfigurationTwilio>> transportConfigurations;
 
+    private final Optional<List<AssistantOverridesCredentialsItem>> credentials;
+
     private final Optional<Map<String, Object>> variableValues;
 
     private final Optional<String> name;
@@ -96,6 +98,7 @@ public final class AssistantOverrides {
             Optional<Boolean> backgroundDenoisingEnabled,
             Optional<Boolean> modelOutputInMessagesEnabled,
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
+            Optional<List<AssistantOverridesCredentialsItem>> credentials,
             Optional<Map<String, Object>> variableValues,
             Optional<String> name,
             Optional<TwilioVoicemailDetection> voicemailDetection,
@@ -126,6 +129,7 @@ public final class AssistantOverrides {
         this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
         this.modelOutputInMessagesEnabled = modelOutputInMessagesEnabled;
         this.transportConfigurations = transportConfigurations;
+        this.credentials = credentials;
         this.variableValues = variableValues;
         this.name = name;
         this.voicemailDetection = voicemailDetection;
@@ -268,6 +272,14 @@ public final class AssistantOverrides {
     @JsonProperty("transportConfigurations")
     public Optional<List<TransportConfigurationTwilio>> getTransportConfigurations() {
         return transportConfigurations;
+    }
+
+    /**
+     * @return These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.
+     */
+    @JsonProperty("credentials")
+    public Optional<List<AssistantOverridesCredentialsItem>> getCredentials() {
+        return credentials;
     }
 
     /**
@@ -456,6 +468,7 @@ public final class AssistantOverrides {
                 && backgroundDenoisingEnabled.equals(other.backgroundDenoisingEnabled)
                 && modelOutputInMessagesEnabled.equals(other.modelOutputInMessagesEnabled)
                 && transportConfigurations.equals(other.transportConfigurations)
+                && credentials.equals(other.credentials)
                 && variableValues.equals(other.variableValues)
                 && name.equals(other.name)
                 && voicemailDetection.equals(other.voicemailDetection)
@@ -490,6 +503,7 @@ public final class AssistantOverrides {
                 this.backgroundDenoisingEnabled,
                 this.modelOutputInMessagesEnabled,
                 this.transportConfigurations,
+                this.credentials,
                 this.variableValues,
                 this.name,
                 this.voicemailDetection,
@@ -546,6 +560,8 @@ public final class AssistantOverrides {
 
         private Optional<List<TransportConfigurationTwilio>> transportConfigurations = Optional.empty();
 
+        private Optional<List<AssistantOverridesCredentialsItem>> credentials = Optional.empty();
+
         private Optional<Map<String, Object>> variableValues = Optional.empty();
 
         private Optional<String> name = Optional.empty();
@@ -596,6 +612,7 @@ public final class AssistantOverrides {
             backgroundDenoisingEnabled(other.getBackgroundDenoisingEnabled());
             modelOutputInMessagesEnabled(other.getModelOutputInMessagesEnabled());
             transportConfigurations(other.getTransportConfigurations());
+            credentials(other.getCredentials());
             variableValues(other.getVariableValues());
             name(other.getName());
             voicemailDetection(other.getVoicemailDetection());
@@ -765,6 +782,17 @@ public final class AssistantOverrides {
 
         public Builder transportConfigurations(List<TransportConfigurationTwilio> transportConfigurations) {
             this.transportConfigurations = Optional.ofNullable(transportConfigurations);
+            return this;
+        }
+
+        @JsonSetter(value = "credentials", nulls = Nulls.SKIP)
+        public Builder credentials(Optional<List<AssistantOverridesCredentialsItem>> credentials) {
+            this.credentials = credentials;
+            return this;
+        }
+
+        public Builder credentials(List<AssistantOverridesCredentialsItem> credentials) {
+            this.credentials = Optional.ofNullable(credentials);
             return this;
         }
 
@@ -949,6 +977,7 @@ public final class AssistantOverrides {
                     backgroundDenoisingEnabled,
                     modelOutputInMessagesEnabled,
                     transportConfigurations,
+                    credentials,
                     variableValues,
                     name,
                     voicemailDetection,

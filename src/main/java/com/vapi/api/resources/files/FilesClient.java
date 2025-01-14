@@ -187,10 +187,6 @@ public class FilesClient {
         }
     }
 
-    public File update(String id) {
-        return update(id, UpdateFileDto.builder().build());
-    }
-
     public File update(String id, UpdateFileDto request) {
         return update(id, request, null);
     }

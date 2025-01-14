@@ -12,12 +12,12 @@ import com.vapi.api.core.RequestOptions;
 import com.vapi.api.core.VapiApiException;
 import com.vapi.api.core.VapiException;
 import com.vapi.api.resources.blocks.requests.BlocksListRequest;
-import com.vapi.api.resources.blocks.requests.UpdateBlockDto;
 import com.vapi.api.resources.blocks.types.BlocksCreateRequest;
 import com.vapi.api.resources.blocks.types.BlocksCreateResponse;
 import com.vapi.api.resources.blocks.types.BlocksDeleteResponse;
 import com.vapi.api.resources.blocks.types.BlocksGetResponse;
 import com.vapi.api.resources.blocks.types.BlocksListResponseItem;
+import com.vapi.api.resources.blocks.types.BlocksUpdateRequest;
 import com.vapi.api.resources.blocks.types.BlocksUpdateResponse;
 import java.io.IOException;
 import java.util.List;
@@ -220,15 +220,11 @@ public class BlocksClient {
         }
     }
 
-    public BlocksUpdateResponse update(String id) {
-        return update(id, UpdateBlockDto.builder().build());
-    }
-
-    public BlocksUpdateResponse update(String id, UpdateBlockDto request) {
+    public BlocksUpdateResponse update(String id, BlocksUpdateRequest request) {
         return update(id, request, null);
     }
 
-    public BlocksUpdateResponse update(String id, UpdateBlockDto request, RequestOptions requestOptions) {
+    public BlocksUpdateResponse update(String id, BlocksUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("block")

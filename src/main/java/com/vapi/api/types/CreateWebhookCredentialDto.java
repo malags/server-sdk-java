@@ -36,11 +36,6 @@ public final class CreateWebhookCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "webhook";
-    }
-
     /**
      * @return This is the authentication plan. Currently supports OAuth2 RFC 6749.
      */

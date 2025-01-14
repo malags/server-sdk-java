@@ -21,6 +21,7 @@ import com.vapi.api.types.NeetsVoice;
 import com.vapi.api.types.OpenAiVoice;
 import com.vapi.api.types.PlayHtVoice;
 import com.vapi.api.types.RimeAiVoice;
+import com.vapi.api.types.SmallestAiVoice;
 import com.vapi.api.types.TavusVoice;
 import java.util.Objects;
 import java.util.Optional;
@@ -77,6 +78,10 @@ public final class UpdateAssistantDtoVoice {
         return new UpdateAssistantDtoVoice(new RimeAiValue(value));
     }
 
+    public static UpdateAssistantDtoVoice smallestAi(SmallestAiVoice value) {
+        return new UpdateAssistantDtoVoice(new SmallestAiValue(value));
+    }
+
     public static UpdateAssistantDtoVoice tavus(TavusVoice value) {
         return new UpdateAssistantDtoVoice(new TavusValue(value));
     }
@@ -119,6 +124,10 @@ public final class UpdateAssistantDtoVoice {
 
     public boolean isRimeAi() {
         return value instanceof RimeAiValue;
+    }
+
+    public boolean isSmallestAi() {
+        return value instanceof SmallestAiValue;
     }
 
     public boolean isTavus() {
@@ -199,6 +208,13 @@ public final class UpdateAssistantDtoVoice {
         return Optional.empty();
     }
 
+    public Optional<SmallestAiVoice> getSmallestAi() {
+        if (isSmallestAi()) {
+            return Optional.of(((SmallestAiValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<TavusVoice> getTavus() {
         if (isTavus()) {
             return Optional.of(((TavusValue) value).value);
@@ -239,6 +255,8 @@ public final class UpdateAssistantDtoVoice {
 
         T visitRimeAi(RimeAiVoice rimeAi);
 
+        T visitSmallestAi(SmallestAiVoice smallestAi);
+
         T visitTavus(TavusVoice tavus);
 
         T _visitUnknown(Object unknownType);
@@ -256,6 +274,7 @@ public final class UpdateAssistantDtoVoice {
         @JsonSubTypes.Type(OpenaiValue.class),
         @JsonSubTypes.Type(PlayhtValue.class),
         @JsonSubTypes.Type(RimeAiValue.class),
+        @JsonSubTypes.Type(SmallestAiValue.class),
         @JsonSubTypes.Type(TavusValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -629,6 +648,44 @@ public final class UpdateAssistantDtoVoice {
         }
 
         private boolean equalTo(RimeAiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoVoice{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("smallest-ai")
+    private static final class SmallestAiValue implements Value {
+        @JsonUnwrapped
+        private SmallestAiVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SmallestAiValue() {}
+
+        private SmallestAiValue(SmallestAiVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSmallestAi(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SmallestAiValue && equalTo((SmallestAiValue) other);
+        }
+
+        private boolean equalTo(SmallestAiValue other) {
             return value.equals(other.value);
         }
 

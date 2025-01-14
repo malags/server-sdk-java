@@ -29,6 +29,8 @@ public final class CreateAzureOpenAiCredentialDto {
 
     private final String openAiKey;
 
+    private final Optional<String> ocpApimSubscriptionKey;
+
     private final String openAiEndpoint;
 
     private final Optional<String> name;
@@ -39,20 +41,17 @@ public final class CreateAzureOpenAiCredentialDto {
             CreateAzureOpenAiCredentialDtoRegion region,
             List<CreateAzureOpenAiCredentialDtoModelsItem> models,
             String openAiKey,
+            Optional<String> ocpApimSubscriptionKey,
             String openAiEndpoint,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.region = region;
         this.models = models;
         this.openAiKey = openAiKey;
+        this.ocpApimSubscriptionKey = ocpApimSubscriptionKey;
         this.openAiEndpoint = openAiEndpoint;
         this.name = name;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "azure-openai";
     }
 
     @JsonProperty("region")
@@ -71,6 +70,14 @@ public final class CreateAzureOpenAiCredentialDto {
     @JsonProperty("openAIKey")
     public String getOpenAiKey() {
         return openAiKey;
+    }
+
+    /**
+     * @return This is not returned in the API.
+     */
+    @JsonProperty("ocpApimSubscriptionKey")
+    public Optional<String> getOcpApimSubscriptionKey() {
+        return ocpApimSubscriptionKey;
     }
 
     @JsonProperty("openAIEndpoint")
@@ -101,13 +108,15 @@ public final class CreateAzureOpenAiCredentialDto {
         return region.equals(other.region)
                 && models.equals(other.models)
                 && openAiKey.equals(other.openAiKey)
+                && ocpApimSubscriptionKey.equals(other.ocpApimSubscriptionKey)
                 && openAiEndpoint.equals(other.openAiEndpoint)
                 && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.region, this.models, this.openAiKey, this.openAiEndpoint, this.name);
+        return Objects.hash(
+                this.region, this.models, this.openAiKey, this.ocpApimSubscriptionKey, this.openAiEndpoint, this.name);
     }
 
     @java.lang.Override
@@ -142,6 +151,10 @@ public final class CreateAzureOpenAiCredentialDto {
 
         _FinalStage addAllModels(List<CreateAzureOpenAiCredentialDtoModelsItem> models);
 
+        _FinalStage ocpApimSubscriptionKey(Optional<String> ocpApimSubscriptionKey);
+
+        _FinalStage ocpApimSubscriptionKey(String ocpApimSubscriptionKey);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -157,6 +170,8 @@ public final class CreateAzureOpenAiCredentialDto {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<String> ocpApimSubscriptionKey = Optional.empty();
+
         private List<CreateAzureOpenAiCredentialDtoModelsItem> models = new ArrayList<>();
 
         @JsonAnySetter
@@ -169,6 +184,7 @@ public final class CreateAzureOpenAiCredentialDto {
             region(other.getRegion());
             models(other.getModels());
             openAiKey(other.getOpenAiKey());
+            ocpApimSubscriptionKey(other.getOcpApimSubscriptionKey());
             openAiEndpoint(other.getOpenAiEndpoint());
             name(other.getName());
             return this;
@@ -216,6 +232,23 @@ public final class CreateAzureOpenAiCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage ocpApimSubscriptionKey(String ocpApimSubscriptionKey) {
+            this.ocpApimSubscriptionKey = Optional.ofNullable(ocpApimSubscriptionKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "ocpApimSubscriptionKey", nulls = Nulls.SKIP)
+        public _FinalStage ocpApimSubscriptionKey(Optional<String> ocpApimSubscriptionKey) {
+            this.ocpApimSubscriptionKey = ocpApimSubscriptionKey;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllModels(List<CreateAzureOpenAiCredentialDtoModelsItem> models) {
             this.models.addAll(models);
@@ -239,7 +272,7 @@ public final class CreateAzureOpenAiCredentialDto {
         @java.lang.Override
         public CreateAzureOpenAiCredentialDto build() {
             return new CreateAzureOpenAiCredentialDto(
-                    region, models, openAiKey, openAiEndpoint, name, additionalProperties);
+                    region, models, openAiKey, ocpApimSubscriptionKey, openAiEndpoint, name, additionalProperties);
         }
     }
 }

@@ -16,43 +16,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdatePlayHtCredentialDto.Builder.class)
 public final class UpdatePlayHtCredentialDto {
-    private final String apiKey;
-
-    private final String userId;
+    private final Optional<String> apiKey;
 
     private final Optional<String> name;
+
+    private final Optional<String> userId;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdatePlayHtCredentialDto(
-            String apiKey, String userId, Optional<String> name, Map<String, Object> additionalProperties) {
+            Optional<String> apiKey,
+            Optional<String> name,
+            Optional<String> userId,
+            Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
-        this.userId = userId;
         this.name = name;
+        this.userId = userId;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "playht";
     }
 
     /**
      * @return This is not returned in the API.
      */
     @JsonProperty("apiKey")
-    public String getApiKey() {
+    public Optional<String> getApiKey() {
         return apiKey;
-    }
-
-    @JsonProperty("userId")
-    public String getUserId() {
-        return userId;
     }
 
     /**
@@ -61,6 +53,11 @@ public final class UpdatePlayHtCredentialDto {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    @JsonProperty("userId")
+    public Optional<String> getUserId() {
+        return userId;
     }
 
     @java.lang.Override
@@ -75,12 +72,12 @@ public final class UpdatePlayHtCredentialDto {
     }
 
     private boolean equalTo(UpdatePlayHtCredentialDto other) {
-        return apiKey.equals(other.apiKey) && userId.equals(other.userId) && name.equals(other.name);
+        return apiKey.equals(other.apiKey) && name.equals(other.name) && userId.equals(other.userId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.userId, this.name);
+        return Objects.hash(this.apiKey, this.name, this.userId);
     }
 
     @java.lang.Override
@@ -88,87 +85,65 @@ public final class UpdatePlayHtCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static ApiKeyStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ApiKeyStage {
-        UserIdStage apiKey(@NotNull String apiKey);
-
-        Builder from(UpdatePlayHtCredentialDto other);
-    }
-
-    public interface UserIdStage {
-        _FinalStage userId(@NotNull String userId);
-    }
-
-    public interface _FinalStage {
-        UpdatePlayHtCredentialDto build();
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ApiKeyStage, UserIdStage, _FinalStage {
-        private String apiKey;
-
-        private String userId;
+    public static final class Builder {
+        private Optional<String> apiKey = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<String> userId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdatePlayHtCredentialDto other) {
             apiKey(other.getApiKey());
-            userId(other.getUserId());
             name(other.getName());
+            userId(other.getUserId());
             return this;
         }
 
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("apiKey")
-        public UserIdStage apiKey(@NotNull String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey, "apiKey must not be null");
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public Builder apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("userId")
-        public _FinalStage userId(@NotNull String userId) {
-            this.userId = Objects.requireNonNull(userId, "userId must not be null");
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        @java.lang.Override
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @JsonSetter(value = "userId", nulls = Nulls.SKIP)
+        public Builder userId(Optional<String> userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder userId(String userId) {
+            this.userId = Optional.ofNullable(userId);
+            return this;
+        }
+
         public UpdatePlayHtCredentialDto build() {
-            return new UpdatePlayHtCredentialDto(apiKey, userId, name, additionalProperties);
+            return new UpdatePlayHtCredentialDto(apiKey, name, userId, additionalProperties);
         }
     }
 }

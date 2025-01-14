@@ -44,7 +44,7 @@ java {
 
 group = 'dev.vapi'
 
-version = '0.2.0'
+version = '0.3.0'
 
 jar {
     dependsOn(":generatePomFileForMavenPublication")
@@ -71,7 +71,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'dev.vapi'
             artifactId = 'server-sdk'
-            version = '0.2.0'
+            version = '0.3.0'
             from components.java
             pom {
                 licenses {

@@ -22,8 +22,6 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateByoSipTrunkCredentialDto.Builder.class)
 public final class CreateByoSipTrunkCredentialDto {
-    private final Optional<String> provider;
-
     private final List<SipTrunkGateway> gateways;
 
     private final Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan;
@@ -41,7 +39,6 @@ public final class CreateByoSipTrunkCredentialDto {
     private final Map<String, Object> additionalProperties;
 
     private CreateByoSipTrunkCredentialDto(
-            Optional<String> provider,
             List<SipTrunkGateway> gateways,
             Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan,
             Optional<Boolean> outboundLeadingPlusEnabled,
@@ -50,7 +47,6 @@ public final class CreateByoSipTrunkCredentialDto {
             Optional<SbcConfiguration> sbcConfiguration,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
-        this.provider = provider;
         this.gateways = gateways;
         this.outboundAuthenticationPlan = outboundAuthenticationPlan;
         this.outboundLeadingPlusEnabled = outboundLeadingPlusEnabled;
@@ -59,14 +55,6 @@ public final class CreateByoSipTrunkCredentialDto {
         this.sbcConfiguration = sbcConfiguration;
         this.name = name;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This can be used to bring your own SIP trunks or to connect to a Carrier.
-     */
-    @JsonProperty("provider")
-    public Optional<String> getProvider() {
-        return provider;
     }
 
     /**
@@ -142,8 +130,7 @@ public final class CreateByoSipTrunkCredentialDto {
     }
 
     private boolean equalTo(CreateByoSipTrunkCredentialDto other) {
-        return provider.equals(other.provider)
-                && gateways.equals(other.gateways)
+        return gateways.equals(other.gateways)
                 && outboundAuthenticationPlan.equals(other.outboundAuthenticationPlan)
                 && outboundLeadingPlusEnabled.equals(other.outboundLeadingPlusEnabled)
                 && techPrefix.equals(other.techPrefix)
@@ -155,7 +142,6 @@ public final class CreateByoSipTrunkCredentialDto {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.provider,
                 this.gateways,
                 this.outboundAuthenticationPlan,
                 this.outboundLeadingPlusEnabled,
@@ -176,8 +162,6 @@ public final class CreateByoSipTrunkCredentialDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> provider = Optional.empty();
-
         private List<SipTrunkGateway> gateways = new ArrayList<>();
 
         private Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan = Optional.empty();
@@ -198,7 +182,6 @@ public final class CreateByoSipTrunkCredentialDto {
         private Builder() {}
 
         public Builder from(CreateByoSipTrunkCredentialDto other) {
-            provider(other.getProvider());
             gateways(other.getGateways());
             outboundAuthenticationPlan(other.getOutboundAuthenticationPlan());
             outboundLeadingPlusEnabled(other.getOutboundLeadingPlusEnabled());
@@ -206,17 +189,6 @@ public final class CreateByoSipTrunkCredentialDto {
             sipDiversionHeader(other.getSipDiversionHeader());
             sbcConfiguration(other.getSbcConfiguration());
             name(other.getName());
-            return this;
-        }
-
-        @JsonSetter(value = "provider", nulls = Nulls.SKIP)
-        public Builder provider(Optional<String> provider) {
-            this.provider = provider;
-            return this;
-        }
-
-        public Builder provider(String provider) {
-            this.provider = Optional.ofNullable(provider);
             return this;
         }
 
@@ -306,7 +278,6 @@ public final class CreateByoSipTrunkCredentialDto {
 
         public CreateByoSipTrunkCredentialDto build() {
             return new CreateByoSipTrunkCredentialDto(
-                    provider,
                     gateways,
                     outboundAuthenticationPlan,
                     outboundLeadingPlusEnabled,

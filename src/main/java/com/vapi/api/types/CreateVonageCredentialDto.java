@@ -37,11 +37,6 @@ public final class CreateVonageCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "vonage";
-    }
-
     /**
      * @return This is not returned in the API.
      */

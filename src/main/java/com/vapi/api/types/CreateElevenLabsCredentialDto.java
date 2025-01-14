@@ -34,11 +34,6 @@ public final class CreateElevenLabsCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "11labs";
-    }
-
     /**
      * @return This is not returned in the API.
      */

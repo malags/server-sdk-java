@@ -66,6 +66,10 @@ public final class FallbackPlanVoicesItem {
         return new FallbackPlanVoicesItem(new RimeAiValue(value));
     }
 
+    public static FallbackPlanVoicesItem smallestAi(FallbackSmallestAiVoice value) {
+        return new FallbackPlanVoicesItem(new SmallestAiValue(value));
+    }
+
     public static FallbackPlanVoicesItem tavus(FallbackTavusVoice value) {
         return new FallbackPlanVoicesItem(new TavusValue(value));
     }
@@ -108,6 +112,10 @@ public final class FallbackPlanVoicesItem {
 
     public boolean isRimeAi() {
         return value instanceof RimeAiValue;
+    }
+
+    public boolean isSmallestAi() {
+        return value instanceof SmallestAiValue;
     }
 
     public boolean isTavus() {
@@ -188,6 +196,13 @@ public final class FallbackPlanVoicesItem {
         return Optional.empty();
     }
 
+    public Optional<FallbackSmallestAiVoice> getSmallestAi() {
+        if (isSmallestAi()) {
+            return Optional.of(((SmallestAiValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<FallbackTavusVoice> getTavus() {
         if (isTavus()) {
             return Optional.of(((TavusValue) value).value);
@@ -228,6 +243,8 @@ public final class FallbackPlanVoicesItem {
 
         T visitRimeAi(FallbackRimeAiVoice rimeAi);
 
+        T visitSmallestAi(FallbackSmallestAiVoice smallestAi);
+
         T visitTavus(FallbackTavusVoice tavus);
 
         T _visitUnknown(Object unknownType);
@@ -245,6 +262,7 @@ public final class FallbackPlanVoicesItem {
         @JsonSubTypes.Type(OpenaiValue.class),
         @JsonSubTypes.Type(PlayhtValue.class),
         @JsonSubTypes.Type(RimeAiValue.class),
+        @JsonSubTypes.Type(SmallestAiValue.class),
         @JsonSubTypes.Type(TavusValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -618,6 +636,44 @@ public final class FallbackPlanVoicesItem {
         }
 
         private boolean equalTo(RimeAiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "FallbackPlanVoicesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("smallest-ai")
+    private static final class SmallestAiValue implements Value {
+        @JsonUnwrapped
+        private FallbackSmallestAiVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SmallestAiValue() {}
+
+        private SmallestAiValue(FallbackSmallestAiVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSmallestAi(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SmallestAiValue && equalTo((SmallestAiValue) other);
+        }
+
+        private boolean equalTo(SmallestAiValue other) {
             return value.equals(other.value);
         }
 

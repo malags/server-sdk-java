@@ -35,9 +35,7 @@ public final class ImportTwilioPhoneNumberDto {
 
     private final Optional<String> squadId;
 
-    private final Optional<String> serverUrl;
-
-    private final Optional<String> serverUrlSecret;
+    private final Optional<Server> server;
 
     private final Map<String, Object> additionalProperties;
 
@@ -49,8 +47,7 @@ public final class ImportTwilioPhoneNumberDto {
             Optional<String> name,
             Optional<String> assistantId,
             Optional<String> squadId,
-            Optional<String> serverUrl,
-            Optional<String> serverUrlSecret,
+            Optional<Server> server,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
         this.twilioPhoneNumber = twilioPhoneNumber;
@@ -59,8 +56,7 @@ public final class ImportTwilioPhoneNumberDto {
         this.name = name;
         this.assistantId = assistantId;
         this.squadId = squadId;
-        this.serverUrl = serverUrl;
-        this.serverUrlSecret = serverUrlSecret;
+        this.server = server;
         this.additionalProperties = additionalProperties;
     }
 
@@ -129,22 +125,17 @@ public final class ImportTwilioPhoneNumberDto {
     }
 
     /**
-     * @return This is the server URL where messages will be sent for calls on this number. This includes the <code>assistant-request</code> message.
-     * <p>You can see the shape of the messages sent in <code>ServerMessage</code>.</p>
-     * <p>This overrides the <code>org.serverUrl</code>. Order of precedence: tool.server.url &gt; assistant.serverUrl &gt; phoneNumber.serverUrl &gt; org.serverUrl.</p>
+     * @return This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.
+     * <p>The order of precedence is:</p>
+     * <ol>
+     * <li>assistant.server</li>
+     * <li>phoneNumber.server</li>
+     * <li>org.server</li>
+     * </ol>
      */
-    @JsonProperty("serverUrl")
-    public Optional<String> getServerUrl() {
-        return serverUrl;
-    }
-
-    /**
-     * @return This is the secret Vapi will send with every message to your server. It's sent as a header called x-vapi-secret.
-     * <p>Same precedence logic as serverUrl.</p>
-     */
-    @JsonProperty("serverUrlSecret")
-    public Optional<String> getServerUrlSecret() {
-        return serverUrlSecret;
+    @JsonProperty("server")
+    public Optional<Server> getServer() {
+        return server;
     }
 
     @java.lang.Override
@@ -166,8 +157,7 @@ public final class ImportTwilioPhoneNumberDto {
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
                 && squadId.equals(other.squadId)
-                && serverUrl.equals(other.serverUrl)
-                && serverUrlSecret.equals(other.serverUrlSecret);
+                && server.equals(other.server);
     }
 
     @java.lang.Override
@@ -180,8 +170,7 @@ public final class ImportTwilioPhoneNumberDto {
                 this.name,
                 this.assistantId,
                 this.squadId,
-                this.serverUrl,
-                this.serverUrlSecret);
+                this.server);
     }
 
     @java.lang.Override
@@ -226,13 +215,9 @@ public final class ImportTwilioPhoneNumberDto {
 
         _FinalStage squadId(String squadId);
 
-        _FinalStage serverUrl(Optional<String> serverUrl);
+        _FinalStage server(Optional<Server> server);
 
-        _FinalStage serverUrl(String serverUrl);
-
-        _FinalStage serverUrlSecret(Optional<String> serverUrlSecret);
-
-        _FinalStage serverUrlSecret(String serverUrlSecret);
+        _FinalStage server(Server server);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -244,9 +229,7 @@ public final class ImportTwilioPhoneNumberDto {
 
         private String twilioAuthToken;
 
-        private Optional<String> serverUrlSecret = Optional.empty();
-
-        private Optional<String> serverUrl = Optional.empty();
+        private Optional<Server> server = Optional.empty();
 
         private Optional<String> squadId = Optional.empty();
 
@@ -270,8 +253,7 @@ public final class ImportTwilioPhoneNumberDto {
             name(other.getName());
             assistantId(other.getAssistantId());
             squadId(other.getSquadId());
-            serverUrl(other.getServerUrl());
-            serverUrlSecret(other.getServerUrlSecret());
+            server(other.getServer());
             return this;
         }
 
@@ -309,39 +291,25 @@ public final class ImportTwilioPhoneNumberDto {
         }
 
         /**
-         * <p>This is the secret Vapi will send with every message to your server. It's sent as a header called x-vapi-secret.</p>
-         * <p>Same precedence logic as serverUrl.</p>
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage serverUrlSecret(String serverUrlSecret) {
-            this.serverUrlSecret = Optional.ofNullable(serverUrlSecret);
+        public _FinalStage server(Server server) {
+            this.server = Optional.ofNullable(server);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "serverUrlSecret", nulls = Nulls.SKIP)
-        public _FinalStage serverUrlSecret(Optional<String> serverUrlSecret) {
-            this.serverUrlSecret = serverUrlSecret;
-            return this;
-        }
-
-        /**
-         * <p>This is the server URL where messages will be sent for calls on this number. This includes the <code>assistant-request</code> message.</p>
-         * <p>You can see the shape of the messages sent in <code>ServerMessage</code>.</p>
-         * <p>This overrides the <code>org.serverUrl</code>. Order of precedence: tool.server.url &gt; assistant.serverUrl &gt; phoneNumber.serverUrl &gt; org.serverUrl.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage serverUrl(String serverUrl) {
-            this.serverUrl = Optional.ofNullable(serverUrl);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "serverUrl", nulls = Nulls.SKIP)
-        public _FinalStage serverUrl(Optional<String> serverUrl) {
-            this.serverUrl = serverUrl;
+        @JsonSetter(value = "server", nulls = Nulls.SKIP)
+        public _FinalStage server(Optional<Server> server) {
+            this.server = server;
             return this;
         }
 
@@ -432,8 +400,7 @@ public final class ImportTwilioPhoneNumberDto {
                     name,
                     assistantId,
                     squadId,
-                    serverUrl,
-                    serverUrlSecret,
+                    server,
                     additionalProperties);
         }
     }

@@ -40,11 +40,6 @@ public final class CreateCustomLlmCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "custom-llm";
-    }
-
     /**
      * @return This is not returned in the API.
      */

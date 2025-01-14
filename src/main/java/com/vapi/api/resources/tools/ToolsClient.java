@@ -12,12 +12,12 @@ import com.vapi.api.core.RequestOptions;
 import com.vapi.api.core.VapiApiException;
 import com.vapi.api.core.VapiException;
 import com.vapi.api.resources.tools.requests.ToolsListRequest;
-import com.vapi.api.resources.tools.requests.UpdateToolDto;
 import com.vapi.api.resources.tools.types.ToolsCreateRequest;
 import com.vapi.api.resources.tools.types.ToolsCreateResponse;
 import com.vapi.api.resources.tools.types.ToolsDeleteResponse;
 import com.vapi.api.resources.tools.types.ToolsGetResponse;
 import com.vapi.api.resources.tools.types.ToolsListResponseItem;
+import com.vapi.api.resources.tools.types.ToolsUpdateRequest;
 import com.vapi.api.resources.tools.types.ToolsUpdateResponse;
 import java.io.IOException;
 import java.util.List;
@@ -220,15 +220,11 @@ public class ToolsClient {
         }
     }
 
-    public ToolsUpdateResponse update(String id) {
-        return update(id, UpdateToolDto.builder().build());
-    }
-
-    public ToolsUpdateResponse update(String id, UpdateToolDto request) {
+    public ToolsUpdateResponse update(String id, ToolsUpdateRequest request) {
         return update(id, request, null);
     }
 
-    public ToolsUpdateResponse update(String id, UpdateToolDto request, RequestOptions requestOptions) {
+    public ToolsUpdateResponse update(String id, ToolsUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tool")

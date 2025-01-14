@@ -34,14 +34,6 @@ public final class CreateXAiCredentialDto {
     }
 
     /**
-     * @return This is the api key for Grok in XAi's console. Get it from here: https://console.x.ai
-     */
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "xai";
-    }
-
-    /**
      * @return This is not returned in the API.
      */
     @JsonProperty("apiKey")

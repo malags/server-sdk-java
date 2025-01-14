@@ -34,11 +34,6 @@ public final class CreateTogetherAiCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "together-ai";
-    }
-
     /**
      * @return This is not returned in the API.
      */

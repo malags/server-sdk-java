@@ -30,9 +30,7 @@ public final class UpdateOrgDto {
 
     private final Optional<Double> billingLimit;
 
-    private final Optional<String> serverUrl;
-
-    private final Optional<String> serverUrlSecret;
+    private final Optional<Server> server;
 
     private final Optional<Double> concurrencyLimit;
 
@@ -44,8 +42,7 @@ public final class UpdateOrgDto {
             Optional<String> name,
             Optional<UpdateOrgDtoChannel> channel,
             Optional<Double> billingLimit,
-            Optional<String> serverUrl,
-            Optional<String> serverUrlSecret,
+            Optional<Server> server,
             Optional<Double> concurrencyLimit,
             Map<String, Object> additionalProperties) {
         this.hipaaEnabled = hipaaEnabled;
@@ -53,8 +50,7 @@ public final class UpdateOrgDto {
         this.name = name;
         this.channel = channel;
         this.billingLimit = billingLimit;
-        this.serverUrl = serverUrl;
-        this.serverUrlSecret = serverUrlSecret;
+        this.server = server;
         this.concurrencyLimit = concurrencyLimit;
         this.additionalProperties = additionalProperties;
     }
@@ -102,20 +98,17 @@ public final class UpdateOrgDto {
     }
 
     /**
-     * @return This is the URL Vapi will communicate with via HTTP GET and POST Requests. This is used for retrieving context, function calling, and end-of-call reports.
-     * <p>All requests will be sent with the call object among other things relevant to that message. You can find more details in the Server URL documentation.</p>
+     * @return This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.
+     * <p>The order of precedence is:</p>
+     * <ol>
+     * <li>assistant.server</li>
+     * <li>phoneNumber.server</li>
+     * <li>org.server</li>
+     * </ol>
      */
-    @JsonProperty("serverUrl")
-    public Optional<String> getServerUrl() {
-        return serverUrl;
-    }
-
-    /**
-     * @return This is the secret you can set that Vapi will send with every request to your server. Will be sent as a header called x-vapi-secret.
-     */
-    @JsonProperty("serverUrlSecret")
-    public Optional<String> getServerUrlSecret() {
-        return serverUrlSecret;
+    @JsonProperty("server")
+    public Optional<Server> getServer() {
+        return server;
     }
 
     /**
@@ -143,8 +136,7 @@ public final class UpdateOrgDto {
                 && name.equals(other.name)
                 && channel.equals(other.channel)
                 && billingLimit.equals(other.billingLimit)
-                && serverUrl.equals(other.serverUrl)
-                && serverUrlSecret.equals(other.serverUrlSecret)
+                && server.equals(other.server)
                 && concurrencyLimit.equals(other.concurrencyLimit);
     }
 
@@ -156,8 +148,7 @@ public final class UpdateOrgDto {
                 this.name,
                 this.channel,
                 this.billingLimit,
-                this.serverUrl,
-                this.serverUrlSecret,
+                this.server,
                 this.concurrencyLimit);
     }
 
@@ -182,9 +173,7 @@ public final class UpdateOrgDto {
 
         private Optional<Double> billingLimit = Optional.empty();
 
-        private Optional<String> serverUrl = Optional.empty();
-
-        private Optional<String> serverUrlSecret = Optional.empty();
+        private Optional<Server> server = Optional.empty();
 
         private Optional<Double> concurrencyLimit = Optional.empty();
 
@@ -199,8 +188,7 @@ public final class UpdateOrgDto {
             name(other.getName());
             channel(other.getChannel());
             billingLimit(other.getBillingLimit());
-            serverUrl(other.getServerUrl());
-            serverUrlSecret(other.getServerUrlSecret());
+            server(other.getServer());
             concurrencyLimit(other.getConcurrencyLimit());
             return this;
         }
@@ -260,25 +248,14 @@ public final class UpdateOrgDto {
             return this;
         }
 
-        @JsonSetter(value = "serverUrl", nulls = Nulls.SKIP)
-        public Builder serverUrl(Optional<String> serverUrl) {
-            this.serverUrl = serverUrl;
+        @JsonSetter(value = "server", nulls = Nulls.SKIP)
+        public Builder server(Optional<Server> server) {
+            this.server = server;
             return this;
         }
 
-        public Builder serverUrl(String serverUrl) {
-            this.serverUrl = Optional.ofNullable(serverUrl);
-            return this;
-        }
-
-        @JsonSetter(value = "serverUrlSecret", nulls = Nulls.SKIP)
-        public Builder serverUrlSecret(Optional<String> serverUrlSecret) {
-            this.serverUrlSecret = serverUrlSecret;
-            return this;
-        }
-
-        public Builder serverUrlSecret(String serverUrlSecret) {
-            this.serverUrlSecret = Optional.ofNullable(serverUrlSecret);
+        public Builder server(Server server) {
+            this.server = Optional.ofNullable(server);
             return this;
         }
 
@@ -300,8 +277,7 @@ public final class UpdateOrgDto {
                     name,
                     channel,
                     billingLimit,
-                    serverUrl,
-                    serverUrlSecret,
+                    server,
                     concurrencyLimit,
                     additionalProperties);
         }

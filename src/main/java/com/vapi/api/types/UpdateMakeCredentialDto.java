@@ -16,25 +16,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateMakeCredentialDto.Builder.class)
 public final class UpdateMakeCredentialDto {
-    private final String teamId;
+    private final Optional<String> teamId;
 
-    private final String region;
+    private final Optional<String> region;
 
-    private final String apiKey;
+    private final Optional<String> apiKey;
 
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateMakeCredentialDto(
-            String teamId,
-            String region,
-            String apiKey,
+            Optional<String> teamId,
+            Optional<String> region,
+            Optional<String> apiKey,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.teamId = teamId;
@@ -44,16 +43,11 @@ public final class UpdateMakeCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "make";
-    }
-
     /**
      * @return Team ID
      */
     @JsonProperty("teamId")
-    public String getTeamId() {
+    public Optional<String> getTeamId() {
         return teamId;
     }
 
@@ -61,7 +55,7 @@ public final class UpdateMakeCredentialDto {
      * @return Region of your application. For example: eu1, eu2, us1, us2
      */
     @JsonProperty("region")
-    public String getRegion() {
+    public Optional<String> getRegion() {
         return region;
     }
 
@@ -69,7 +63,7 @@ public final class UpdateMakeCredentialDto {
      * @return This is not returned in the API.
      */
     @JsonProperty("apiKey")
-    public String getApiKey() {
+    public Optional<String> getApiKey() {
         return apiKey;
     }
 
@@ -109,39 +103,17 @@ public final class UpdateMakeCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static TeamIdStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface TeamIdStage {
-        RegionStage teamId(@NotNull String teamId);
-
-        Builder from(UpdateMakeCredentialDto other);
-    }
-
-    public interface RegionStage {
-        ApiKeyStage region(@NotNull String region);
-    }
-
-    public interface ApiKeyStage {
-        _FinalStage apiKey(@NotNull String apiKey);
-    }
-
-    public interface _FinalStage {
-        UpdateMakeCredentialDto build();
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TeamIdStage, RegionStage, ApiKeyStage, _FinalStage {
-        private String teamId;
+    public static final class Builder {
+        private Optional<String> teamId = Optional.empty();
 
-        private String region;
+        private Optional<String> region = Optional.empty();
 
-        private String apiKey;
+        private Optional<String> apiKey = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -150,7 +122,6 @@ public final class UpdateMakeCredentialDto {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateMakeCredentialDto other) {
             teamId(other.getTeamId());
             region(other.getRegion());
@@ -159,57 +130,50 @@ public final class UpdateMakeCredentialDto {
             return this;
         }
 
-        /**
-         * <p>Team ID</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("teamId")
-        public RegionStage teamId(@NotNull String teamId) {
-            this.teamId = Objects.requireNonNull(teamId, "teamId must not be null");
+        @JsonSetter(value = "teamId", nulls = Nulls.SKIP)
+        public Builder teamId(Optional<String> teamId) {
+            this.teamId = teamId;
             return this;
         }
 
-        /**
-         * <p>Region of your application. For example: eu1, eu2, us1, us2</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("region")
-        public ApiKeyStage region(@NotNull String region) {
-            this.region = Objects.requireNonNull(region, "region must not be null");
+        public Builder teamId(String teamId) {
+            this.teamId = Optional.ofNullable(teamId);
             return this;
         }
 
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("apiKey")
-        public _FinalStage apiKey(@NotNull String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey, "apiKey must not be null");
+        @JsonSetter(value = "region", nulls = Nulls.SKIP)
+        public Builder region(Optional<String> region) {
+            this.region = region;
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
+        public Builder region(String region) {
+            this.region = Optional.ofNullable(region);
             return this;
         }
 
-        @java.lang.Override
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public Builder apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
+            return this;
+        }
+
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        @java.lang.Override
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
         public UpdateMakeCredentialDto build() {
             return new UpdateMakeCredentialDto(teamId, region, apiKey, name, additionalProperties);
         }

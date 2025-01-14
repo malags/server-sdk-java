@@ -17,6 +17,7 @@ import com.vapi.api.resources.knowledgebases.types.KnowledgeBasesCreateResponse;
 import com.vapi.api.resources.knowledgebases.types.KnowledgeBasesDeleteResponse;
 import com.vapi.api.resources.knowledgebases.types.KnowledgeBasesGetResponse;
 import com.vapi.api.resources.knowledgebases.types.KnowledgeBasesListResponseItem;
+import com.vapi.api.resources.knowledgebases.types.KnowledgeBasesUpdateRequest;
 import com.vapi.api.resources.knowledgebases.types.KnowledgeBasesUpdateResponse;
 import java.io.IOException;
 import java.util.List;
@@ -219,19 +220,27 @@ public class KnowledgeBasesClient {
         }
     }
 
-    public KnowledgeBasesUpdateResponse update(String id) {
-        return update(id, null);
+    public KnowledgeBasesUpdateResponse update(String id, KnowledgeBasesUpdateRequest request) {
+        return update(id, request, null);
     }
 
-    public KnowledgeBasesUpdateResponse update(String id, RequestOptions requestOptions) {
+    public KnowledgeBasesUpdateResponse update(
+            String id, KnowledgeBasesUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("knowledge-base")
                 .addPathSegment(id)
                 .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new VapiException("Failed to serialize request", e);
+        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("PATCH", null)
+                .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
                 .build();

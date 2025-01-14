@@ -34,11 +34,6 @@ public final class CreateDeepInfraCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "deepinfra";
-    }
-
     /**
      * @return This is not returned in the API.
      */

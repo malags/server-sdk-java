@@ -34,11 +34,6 @@ public final class CreateCartesiaCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "cartesia";
-    }
-
     /**
      * @return This is not returned in the API.
      */

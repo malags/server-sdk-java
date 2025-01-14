@@ -40,11 +40,6 @@ public final class CreateGcpCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "gcp";
-    }
-
     /**
      * @return This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.
      * <p>The schema is identical to the JSON that GCP outputs.</p>

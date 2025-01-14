@@ -44,11 +44,6 @@ public final class CreateLangfuseCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "langfuse";
-    }
-
     /**
      * @return The public key for Langfuse project. Eg: pk-lf-...
      */

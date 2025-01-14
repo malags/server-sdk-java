@@ -16,40 +16,44 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateAzureCredentialDto.Builder.class)
 public final class CreateAzureCredentialDto {
+    private final CreateAzureCredentialDtoService service;
+
     private final Optional<CreateAzureCredentialDtoRegion> region;
 
     private final Optional<String> apiKey;
+
+    private final Optional<AzureBlobStorageBucketPlan> bucketPlan;
 
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateAzureCredentialDto(
+            CreateAzureCredentialDtoService service,
             Optional<CreateAzureCredentialDtoRegion> region,
             Optional<String> apiKey,
+            Optional<AzureBlobStorageBucketPlan> bucketPlan,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
+        this.service = service;
         this.region = region;
         this.apiKey = apiKey;
+        this.bucketPlan = bucketPlan;
         this.name = name;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "azure";
     }
 
     /**
      * @return This is the service being used in Azure.
      */
     @JsonProperty("service")
-    public String getService() {
-        return "speech";
+    public CreateAzureCredentialDtoService getService() {
+        return service;
     }
 
     /**
@@ -66,6 +70,14 @@ public final class CreateAzureCredentialDto {
     @JsonProperty("apiKey")
     public Optional<String> getApiKey() {
         return apiKey;
+    }
+
+    /**
+     * @return This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.
+     */
+    @JsonProperty("bucketPlan")
+    public Optional<AzureBlobStorageBucketPlan> getBucketPlan() {
+        return bucketPlan;
     }
 
     /**
@@ -88,12 +100,16 @@ public final class CreateAzureCredentialDto {
     }
 
     private boolean equalTo(CreateAzureCredentialDto other) {
-        return region.equals(other.region) && apiKey.equals(other.apiKey) && name.equals(other.name);
+        return service.equals(other.service)
+                && region.equals(other.region)
+                && apiKey.equals(other.apiKey)
+                && bucketPlan.equals(other.bucketPlan)
+                && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.region, this.apiKey, this.name);
+        return Objects.hash(this.service, this.region, this.apiKey, this.bucketPlan, this.name);
     }
 
     @java.lang.Override
@@ -101,65 +117,145 @@ public final class CreateAzureCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static ServiceStage builder() {
         return new Builder();
     }
 
+    public interface ServiceStage {
+        _FinalStage service(@NotNull CreateAzureCredentialDtoService service);
+
+        Builder from(CreateAzureCredentialDto other);
+    }
+
+    public interface _FinalStage {
+        CreateAzureCredentialDto build();
+
+        _FinalStage region(Optional<CreateAzureCredentialDtoRegion> region);
+
+        _FinalStage region(CreateAzureCredentialDtoRegion region);
+
+        _FinalStage apiKey(Optional<String> apiKey);
+
+        _FinalStage apiKey(String apiKey);
+
+        _FinalStage bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan);
+
+        _FinalStage bucketPlan(AzureBlobStorageBucketPlan bucketPlan);
+
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private Optional<CreateAzureCredentialDtoRegion> region = Optional.empty();
+    public static final class Builder implements ServiceStage, _FinalStage {
+        private CreateAzureCredentialDtoService service;
+
+        private Optional<String> name = Optional.empty();
+
+        private Optional<AzureBlobStorageBucketPlan> bucketPlan = Optional.empty();
 
         private Optional<String> apiKey = Optional.empty();
 
-        private Optional<String> name = Optional.empty();
+        private Optional<CreateAzureCredentialDtoRegion> region = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(CreateAzureCredentialDto other) {
+            service(other.getService());
             region(other.getRegion());
             apiKey(other.getApiKey());
+            bucketPlan(other.getBucketPlan());
             name(other.getName());
             return this;
         }
 
-        @JsonSetter(value = "region", nulls = Nulls.SKIP)
-        public Builder region(Optional<CreateAzureCredentialDtoRegion> region) {
-            this.region = region;
+        /**
+         * <p>This is the service being used in Azure.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("service")
+        public _FinalStage service(@NotNull CreateAzureCredentialDtoService service) {
+            this.service = Objects.requireNonNull(service, "service must not be null");
             return this;
         }
 
-        public Builder region(CreateAzureCredentialDtoRegion region) {
-            this.region = Optional.ofNullable(region);
-            return this;
-        }
-
-        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
-        public Builder apiKey(Optional<String> apiKey) {
-            this.apiKey = apiKey;
-            return this;
-        }
-
-        public Builder apiKey(String apiKey) {
-            this.apiKey = Optional.ofNullable(apiKey);
-            return this;
-        }
-
-        @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public Builder name(Optional<String> name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder name(String name) {
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
             this.name = Optional.ofNullable(name);
             return this;
         }
 
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage bucketPlan(AzureBlobStorageBucketPlan bucketPlan) {
+            this.bucketPlan = Optional.ofNullable(bucketPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "bucketPlan", nulls = Nulls.SKIP)
+        public _FinalStage bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan) {
+            this.bucketPlan = bucketPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is not returned in the API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public _FinalStage apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        /**
+         * <p>This is the region of the Azure resource.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage region(CreateAzureCredentialDtoRegion region) {
+            this.region = Optional.ofNullable(region);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "region", nulls = Nulls.SKIP)
+        public _FinalStage region(Optional<CreateAzureCredentialDtoRegion> region) {
+            this.region = region;
+            return this;
+        }
+
+        @java.lang.Override
         public CreateAzureCredentialDto build() {
-            return new CreateAzureCredentialDto(region, apiKey, name, additionalProperties);
+            return new CreateAzureCredentialDto(service, region, apiKey, bucketPlan, name, additionalProperties);
         }
     }
 }

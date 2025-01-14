@@ -37,11 +37,6 @@ public final class CreateDeepgramCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "deepgram";
-    }
-
     /**
      * @return This is not returned in the API.
      */

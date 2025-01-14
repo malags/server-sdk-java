@@ -30,6 +30,8 @@ public final class AzureOpenAiCredential {
 
     private final String openAiKey;
 
+    private final Optional<String> ocpApimSubscriptionKey;
+
     private final String id;
 
     private final String orgId;
@@ -48,6 +50,7 @@ public final class AzureOpenAiCredential {
             AzureOpenAiCredentialRegion region,
             List<AzureOpenAiCredentialModelsItem> models,
             String openAiKey,
+            Optional<String> ocpApimSubscriptionKey,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -58,6 +61,7 @@ public final class AzureOpenAiCredential {
         this.region = region;
         this.models = models;
         this.openAiKey = openAiKey;
+        this.ocpApimSubscriptionKey = ocpApimSubscriptionKey;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -88,6 +92,14 @@ public final class AzureOpenAiCredential {
     @JsonProperty("openAIKey")
     public String getOpenAiKey() {
         return openAiKey;
+    }
+
+    /**
+     * @return This is not returned in the API.
+     */
+    @JsonProperty("ocpApimSubscriptionKey")
+    public Optional<String> getOcpApimSubscriptionKey() {
+        return ocpApimSubscriptionKey;
     }
 
     /**
@@ -150,6 +162,7 @@ public final class AzureOpenAiCredential {
         return region.equals(other.region)
                 && models.equals(other.models)
                 && openAiKey.equals(other.openAiKey)
+                && ocpApimSubscriptionKey.equals(other.ocpApimSubscriptionKey)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
@@ -164,6 +177,7 @@ public final class AzureOpenAiCredential {
                 this.region,
                 this.models,
                 this.openAiKey,
+                this.ocpApimSubscriptionKey,
                 this.id,
                 this.orgId,
                 this.createdAt,
@@ -220,6 +234,10 @@ public final class AzureOpenAiCredential {
 
         _FinalStage addAllModels(List<AzureOpenAiCredentialModelsItem> models);
 
+        _FinalStage ocpApimSubscriptionKey(Optional<String> ocpApimSubscriptionKey);
+
+        _FinalStage ocpApimSubscriptionKey(String ocpApimSubscriptionKey);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -251,6 +269,8 @@ public final class AzureOpenAiCredential {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<String> ocpApimSubscriptionKey = Optional.empty();
+
         private List<AzureOpenAiCredentialModelsItem> models = new ArrayList<>();
 
         @JsonAnySetter
@@ -263,6 +283,7 @@ public final class AzureOpenAiCredential {
             region(other.getRegion());
             models(other.getModels());
             openAiKey(other.getOpenAiKey());
+            ocpApimSubscriptionKey(other.getOcpApimSubscriptionKey());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -358,6 +379,23 @@ public final class AzureOpenAiCredential {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage ocpApimSubscriptionKey(String ocpApimSubscriptionKey) {
+            this.ocpApimSubscriptionKey = Optional.ofNullable(ocpApimSubscriptionKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "ocpApimSubscriptionKey", nulls = Nulls.SKIP)
+        public _FinalStage ocpApimSubscriptionKey(Optional<String> ocpApimSubscriptionKey) {
+            this.ocpApimSubscriptionKey = ocpApimSubscriptionKey;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllModels(List<AzureOpenAiCredentialModelsItem> models) {
             this.models.addAll(models);
@@ -384,6 +422,7 @@ public final class AzureOpenAiCredential {
                     region,
                     models,
                     openAiKey,
+                    ocpApimSubscriptionKey,
                     id,
                     orgId,
                     createdAt,

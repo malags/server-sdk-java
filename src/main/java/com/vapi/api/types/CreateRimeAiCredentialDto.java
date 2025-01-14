@@ -33,11 +33,6 @@ public final class CreateRimeAiCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "rime-ai";
-    }
-
     /**
      * @return This is not returned in the API.
      */

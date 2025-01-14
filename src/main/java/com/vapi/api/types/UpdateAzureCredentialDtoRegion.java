@@ -28,7 +28,7 @@ public enum UpdateAzureCredentialDtoRegion {
 
     SOUTHCENTRALUS("southcentralus"),
 
-    SWEDEN("sweden"),
+    SWEDENCENTRAL("swedencentral"),
 
     SWITZERLAND("switzerland"),
 

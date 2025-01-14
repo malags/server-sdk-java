@@ -34,11 +34,6 @@ public final class CreateAssemblyAiCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "assembly-ai";
-    }
-
     /**
      * @return This is not returned in the API.
      */

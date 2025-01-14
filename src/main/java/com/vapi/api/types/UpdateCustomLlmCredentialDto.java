@@ -16,12 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateCustomLlmCredentialDto.Builder.class)
 public final class UpdateCustomLlmCredentialDto {
-    private final String apiKey;
+    private final Optional<String> apiKey;
 
     private final Optional<OAuth2AuthenticationPlan> authenticationPlan;
 
@@ -30,7 +29,7 @@ public final class UpdateCustomLlmCredentialDto {
     private final Map<String, Object> additionalProperties;
 
     private UpdateCustomLlmCredentialDto(
-            String apiKey,
+            Optional<String> apiKey,
             Optional<OAuth2AuthenticationPlan> authenticationPlan,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
@@ -40,16 +39,11 @@ public final class UpdateCustomLlmCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "custom-llm";
-    }
-
     /**
      * @return This is not returned in the API.
      */
     @JsonProperty("apiKey")
-    public String getApiKey() {
+    public Optional<String> getApiKey() {
         return apiKey;
     }
 
@@ -96,42 +90,23 @@ public final class UpdateCustomLlmCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static ApiKeyStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ApiKeyStage {
-        _FinalStage apiKey(@NotNull String apiKey);
-
-        Builder from(UpdateCustomLlmCredentialDto other);
-    }
-
-    public interface _FinalStage {
-        UpdateCustomLlmCredentialDto build();
-
-        _FinalStage authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan);
-
-        _FinalStage authenticationPlan(OAuth2AuthenticationPlan authenticationPlan);
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ApiKeyStage, _FinalStage {
-        private String apiKey;
-
-        private Optional<String> name = Optional.empty();
+    public static final class Builder {
+        private Optional<String> apiKey = Optional.empty();
 
         private Optional<OAuth2AuthenticationPlan> authenticationPlan = Optional.empty();
+
+        private Optional<String> name = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateCustomLlmCredentialDto other) {
             apiKey(other.getApiKey());
             authenticationPlan(other.getAuthenticationPlan());
@@ -139,52 +114,39 @@ public final class UpdateCustomLlmCredentialDto {
             return this;
         }
 
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("apiKey")
-        public _FinalStage apiKey(@NotNull String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey, "apiKey must not be null");
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public Builder apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
-            this.name = name;
-            return this;
-        }
-
-        /**
-         * <p>This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage authenticationPlan(OAuth2AuthenticationPlan authenticationPlan) {
-            this.authenticationPlan = Optional.ofNullable(authenticationPlan);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "authenticationPlan", nulls = Nulls.SKIP)
-        public _FinalStage authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan) {
+        public Builder authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan) {
             this.authenticationPlan = authenticationPlan;
             return this;
         }
 
-        @java.lang.Override
+        public Builder authenticationPlan(OAuth2AuthenticationPlan authenticationPlan) {
+            this.authenticationPlan = Optional.ofNullable(authenticationPlan);
+            return this;
+        }
+
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public Builder name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
         public UpdateCustomLlmCredentialDto build() {
             return new UpdateCustomLlmCredentialDto(apiKey, authenticationPlan, name, additionalProperties);
         }

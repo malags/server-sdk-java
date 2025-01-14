@@ -37,11 +37,6 @@ public final class CreateTwilioCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "twilio";
-    }
-
     /**
      * @return This is not returned in the API.
      */

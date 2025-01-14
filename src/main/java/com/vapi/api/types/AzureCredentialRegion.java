@@ -28,7 +28,7 @@ public enum AzureCredentialRegion {
 
     SOUTHCENTRALUS("southcentralus"),
 
-    SWEDEN("sweden"),
+    SWEDENCENTRAL("swedencentral"),
 
     SWITZERLAND("switzerland"),
 

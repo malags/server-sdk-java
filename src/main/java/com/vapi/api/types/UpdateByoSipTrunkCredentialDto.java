@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +21,9 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateByoSipTrunkCredentialDto.Builder.class)
 public final class UpdateByoSipTrunkCredentialDto {
-    private final Optional<String> provider;
+    private final Optional<String> name;
 
-    private final List<SipTrunkGateway> gateways;
+    private final Optional<List<SipTrunkGateway>> gateways;
 
     private final Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan;
 
@@ -36,44 +35,40 @@ public final class UpdateByoSipTrunkCredentialDto {
 
     private final Optional<SbcConfiguration> sbcConfiguration;
 
-    private final Optional<String> name;
-
     private final Map<String, Object> additionalProperties;
 
     private UpdateByoSipTrunkCredentialDto(
-            Optional<String> provider,
-            List<SipTrunkGateway> gateways,
+            Optional<String> name,
+            Optional<List<SipTrunkGateway>> gateways,
             Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan,
             Optional<Boolean> outboundLeadingPlusEnabled,
             Optional<String> techPrefix,
             Optional<String> sipDiversionHeader,
             Optional<SbcConfiguration> sbcConfiguration,
-            Optional<String> name,
             Map<String, Object> additionalProperties) {
-        this.provider = provider;
+        this.name = name;
         this.gateways = gateways;
         this.outboundAuthenticationPlan = outboundAuthenticationPlan;
         this.outboundLeadingPlusEnabled = outboundLeadingPlusEnabled;
         this.techPrefix = techPrefix;
         this.sipDiversionHeader = sipDiversionHeader;
         this.sbcConfiguration = sbcConfiguration;
-        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return This can be used to bring your own SIP trunks or to connect to a Carrier.
+     * @return This is the name of credential. This is just for your reference.
      */
-    @JsonProperty("provider")
-    public Optional<String> getProvider() {
-        return provider;
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
     }
 
     /**
      * @return This is the list of SIP trunk's gateways.
      */
     @JsonProperty("gateways")
-    public List<SipTrunkGateway> getGateways() {
+    public Optional<List<SipTrunkGateway>> getGateways() {
         return gateways;
     }
 
@@ -122,14 +117,6 @@ public final class UpdateByoSipTrunkCredentialDto {
         return sbcConfiguration;
     }
 
-    /**
-     * @return This is the name of credential. This is just for your reference.
-     */
-    @JsonProperty("name")
-    public Optional<String> getName() {
-        return name;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -142,27 +129,25 @@ public final class UpdateByoSipTrunkCredentialDto {
     }
 
     private boolean equalTo(UpdateByoSipTrunkCredentialDto other) {
-        return provider.equals(other.provider)
+        return name.equals(other.name)
                 && gateways.equals(other.gateways)
                 && outboundAuthenticationPlan.equals(other.outboundAuthenticationPlan)
                 && outboundLeadingPlusEnabled.equals(other.outboundLeadingPlusEnabled)
                 && techPrefix.equals(other.techPrefix)
                 && sipDiversionHeader.equals(other.sipDiversionHeader)
-                && sbcConfiguration.equals(other.sbcConfiguration)
-                && name.equals(other.name);
+                && sbcConfiguration.equals(other.sbcConfiguration);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.provider,
+                this.name,
                 this.gateways,
                 this.outboundAuthenticationPlan,
                 this.outboundLeadingPlusEnabled,
                 this.techPrefix,
                 this.sipDiversionHeader,
-                this.sbcConfiguration,
-                this.name);
+                this.sbcConfiguration);
     }
 
     @java.lang.Override
@@ -176,9 +161,9 @@ public final class UpdateByoSipTrunkCredentialDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> provider = Optional.empty();
+        private Optional<String> name = Optional.empty();
 
-        private List<SipTrunkGateway> gateways = new ArrayList<>();
+        private Optional<List<SipTrunkGateway>> gateways = Optional.empty();
 
         private Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan = Optional.empty();
 
@@ -190,50 +175,41 @@ public final class UpdateByoSipTrunkCredentialDto {
 
         private Optional<SbcConfiguration> sbcConfiguration = Optional.empty();
 
-        private Optional<String> name = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         public Builder from(UpdateByoSipTrunkCredentialDto other) {
-            provider(other.getProvider());
+            name(other.getName());
             gateways(other.getGateways());
             outboundAuthenticationPlan(other.getOutboundAuthenticationPlan());
             outboundLeadingPlusEnabled(other.getOutboundLeadingPlusEnabled());
             techPrefix(other.getTechPrefix());
             sipDiversionHeader(other.getSipDiversionHeader());
             sbcConfiguration(other.getSbcConfiguration());
-            name(other.getName());
             return this;
         }
 
-        @JsonSetter(value = "provider", nulls = Nulls.SKIP)
-        public Builder provider(Optional<String> provider) {
-            this.provider = provider;
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public Builder name(Optional<String> name) {
+            this.name = name;
             return this;
         }
 
-        public Builder provider(String provider) {
-            this.provider = Optional.ofNullable(provider);
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
         @JsonSetter(value = "gateways", nulls = Nulls.SKIP)
+        public Builder gateways(Optional<List<SipTrunkGateway>> gateways) {
+            this.gateways = gateways;
+            return this;
+        }
+
         public Builder gateways(List<SipTrunkGateway> gateways) {
-            this.gateways.clear();
-            this.gateways.addAll(gateways);
-            return this;
-        }
-
-        public Builder addGateways(SipTrunkGateway gateways) {
-            this.gateways.add(gateways);
-            return this;
-        }
-
-        public Builder addAllGateways(List<SipTrunkGateway> gateways) {
-            this.gateways.addAll(gateways);
+            this.gateways = Optional.ofNullable(gateways);
             return this;
         }
 
@@ -293,27 +269,15 @@ public final class UpdateByoSipTrunkCredentialDto {
             return this;
         }
 
-        @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public Builder name(Optional<String> name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
         public UpdateByoSipTrunkCredentialDto build() {
             return new UpdateByoSipTrunkCredentialDto(
-                    provider,
+                    name,
                     gateways,
                     outboundAuthenticationPlan,
                     outboundLeadingPlusEnabled,
                     techPrefix,
                     sipDiversionHeader,
                     sbcConfiguration,
-                    name,
                     additionalProperties);
         }
     }

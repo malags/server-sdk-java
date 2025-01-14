@@ -44,11 +44,6 @@ public final class CreateMakeCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "make";
-    }
-
     /**
      * @return Team ID
      */

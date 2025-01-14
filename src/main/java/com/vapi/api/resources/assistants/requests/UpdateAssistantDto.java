@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoBackgroundSound;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoClientMessagesItem;
+import com.vapi.api.resources.assistants.types.UpdateAssistantDtoCredentialsItem;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoFirstMessageMode;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoModel;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoServerMessagesItem;
@@ -65,6 +66,8 @@ public final class UpdateAssistantDto {
 
     private final Optional<List<TransportConfigurationTwilio>> transportConfigurations;
 
+    private final Optional<List<UpdateAssistantDtoCredentialsItem>> credentials;
+
     private final Optional<String> name;
 
     private final Optional<TwilioVoicemailDetection> voicemailDetection;
@@ -110,6 +113,7 @@ public final class UpdateAssistantDto {
             Optional<Boolean> backgroundDenoisingEnabled,
             Optional<Boolean> modelOutputInMessagesEnabled,
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
+            Optional<List<UpdateAssistantDtoCredentialsItem>> credentials,
             Optional<String> name,
             Optional<TwilioVoicemailDetection> voicemailDetection,
             Optional<String> voicemailMessage,
@@ -139,6 +143,7 @@ public final class UpdateAssistantDto {
         this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
         this.modelOutputInMessagesEnabled = modelOutputInMessagesEnabled;
         this.transportConfigurations = transportConfigurations;
+        this.credentials = credentials;
         this.name = name;
         this.voicemailDetection = voicemailDetection;
         this.voicemailMessage = voicemailMessage;
@@ -280,6 +285,14 @@ public final class UpdateAssistantDto {
     @JsonProperty("transportConfigurations")
     public Optional<List<TransportConfigurationTwilio>> getTransportConfigurations() {
         return transportConfigurations;
+    }
+
+    /**
+     * @return These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.
+     */
+    @JsonProperty("credentials")
+    public Optional<List<UpdateAssistantDtoCredentialsItem>> getCredentials() {
+        return credentials;
     }
 
     /**
@@ -453,6 +466,7 @@ public final class UpdateAssistantDto {
                 && backgroundDenoisingEnabled.equals(other.backgroundDenoisingEnabled)
                 && modelOutputInMessagesEnabled.equals(other.modelOutputInMessagesEnabled)
                 && transportConfigurations.equals(other.transportConfigurations)
+                && credentials.equals(other.credentials)
                 && name.equals(other.name)
                 && voicemailDetection.equals(other.voicemailDetection)
                 && voicemailMessage.equals(other.voicemailMessage)
@@ -486,6 +500,7 @@ public final class UpdateAssistantDto {
                 this.backgroundDenoisingEnabled,
                 this.modelOutputInMessagesEnabled,
                 this.transportConfigurations,
+                this.credentials,
                 this.name,
                 this.voicemailDetection,
                 this.voicemailMessage,
@@ -541,6 +556,8 @@ public final class UpdateAssistantDto {
 
         private Optional<List<TransportConfigurationTwilio>> transportConfigurations = Optional.empty();
 
+        private Optional<List<UpdateAssistantDtoCredentialsItem>> credentials = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<TwilioVoicemailDetection> voicemailDetection = Optional.empty();
@@ -589,6 +606,7 @@ public final class UpdateAssistantDto {
             backgroundDenoisingEnabled(other.getBackgroundDenoisingEnabled());
             modelOutputInMessagesEnabled(other.getModelOutputInMessagesEnabled());
             transportConfigurations(other.getTransportConfigurations());
+            credentials(other.getCredentials());
             name(other.getName());
             voicemailDetection(other.getVoicemailDetection());
             voicemailMessage(other.getVoicemailMessage());
@@ -757,6 +775,17 @@ public final class UpdateAssistantDto {
 
         public Builder transportConfigurations(List<TransportConfigurationTwilio> transportConfigurations) {
             this.transportConfigurations = Optional.ofNullable(transportConfigurations);
+            return this;
+        }
+
+        @JsonSetter(value = "credentials", nulls = Nulls.SKIP)
+        public Builder credentials(Optional<List<UpdateAssistantDtoCredentialsItem>> credentials) {
+            this.credentials = credentials;
+            return this;
+        }
+
+        public Builder credentials(List<UpdateAssistantDtoCredentialsItem> credentials) {
+            this.credentials = Optional.ofNullable(credentials);
             return this;
         }
 
@@ -930,6 +959,7 @@ public final class UpdateAssistantDto {
                     backgroundDenoisingEnabled,
                     modelOutputInMessagesEnabled,
                     transportConfigurations,
+                    credentials,
                     name,
                     voicemailDetection,
                     voicemailMessage,

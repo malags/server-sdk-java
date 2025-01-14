@@ -16,33 +16,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateTavusCredentialDto.Builder.class)
 public final class UpdateTavusCredentialDto {
-    private final String apiKey;
+    private final Optional<String> apiKey;
 
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
-    private UpdateTavusCredentialDto(String apiKey, Optional<String> name, Map<String, Object> additionalProperties) {
+    private UpdateTavusCredentialDto(
+            Optional<String> apiKey, Optional<String> name, Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
         this.name = name;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "tavus";
     }
 
     /**
      * @return This is not returned in the API.
      */
     @JsonProperty("apiKey")
-    public String getApiKey() {
+    public Optional<String> getApiKey() {
         return apiKey;
     }
 
@@ -79,27 +74,13 @@ public final class UpdateTavusCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static ApiKeyStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ApiKeyStage {
-        _FinalStage apiKey(@NotNull String apiKey);
-
-        Builder from(UpdateTavusCredentialDto other);
-    }
-
-    public interface _FinalStage {
-        UpdateTavusCredentialDto build();
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ApiKeyStage, _FinalStage {
-        private String apiKey;
+    public static final class Builder {
+        private Optional<String> apiKey = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -108,42 +89,34 @@ public final class UpdateTavusCredentialDto {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateTavusCredentialDto other) {
             apiKey(other.getApiKey());
             name(other.getName());
             return this;
         }
 
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("apiKey")
-        public _FinalStage apiKey(@NotNull String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey, "apiKey must not be null");
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public Builder apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
             return this;
         }
 
-        @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        @java.lang.Override
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
         public UpdateTavusCredentialDto build() {
             return new UpdateTavusCredentialDto(apiKey, name, additionalProperties);
         }

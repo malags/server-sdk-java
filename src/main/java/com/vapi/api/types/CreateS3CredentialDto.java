@@ -53,14 +53,6 @@ public final class CreateS3CredentialDto {
     }
 
     /**
-     * @return Credential provider. Only allowed value is s3
-     */
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "s3";
-    }
-
-    /**
      * @return AWS access key ID.
      */
     @JsonProperty("awsAccessKeyId")

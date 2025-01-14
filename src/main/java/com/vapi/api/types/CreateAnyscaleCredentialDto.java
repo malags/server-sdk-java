@@ -34,11 +34,6 @@ public final class CreateAnyscaleCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "anyscale";
-    }
-
     /**
      * @return This is not returned in the API.
      */

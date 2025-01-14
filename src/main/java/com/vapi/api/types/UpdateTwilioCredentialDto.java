@@ -16,43 +16,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateTwilioCredentialDto.Builder.class)
 public final class UpdateTwilioCredentialDto {
-    private final String authToken;
-
-    private final String accountSid;
+    private final Optional<String> authToken;
 
     private final Optional<String> name;
+
+    private final Optional<String> accountSid;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateTwilioCredentialDto(
-            String authToken, String accountSid, Optional<String> name, Map<String, Object> additionalProperties) {
+            Optional<String> authToken,
+            Optional<String> name,
+            Optional<String> accountSid,
+            Map<String, Object> additionalProperties) {
         this.authToken = authToken;
-        this.accountSid = accountSid;
         this.name = name;
+        this.accountSid = accountSid;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "twilio";
     }
 
     /**
      * @return This is not returned in the API.
      */
     @JsonProperty("authToken")
-    public String getAuthToken() {
+    public Optional<String> getAuthToken() {
         return authToken;
-    }
-
-    @JsonProperty("accountSid")
-    public String getAccountSid() {
-        return accountSid;
     }
 
     /**
@@ -61,6 +53,11 @@ public final class UpdateTwilioCredentialDto {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    @JsonProperty("accountSid")
+    public Optional<String> getAccountSid() {
+        return accountSid;
     }
 
     @java.lang.Override
@@ -75,12 +72,12 @@ public final class UpdateTwilioCredentialDto {
     }
 
     private boolean equalTo(UpdateTwilioCredentialDto other) {
-        return authToken.equals(other.authToken) && accountSid.equals(other.accountSid) && name.equals(other.name);
+        return authToken.equals(other.authToken) && name.equals(other.name) && accountSid.equals(other.accountSid);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.authToken, this.accountSid, this.name);
+        return Objects.hash(this.authToken, this.name, this.accountSid);
     }
 
     @java.lang.Override
@@ -88,87 +85,65 @@ public final class UpdateTwilioCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static AuthTokenStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface AuthTokenStage {
-        AccountSidStage authToken(@NotNull String authToken);
-
-        Builder from(UpdateTwilioCredentialDto other);
-    }
-
-    public interface AccountSidStage {
-        _FinalStage accountSid(@NotNull String accountSid);
-    }
-
-    public interface _FinalStage {
-        UpdateTwilioCredentialDto build();
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements AuthTokenStage, AccountSidStage, _FinalStage {
-        private String authToken;
-
-        private String accountSid;
+    public static final class Builder {
+        private Optional<String> authToken = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<String> accountSid = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateTwilioCredentialDto other) {
             authToken(other.getAuthToken());
-            accountSid(other.getAccountSid());
             name(other.getName());
+            accountSid(other.getAccountSid());
             return this;
         }
 
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("authToken")
-        public AccountSidStage authToken(@NotNull String authToken) {
-            this.authToken = Objects.requireNonNull(authToken, "authToken must not be null");
+        @JsonSetter(value = "authToken", nulls = Nulls.SKIP)
+        public Builder authToken(Optional<String> authToken) {
+            this.authToken = authToken;
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("accountSid")
-        public _FinalStage accountSid(@NotNull String accountSid) {
-            this.accountSid = Objects.requireNonNull(accountSid, "accountSid must not be null");
+        public Builder authToken(String authToken) {
+            this.authToken = Optional.ofNullable(authToken);
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        @java.lang.Override
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @JsonSetter(value = "accountSid", nulls = Nulls.SKIP)
+        public Builder accountSid(Optional<String> accountSid) {
+            this.accountSid = accountSid;
+            return this;
+        }
+
+        public Builder accountSid(String accountSid) {
+            this.accountSid = Optional.ofNullable(accountSid);
+            return this;
+        }
+
         public UpdateTwilioCredentialDto build() {
-            return new UpdateTwilioCredentialDto(authToken, accountSid, name, additionalProperties);
+            return new UpdateTwilioCredentialDto(authToken, name, accountSid, additionalProperties);
         }
     }
 }

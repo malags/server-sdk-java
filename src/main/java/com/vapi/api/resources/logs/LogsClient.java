@@ -9,6 +9,7 @@ import com.vapi.api.core.RequestOptions;
 import com.vapi.api.core.VapiApiException;
 import com.vapi.api.core.VapiException;
 import com.vapi.api.core.pagination.SyncPagingIterable;
+import com.vapi.api.resources.logs.requests.LoggingControllerLogsDeleteQueryRequest;
 import com.vapi.api.resources.logs.requests.LogsGetRequest;
 import com.vapi.api.types.Log;
 import com.vapi.api.types.LogsPaginatedResponse;
@@ -128,6 +129,63 @@ public class LogsClient {
                         .build();
                 List<Log> result = parsedResponse.getResults();
                 return new SyncPagingIterable<>(true, result, () -> get(nextRequest, requestOptions));
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            throw new VapiApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new VapiException("Network error executing HTTP request", e);
+        }
+    }
+
+    public void loggingControllerLogsDeleteQuery() {
+        loggingControllerLogsDeleteQuery(
+                LoggingControllerLogsDeleteQueryRequest.builder().build());
+    }
+
+    public void loggingControllerLogsDeleteQuery(LoggingControllerLogsDeleteQueryRequest request) {
+        loggingControllerLogsDeleteQuery(request, null);
+    }
+
+    public void loggingControllerLogsDeleteQuery(
+            LoggingControllerLogsDeleteQueryRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("logs");
+        if (request.getOrgId().isPresent()) {
+            httpUrl.addQueryParameter("orgId", request.getOrgId().get());
+        }
+        if (request.getAssistantId().isPresent()) {
+            httpUrl.addQueryParameter("assistantId", request.getAssistantId().get());
+        }
+        if (request.getPhoneNumberId().isPresent()) {
+            httpUrl.addQueryParameter(
+                    "phoneNumberId", request.getPhoneNumberId().get());
+        }
+        if (request.getCustomerId().isPresent()) {
+            httpUrl.addQueryParameter("customerId", request.getCustomerId().get());
+        }
+        if (request.getSquadId().isPresent()) {
+            httpUrl.addQueryParameter("squadId", request.getSquadId().get());
+        }
+        if (request.getCallId().isPresent()) {
+            httpUrl.addQueryParameter("callId", request.getCallId().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)));
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new VapiApiException(

@@ -15,6 +15,7 @@ import com.vapi.api.types.AnthropicModel;
 import com.vapi.api.types.AnyscaleModel;
 import com.vapi.api.types.CustomLlmModel;
 import com.vapi.api.types.DeepInfraModel;
+import com.vapi.api.types.DeepSeekModel;
 import com.vapi.api.types.GoogleModel;
 import com.vapi.api.types.GroqModel;
 import com.vapi.api.types.InflectionAiModel;
@@ -67,6 +68,10 @@ public final class UpdateAssistantDtoModel {
         return new UpdateAssistantDtoModel(new InflectionAiValue(value));
     }
 
+    public static UpdateAssistantDtoModel deepSeek(DeepSeekModel value) {
+        return new UpdateAssistantDtoModel(new DeepSeekValue(value));
+    }
+
     public static UpdateAssistantDtoModel openai(OpenAiModel value) {
         return new UpdateAssistantDtoModel(new OpenaiValue(value));
     }
@@ -117,6 +122,10 @@ public final class UpdateAssistantDtoModel {
 
     public boolean isInflectionAi() {
         return value instanceof InflectionAiValue;
+    }
+
+    public boolean isDeepSeek() {
+        return value instanceof DeepSeekValue;
     }
 
     public boolean isOpenai() {
@@ -196,6 +205,13 @@ public final class UpdateAssistantDtoModel {
         return Optional.empty();
     }
 
+    public Optional<DeepSeekModel> getDeepSeek() {
+        if (isDeepSeek()) {
+            return Optional.of(((DeepSeekValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<OpenAiModel> getOpenai() {
         if (isOpenai()) {
             return Optional.of(((OpenaiValue) value).value);
@@ -265,6 +281,8 @@ public final class UpdateAssistantDtoModel {
 
         T visitInflectionAi(InflectionAiModel inflectionAi);
 
+        T visitDeepSeek(DeepSeekModel deepSeek);
+
         T visitOpenai(OpenAiModel openai);
 
         T visitOpenrouter(OpenRouterModel openrouter);
@@ -289,6 +307,7 @@ public final class UpdateAssistantDtoModel {
         @JsonSubTypes.Type(GoogleValue.class),
         @JsonSubTypes.Type(GroqValue.class),
         @JsonSubTypes.Type(InflectionAiValue.class),
+        @JsonSubTypes.Type(DeepSeekValue.class),
         @JsonSubTypes.Type(OpenaiValue.class),
         @JsonSubTypes.Type(OpenrouterValue.class),
         @JsonSubTypes.Type(PerplexityAiValue.class),
@@ -553,6 +572,44 @@ public final class UpdateAssistantDtoModel {
         }
 
         private boolean equalTo(InflectionAiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoModel{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("deep-seek")
+    private static final class DeepSeekValue implements Value {
+        @JsonUnwrapped
+        private DeepSeekModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private DeepSeekValue() {}
+
+        private DeepSeekValue(DeepSeekModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitDeepSeek(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof DeepSeekValue && equalTo((DeepSeekValue) other);
+        }
+
+        private boolean equalTo(DeepSeekValue other) {
             return value.equals(other.value);
         }
 

@@ -8,7 +8,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum FallbackCartesiaVoiceModel {
     SONIC_ENGLISH("sonic-english"),
 
-    SONIC_MULTILINGUAL("sonic-multilingual");
+    SONIC_MULTILINGUAL("sonic-multilingual"),
+
+    SONIC_PREVIEW("sonic-preview"),
+
+    SONIC("sonic");
 
     private final String value;
 

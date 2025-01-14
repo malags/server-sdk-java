@@ -26,6 +26,8 @@ public enum SyncVoiceLibraryDtoProvidersItem {
 
     RIME_AI("rime-ai"),
 
+    SMALLEST_AI("smallest-ai"),
+
     TAVUS("tavus");
 
     private final String value;

@@ -33,11 +33,6 @@ public final class CreateTavusCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "tavus";
-    }
-
     /**
      * @return This is not returned in the API.
      */

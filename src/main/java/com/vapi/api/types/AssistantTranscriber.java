@@ -30,6 +30,10 @@ public final class AssistantTranscriber {
         return new AssistantTranscriber(new AssemblyAiValue(value));
     }
 
+    public static AssistantTranscriber azure(AzureSpeechTranscriber value) {
+        return new AssistantTranscriber(new AzureValue(value));
+    }
+
     public static AssistantTranscriber customTranscriber(CustomTranscriber value) {
         return new AssistantTranscriber(new CustomTranscriberValue(value));
     }
@@ -48,6 +52,10 @@ public final class AssistantTranscriber {
 
     public boolean isAssemblyAi() {
         return value instanceof AssemblyAiValue;
+    }
+
+    public boolean isAzure() {
+        return value instanceof AzureValue;
     }
 
     public boolean isCustomTranscriber() {
@@ -73,6 +81,13 @@ public final class AssistantTranscriber {
     public Optional<AssemblyAiTranscriber> getAssemblyAi() {
         if (isAssemblyAi()) {
             return Optional.of(((AssemblyAiValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<AzureSpeechTranscriber> getAzure() {
+        if (isAzure()) {
+            return Optional.of(((AzureValue) value).value);
         }
         return Optional.empty();
     }
@@ -120,6 +135,8 @@ public final class AssistantTranscriber {
     public interface Visitor<T> {
         T visitAssemblyAi(AssemblyAiTranscriber assemblyAi);
 
+        T visitAzure(AzureSpeechTranscriber azure);
+
         T visitCustomTranscriber(CustomTranscriber customTranscriber);
 
         T visitDeepgram(DeepgramTranscriber deepgram);
@@ -134,6 +151,7 @@ public final class AssistantTranscriber {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "provider", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
         @JsonSubTypes.Type(AssemblyAiValue.class),
+        @JsonSubTypes.Type(AzureValue.class),
         @JsonSubTypes.Type(CustomTranscriberValue.class),
         @JsonSubTypes.Type(DeepgramValue.class),
         @JsonSubTypes.Type(GladiaValue.class),
@@ -168,6 +186,44 @@ public final class AssistantTranscriber {
         }
 
         private boolean equalTo(AssemblyAiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantTranscriber{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("azure")
+    private static final class AzureValue implements Value {
+        @JsonUnwrapped
+        private AzureSpeechTranscriber value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private AzureValue() {}
+
+        private AzureValue(AzureSpeechTranscriber value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitAzure(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof AzureValue && equalTo((AzureValue) other);
+        }
+
+        private boolean equalTo(AzureValue other) {
             return value.equals(other.value);
         }
 

@@ -16,25 +16,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateLangfuseCredentialDto.Builder.class)
 public final class UpdateLangfuseCredentialDto {
-    private final String publicKey;
+    private final Optional<String> publicKey;
 
-    private final String apiKey;
+    private final Optional<String> apiKey;
 
-    private final String apiUrl;
+    private final Optional<String> apiUrl;
 
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateLangfuseCredentialDto(
-            String publicKey,
-            String apiKey,
-            String apiUrl,
+            Optional<String> publicKey,
+            Optional<String> apiKey,
+            Optional<String> apiUrl,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.publicKey = publicKey;
@@ -44,16 +43,11 @@ public final class UpdateLangfuseCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "langfuse";
-    }
-
     /**
      * @return The public key for Langfuse project. Eg: pk-lf-...
      */
     @JsonProperty("publicKey")
-    public String getPublicKey() {
+    public Optional<String> getPublicKey() {
         return publicKey;
     }
 
@@ -61,7 +55,7 @@ public final class UpdateLangfuseCredentialDto {
      * @return The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.
      */
     @JsonProperty("apiKey")
-    public String getApiKey() {
+    public Optional<String> getApiKey() {
         return apiKey;
     }
 
@@ -69,7 +63,7 @@ public final class UpdateLangfuseCredentialDto {
      * @return The host URL for Langfuse project. Eg: https://cloud.langfuse.com
      */
     @JsonProperty("apiUrl")
-    public String getApiUrl() {
+    public Optional<String> getApiUrl() {
         return apiUrl;
     }
 
@@ -109,39 +103,17 @@ public final class UpdateLangfuseCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static PublicKeyStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface PublicKeyStage {
-        ApiKeyStage publicKey(@NotNull String publicKey);
-
-        Builder from(UpdateLangfuseCredentialDto other);
-    }
-
-    public interface ApiKeyStage {
-        ApiUrlStage apiKey(@NotNull String apiKey);
-    }
-
-    public interface ApiUrlStage {
-        _FinalStage apiUrl(@NotNull String apiUrl);
-    }
-
-    public interface _FinalStage {
-        UpdateLangfuseCredentialDto build();
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements PublicKeyStage, ApiKeyStage, ApiUrlStage, _FinalStage {
-        private String publicKey;
+    public static final class Builder {
+        private Optional<String> publicKey = Optional.empty();
 
-        private String apiKey;
+        private Optional<String> apiKey = Optional.empty();
 
-        private String apiUrl;
+        private Optional<String> apiUrl = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -150,7 +122,6 @@ public final class UpdateLangfuseCredentialDto {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateLangfuseCredentialDto other) {
             publicKey(other.getPublicKey());
             apiKey(other.getApiKey());
@@ -159,57 +130,50 @@ public final class UpdateLangfuseCredentialDto {
             return this;
         }
 
-        /**
-         * <p>The public key for Langfuse project. Eg: pk-lf-...</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("publicKey")
-        public ApiKeyStage publicKey(@NotNull String publicKey) {
-            this.publicKey = Objects.requireNonNull(publicKey, "publicKey must not be null");
+        @JsonSetter(value = "publicKey", nulls = Nulls.SKIP)
+        public Builder publicKey(Optional<String> publicKey) {
+            this.publicKey = publicKey;
             return this;
         }
 
-        /**
-         * <p>The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("apiKey")
-        public ApiUrlStage apiKey(@NotNull String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey, "apiKey must not be null");
+        public Builder publicKey(String publicKey) {
+            this.publicKey = Optional.ofNullable(publicKey);
             return this;
         }
 
-        /**
-         * <p>The host URL for Langfuse project. Eg: https://cloud.langfuse.com</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("apiUrl")
-        public _FinalStage apiUrl(@NotNull String apiUrl) {
-            this.apiUrl = Objects.requireNonNull(apiUrl, "apiUrl must not be null");
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public Builder apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
             return this;
         }
 
-        @java.lang.Override
+        @JsonSetter(value = "apiUrl", nulls = Nulls.SKIP)
+        public Builder apiUrl(Optional<String> apiUrl) {
+            this.apiUrl = apiUrl;
+            return this;
+        }
+
+        public Builder apiUrl(String apiUrl) {
+            this.apiUrl = Optional.ofNullable(apiUrl);
+            return this;
+        }
+
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        @java.lang.Override
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
         public UpdateLangfuseCredentialDto build() {
             return new UpdateLangfuseCredentialDto(publicKey, apiKey, apiUrl, name, additionalProperties);
         }

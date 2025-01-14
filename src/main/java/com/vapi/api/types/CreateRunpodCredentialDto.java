@@ -33,11 +33,6 @@ public final class CreateRunpodCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "runpod";
-    }
-
     /**
      * @return This is not returned in the API.
      */

@@ -34,11 +34,6 @@ public final class CreatePerplexityAiCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "perplexity-ai";
-    }
-
     /**
      * @return This is not returned in the API.
      */

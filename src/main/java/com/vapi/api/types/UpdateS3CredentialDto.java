@@ -16,31 +16,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateS3CredentialDto.Builder.class)
 public final class UpdateS3CredentialDto {
-    private final String awsAccessKeyId;
+    private final Optional<String> awsAccessKeyId;
 
-    private final String awsSecretAccessKey;
+    private final Optional<String> awsSecretAccessKey;
 
-    private final String region;
+    private final Optional<String> region;
 
-    private final String s3BucketName;
+    private final Optional<String> s3BucketName;
 
-    private final String s3PathPrefix;
+    private final Optional<String> s3PathPrefix;
 
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateS3CredentialDto(
-            String awsAccessKeyId,
-            String awsSecretAccessKey,
-            String region,
-            String s3BucketName,
-            String s3PathPrefix,
+            Optional<String> awsAccessKeyId,
+            Optional<String> awsSecretAccessKey,
+            Optional<String> region,
+            Optional<String> s3BucketName,
+            Optional<String> s3PathPrefix,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.awsAccessKeyId = awsAccessKeyId;
@@ -53,18 +52,10 @@ public final class UpdateS3CredentialDto {
     }
 
     /**
-     * @return Credential provider. Only allowed value is s3
-     */
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "s3";
-    }
-
-    /**
      * @return AWS access key ID.
      */
     @JsonProperty("awsAccessKeyId")
-    public String getAwsAccessKeyId() {
+    public Optional<String> getAwsAccessKeyId() {
         return awsAccessKeyId;
     }
 
@@ -72,7 +63,7 @@ public final class UpdateS3CredentialDto {
      * @return AWS access key secret. This is not returned in the API.
      */
     @JsonProperty("awsSecretAccessKey")
-    public String getAwsSecretAccessKey() {
+    public Optional<String> getAwsSecretAccessKey() {
         return awsSecretAccessKey;
     }
 
@@ -80,7 +71,7 @@ public final class UpdateS3CredentialDto {
      * @return AWS region in which the S3 bucket is located.
      */
     @JsonProperty("region")
-    public String getRegion() {
+    public Optional<String> getRegion() {
         return region;
     }
 
@@ -88,7 +79,7 @@ public final class UpdateS3CredentialDto {
      * @return AWS S3 bucket name.
      */
     @JsonProperty("s3BucketName")
-    public String getS3BucketName() {
+    public Optional<String> getS3BucketName() {
         return s3BucketName;
     }
 
@@ -96,7 +87,7 @@ public final class UpdateS3CredentialDto {
      * @return The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;
      */
     @JsonProperty("s3PathPrefix")
-    public String getS3PathPrefix() {
+    public Optional<String> getS3PathPrefix() {
         return s3PathPrefix;
     }
 
@@ -144,57 +135,21 @@ public final class UpdateS3CredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static AwsAccessKeyIdStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface AwsAccessKeyIdStage {
-        AwsSecretAccessKeyStage awsAccessKeyId(@NotNull String awsAccessKeyId);
-
-        Builder from(UpdateS3CredentialDto other);
-    }
-
-    public interface AwsSecretAccessKeyStage {
-        RegionStage awsSecretAccessKey(@NotNull String awsSecretAccessKey);
-    }
-
-    public interface RegionStage {
-        S3BucketNameStage region(@NotNull String region);
-    }
-
-    public interface S3BucketNameStage {
-        S3PathPrefixStage s3BucketName(@NotNull String s3BucketName);
-    }
-
-    public interface S3PathPrefixStage {
-        _FinalStage s3PathPrefix(@NotNull String s3PathPrefix);
-    }
-
-    public interface _FinalStage {
-        UpdateS3CredentialDto build();
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements AwsAccessKeyIdStage,
-                    AwsSecretAccessKeyStage,
-                    RegionStage,
-                    S3BucketNameStage,
-                    S3PathPrefixStage,
-                    _FinalStage {
-        private String awsAccessKeyId;
+    public static final class Builder {
+        private Optional<String> awsAccessKeyId = Optional.empty();
 
-        private String awsSecretAccessKey;
+        private Optional<String> awsSecretAccessKey = Optional.empty();
 
-        private String region;
+        private Optional<String> region = Optional.empty();
 
-        private String s3BucketName;
+        private Optional<String> s3BucketName = Optional.empty();
 
-        private String s3PathPrefix;
+        private Optional<String> s3PathPrefix = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -203,7 +158,6 @@ public final class UpdateS3CredentialDto {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateS3CredentialDto other) {
             awsAccessKeyId(other.getAwsAccessKeyId());
             awsSecretAccessKey(other.getAwsSecretAccessKey());
@@ -214,79 +168,72 @@ public final class UpdateS3CredentialDto {
             return this;
         }
 
-        /**
-         * <p>AWS access key ID.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("awsAccessKeyId")
-        public AwsSecretAccessKeyStage awsAccessKeyId(@NotNull String awsAccessKeyId) {
-            this.awsAccessKeyId = Objects.requireNonNull(awsAccessKeyId, "awsAccessKeyId must not be null");
+        @JsonSetter(value = "awsAccessKeyId", nulls = Nulls.SKIP)
+        public Builder awsAccessKeyId(Optional<String> awsAccessKeyId) {
+            this.awsAccessKeyId = awsAccessKeyId;
             return this;
         }
 
-        /**
-         * <p>AWS access key secret. This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("awsSecretAccessKey")
-        public RegionStage awsSecretAccessKey(@NotNull String awsSecretAccessKey) {
-            this.awsSecretAccessKey = Objects.requireNonNull(awsSecretAccessKey, "awsSecretAccessKey must not be null");
+        public Builder awsAccessKeyId(String awsAccessKeyId) {
+            this.awsAccessKeyId = Optional.ofNullable(awsAccessKeyId);
             return this;
         }
 
-        /**
-         * <p>AWS region in which the S3 bucket is located.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("region")
-        public S3BucketNameStage region(@NotNull String region) {
-            this.region = Objects.requireNonNull(region, "region must not be null");
+        @JsonSetter(value = "awsSecretAccessKey", nulls = Nulls.SKIP)
+        public Builder awsSecretAccessKey(Optional<String> awsSecretAccessKey) {
+            this.awsSecretAccessKey = awsSecretAccessKey;
             return this;
         }
 
-        /**
-         * <p>AWS S3 bucket name.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("s3BucketName")
-        public S3PathPrefixStage s3BucketName(@NotNull String s3BucketName) {
-            this.s3BucketName = Objects.requireNonNull(s3BucketName, "s3BucketName must not be null");
+        public Builder awsSecretAccessKey(String awsSecretAccessKey) {
+            this.awsSecretAccessKey = Optional.ofNullable(awsSecretAccessKey);
             return this;
         }
 
-        /**
-         * <p>The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("s3PathPrefix")
-        public _FinalStage s3PathPrefix(@NotNull String s3PathPrefix) {
-            this.s3PathPrefix = Objects.requireNonNull(s3PathPrefix, "s3PathPrefix must not be null");
+        @JsonSetter(value = "region", nulls = Nulls.SKIP)
+        public Builder region(Optional<String> region) {
+            this.region = region;
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
+        public Builder region(String region) {
+            this.region = Optional.ofNullable(region);
             return this;
         }
 
-        @java.lang.Override
+        @JsonSetter(value = "s3BucketName", nulls = Nulls.SKIP)
+        public Builder s3BucketName(Optional<String> s3BucketName) {
+            this.s3BucketName = s3BucketName;
+            return this;
+        }
+
+        public Builder s3BucketName(String s3BucketName) {
+            this.s3BucketName = Optional.ofNullable(s3BucketName);
+            return this;
+        }
+
+        @JsonSetter(value = "s3PathPrefix", nulls = Nulls.SKIP)
+        public Builder s3PathPrefix(Optional<String> s3PathPrefix) {
+            this.s3PathPrefix = s3PathPrefix;
+            return this;
+        }
+
+        public Builder s3PathPrefix(String s3PathPrefix) {
+            this.s3PathPrefix = Optional.ofNullable(s3PathPrefix);
+            return this;
+        }
+
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        @java.lang.Override
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
         public UpdateS3CredentialDto build() {
             return new UpdateS3CredentialDto(
                     awsAccessKeyId, awsSecretAccessKey, region, s3BucketName, s3PathPrefix, name, additionalProperties);

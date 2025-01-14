@@ -25,6 +25,8 @@ public final class TransferPlan {
 
     private final Optional<TransferPlanMessage> message;
 
+    private final Optional<Map<String, Object>> sipVerb;
+
     private final Optional<SummaryPlan> summaryPlan;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class TransferPlan {
     private TransferPlan(
             TransferPlanMode mode,
             Optional<TransferPlanMessage> message,
+            Optional<Map<String, Object>> sipVerb,
             Optional<SummaryPlan> summaryPlan,
             Map<String, Object> additionalProperties) {
         this.mode = mode;
         this.message = message;
+        this.sipVerb = sipVerb;
         this.summaryPlan = summaryPlan;
         this.additionalProperties = additionalProperties;
     }
@@ -62,7 +66,7 @@ public final class TransferPlan {
      * @return This is the message the assistant will deliver to the destination party before connecting the customer.
      * <p>Usage:</p>
      * <ul>
-     * <li>Used only when <code>mode</code> is <code>warm-transfer-say-message</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>.</li>
+     * <li>Used only when <code>mode</code> is <code>blind-transfer-add-summary-to-sip-header</code>, <code>warm-transfer-say-message</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>.</li>
      * </ul>
      */
     @JsonProperty("message")
@@ -71,10 +75,22 @@ public final class TransferPlan {
     }
 
     /**
+     * @return This specifies the SIP verb to use while transferring the call.
+     * <ul>
+     * <li>'refer': Uses SIP REFER to transfer the call (default)</li>
+     * <li>'bye': Ends current call with SIP BYE</li>
+     * </ul>
+     */
+    @JsonProperty("sipVerb")
+    public Optional<Map<String, Object>> getSipVerb() {
+        return sipVerb;
+    }
+
+    /**
      * @return This is the plan for generating a summary of the call to present to the destination party.
      * <p>Usage:</p>
      * <ul>
-     * <li>Used only when <code>mode</code> is <code>warm-transfer-say-summary</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code>.</li>
+     * <li>Used only when <code>mode</code> is <code>blind-transfer-add-summary-to-sip-header</code> or <code>warm-transfer-say-summary</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code>.</li>
      * </ul>
      */
     @JsonProperty("summaryPlan")
@@ -94,12 +110,15 @@ public final class TransferPlan {
     }
 
     private boolean equalTo(TransferPlan other) {
-        return mode.equals(other.mode) && message.equals(other.message) && summaryPlan.equals(other.summaryPlan);
+        return mode.equals(other.mode)
+                && message.equals(other.message)
+                && sipVerb.equals(other.sipVerb)
+                && summaryPlan.equals(other.summaryPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.mode, this.message, this.summaryPlan);
+        return Objects.hash(this.mode, this.message, this.sipVerb, this.summaryPlan);
     }
 
     @java.lang.Override
@@ -124,6 +143,10 @@ public final class TransferPlan {
 
         _FinalStage message(TransferPlanMessage message);
 
+        _FinalStage sipVerb(Optional<Map<String, Object>> sipVerb);
+
+        _FinalStage sipVerb(Map<String, Object> sipVerb);
+
         _FinalStage summaryPlan(Optional<SummaryPlan> summaryPlan);
 
         _FinalStage summaryPlan(SummaryPlan summaryPlan);
@@ -134,6 +157,8 @@ public final class TransferPlan {
         private TransferPlanMode mode;
 
         private Optional<SummaryPlan> summaryPlan = Optional.empty();
+
+        private Optional<Map<String, Object>> sipVerb = Optional.empty();
 
         private Optional<TransferPlanMessage> message = Optional.empty();
 
@@ -146,6 +171,7 @@ public final class TransferPlan {
         public Builder from(TransferPlan other) {
             mode(other.getMode());
             message(other.getMessage());
+            sipVerb(other.getSipVerb());
             summaryPlan(other.getSummaryPlan());
             return this;
         }
@@ -175,7 +201,7 @@ public final class TransferPlan {
          * <p>This is the plan for generating a summary of the call to present to the destination party.</p>
          * <p>Usage:</p>
          * <ul>
-         * <li>Used only when <code>mode</code> is <code>warm-transfer-say-summary</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code>.</li>
+         * <li>Used only when <code>mode</code> is <code>blind-transfer-add-summary-to-sip-header</code> or <code>warm-transfer-say-summary</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code>.</li>
          * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -193,10 +219,31 @@ public final class TransferPlan {
         }
 
         /**
+         * <p>This specifies the SIP verb to use while transferring the call.</p>
+         * <ul>
+         * <li>'refer': Uses SIP REFER to transfer the call (default)</li>
+         * <li>'bye': Ends current call with SIP BYE</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sipVerb(Map<String, Object> sipVerb) {
+            this.sipVerb = Optional.ofNullable(sipVerb);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "sipVerb", nulls = Nulls.SKIP)
+        public _FinalStage sipVerb(Optional<Map<String, Object>> sipVerb) {
+            this.sipVerb = sipVerb;
+            return this;
+        }
+
+        /**
          * <p>This is the message the assistant will deliver to the destination party before connecting the customer.</p>
          * <p>Usage:</p>
          * <ul>
-         * <li>Used only when <code>mode</code> is <code>warm-transfer-say-message</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>.</li>
+         * <li>Used only when <code>mode</code> is <code>blind-transfer-add-summary-to-sip-header</code>, <code>warm-transfer-say-message</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>.</li>
          * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -215,7 +262,7 @@ public final class TransferPlan {
 
         @java.lang.Override
         public TransferPlan build() {
-            return new TransferPlan(mode, message, summaryPlan, additionalProperties);
+            return new TransferPlan(mode, message, sipVerb, summaryPlan, additionalProperties);
         }
     }
 }

@@ -220,10 +220,6 @@ public class AssistantsClient {
         }
     }
 
-    public Assistant update(String id) {
-        return update(id, UpdateAssistantDto.builder().build());
-    }
-
     public Assistant update(String id, UpdateAssistantDto request) {
         return update(id, request, null);
     }

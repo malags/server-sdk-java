@@ -34,11 +34,6 @@ public final class CreateAnthropicCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "anthropic";
-    }
-
     /**
      * @return This is not returned in the API.
      */

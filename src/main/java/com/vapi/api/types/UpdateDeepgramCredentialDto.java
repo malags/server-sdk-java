@@ -16,46 +16,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateDeepgramCredentialDto.Builder.class)
 public final class UpdateDeepgramCredentialDto {
-    private final String apiKey;
-
-    private final Optional<String> apiUrl;
+    private final Optional<String> apiKey;
 
     private final Optional<String> name;
+
+    private final Optional<String> apiUrl;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateDeepgramCredentialDto(
-            String apiKey, Optional<String> apiUrl, Optional<String> name, Map<String, Object> additionalProperties) {
+            Optional<String> apiKey,
+            Optional<String> name,
+            Optional<String> apiUrl,
+            Map<String, Object> additionalProperties) {
         this.apiKey = apiKey;
-        this.apiUrl = apiUrl;
         this.name = name;
+        this.apiUrl = apiUrl;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "deepgram";
     }
 
     /**
      * @return This is not returned in the API.
      */
     @JsonProperty("apiKey")
-    public String getApiKey() {
+    public Optional<String> getApiKey() {
         return apiKey;
-    }
-
-    /**
-     * @return This can be used to point to an onprem Deepgram instance. Defaults to api.deepgram.com.
-     */
-    @JsonProperty("apiUrl")
-    public Optional<String> getApiUrl() {
-        return apiUrl;
     }
 
     /**
@@ -64,6 +53,14 @@ public final class UpdateDeepgramCredentialDto {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    /**
+     * @return This can be used to point to an onprem Deepgram instance. Defaults to api.deepgram.com.
+     */
+    @JsonProperty("apiUrl")
+    public Optional<String> getApiUrl() {
+        return apiUrl;
     }
 
     @java.lang.Override
@@ -78,12 +75,12 @@ public final class UpdateDeepgramCredentialDto {
     }
 
     private boolean equalTo(UpdateDeepgramCredentialDto other) {
-        return apiKey.equals(other.apiKey) && apiUrl.equals(other.apiUrl) && name.equals(other.name);
+        return apiKey.equals(other.apiKey) && name.equals(other.name) && apiUrl.equals(other.apiUrl);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiKey, this.apiUrl, this.name);
+        return Objects.hash(this.apiKey, this.name, this.apiUrl);
     }
 
     @java.lang.Override
@@ -91,31 +88,13 @@ public final class UpdateDeepgramCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static ApiKeyStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ApiKeyStage {
-        _FinalStage apiKey(@NotNull String apiKey);
-
-        Builder from(UpdateDeepgramCredentialDto other);
-    }
-
-    public interface _FinalStage {
-        UpdateDeepgramCredentialDto build();
-
-        _FinalStage apiUrl(Optional<String> apiUrl);
-
-        _FinalStage apiUrl(String apiUrl);
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ApiKeyStage, _FinalStage {
-        private String apiKey;
+    public static final class Builder {
+        private Optional<String> apiKey = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -126,62 +105,48 @@ public final class UpdateDeepgramCredentialDto {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateDeepgramCredentialDto other) {
             apiKey(other.getApiKey());
-            apiUrl(other.getApiUrl());
             name(other.getName());
+            apiUrl(other.getApiUrl());
             return this;
         }
 
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("apiKey")
-        public _FinalStage apiKey(@NotNull String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey, "apiKey must not be null");
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public Builder apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
             return this;
         }
 
-        @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        /**
-         * <p>This can be used to point to an onprem Deepgram instance. Defaults to api.deepgram.com.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage apiUrl(String apiUrl) {
-            this.apiUrl = Optional.ofNullable(apiUrl);
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
-        @java.lang.Override
         @JsonSetter(value = "apiUrl", nulls = Nulls.SKIP)
-        public _FinalStage apiUrl(Optional<String> apiUrl) {
+        public Builder apiUrl(Optional<String> apiUrl) {
             this.apiUrl = apiUrl;
             return this;
         }
 
-        @java.lang.Override
+        public Builder apiUrl(String apiUrl) {
+            this.apiUrl = Optional.ofNullable(apiUrl);
+            return this;
+        }
+
         public UpdateDeepgramCredentialDto build() {
-            return new UpdateDeepgramCredentialDto(apiKey, apiUrl, name, additionalProperties);
+            return new UpdateDeepgramCredentialDto(apiKey, name, apiUrl, additionalProperties);
         }
     }
 }

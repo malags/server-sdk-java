@@ -33,11 +33,6 @@ public final class CreateGladiaCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "gladia";
-    }
-
     /**
      * @return This is not returned in the API.
      */

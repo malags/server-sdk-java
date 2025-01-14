@@ -16,43 +16,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateVonageCredentialDto.Builder.class)
 public final class UpdateVonageCredentialDto {
-    private final String apiSecret;
-
-    private final String apiKey;
+    private final Optional<String> apiSecret;
 
     private final Optional<String> name;
+
+    private final Optional<String> apiKey;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateVonageCredentialDto(
-            String apiSecret, String apiKey, Optional<String> name, Map<String, Object> additionalProperties) {
+            Optional<String> apiSecret,
+            Optional<String> name,
+            Optional<String> apiKey,
+            Map<String, Object> additionalProperties) {
         this.apiSecret = apiSecret;
-        this.apiKey = apiKey;
         this.name = name;
+        this.apiKey = apiKey;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "vonage";
     }
 
     /**
      * @return This is not returned in the API.
      */
     @JsonProperty("apiSecret")
-    public String getApiSecret() {
+    public Optional<String> getApiSecret() {
         return apiSecret;
-    }
-
-    @JsonProperty("apiKey")
-    public String getApiKey() {
-        return apiKey;
     }
 
     /**
@@ -61,6 +53,11 @@ public final class UpdateVonageCredentialDto {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    @JsonProperty("apiKey")
+    public Optional<String> getApiKey() {
+        return apiKey;
     }
 
     @java.lang.Override
@@ -75,12 +72,12 @@ public final class UpdateVonageCredentialDto {
     }
 
     private boolean equalTo(UpdateVonageCredentialDto other) {
-        return apiSecret.equals(other.apiSecret) && apiKey.equals(other.apiKey) && name.equals(other.name);
+        return apiSecret.equals(other.apiSecret) && name.equals(other.name) && apiKey.equals(other.apiKey);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.apiSecret, this.apiKey, this.name);
+        return Objects.hash(this.apiSecret, this.name, this.apiKey);
     }
 
     @java.lang.Override
@@ -88,87 +85,65 @@ public final class UpdateVonageCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static ApiSecretStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ApiSecretStage {
-        ApiKeyStage apiSecret(@NotNull String apiSecret);
-
-        Builder from(UpdateVonageCredentialDto other);
-    }
-
-    public interface ApiKeyStage {
-        _FinalStage apiKey(@NotNull String apiKey);
-    }
-
-    public interface _FinalStage {
-        UpdateVonageCredentialDto build();
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ApiSecretStage, ApiKeyStage, _FinalStage {
-        private String apiSecret;
-
-        private String apiKey;
+    public static final class Builder {
+        private Optional<String> apiSecret = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<String> apiKey = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateVonageCredentialDto other) {
             apiSecret(other.getApiSecret());
-            apiKey(other.getApiKey());
             name(other.getName());
+            apiKey(other.getApiKey());
             return this;
         }
 
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("apiSecret")
-        public ApiKeyStage apiSecret(@NotNull String apiSecret) {
-            this.apiSecret = Objects.requireNonNull(apiSecret, "apiSecret must not be null");
+        @JsonSetter(value = "apiSecret", nulls = Nulls.SKIP)
+        public Builder apiSecret(Optional<String> apiSecret) {
+            this.apiSecret = apiSecret;
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("apiKey")
-        public _FinalStage apiKey(@NotNull String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey, "apiKey must not be null");
+        public Builder apiSecret(String apiSecret) {
+            this.apiSecret = Optional.ofNullable(apiSecret);
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        @java.lang.Override
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public Builder apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
+            return this;
+        }
+
         public UpdateVonageCredentialDto build() {
-            return new UpdateVonageCredentialDto(apiSecret, apiKey, name, additionalProperties);
+            return new UpdateVonageCredentialDto(apiSecret, name, apiKey, additionalProperties);
         }
     }
 }

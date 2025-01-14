@@ -49,6 +49,8 @@ public final class CreateAssistantDto {
 
     private final Optional<List<TransportConfigurationTwilio>> transportConfigurations;
 
+    private final Optional<List<CreateAssistantDtoCredentialsItem>> credentials;
+
     private final Optional<String> name;
 
     private final Optional<TwilioVoicemailDetection> voicemailDetection;
@@ -94,6 +96,7 @@ public final class CreateAssistantDto {
             Optional<Boolean> backgroundDenoisingEnabled,
             Optional<Boolean> modelOutputInMessagesEnabled,
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
+            Optional<List<CreateAssistantDtoCredentialsItem>> credentials,
             Optional<String> name,
             Optional<TwilioVoicemailDetection> voicemailDetection,
             Optional<String> voicemailMessage,
@@ -123,6 +126,7 @@ public final class CreateAssistantDto {
         this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
         this.modelOutputInMessagesEnabled = modelOutputInMessagesEnabled;
         this.transportConfigurations = transportConfigurations;
+        this.credentials = credentials;
         this.name = name;
         this.voicemailDetection = voicemailDetection;
         this.voicemailMessage = voicemailMessage;
@@ -264,6 +268,14 @@ public final class CreateAssistantDto {
     @JsonProperty("transportConfigurations")
     public Optional<List<TransportConfigurationTwilio>> getTransportConfigurations() {
         return transportConfigurations;
+    }
+
+    /**
+     * @return These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.
+     */
+    @JsonProperty("credentials")
+    public Optional<List<CreateAssistantDtoCredentialsItem>> getCredentials() {
+        return credentials;
     }
 
     /**
@@ -437,6 +449,7 @@ public final class CreateAssistantDto {
                 && backgroundDenoisingEnabled.equals(other.backgroundDenoisingEnabled)
                 && modelOutputInMessagesEnabled.equals(other.modelOutputInMessagesEnabled)
                 && transportConfigurations.equals(other.transportConfigurations)
+                && credentials.equals(other.credentials)
                 && name.equals(other.name)
                 && voicemailDetection.equals(other.voicemailDetection)
                 && voicemailMessage.equals(other.voicemailMessage)
@@ -470,6 +483,7 @@ public final class CreateAssistantDto {
                 this.backgroundDenoisingEnabled,
                 this.modelOutputInMessagesEnabled,
                 this.transportConfigurations,
+                this.credentials,
                 this.name,
                 this.voicemailDetection,
                 this.voicemailMessage,
@@ -525,6 +539,8 @@ public final class CreateAssistantDto {
 
         private Optional<List<TransportConfigurationTwilio>> transportConfigurations = Optional.empty();
 
+        private Optional<List<CreateAssistantDtoCredentialsItem>> credentials = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<TwilioVoicemailDetection> voicemailDetection = Optional.empty();
@@ -573,6 +589,7 @@ public final class CreateAssistantDto {
             backgroundDenoisingEnabled(other.getBackgroundDenoisingEnabled());
             modelOutputInMessagesEnabled(other.getModelOutputInMessagesEnabled());
             transportConfigurations(other.getTransportConfigurations());
+            credentials(other.getCredentials());
             name(other.getName());
             voicemailDetection(other.getVoicemailDetection());
             voicemailMessage(other.getVoicemailMessage());
@@ -741,6 +758,17 @@ public final class CreateAssistantDto {
 
         public Builder transportConfigurations(List<TransportConfigurationTwilio> transportConfigurations) {
             this.transportConfigurations = Optional.ofNullable(transportConfigurations);
+            return this;
+        }
+
+        @JsonSetter(value = "credentials", nulls = Nulls.SKIP)
+        public Builder credentials(Optional<List<CreateAssistantDtoCredentialsItem>> credentials) {
+            this.credentials = credentials;
+            return this;
+        }
+
+        public Builder credentials(List<CreateAssistantDtoCredentialsItem> credentials) {
+            this.credentials = Optional.ofNullable(credentials);
             return this;
         }
 
@@ -914,6 +942,7 @@ public final class CreateAssistantDto {
                     backgroundDenoisingEnabled,
                     modelOutputInMessagesEnabled,
                     transportConfigurations,
+                    credentials,
                     name,
                     voicemailDetection,
                     voicemailMessage,

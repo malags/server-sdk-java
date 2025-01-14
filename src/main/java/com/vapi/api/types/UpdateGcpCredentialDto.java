@@ -16,33 +16,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateGcpCredentialDto.Builder.class)
 public final class UpdateGcpCredentialDto {
-    private final GcpKey gcpKey;
+    private final Optional<String> name;
+
+    private final Optional<GcpKey> gcpKey;
 
     private final Optional<BucketPlan> bucketPlan;
-
-    private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateGcpCredentialDto(
-            GcpKey gcpKey,
-            Optional<BucketPlan> bucketPlan,
             Optional<String> name,
+            Optional<GcpKey> gcpKey,
+            Optional<BucketPlan> bucketPlan,
             Map<String, Object> additionalProperties) {
+        this.name = name;
         this.gcpKey = gcpKey;
         this.bucketPlan = bucketPlan;
-        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "gcp";
+    /**
+     * @return This is the name of credential. This is just for your reference.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
     }
 
     /**
@@ -50,7 +52,7 @@ public final class UpdateGcpCredentialDto {
      * <p>The schema is identical to the JSON that GCP outputs.</p>
      */
     @JsonProperty("gcpKey")
-    public GcpKey getGcpKey() {
+    public Optional<GcpKey> getGcpKey() {
         return gcpKey;
     }
 
@@ -60,14 +62,6 @@ public final class UpdateGcpCredentialDto {
     @JsonProperty("bucketPlan")
     public Optional<BucketPlan> getBucketPlan() {
         return bucketPlan;
-    }
-
-    /**
-     * @return This is the name of credential. This is just for your reference.
-     */
-    @JsonProperty("name")
-    public Optional<String> getName() {
-        return name;
     }
 
     @java.lang.Override
@@ -82,12 +76,12 @@ public final class UpdateGcpCredentialDto {
     }
 
     private boolean equalTo(UpdateGcpCredentialDto other) {
-        return gcpKey.equals(other.gcpKey) && bucketPlan.equals(other.bucketPlan) && name.equals(other.name);
+        return name.equals(other.name) && gcpKey.equals(other.gcpKey) && bucketPlan.equals(other.bucketPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.gcpKey, this.bucketPlan, this.name);
+        return Objects.hash(this.name, this.gcpKey, this.bucketPlan);
     }
 
     @java.lang.Override
@@ -95,33 +89,15 @@ public final class UpdateGcpCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static GcpKeyStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface GcpKeyStage {
-        _FinalStage gcpKey(@NotNull GcpKey gcpKey);
-
-        Builder from(UpdateGcpCredentialDto other);
-    }
-
-    public interface _FinalStage {
-        UpdateGcpCredentialDto build();
-
-        _FinalStage bucketPlan(Optional<BucketPlan> bucketPlan);
-
-        _FinalStage bucketPlan(BucketPlan bucketPlan);
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements GcpKeyStage, _FinalStage {
-        private GcpKey gcpKey;
-
+    public static final class Builder {
         private Optional<String> name = Optional.empty();
+
+        private Optional<GcpKey> gcpKey = Optional.empty();
 
         private Optional<BucketPlan> bucketPlan = Optional.empty();
 
@@ -130,63 +106,48 @@ public final class UpdateGcpCredentialDto {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateGcpCredentialDto other) {
+            name(other.getName());
             gcpKey(other.getGcpKey());
             bucketPlan(other.getBucketPlan());
-            name(other.getName());
             return this;
         }
 
-        /**
-         * <p>This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.</p>
-         * <p>The schema is identical to the JSON that GCP outputs.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("gcpKey")
-        public _FinalStage gcpKey(@NotNull GcpKey gcpKey) {
-            this.gcpKey = Objects.requireNonNull(gcpKey, "gcpKey must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        /**
-         * <p>This is the bucket plan that can be provided to store call artifacts in GCP.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage bucketPlan(BucketPlan bucketPlan) {
-            this.bucketPlan = Optional.ofNullable(bucketPlan);
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
-        @java.lang.Override
+        @JsonSetter(value = "gcpKey", nulls = Nulls.SKIP)
+        public Builder gcpKey(Optional<GcpKey> gcpKey) {
+            this.gcpKey = gcpKey;
+            return this;
+        }
+
+        public Builder gcpKey(GcpKey gcpKey) {
+            this.gcpKey = Optional.ofNullable(gcpKey);
+            return this;
+        }
+
         @JsonSetter(value = "bucketPlan", nulls = Nulls.SKIP)
-        public _FinalStage bucketPlan(Optional<BucketPlan> bucketPlan) {
+        public Builder bucketPlan(Optional<BucketPlan> bucketPlan) {
             this.bucketPlan = bucketPlan;
             return this;
         }
 
-        @java.lang.Override
+        public Builder bucketPlan(BucketPlan bucketPlan) {
+            this.bucketPlan = Optional.ofNullable(bucketPlan);
+            return this;
+        }
+
         public UpdateGcpCredentialDto build() {
-            return new UpdateGcpCredentialDto(gcpKey, bucketPlan, name, additionalProperties);
+            return new UpdateGcpCredentialDto(name, gcpKey, bucketPlan, additionalProperties);
         }
     }
 }

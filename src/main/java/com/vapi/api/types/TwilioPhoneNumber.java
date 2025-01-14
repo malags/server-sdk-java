@@ -38,9 +38,7 @@ public final class TwilioPhoneNumber {
 
     private final Optional<String> squadId;
 
-    private final Optional<String> serverUrl;
-
-    private final Optional<String> serverUrlSecret;
+    private final Optional<Server> server;
 
     private final String number;
 
@@ -59,8 +57,7 @@ public final class TwilioPhoneNumber {
             Optional<String> name,
             Optional<String> assistantId,
             Optional<String> squadId,
-            Optional<String> serverUrl,
-            Optional<String> serverUrlSecret,
+            Optional<Server> server,
             String number,
             String twilioAccountSid,
             String twilioAuthToken,
@@ -73,8 +70,7 @@ public final class TwilioPhoneNumber {
         this.name = name;
         this.assistantId = assistantId;
         this.squadId = squadId;
-        this.serverUrl = serverUrl;
-        this.serverUrlSecret = serverUrlSecret;
+        this.server = server;
         this.number = number;
         this.twilioAccountSid = twilioAccountSid;
         this.twilioAuthToken = twilioAuthToken;
@@ -154,22 +150,17 @@ public final class TwilioPhoneNumber {
     }
 
     /**
-     * @return This is the server URL where messages will be sent for calls on this number. This includes the <code>assistant-request</code> message.
-     * <p>You can see the shape of the messages sent in <code>ServerMessage</code>.</p>
-     * <p>This overrides the <code>org.serverUrl</code>. Order of precedence: tool.server.url &gt; assistant.serverUrl &gt; phoneNumber.serverUrl &gt; org.serverUrl.</p>
+     * @return This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.
+     * <p>The order of precedence is:</p>
+     * <ol>
+     * <li>assistant.server</li>
+     * <li>phoneNumber.server</li>
+     * <li>org.server</li>
+     * </ol>
      */
-    @JsonProperty("serverUrl")
-    public Optional<String> getServerUrl() {
-        return serverUrl;
-    }
-
-    /**
-     * @return This is the secret Vapi will send with every message to your server. It's sent as a header called x-vapi-secret.
-     * <p>Same precedence logic as serverUrl.</p>
-     */
-    @JsonProperty("serverUrlSecret")
-    public Optional<String> getServerUrlSecret() {
-        return serverUrlSecret;
+    @JsonProperty("server")
+    public Optional<Server> getServer() {
+        return server;
     }
 
     /**
@@ -216,8 +207,7 @@ public final class TwilioPhoneNumber {
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
                 && squadId.equals(other.squadId)
-                && serverUrl.equals(other.serverUrl)
-                && serverUrlSecret.equals(other.serverUrlSecret)
+                && server.equals(other.server)
                 && number.equals(other.number)
                 && twilioAccountSid.equals(other.twilioAccountSid)
                 && twilioAuthToken.equals(other.twilioAuthToken);
@@ -234,8 +224,7 @@ public final class TwilioPhoneNumber {
                 this.name,
                 this.assistantId,
                 this.squadId,
-                this.serverUrl,
-                this.serverUrlSecret,
+                this.server,
                 this.number,
                 this.twilioAccountSid,
                 this.twilioAuthToken);
@@ -299,13 +288,9 @@ public final class TwilioPhoneNumber {
 
         _FinalStage squadId(String squadId);
 
-        _FinalStage serverUrl(Optional<String> serverUrl);
+        _FinalStage server(Optional<Server> server);
 
-        _FinalStage serverUrl(String serverUrl);
-
-        _FinalStage serverUrlSecret(Optional<String> serverUrlSecret);
-
-        _FinalStage serverUrlSecret(String serverUrlSecret);
+        _FinalStage server(Server server);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -332,9 +317,7 @@ public final class TwilioPhoneNumber {
 
         private String twilioAuthToken;
 
-        private Optional<String> serverUrlSecret = Optional.empty();
-
-        private Optional<String> serverUrl = Optional.empty();
+        private Optional<Server> server = Optional.empty();
 
         private Optional<String> squadId = Optional.empty();
 
@@ -359,8 +342,7 @@ public final class TwilioPhoneNumber {
             name(other.getName());
             assistantId(other.getAssistantId());
             squadId(other.getSquadId());
-            serverUrl(other.getServerUrl());
-            serverUrlSecret(other.getServerUrlSecret());
+            server(other.getServer());
             number(other.getNumber());
             twilioAccountSid(other.getTwilioAccountSid());
             twilioAuthToken(other.getTwilioAuthToken());
@@ -445,39 +427,25 @@ public final class TwilioPhoneNumber {
         }
 
         /**
-         * <p>This is the secret Vapi will send with every message to your server. It's sent as a header called x-vapi-secret.</p>
-         * <p>Same precedence logic as serverUrl.</p>
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage serverUrlSecret(String serverUrlSecret) {
-            this.serverUrlSecret = Optional.ofNullable(serverUrlSecret);
+        public _FinalStage server(Server server) {
+            this.server = Optional.ofNullable(server);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "serverUrlSecret", nulls = Nulls.SKIP)
-        public _FinalStage serverUrlSecret(Optional<String> serverUrlSecret) {
-            this.serverUrlSecret = serverUrlSecret;
-            return this;
-        }
-
-        /**
-         * <p>This is the server URL where messages will be sent for calls on this number. This includes the <code>assistant-request</code> message.</p>
-         * <p>You can see the shape of the messages sent in <code>ServerMessage</code>.</p>
-         * <p>This overrides the <code>org.serverUrl</code>. Order of precedence: tool.server.url &gt; assistant.serverUrl &gt; phoneNumber.serverUrl &gt; org.serverUrl.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage serverUrl(String serverUrl) {
-            this.serverUrl = Optional.ofNullable(serverUrl);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "serverUrl", nulls = Nulls.SKIP)
-        public _FinalStage serverUrl(Optional<String> serverUrl) {
-            this.serverUrl = serverUrl;
+        @JsonSetter(value = "server", nulls = Nulls.SKIP)
+        public _FinalStage server(Optional<Server> server) {
+            this.server = server;
             return this;
         }
 
@@ -568,8 +536,7 @@ public final class TwilioPhoneNumber {
                     name,
                     assistantId,
                     squadId,
-                    serverUrl,
-                    serverUrlSecret,
+                    server,
                     number,
                     twilioAccountSid,
                     twilioAuthToken,

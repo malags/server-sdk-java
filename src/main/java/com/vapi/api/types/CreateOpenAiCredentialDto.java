@@ -33,11 +33,6 @@ public final class CreateOpenAiCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "openai";
-    }
-
     /**
      * @return This is not returned in the API.
      */

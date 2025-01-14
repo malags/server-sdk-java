@@ -20,36 +20,39 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateAzureCredentialDto.Builder.class)
 public final class UpdateAzureCredentialDto {
+    private final Optional<UpdateAzureCredentialDtoService> service;
+
     private final Optional<UpdateAzureCredentialDtoRegion> region;
 
     private final Optional<String> apiKey;
 
     private final Optional<String> name;
 
+    private final Optional<AzureBlobStorageBucketPlan> bucketPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateAzureCredentialDto(
+            Optional<UpdateAzureCredentialDtoService> service,
             Optional<UpdateAzureCredentialDtoRegion> region,
             Optional<String> apiKey,
             Optional<String> name,
+            Optional<AzureBlobStorageBucketPlan> bucketPlan,
             Map<String, Object> additionalProperties) {
+        this.service = service;
         this.region = region;
         this.apiKey = apiKey;
         this.name = name;
+        this.bucketPlan = bucketPlan;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "azure";
     }
 
     /**
      * @return This is the service being used in Azure.
      */
     @JsonProperty("service")
-    public String getService() {
-        return "speech";
+    public Optional<UpdateAzureCredentialDtoService> getService() {
+        return service;
     }
 
     /**
@@ -76,6 +79,14 @@ public final class UpdateAzureCredentialDto {
         return name;
     }
 
+    /**
+     * @return This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.
+     */
+    @JsonProperty("bucketPlan")
+    public Optional<AzureBlobStorageBucketPlan> getBucketPlan() {
+        return bucketPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -88,12 +99,16 @@ public final class UpdateAzureCredentialDto {
     }
 
     private boolean equalTo(UpdateAzureCredentialDto other) {
-        return region.equals(other.region) && apiKey.equals(other.apiKey) && name.equals(other.name);
+        return service.equals(other.service)
+                && region.equals(other.region)
+                && apiKey.equals(other.apiKey)
+                && name.equals(other.name)
+                && bucketPlan.equals(other.bucketPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.region, this.apiKey, this.name);
+        return Objects.hash(this.service, this.region, this.apiKey, this.name, this.bucketPlan);
     }
 
     @java.lang.Override
@@ -107,11 +122,15 @@ public final class UpdateAzureCredentialDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<UpdateAzureCredentialDtoService> service = Optional.empty();
+
         private Optional<UpdateAzureCredentialDtoRegion> region = Optional.empty();
 
         private Optional<String> apiKey = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<AzureBlobStorageBucketPlan> bucketPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -119,9 +138,22 @@ public final class UpdateAzureCredentialDto {
         private Builder() {}
 
         public Builder from(UpdateAzureCredentialDto other) {
+            service(other.getService());
             region(other.getRegion());
             apiKey(other.getApiKey());
             name(other.getName());
+            bucketPlan(other.getBucketPlan());
+            return this;
+        }
+
+        @JsonSetter(value = "service", nulls = Nulls.SKIP)
+        public Builder service(Optional<UpdateAzureCredentialDtoService> service) {
+            this.service = service;
+            return this;
+        }
+
+        public Builder service(UpdateAzureCredentialDtoService service) {
+            this.service = Optional.ofNullable(service);
             return this;
         }
 
@@ -158,8 +190,19 @@ public final class UpdateAzureCredentialDto {
             return this;
         }
 
+        @JsonSetter(value = "bucketPlan", nulls = Nulls.SKIP)
+        public Builder bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan) {
+            this.bucketPlan = bucketPlan;
+            return this;
+        }
+
+        public Builder bucketPlan(AzureBlobStorageBucketPlan bucketPlan) {
+            this.bucketPlan = Optional.ofNullable(bucketPlan);
+            return this;
+        }
+
         public UpdateAzureCredentialDto build() {
-            return new UpdateAzureCredentialDto(region, apiKey, name, additionalProperties);
+            return new UpdateAzureCredentialDto(service, region, apiKey, name, bucketPlan, additionalProperties);
         }
     }
 }

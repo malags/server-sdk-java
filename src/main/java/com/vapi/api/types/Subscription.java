@@ -300,7 +300,7 @@ public final class Subscription {
     }
 
     /**
-     * @return This is the stripe customer's email.
+     * @return This is the customer's email on Stripe.
      */
     @JsonProperty("stripeCustomerEmail")
     public Optional<String> getStripeCustomerEmail() {
@@ -1010,7 +1010,7 @@ public final class Subscription {
         }
 
         /**
-         * <p>This is the stripe customer's email.</p>
+         * <p>This is the customer's email on Stripe.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

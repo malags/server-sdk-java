@@ -12,56 +12,53 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateAzureOpenAiCredentialDto.Builder.class)
 public final class UpdateAzureOpenAiCredentialDto {
-    private final UpdateAzureOpenAiCredentialDtoRegion region;
+    private final Optional<UpdateAzureOpenAiCredentialDtoRegion> region;
 
-    private final List<UpdateAzureOpenAiCredentialDtoModelsItem> models;
+    private final Optional<List<UpdateAzureOpenAiCredentialDtoModelsItem>> models;
 
-    private final String openAiKey;
+    private final Optional<String> openAiKey;
 
-    private final String openAiEndpoint;
+    private final Optional<String> ocpApimSubscriptionKey;
 
     private final Optional<String> name;
+
+    private final Optional<String> openAiEndpoint;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateAzureOpenAiCredentialDto(
-            UpdateAzureOpenAiCredentialDtoRegion region,
-            List<UpdateAzureOpenAiCredentialDtoModelsItem> models,
-            String openAiKey,
-            String openAiEndpoint,
+            Optional<UpdateAzureOpenAiCredentialDtoRegion> region,
+            Optional<List<UpdateAzureOpenAiCredentialDtoModelsItem>> models,
+            Optional<String> openAiKey,
+            Optional<String> ocpApimSubscriptionKey,
             Optional<String> name,
+            Optional<String> openAiEndpoint,
             Map<String, Object> additionalProperties) {
         this.region = region;
         this.models = models;
         this.openAiKey = openAiKey;
-        this.openAiEndpoint = openAiEndpoint;
+        this.ocpApimSubscriptionKey = ocpApimSubscriptionKey;
         this.name = name;
+        this.openAiEndpoint = openAiEndpoint;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "azure-openai";
-    }
-
     @JsonProperty("region")
-    public UpdateAzureOpenAiCredentialDtoRegion getRegion() {
+    public Optional<UpdateAzureOpenAiCredentialDtoRegion> getRegion() {
         return region;
     }
 
     @JsonProperty("models")
-    public List<UpdateAzureOpenAiCredentialDtoModelsItem> getModels() {
+    public Optional<List<UpdateAzureOpenAiCredentialDtoModelsItem>> getModels() {
         return models;
     }
 
@@ -69,13 +66,16 @@ public final class UpdateAzureOpenAiCredentialDto {
      * @return This is not returned in the API.
      */
     @JsonProperty("openAIKey")
-    public String getOpenAiKey() {
+    public Optional<String> getOpenAiKey() {
         return openAiKey;
     }
 
-    @JsonProperty("openAIEndpoint")
-    public String getOpenAiEndpoint() {
-        return openAiEndpoint;
+    /**
+     * @return This is not returned in the API.
+     */
+    @JsonProperty("ocpApimSubscriptionKey")
+    public Optional<String> getOcpApimSubscriptionKey() {
+        return ocpApimSubscriptionKey;
     }
 
     /**
@@ -84,6 +84,11 @@ public final class UpdateAzureOpenAiCredentialDto {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    @JsonProperty("openAIEndpoint")
+    public Optional<String> getOpenAiEndpoint() {
+        return openAiEndpoint;
     }
 
     @java.lang.Override
@@ -101,13 +106,15 @@ public final class UpdateAzureOpenAiCredentialDto {
         return region.equals(other.region)
                 && models.equals(other.models)
                 && openAiKey.equals(other.openAiKey)
-                && openAiEndpoint.equals(other.openAiEndpoint)
-                && name.equals(other.name);
+                && ocpApimSubscriptionKey.equals(other.ocpApimSubscriptionKey)
+                && name.equals(other.name)
+                && openAiEndpoint.equals(other.openAiEndpoint);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.region, this.models, this.openAiKey, this.openAiEndpoint, this.name);
+        return Objects.hash(
+                this.region, this.models, this.openAiKey, this.ocpApimSubscriptionKey, this.name, this.openAiEndpoint);
     }
 
     @java.lang.Override
@@ -115,131 +122,108 @@ public final class UpdateAzureOpenAiCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static RegionStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface RegionStage {
-        OpenAiKeyStage region(@NotNull UpdateAzureOpenAiCredentialDtoRegion region);
-
-        Builder from(UpdateAzureOpenAiCredentialDto other);
-    }
-
-    public interface OpenAiKeyStage {
-        OpenAiEndpointStage openAiKey(@NotNull String openAiKey);
-    }
-
-    public interface OpenAiEndpointStage {
-        _FinalStage openAiEndpoint(@NotNull String openAiEndpoint);
-    }
-
-    public interface _FinalStage {
-        UpdateAzureOpenAiCredentialDto build();
-
-        _FinalStage models(List<UpdateAzureOpenAiCredentialDtoModelsItem> models);
-
-        _FinalStage addModels(UpdateAzureOpenAiCredentialDtoModelsItem models);
-
-        _FinalStage addAllModels(List<UpdateAzureOpenAiCredentialDtoModelsItem> models);
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements RegionStage, OpenAiKeyStage, OpenAiEndpointStage, _FinalStage {
-        private UpdateAzureOpenAiCredentialDtoRegion region;
+    public static final class Builder {
+        private Optional<UpdateAzureOpenAiCredentialDtoRegion> region = Optional.empty();
 
-        private String openAiKey;
+        private Optional<List<UpdateAzureOpenAiCredentialDtoModelsItem>> models = Optional.empty();
 
-        private String openAiEndpoint;
+        private Optional<String> openAiKey = Optional.empty();
+
+        private Optional<String> ocpApimSubscriptionKey = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
-        private List<UpdateAzureOpenAiCredentialDtoModelsItem> models = new ArrayList<>();
+        private Optional<String> openAiEndpoint = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(UpdateAzureOpenAiCredentialDto other) {
             region(other.getRegion());
             models(other.getModels());
             openAiKey(other.getOpenAiKey());
-            openAiEndpoint(other.getOpenAiEndpoint());
+            ocpApimSubscriptionKey(other.getOcpApimSubscriptionKey());
             name(other.getName());
+            openAiEndpoint(other.getOpenAiEndpoint());
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("region")
-        public OpenAiKeyStage region(@NotNull UpdateAzureOpenAiCredentialDtoRegion region) {
-            this.region = Objects.requireNonNull(region, "region must not be null");
+        @JsonSetter(value = "region", nulls = Nulls.SKIP)
+        public Builder region(Optional<UpdateAzureOpenAiCredentialDtoRegion> region) {
+            this.region = region;
             return this;
         }
 
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("openAIKey")
-        public OpenAiEndpointStage openAiKey(@NotNull String openAiKey) {
-            this.openAiKey = Objects.requireNonNull(openAiKey, "openAiKey must not be null");
+        public Builder region(UpdateAzureOpenAiCredentialDtoRegion region) {
+            this.region = Optional.ofNullable(region);
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("openAIEndpoint")
-        public _FinalStage openAiEndpoint(@NotNull String openAiEndpoint) {
-            this.openAiEndpoint = Objects.requireNonNull(openAiEndpoint, "openAiEndpoint must not be null");
+        @JsonSetter(value = "models", nulls = Nulls.SKIP)
+        public Builder models(Optional<List<UpdateAzureOpenAiCredentialDtoModelsItem>> models) {
+            this.models = models;
             return this;
         }
 
-        /**
-         * <p>This is the name of credential. This is just for your reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
+        public Builder models(List<UpdateAzureOpenAiCredentialDtoModelsItem> models) {
+            this.models = Optional.ofNullable(models);
             return this;
         }
 
-        @java.lang.Override
+        @JsonSetter(value = "openAIKey", nulls = Nulls.SKIP)
+        public Builder openAiKey(Optional<String> openAiKey) {
+            this.openAiKey = openAiKey;
+            return this;
+        }
+
+        public Builder openAiKey(String openAiKey) {
+            this.openAiKey = Optional.ofNullable(openAiKey);
+            return this;
+        }
+
+        @JsonSetter(value = "ocpApimSubscriptionKey", nulls = Nulls.SKIP)
+        public Builder ocpApimSubscriptionKey(Optional<String> ocpApimSubscriptionKey) {
+            this.ocpApimSubscriptionKey = ocpApimSubscriptionKey;
+            return this;
+        }
+
+        public Builder ocpApimSubscriptionKey(String ocpApimSubscriptionKey) {
+            this.ocpApimSubscriptionKey = Optional.ofNullable(ocpApimSubscriptionKey);
+            return this;
+        }
+
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
+        public Builder name(Optional<String> name) {
             this.name = name;
             return this;
         }
 
-        @java.lang.Override
-        public _FinalStage addAllModels(List<UpdateAzureOpenAiCredentialDtoModelsItem> models) {
-            this.models.addAll(models);
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
-        @java.lang.Override
-        public _FinalStage addModels(UpdateAzureOpenAiCredentialDtoModelsItem models) {
-            this.models.add(models);
+        @JsonSetter(value = "openAIEndpoint", nulls = Nulls.SKIP)
+        public Builder openAiEndpoint(Optional<String> openAiEndpoint) {
+            this.openAiEndpoint = openAiEndpoint;
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter(value = "models", nulls = Nulls.SKIP)
-        public _FinalStage models(List<UpdateAzureOpenAiCredentialDtoModelsItem> models) {
-            this.models.clear();
-            this.models.addAll(models);
+        public Builder openAiEndpoint(String openAiEndpoint) {
+            this.openAiEndpoint = Optional.ofNullable(openAiEndpoint);
             return this;
         }
 
-        @java.lang.Override
         public UpdateAzureOpenAiCredentialDto build() {
             return new UpdateAzureOpenAiCredentialDto(
-                    region, models, openAiKey, openAiEndpoint, name, additionalProperties);
+                    region, models, openAiKey, ocpApimSubscriptionKey, name, openAiEndpoint, additionalProperties);
         }
     }
 }

@@ -34,11 +34,6 @@ public final class CreateGoHighLevelCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "gohighlevel";
-    }
-
     /**
      * @return This is not returned in the API.
      */

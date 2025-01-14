@@ -12,12 +12,12 @@ import com.vapi.api.core.RequestOptions;
 import com.vapi.api.core.VapiApiException;
 import com.vapi.api.core.VapiException;
 import com.vapi.api.resources.phonenumbers.requests.PhoneNumbersListRequest;
-import com.vapi.api.resources.phonenumbers.requests.UpdatePhoneNumberDto;
 import com.vapi.api.resources.phonenumbers.types.PhoneNumbersCreateRequest;
 import com.vapi.api.resources.phonenumbers.types.PhoneNumbersCreateResponse;
 import com.vapi.api.resources.phonenumbers.types.PhoneNumbersDeleteResponse;
 import com.vapi.api.resources.phonenumbers.types.PhoneNumbersGetResponse;
 import com.vapi.api.resources.phonenumbers.types.PhoneNumbersListResponseItem;
+import com.vapi.api.resources.phonenumbers.types.PhoneNumbersUpdateRequest;
 import com.vapi.api.resources.phonenumbers.types.PhoneNumbersUpdateResponse;
 import java.io.IOException;
 import java.util.List;
@@ -220,15 +220,12 @@ public class PhoneNumbersClient {
         }
     }
 
-    public PhoneNumbersUpdateResponse update(String id) {
-        return update(id, UpdatePhoneNumberDto.builder().build());
-    }
-
-    public PhoneNumbersUpdateResponse update(String id, UpdatePhoneNumberDto request) {
+    public PhoneNumbersUpdateResponse update(String id, PhoneNumbersUpdateRequest request) {
         return update(id, request, null);
     }
 
-    public PhoneNumbersUpdateResponse update(String id, UpdatePhoneNumberDto request, RequestOptions requestOptions) {
+    public PhoneNumbersUpdateResponse update(
+            String id, PhoneNumbersUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("phone-number")

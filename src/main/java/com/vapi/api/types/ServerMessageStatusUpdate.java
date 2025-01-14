@@ -46,6 +46,8 @@ public final class ServerMessageStatusUpdate {
 
     private final Optional<String> transcript;
 
+    private final Optional<String> summary;
+
     private final Optional<Map<String, Object>> inboundPhoneCallDebuggingArtifacts;
 
     private final Map<String, Object> additionalProperties;
@@ -63,6 +65,7 @@ public final class ServerMessageStatusUpdate {
             Optional<CreateCustomerDto> customer,
             Optional<Call> call,
             Optional<String> transcript,
+            Optional<String> summary,
             Optional<Map<String, Object>> inboundPhoneCallDebuggingArtifacts,
             Map<String, Object> additionalProperties) {
         this.phoneNumber = phoneNumber;
@@ -77,6 +80,7 @@ public final class ServerMessageStatusUpdate {
         this.customer = customer;
         this.call = call;
         this.transcript = transcript;
+        this.summary = summary;
         this.inboundPhoneCallDebuggingArtifacts = inboundPhoneCallDebuggingArtifacts;
         this.additionalProperties = additionalProperties;
     }
@@ -200,6 +204,14 @@ public final class ServerMessageStatusUpdate {
     }
 
     /**
+     * @return This is the summary of the call. This is only sent if the status is &quot;forwarding&quot;.
+     */
+    @JsonProperty("summary")
+    public Optional<String> getSummary() {
+        return summary;
+    }
+
+    /**
      * @return This is the inbound phone call debugging artifacts. This is only sent if the status is &quot;ended&quot; and there was an error accepting the inbound phone call.
      * <p>This will include any errors related to the &quot;assistant-request&quot; if one was made.</p>
      */
@@ -232,6 +244,7 @@ public final class ServerMessageStatusUpdate {
                 && customer.equals(other.customer)
                 && call.equals(other.call)
                 && transcript.equals(other.transcript)
+                && summary.equals(other.summary)
                 && inboundPhoneCallDebuggingArtifacts.equals(other.inboundPhoneCallDebuggingArtifacts);
     }
 
@@ -250,6 +263,7 @@ public final class ServerMessageStatusUpdate {
                 this.customer,
                 this.call,
                 this.transcript,
+                this.summary,
                 this.inboundPhoneCallDebuggingArtifacts);
     }
 
@@ -315,6 +329,10 @@ public final class ServerMessageStatusUpdate {
 
         _FinalStage transcript(String transcript);
 
+        _FinalStage summary(Optional<String> summary);
+
+        _FinalStage summary(String summary);
+
         _FinalStage inboundPhoneCallDebuggingArtifacts(
                 Optional<Map<String, Object>> inboundPhoneCallDebuggingArtifacts);
 
@@ -326,6 +344,8 @@ public final class ServerMessageStatusUpdate {
         private ServerMessageStatusUpdateStatus status;
 
         private Optional<Map<String, Object>> inboundPhoneCallDebuggingArtifacts = Optional.empty();
+
+        private Optional<String> summary = Optional.empty();
 
         private Optional<String> transcript = Optional.empty();
 
@@ -368,6 +388,7 @@ public final class ServerMessageStatusUpdate {
             customer(other.getCustomer());
             call(other.getCall());
             transcript(other.getTranscript());
+            summary(other.getSummary());
             inboundPhoneCallDebuggingArtifacts(other.getInboundPhoneCallDebuggingArtifacts());
             return this;
         }
@@ -399,6 +420,23 @@ public final class ServerMessageStatusUpdate {
         public _FinalStage inboundPhoneCallDebuggingArtifacts(
                 Optional<Map<String, Object>> inboundPhoneCallDebuggingArtifacts) {
             this.inboundPhoneCallDebuggingArtifacts = inboundPhoneCallDebuggingArtifacts;
+            return this;
+        }
+
+        /**
+         * <p>This is the summary of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage summary(String summary) {
+            this.summary = Optional.ofNullable(summary);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "summary", nulls = Nulls.SKIP)
+        public _FinalStage summary(Optional<String> summary) {
+            this.summary = summary;
             return this;
         }
 
@@ -626,6 +664,7 @@ public final class ServerMessageStatusUpdate {
                     customer,
                     call,
                     transcript,
+                    summary,
                     inboundPhoneCallDebuggingArtifacts,
                     additionalProperties);
         }

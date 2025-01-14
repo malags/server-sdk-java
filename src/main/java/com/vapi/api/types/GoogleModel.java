@@ -34,6 +34,8 @@ public final class GoogleModel {
 
     private final GoogleModelModel model;
 
+    private final Optional<GoogleRealtimeConfig> realtimeConfig;
+
     private final Optional<Double> temperature;
 
     private final Optional<Double> maxTokens;
@@ -51,6 +53,7 @@ public final class GoogleModel {
             Optional<CreateCustomKnowledgeBaseDto> knowledgeBase,
             Optional<String> knowledgeBaseId,
             GoogleModelModel model,
+            Optional<GoogleRealtimeConfig> realtimeConfig,
             Optional<Double> temperature,
             Optional<Double> maxTokens,
             Optional<Boolean> emotionRecognitionEnabled,
@@ -62,6 +65,7 @@ public final class GoogleModel {
         this.knowledgeBase = knowledgeBase;
         this.knowledgeBaseId = knowledgeBaseId;
         this.model = model;
+        this.realtimeConfig = realtimeConfig;
         this.temperature = temperature;
         this.maxTokens = maxTokens;
         this.emotionRecognitionEnabled = emotionRecognitionEnabled;
@@ -120,6 +124,15 @@ public final class GoogleModel {
     }
 
     /**
+     * @return This is the session configuration for the Gemini Flash 2.0 Multimodal Live API.
+     * Only applicable if the model <code>gemini-2.0-flash-realtime-exp</code> is selected.
+     */
+    @JsonProperty("realtimeConfig")
+    public Optional<GoogleRealtimeConfig> getRealtimeConfig() {
+        return realtimeConfig;
+    }
+
+    /**
      * @return This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.
      */
     @JsonProperty("temperature")
@@ -173,6 +186,7 @@ public final class GoogleModel {
                 && knowledgeBase.equals(other.knowledgeBase)
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && model.equals(other.model)
+                && realtimeConfig.equals(other.realtimeConfig)
                 && temperature.equals(other.temperature)
                 && maxTokens.equals(other.maxTokens)
                 && emotionRecognitionEnabled.equals(other.emotionRecognitionEnabled)
@@ -188,6 +202,7 @@ public final class GoogleModel {
                 this.knowledgeBase,
                 this.knowledgeBaseId,
                 this.model,
+                this.realtimeConfig,
                 this.temperature,
                 this.maxTokens,
                 this.emotionRecognitionEnabled,
@@ -232,6 +247,10 @@ public final class GoogleModel {
 
         _FinalStage knowledgeBaseId(String knowledgeBaseId);
 
+        _FinalStage realtimeConfig(Optional<GoogleRealtimeConfig> realtimeConfig);
+
+        _FinalStage realtimeConfig(GoogleRealtimeConfig realtimeConfig);
+
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
@@ -261,6 +280,8 @@ public final class GoogleModel {
 
         private Optional<Double> temperature = Optional.empty();
 
+        private Optional<GoogleRealtimeConfig> realtimeConfig = Optional.empty();
+
         private Optional<String> knowledgeBaseId = Optional.empty();
 
         private Optional<CreateCustomKnowledgeBaseDto> knowledgeBase = Optional.empty();
@@ -284,6 +305,7 @@ public final class GoogleModel {
             knowledgeBase(other.getKnowledgeBase());
             knowledgeBaseId(other.getKnowledgeBaseId());
             model(other.getModel());
+            realtimeConfig(other.getRealtimeConfig());
             temperature(other.getTemperature());
             maxTokens(other.getMaxTokens());
             emotionRecognitionEnabled(other.getEmotionRecognitionEnabled());
@@ -371,6 +393,24 @@ public final class GoogleModel {
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
             this.temperature = temperature;
+            return this;
+        }
+
+        /**
+         * <p>This is the session configuration for the Gemini Flash 2.0 Multimodal Live API.
+         * Only applicable if the model <code>gemini-2.0-flash-realtime-exp</code> is selected.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage realtimeConfig(GoogleRealtimeConfig realtimeConfig) {
+            this.realtimeConfig = Optional.ofNullable(realtimeConfig);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "realtimeConfig", nulls = Nulls.SKIP)
+        public _FinalStage realtimeConfig(Optional<GoogleRealtimeConfig> realtimeConfig) {
+            this.realtimeConfig = realtimeConfig;
             return this;
         }
 
@@ -470,6 +510,7 @@ public final class GoogleModel {
                     knowledgeBase,
                     knowledgeBaseId,
                     model,
+                    realtimeConfig,
                     temperature,
                     maxTokens,
                     emotionRecognitionEnabled,

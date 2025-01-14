@@ -229,10 +229,6 @@ public class CallsClient {
         }
     }
 
-    public Call update(String id) {
-        return update(id, UpdateCallDto.builder().build());
-    }
-
     public Call update(String id, UpdateCallDto request) {
         return update(id, request, null);
     }

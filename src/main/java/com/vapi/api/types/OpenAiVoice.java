@@ -46,7 +46,7 @@ public final class OpenAiVoice {
 
     /**
      * @return This is the provider-specific ID that will be used.
-     * Please note that ash, ballad, coral, sage, and verse may only be used with the <code>gpt-4o-realtime-preview-2024-10-01</code> model.
+     * Please note that ash, ballad, coral, sage, and verse may only be used with realtime models.
      */
     @JsonProperty("voiceId")
     public OpenAiVoiceId getVoiceId() {
@@ -157,7 +157,7 @@ public final class OpenAiVoice {
 
         /**
          * <p>This is the provider-specific ID that will be used.
-         * Please note that ash, ballad, coral, sage, and verse may only be used with the <code>gpt-4o-realtime-preview-2024-10-01</code> model.</p>
+         * Please note that ash, ballad, coral, sage, and verse may only be used with realtime models.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

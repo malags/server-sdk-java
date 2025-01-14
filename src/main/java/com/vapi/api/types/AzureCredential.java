@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AzureCredential.Builder.class)
 public final class AzureCredential {
+    private final AzureCredentialService service;
+
     private final Optional<AzureCredentialRegion> region;
 
     private final Optional<String> apiKey;
@@ -36,9 +38,12 @@ public final class AzureCredential {
 
     private final Optional<String> name;
 
+    private final Optional<AzureBlobStorageBucketPlan> bucketPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private AzureCredential(
+            AzureCredentialService service,
             Optional<AzureCredentialRegion> region,
             Optional<String> apiKey,
             String id,
@@ -46,7 +51,9 @@ public final class AzureCredential {
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             Optional<String> name,
+            Optional<AzureBlobStorageBucketPlan> bucketPlan,
             Map<String, Object> additionalProperties) {
+        this.service = service;
         this.region = region;
         this.apiKey = apiKey;
         this.id = id;
@@ -54,6 +61,7 @@ public final class AzureCredential {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.name = name;
+        this.bucketPlan = bucketPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -66,8 +74,8 @@ public final class AzureCredential {
      * @return This is the service being used in Azure.
      */
     @JsonProperty("service")
-    public String getService() {
-        return "speech";
+    public AzureCredentialService getService() {
+        return service;
     }
 
     /**
@@ -126,6 +134,14 @@ public final class AzureCredential {
         return name;
     }
 
+    /**
+     * @return This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.
+     */
+    @JsonProperty("bucketPlan")
+    public Optional<AzureBlobStorageBucketPlan> getBucketPlan() {
+        return bucketPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -138,18 +154,29 @@ public final class AzureCredential {
     }
 
     private boolean equalTo(AzureCredential other) {
-        return region.equals(other.region)
+        return service.equals(other.service)
+                && region.equals(other.region)
                 && apiKey.equals(other.apiKey)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
-                && name.equals(other.name);
+                && name.equals(other.name)
+                && bucketPlan.equals(other.bucketPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.region, this.apiKey, this.id, this.orgId, this.createdAt, this.updatedAt, this.name);
+        return Objects.hash(
+                this.service,
+                this.region,
+                this.apiKey,
+                this.id,
+                this.orgId,
+                this.createdAt,
+                this.updatedAt,
+                this.name,
+                this.bucketPlan);
     }
 
     @java.lang.Override
@@ -157,14 +184,18 @@ public final class AzureCredential {
         return ObjectMappers.stringify(this);
     }
 
-    public static IdStage builder() {
+    public static ServiceStage builder() {
         return new Builder();
+    }
+
+    public interface ServiceStage {
+        IdStage service(@NotNull AzureCredentialService service);
+
+        Builder from(AzureCredential other);
     }
 
     public interface IdStage {
         OrgIdStage id(@NotNull String id);
-
-        Builder from(AzureCredential other);
     }
 
     public interface OrgIdStage {
@@ -193,10 +224,17 @@ public final class AzureCredential {
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
+
+        _FinalStage bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan);
+
+        _FinalStage bucketPlan(AzureBlobStorageBucketPlan bucketPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, OrgIdStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
+    public static final class Builder
+            implements ServiceStage, IdStage, OrgIdStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
+        private AzureCredentialService service;
+
         private String id;
 
         private String orgId;
@@ -204,6 +242,8 @@ public final class AzureCredential {
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<AzureBlobStorageBucketPlan> bucketPlan = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -218,6 +258,7 @@ public final class AzureCredential {
 
         @java.lang.Override
         public Builder from(AzureCredential other) {
+            service(other.getService());
             region(other.getRegion());
             apiKey(other.getApiKey());
             id(other.getId());
@@ -225,6 +266,18 @@ public final class AzureCredential {
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             name(other.getName());
+            bucketPlan(other.getBucketPlan());
+            return this;
+        }
+
+        /**
+         * <p>This is the service being used in Azure.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("service")
+        public IdStage service(@NotNull AzureCredentialService service) {
+            this.service = Objects.requireNonNull(service, "service must not be null");
             return this;
         }
 
@@ -269,6 +322,23 @@ public final class AzureCredential {
         @JsonSetter("updatedAt")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage bucketPlan(AzureBlobStorageBucketPlan bucketPlan) {
+            this.bucketPlan = Optional.ofNullable(bucketPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "bucketPlan", nulls = Nulls.SKIP)
+        public _FinalStage bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan) {
+            this.bucketPlan = bucketPlan;
             return this;
         }
 
@@ -325,7 +395,8 @@ public final class AzureCredential {
 
         @java.lang.Override
         public AzureCredential build() {
-            return new AzureCredential(region, apiKey, id, orgId, createdAt, updatedAt, name, additionalProperties);
+            return new AzureCredential(
+                    service, region, apiKey, id, orgId, createdAt, updatedAt, name, bucketPlan, additionalProperties);
         }
     }
 }

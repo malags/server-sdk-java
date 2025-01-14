@@ -37,11 +37,6 @@ public final class CreatePlayHtCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "playht";
-    }
-
     /**
      * @return This is not returned in the API.
      */

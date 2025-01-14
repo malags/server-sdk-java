@@ -52,9 +52,7 @@ public final class OrgWithOrgUser {
 
     private final Optional<Double> billingLimit;
 
-    private final Optional<String> serverUrl;
-
-    private final Optional<String> serverUrlSecret;
+    private final Optional<Server> server;
 
     private final Optional<Double> concurrencyLimit;
 
@@ -80,8 +78,7 @@ public final class OrgWithOrgUser {
             Optional<String> name,
             Optional<OrgWithOrgUserChannel> channel,
             Optional<Double> billingLimit,
-            Optional<String> serverUrl,
-            Optional<String> serverUrlSecret,
+            Optional<Server> server,
             Optional<Double> concurrencyLimit,
             Optional<String> invitedByUserId,
             Optional<OrgWithOrgUserRole> role,
@@ -101,8 +98,7 @@ public final class OrgWithOrgUser {
         this.name = name;
         this.channel = channel;
         this.billingLimit = billingLimit;
-        this.serverUrl = serverUrl;
-        this.serverUrlSecret = serverUrlSecret;
+        this.server = server;
         this.concurrencyLimit = concurrencyLimit;
         this.invitedByUserId = invitedByUserId;
         this.role = role;
@@ -229,20 +225,17 @@ public final class OrgWithOrgUser {
     }
 
     /**
-     * @return This is the URL Vapi will communicate with via HTTP GET and POST Requests. This is used for retrieving context, function calling, and end-of-call reports.
-     * <p>All requests will be sent with the call object among other things relevant to that message. You can find more details in the Server URL documentation.</p>
+     * @return This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.
+     * <p>The order of precedence is:</p>
+     * <ol>
+     * <li>assistant.server</li>
+     * <li>phoneNumber.server</li>
+     * <li>org.server</li>
+     * </ol>
      */
-    @JsonProperty("serverUrl")
-    public Optional<String> getServerUrl() {
-        return serverUrl;
-    }
-
-    /**
-     * @return This is the secret you can set that Vapi will send with every request to your server. Will be sent as a header called x-vapi-secret.
-     */
-    @JsonProperty("serverUrlSecret")
-    public Optional<String> getServerUrlSecret() {
-        return serverUrlSecret;
+    @JsonProperty("server")
+    public Optional<Server> getServer() {
+        return server;
     }
 
     /**
@@ -290,8 +283,7 @@ public final class OrgWithOrgUser {
                 && name.equals(other.name)
                 && channel.equals(other.channel)
                 && billingLimit.equals(other.billingLimit)
-                && serverUrl.equals(other.serverUrl)
-                && serverUrlSecret.equals(other.serverUrlSecret)
+                && server.equals(other.server)
                 && concurrencyLimit.equals(other.concurrencyLimit)
                 && invitedByUserId.equals(other.invitedByUserId)
                 && role.equals(other.role);
@@ -315,8 +307,7 @@ public final class OrgWithOrgUser {
                 this.name,
                 this.channel,
                 this.billingLimit,
-                this.serverUrl,
-                this.serverUrlSecret,
+                this.server,
                 this.concurrencyLimit,
                 this.invitedByUserId,
                 this.role);
@@ -396,13 +387,9 @@ public final class OrgWithOrgUser {
 
         _FinalStage billingLimit(Double billingLimit);
 
-        _FinalStage serverUrl(Optional<String> serverUrl);
+        _FinalStage server(Optional<Server> server);
 
-        _FinalStage serverUrl(String serverUrl);
-
-        _FinalStage serverUrlSecret(Optional<String> serverUrlSecret);
-
-        _FinalStage serverUrlSecret(String serverUrlSecret);
+        _FinalStage server(Server server);
 
         _FinalStage concurrencyLimit(Optional<Double> concurrencyLimit);
 
@@ -431,9 +418,7 @@ public final class OrgWithOrgUser {
 
         private Optional<Double> concurrencyLimit = Optional.empty();
 
-        private Optional<String> serverUrlSecret = Optional.empty();
-
-        private Optional<String> serverUrl = Optional.empty();
+        private Optional<Server> server = Optional.empty();
 
         private Optional<Double> billingLimit = Optional.empty();
 
@@ -481,8 +466,7 @@ public final class OrgWithOrgUser {
             name(other.getName());
             channel(other.getChannel());
             billingLimit(other.getBillingLimit());
-            serverUrl(other.getServerUrl());
-            serverUrlSecret(other.getServerUrlSecret());
+            server(other.getServer());
             concurrencyLimit(other.getConcurrencyLimit());
             invitedByUserId(other.getInvitedByUserId());
             role(other.getRole());
@@ -566,37 +550,25 @@ public final class OrgWithOrgUser {
         }
 
         /**
-         * <p>This is the secret you can set that Vapi will send with every request to your server. Will be sent as a header called x-vapi-secret.</p>
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage serverUrlSecret(String serverUrlSecret) {
-            this.serverUrlSecret = Optional.ofNullable(serverUrlSecret);
+        public _FinalStage server(Server server) {
+            this.server = Optional.ofNullable(server);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "serverUrlSecret", nulls = Nulls.SKIP)
-        public _FinalStage serverUrlSecret(Optional<String> serverUrlSecret) {
-            this.serverUrlSecret = serverUrlSecret;
-            return this;
-        }
-
-        /**
-         * <p>This is the URL Vapi will communicate with via HTTP GET and POST Requests. This is used for retrieving context, function calling, and end-of-call reports.</p>
-         * <p>All requests will be sent with the call object among other things relevant to that message. You can find more details in the Server URL documentation.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage serverUrl(String serverUrl) {
-            this.serverUrl = Optional.ofNullable(serverUrl);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "serverUrl", nulls = Nulls.SKIP)
-        public _FinalStage serverUrl(Optional<String> serverUrl) {
-            this.serverUrl = serverUrl;
+        @JsonSetter(value = "server", nulls = Nulls.SKIP)
+        public _FinalStage server(Optional<Server> server) {
+            this.server = server;
             return this;
         }
 
@@ -821,8 +793,7 @@ public final class OrgWithOrgUser {
                     name,
                     channel,
                     billingLimit,
-                    serverUrl,
-                    serverUrlSecret,
+                    server,
                     concurrencyLimit,
                     invitedByUserId,
                     role,

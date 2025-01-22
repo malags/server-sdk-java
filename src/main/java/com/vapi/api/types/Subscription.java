@@ -35,7 +35,7 @@ public final class Subscription {
 
     private final String credits;
 
-    private final double concurrencyLimit;
+    private final double concurrencyCounter;
 
     private final double concurrencyLimitIncluded;
 
@@ -92,7 +92,7 @@ public final class Subscription {
             SubscriptionType type,
             SubscriptionStatus status,
             String credits,
-            double concurrencyLimit,
+            double concurrencyCounter,
             double concurrencyLimitIncluded,
             double concurrencyLimitPurchased,
             Optional<Double> monthlyChargeScheduleId,
@@ -123,7 +123,7 @@ public final class Subscription {
         this.type = type;
         this.status = status;
         this.credits = credits;
-        this.concurrencyLimit = concurrencyLimit;
+        this.concurrencyCounter = concurrencyCounter;
         this.concurrencyLimitIncluded = concurrencyLimitIncluded;
         this.concurrencyLimitPurchased = concurrencyLimitPurchased;
         this.monthlyChargeScheduleId = monthlyChargeScheduleId;
@@ -201,11 +201,11 @@ public final class Subscription {
     }
 
     /**
-     * @return This is the total concurrency limit for the subscription.
+     * @return This is the total number of active calls (concurrency) across all orgs under this subscription.
      */
-    @JsonProperty("concurrencyLimit")
-    public double getConcurrencyLimit() {
-        return concurrencyLimit;
+    @JsonProperty("concurrencyCounter")
+    public double getConcurrencyCounter() {
+        return concurrencyCounter;
     }
 
     /**
@@ -413,7 +413,7 @@ public final class Subscription {
                 && type.equals(other.type)
                 && status.equals(other.status)
                 && credits.equals(other.credits)
-                && concurrencyLimit == other.concurrencyLimit
+                && concurrencyCounter == other.concurrencyCounter
                 && concurrencyLimitIncluded == other.concurrencyLimitIncluded
                 && concurrencyLimitPurchased == other.concurrencyLimitPurchased
                 && monthlyChargeScheduleId.equals(other.monthlyChargeScheduleId)
@@ -448,7 +448,7 @@ public final class Subscription {
                 this.type,
                 this.status,
                 this.credits,
-                this.concurrencyLimit,
+                this.concurrencyCounter,
                 this.concurrencyLimitIncluded,
                 this.concurrencyLimitPurchased,
                 this.monthlyChargeScheduleId,
@@ -506,11 +506,11 @@ public final class Subscription {
     }
 
     public interface CreditsStage {
-        ConcurrencyLimitStage credits(@NotNull String credits);
+        ConcurrencyCounterStage credits(@NotNull String credits);
     }
 
-    public interface ConcurrencyLimitStage {
-        ConcurrencyLimitIncludedStage concurrencyLimit(double concurrencyLimit);
+    public interface ConcurrencyCounterStage {
+        ConcurrencyLimitIncludedStage concurrencyCounter(double concurrencyCounter);
     }
 
     public interface ConcurrencyLimitIncludedStage {
@@ -617,7 +617,7 @@ public final class Subscription {
                     TypeStage,
                     StatusStage,
                     CreditsStage,
-                    ConcurrencyLimitStage,
+                    ConcurrencyCounterStage,
                     ConcurrencyLimitIncludedStage,
                     ConcurrencyLimitPurchasedStage,
                     _FinalStage {
@@ -633,7 +633,7 @@ public final class Subscription {
 
         private String credits;
 
-        private double concurrencyLimit;
+        private double concurrencyCounter;
 
         private double concurrencyLimitIncluded;
 
@@ -694,7 +694,7 @@ public final class Subscription {
             type(other.getType());
             status(other.getStatus());
             credits(other.getCredits());
-            concurrencyLimit(other.getConcurrencyLimit());
+            concurrencyCounter(other.getConcurrencyCounter());
             concurrencyLimitIncluded(other.getConcurrencyLimitIncluded());
             concurrencyLimitPurchased(other.getConcurrencyLimitPurchased());
             monthlyChargeScheduleId(other.getMonthlyChargeScheduleId());
@@ -784,19 +784,19 @@ public final class Subscription {
          */
         @java.lang.Override
         @JsonSetter("credits")
-        public ConcurrencyLimitStage credits(@NotNull String credits) {
+        public ConcurrencyCounterStage credits(@NotNull String credits) {
             this.credits = Objects.requireNonNull(credits, "credits must not be null");
             return this;
         }
 
         /**
-         * <p>This is the total concurrency limit for the subscription.</p>
+         * <p>This is the total number of active calls (concurrency) across all orgs under this subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("concurrencyLimit")
-        public ConcurrencyLimitIncludedStage concurrencyLimit(double concurrencyLimit) {
-            this.concurrencyLimit = concurrencyLimit;
+        @JsonSetter("concurrencyCounter")
+        public ConcurrencyLimitIncludedStage concurrencyCounter(double concurrencyCounter) {
+            this.concurrencyCounter = concurrencyCounter;
             return this;
         }
 
@@ -1191,7 +1191,7 @@ public final class Subscription {
                     type,
                     status,
                     credits,
-                    concurrencyLimit,
+                    concurrencyCounter,
                     concurrencyLimitIncluded,
                     concurrencyLimitPurchased,
                     monthlyChargeScheduleId,

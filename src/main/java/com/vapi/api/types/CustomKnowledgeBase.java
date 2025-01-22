@@ -35,8 +35,7 @@ public final class CustomKnowledgeBase {
     }
 
     /**
-     * @return /**
-     * This is where the knowledge base request will be sent.
+     * @return This is where the knowledge base request will be sent.
      * <p>Request Example:</p>
      * <p>POST https://{server.url}
      * Content-Type: application/json</p>
@@ -161,8 +160,7 @@ public final class CustomKnowledgeBase {
         }
 
         /**
-         * <p>/**
-         * This is where the knowledge base request will be sent.</p>
+         * <p>This is where the knowledge base request will be sent.</p>
          * <p>Request Example:</p>
          * <p>POST https://{server.url}
          * Content-Type: application/json</p>

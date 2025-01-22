@@ -30,8 +30,7 @@ public final class UpdateCustomKnowledgeBaseDto {
     }
 
     /**
-     * @return /**
-     * This is where the knowledge base request will be sent.
+     * @return This is where the knowledge base request will be sent.
      * <p>Request Example:</p>
      * <p>POST https://{server.url}
      * Content-Type: application/json</p>

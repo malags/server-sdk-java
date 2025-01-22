@@ -23,11 +23,9 @@ import org.jetbrains.annotations.NotNull;
 public final class TrieveKnowledgeBase {
     private final Optional<String> name;
 
-    private final TrieveKnowledgeBaseVectorStoreSearchPlan vectorStoreSearchPlan;
+    private final Optional<TrieveKnowledgeBaseSearchPlan> searchPlan;
 
-    private final Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan;
-
-    private final Optional<String> vectorStoreProviderId;
+    private final Optional<TrieveKnowledgeBaseCreatePlan> createPlan;
 
     private final String id;
 
@@ -37,16 +35,14 @@ public final class TrieveKnowledgeBase {
 
     private TrieveKnowledgeBase(
             Optional<String> name,
-            TrieveKnowledgeBaseVectorStoreSearchPlan vectorStoreSearchPlan,
-            Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan,
-            Optional<String> vectorStoreProviderId,
+            Optional<TrieveKnowledgeBaseSearchPlan> searchPlan,
+            Optional<TrieveKnowledgeBaseCreatePlan> createPlan,
             String id,
             String orgId,
             Map<String, Object> additionalProperties) {
         this.name = name;
-        this.vectorStoreSearchPlan = vectorStoreSearchPlan;
-        this.vectorStoreCreatePlan = vectorStoreCreatePlan;
-        this.vectorStoreProviderId = vectorStoreProviderId;
+        this.searchPlan = searchPlan;
+        this.createPlan = createPlan;
         this.id = id;
         this.orgId = orgId;
         this.additionalProperties = additionalProperties;
@@ -61,32 +57,24 @@ public final class TrieveKnowledgeBase {
     }
 
     /**
-     * @return This is the plan on how to search the vector store while a call is going on.
-     */
-    @JsonProperty("vectorStoreSearchPlan")
-    public TrieveKnowledgeBaseVectorStoreSearchPlan getVectorStoreSearchPlan() {
-        return vectorStoreSearchPlan;
-    }
-
-    /**
-     * @return This is the plan if you want us to create a new vector store on your behalf. To use an existing vector store from your account, use <code>vectoreStoreProviderId</code>
-     */
-    @JsonProperty("vectorStoreCreatePlan")
-    public Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> getVectorStoreCreatePlan() {
-        return vectorStoreCreatePlan;
-    }
-
-    /**
-     * @return This is an vector store that you already have on your account with the provider. To create a new vector store, use vectorStoreCreatePlan.
-     * <p>Usage:</p>
+     * @return This is the searching plan used when searching for relevant chunks from the vector store.
+     * <p>You should configure this if you're running into these issues:</p>
      * <ul>
-     * <li>To bring your own vector store from Trieve, go to https://trieve.ai</li>
-     * <li>Create a dataset, and use the datasetId here.</li>
+     * <li>Too much unnecessary context is being fed as knowledge base context.</li>
+     * <li>Not enough relevant context is being fed as knowledge base context.</li>
      * </ul>
      */
-    @JsonProperty("vectorStoreProviderId")
-    public Optional<String> getVectorStoreProviderId() {
-        return vectorStoreProviderId;
+    @JsonProperty("searchPlan")
+    public Optional<TrieveKnowledgeBaseSearchPlan> getSearchPlan() {
+        return searchPlan;
+    }
+
+    /**
+     * @return This is the plan if you want us to create/import a new vector store using Trieve.
+     */
+    @JsonProperty("createPlan")
+    public Optional<TrieveKnowledgeBaseCreatePlan> getCreatePlan() {
+        return createPlan;
     }
 
     /**
@@ -118,22 +106,15 @@ public final class TrieveKnowledgeBase {
 
     private boolean equalTo(TrieveKnowledgeBase other) {
         return name.equals(other.name)
-                && vectorStoreSearchPlan.equals(other.vectorStoreSearchPlan)
-                && vectorStoreCreatePlan.equals(other.vectorStoreCreatePlan)
-                && vectorStoreProviderId.equals(other.vectorStoreProviderId)
+                && searchPlan.equals(other.searchPlan)
+                && createPlan.equals(other.createPlan)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.name,
-                this.vectorStoreSearchPlan,
-                this.vectorStoreCreatePlan,
-                this.vectorStoreProviderId,
-                this.id,
-                this.orgId);
+        return Objects.hash(this.name, this.searchPlan, this.createPlan, this.id, this.orgId);
     }
 
     @java.lang.Override
@@ -141,18 +122,14 @@ public final class TrieveKnowledgeBase {
         return ObjectMappers.stringify(this);
     }
 
-    public static VectorStoreSearchPlanStage builder() {
+    public static IdStage builder() {
         return new Builder();
-    }
-
-    public interface VectorStoreSearchPlanStage {
-        IdStage vectorStoreSearchPlan(@NotNull TrieveKnowledgeBaseVectorStoreSearchPlan vectorStoreSearchPlan);
-
-        Builder from(TrieveKnowledgeBase other);
     }
 
     public interface IdStage {
         OrgIdStage id(@NotNull String id);
+
+        Builder from(TrieveKnowledgeBase other);
     }
 
     public interface OrgIdStage {
@@ -166,26 +143,24 @@ public final class TrieveKnowledgeBase {
 
         _FinalStage name(String name);
 
-        _FinalStage vectorStoreCreatePlan(Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan);
+        _FinalStage searchPlan(Optional<TrieveKnowledgeBaseSearchPlan> searchPlan);
 
-        _FinalStage vectorStoreCreatePlan(TrieveKnowledgeBaseVectorStoreCreatePlan vectorStoreCreatePlan);
+        _FinalStage searchPlan(TrieveKnowledgeBaseSearchPlan searchPlan);
 
-        _FinalStage vectorStoreProviderId(Optional<String> vectorStoreProviderId);
+        _FinalStage createPlan(Optional<TrieveKnowledgeBaseCreatePlan> createPlan);
 
-        _FinalStage vectorStoreProviderId(String vectorStoreProviderId);
+        _FinalStage createPlan(TrieveKnowledgeBaseCreatePlan createPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements VectorStoreSearchPlanStage, IdStage, OrgIdStage, _FinalStage {
-        private TrieveKnowledgeBaseVectorStoreSearchPlan vectorStoreSearchPlan;
-
+    public static final class Builder implements IdStage, OrgIdStage, _FinalStage {
         private String id;
 
         private String orgId;
 
-        private Optional<String> vectorStoreProviderId = Optional.empty();
+        private Optional<TrieveKnowledgeBaseCreatePlan> createPlan = Optional.empty();
 
-        private Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan = Optional.empty();
+        private Optional<TrieveKnowledgeBaseSearchPlan> searchPlan = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -197,23 +172,10 @@ public final class TrieveKnowledgeBase {
         @java.lang.Override
         public Builder from(TrieveKnowledgeBase other) {
             name(other.getName());
-            vectorStoreSearchPlan(other.getVectorStoreSearchPlan());
-            vectorStoreCreatePlan(other.getVectorStoreCreatePlan());
-            vectorStoreProviderId(other.getVectorStoreProviderId());
+            searchPlan(other.getSearchPlan());
+            createPlan(other.getCreatePlan());
             id(other.getId());
             orgId(other.getOrgId());
-            return this;
-        }
-
-        /**
-         * <p>This is the plan on how to search the vector store while a call is going on.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("vectorStoreSearchPlan")
-        public IdStage vectorStoreSearchPlan(@NotNull TrieveKnowledgeBaseVectorStoreSearchPlan vectorStoreSearchPlan) {
-            this.vectorStoreSearchPlan =
-                    Objects.requireNonNull(vectorStoreSearchPlan, "vectorStoreSearchPlan must not be null");
             return this;
         }
 
@@ -240,42 +202,41 @@ public final class TrieveKnowledgeBase {
         }
 
         /**
-         * <p>This is an vector store that you already have on your account with the provider. To create a new vector store, use vectorStoreCreatePlan.</p>
-         * <p>Usage:</p>
-         * <ul>
-         * <li>To bring your own vector store from Trieve, go to https://trieve.ai</li>
-         * <li>Create a dataset, and use the datasetId here.</li>
-         * </ul>
+         * <p>This is the plan if you want us to create/import a new vector store using Trieve.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage vectorStoreProviderId(String vectorStoreProviderId) {
-            this.vectorStoreProviderId = Optional.ofNullable(vectorStoreProviderId);
+        public _FinalStage createPlan(TrieveKnowledgeBaseCreatePlan createPlan) {
+            this.createPlan = Optional.ofNullable(createPlan);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "vectorStoreProviderId", nulls = Nulls.SKIP)
-        public _FinalStage vectorStoreProviderId(Optional<String> vectorStoreProviderId) {
-            this.vectorStoreProviderId = vectorStoreProviderId;
+        @JsonSetter(value = "createPlan", nulls = Nulls.SKIP)
+        public _FinalStage createPlan(Optional<TrieveKnowledgeBaseCreatePlan> createPlan) {
+            this.createPlan = createPlan;
             return this;
         }
 
         /**
-         * <p>This is the plan if you want us to create a new vector store on your behalf. To use an existing vector store from your account, use <code>vectoreStoreProviderId</code></p>
+         * <p>This is the searching plan used when searching for relevant chunks from the vector store.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>Too much unnecessary context is being fed as knowledge base context.</li>
+         * <li>Not enough relevant context is being fed as knowledge base context.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage vectorStoreCreatePlan(TrieveKnowledgeBaseVectorStoreCreatePlan vectorStoreCreatePlan) {
-            this.vectorStoreCreatePlan = Optional.ofNullable(vectorStoreCreatePlan);
+        public _FinalStage searchPlan(TrieveKnowledgeBaseSearchPlan searchPlan) {
+            this.searchPlan = Optional.ofNullable(searchPlan);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "vectorStoreCreatePlan", nulls = Nulls.SKIP)
-        public _FinalStage vectorStoreCreatePlan(
-                Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan) {
-            this.vectorStoreCreatePlan = vectorStoreCreatePlan;
+        @JsonSetter(value = "searchPlan", nulls = Nulls.SKIP)
+        public _FinalStage searchPlan(Optional<TrieveKnowledgeBaseSearchPlan> searchPlan) {
+            this.searchPlan = searchPlan;
             return this;
         }
 
@@ -298,14 +259,7 @@ public final class TrieveKnowledgeBase {
 
         @java.lang.Override
         public TrieveKnowledgeBase build() {
-            return new TrieveKnowledgeBase(
-                    name,
-                    vectorStoreSearchPlan,
-                    vectorStoreCreatePlan,
-                    vectorStoreProviderId,
-                    id,
-                    orgId,
-                    additionalProperties);
+            return new TrieveKnowledgeBase(name, searchPlan, createPlan, id, orgId, additionalProperties);
         }
     }
 }

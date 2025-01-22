@@ -23,8 +23,6 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = LogsGetRequest.Builder.class)
 public final class LogsGetRequest {
-    private final Optional<String> orgId;
-
     private final Optional<LogsGetRequestType> type;
 
     private final Optional<String> webhookType;
@@ -64,7 +62,6 @@ public final class LogsGetRequest {
     private final Map<String, Object> additionalProperties;
 
     private LogsGetRequest(
-            Optional<String> orgId,
             Optional<LogsGetRequestType> type,
             Optional<String> webhookType,
             Optional<String> assistantId,
@@ -84,7 +81,6 @@ public final class LogsGetRequest {
             Optional<OffsetDateTime> updatedAtGe,
             Optional<OffsetDateTime> updatedAtLe,
             Map<String, Object> additionalProperties) {
-        this.orgId = orgId;
         this.type = type;
         this.webhookType = webhookType;
         this.assistantId = assistantId;
@@ -104,14 +100,6 @@ public final class LogsGetRequest {
         this.updatedAtGe = updatedAtGe;
         this.updatedAtLe = updatedAtLe;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This is the unique identifier for the org that this log belongs to.
-     */
-    @JsonProperty("orgId")
-    public Optional<String> getOrgId() {
-        return orgId;
     }
 
     /**
@@ -270,8 +258,7 @@ public final class LogsGetRequest {
     }
 
     private boolean equalTo(LogsGetRequest other) {
-        return orgId.equals(other.orgId)
-                && type.equals(other.type)
+        return type.equals(other.type)
                 && webhookType.equals(other.webhookType)
                 && assistantId.equals(other.assistantId)
                 && phoneNumberId.equals(other.phoneNumberId)
@@ -294,7 +281,6 @@ public final class LogsGetRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.orgId,
                 this.type,
                 this.webhookType,
                 this.assistantId,
@@ -326,8 +312,6 @@ public final class LogsGetRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> orgId = Optional.empty();
-
         private Optional<LogsGetRequestType> type = Optional.empty();
 
         private Optional<String> webhookType = Optional.empty();
@@ -370,7 +354,6 @@ public final class LogsGetRequest {
         private Builder() {}
 
         public Builder from(LogsGetRequest other) {
-            orgId(other.getOrgId());
             type(other.getType());
             webhookType(other.getWebhookType());
             assistantId(other.getAssistantId());
@@ -389,17 +372,6 @@ public final class LogsGetRequest {
             updatedAtLt(other.getUpdatedAtLt());
             updatedAtGe(other.getUpdatedAtGe());
             updatedAtLe(other.getUpdatedAtLe());
-            return this;
-        }
-
-        @JsonSetter(value = "orgId", nulls = Nulls.SKIP)
-        public Builder orgId(Optional<String> orgId) {
-            this.orgId = orgId;
-            return this;
-        }
-
-        public Builder orgId(String orgId) {
-            this.orgId = Optional.ofNullable(orgId);
             return this;
         }
 
@@ -603,7 +575,6 @@ public final class LogsGetRequest {
 
         public LogsGetRequest build() {
             return new LogsGetRequest(
-                    orgId,
                     type,
                     webhookType,
                     assistantId,

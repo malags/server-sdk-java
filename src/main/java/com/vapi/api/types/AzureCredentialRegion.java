@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum AzureCredentialRegion {
     AUSTRALIA("australia"),
 
-    CANADA("canada"),
+    CANADAEAST("canadaeast"),
+
+    CANADACENTRAL("canadacentral"),
 
     EASTUS_2("eastus2"),
 
@@ -18,7 +20,9 @@ public enum AzureCredentialRegion {
 
     INDIA("india"),
 
-    JAPAN("japan"),
+    JAPANEAST("japaneast"),
+
+    JAPANWEST("japanwest"),
 
     UAENORTH("uaenorth"),
 

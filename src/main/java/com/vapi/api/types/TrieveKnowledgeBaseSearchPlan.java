@@ -19,20 +19,20 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = TrieveKnowledgeBaseVectorStoreSearchPlan.Builder.class)
-public final class TrieveKnowledgeBaseVectorStoreSearchPlan {
+@JsonDeserialize(builder = TrieveKnowledgeBaseSearchPlan.Builder.class)
+public final class TrieveKnowledgeBaseSearchPlan {
     private final Optional<Boolean> removeStopWords;
 
     private final Optional<Double> scoreThreshold;
 
-    private final TrieveKnowledgeBaseVectorStoreSearchPlanSearchType searchType;
+    private final TrieveKnowledgeBaseSearchPlanSearchType searchType;
 
     private final Map<String, Object> additionalProperties;
 
-    private TrieveKnowledgeBaseVectorStoreSearchPlan(
+    private TrieveKnowledgeBaseSearchPlan(
             Optional<Boolean> removeStopWords,
             Optional<Double> scoreThreshold,
-            TrieveKnowledgeBaseVectorStoreSearchPlanSearchType searchType,
+            TrieveKnowledgeBaseSearchPlanSearchType searchType,
             Map<String, Object> additionalProperties) {
         this.removeStopWords = removeStopWords;
         this.scoreThreshold = scoreThreshold;
@@ -60,15 +60,14 @@ public final class TrieveKnowledgeBaseVectorStoreSearchPlan {
      * @return This is the search method used when searching for relevant chunks from the vector store.
      */
     @JsonProperty("searchType")
-    public TrieveKnowledgeBaseVectorStoreSearchPlanSearchType getSearchType() {
+    public TrieveKnowledgeBaseSearchPlanSearchType getSearchType() {
         return searchType;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof TrieveKnowledgeBaseVectorStoreSearchPlan
-                && equalTo((TrieveKnowledgeBaseVectorStoreSearchPlan) other);
+        return other instanceof TrieveKnowledgeBaseSearchPlan && equalTo((TrieveKnowledgeBaseSearchPlan) other);
     }
 
     @JsonAnyGetter
@@ -76,7 +75,7 @@ public final class TrieveKnowledgeBaseVectorStoreSearchPlan {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(TrieveKnowledgeBaseVectorStoreSearchPlan other) {
+    private boolean equalTo(TrieveKnowledgeBaseSearchPlan other) {
         return removeStopWords.equals(other.removeStopWords)
                 && scoreThreshold.equals(other.scoreThreshold)
                 && searchType.equals(other.searchType);
@@ -97,13 +96,13 @@ public final class TrieveKnowledgeBaseVectorStoreSearchPlan {
     }
 
     public interface SearchTypeStage {
-        _FinalStage searchType(@NotNull TrieveKnowledgeBaseVectorStoreSearchPlanSearchType searchType);
+        _FinalStage searchType(@NotNull TrieveKnowledgeBaseSearchPlanSearchType searchType);
 
-        Builder from(TrieveKnowledgeBaseVectorStoreSearchPlan other);
+        Builder from(TrieveKnowledgeBaseSearchPlan other);
     }
 
     public interface _FinalStage {
-        TrieveKnowledgeBaseVectorStoreSearchPlan build();
+        TrieveKnowledgeBaseSearchPlan build();
 
         _FinalStage removeStopWords(Optional<Boolean> removeStopWords);
 
@@ -116,7 +115,7 @@ public final class TrieveKnowledgeBaseVectorStoreSearchPlan {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements SearchTypeStage, _FinalStage {
-        private TrieveKnowledgeBaseVectorStoreSearchPlanSearchType searchType;
+        private TrieveKnowledgeBaseSearchPlanSearchType searchType;
 
         private Optional<Double> scoreThreshold = Optional.empty();
 
@@ -128,7 +127,7 @@ public final class TrieveKnowledgeBaseVectorStoreSearchPlan {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(TrieveKnowledgeBaseVectorStoreSearchPlan other) {
+        public Builder from(TrieveKnowledgeBaseSearchPlan other) {
             removeStopWords(other.getRemoveStopWords());
             scoreThreshold(other.getScoreThreshold());
             searchType(other.getSearchType());
@@ -141,7 +140,7 @@ public final class TrieveKnowledgeBaseVectorStoreSearchPlan {
          */
         @java.lang.Override
         @JsonSetter("searchType")
-        public _FinalStage searchType(@NotNull TrieveKnowledgeBaseVectorStoreSearchPlanSearchType searchType) {
+        public _FinalStage searchType(@NotNull TrieveKnowledgeBaseSearchPlanSearchType searchType) {
             this.searchType = Objects.requireNonNull(searchType, "searchType must not be null");
             return this;
         }
@@ -181,9 +180,8 @@ public final class TrieveKnowledgeBaseVectorStoreSearchPlan {
         }
 
         @java.lang.Override
-        public TrieveKnowledgeBaseVectorStoreSearchPlan build() {
-            return new TrieveKnowledgeBaseVectorStoreSearchPlan(
-                    removeStopWords, scoreThreshold, searchType, additionalProperties);
+        public TrieveKnowledgeBaseSearchPlan build() {
+            return new TrieveKnowledgeBaseSearchPlan(removeStopWords, scoreThreshold, searchType, additionalProperties);
         }
     }
 }

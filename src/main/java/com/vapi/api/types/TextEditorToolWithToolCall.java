@@ -20,15 +20,13 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = GhlToolWithToolCall.Builder.class)
-public final class GhlToolWithToolCall {
+@JsonDeserialize(builder = TextEditorToolWithToolCall.Builder.class)
+public final class TextEditorToolWithToolCall {
     private final Optional<Boolean> async;
 
-    private final Optional<List<GhlToolWithToolCallMessagesItem>> messages;
+    private final Optional<List<TextEditorToolWithToolCallMessagesItem>> messages;
 
     private final ToolCall toolCall;
-
-    private final GhlToolMetadata metadata;
 
     private final Optional<OpenAiFunction> function;
 
@@ -36,18 +34,16 @@ public final class GhlToolWithToolCall {
 
     private final Map<String, Object> additionalProperties;
 
-    private GhlToolWithToolCall(
+    private TextEditorToolWithToolCall(
             Optional<Boolean> async,
-            Optional<List<GhlToolWithToolCallMessagesItem>> messages,
+            Optional<List<TextEditorToolWithToolCallMessagesItem>> messages,
             ToolCall toolCall,
-            GhlToolMetadata metadata,
             Optional<OpenAiFunction> function,
             Optional<Server> server,
             Map<String, Object> additionalProperties) {
         this.async = async;
         this.messages = messages;
         this.toolCall = toolCall;
-        this.metadata = metadata;
         this.function = function;
         this.server = server;
         this.additionalProperties = additionalProperties;
@@ -69,8 +65,16 @@ public final class GhlToolWithToolCall {
      * <p>For some tools, this is auto-filled based on special fields like <code>tool.destinations</code>. For others like the function tool, these can be custom configured.</p>
      */
     @JsonProperty("messages")
-    public Optional<List<GhlToolWithToolCallMessagesItem>> getMessages() {
+    public Optional<List<TextEditorToolWithToolCallMessagesItem>> getMessages() {
         return messages;
+    }
+
+    /**
+     * @return The sub type of tool.
+     */
+    @JsonProperty("subType")
+    public String getSubType() {
+        return "text_editor_20241022";
     }
 
     @JsonProperty("toolCall")
@@ -78,9 +82,12 @@ public final class GhlToolWithToolCall {
         return toolCall;
     }
 
-    @JsonProperty("metadata")
-    public GhlToolMetadata getMetadata() {
-        return metadata;
+    /**
+     * @return The name of the tool, fixed to 'str_replace_editor'
+     */
+    @JsonProperty("name")
+    public String getName() {
+        return "str_replace_editor";
     }
 
     /**
@@ -106,7 +113,7 @@ public final class GhlToolWithToolCall {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof GhlToolWithToolCall && equalTo((GhlToolWithToolCall) other);
+        return other instanceof TextEditorToolWithToolCall && equalTo((TextEditorToolWithToolCall) other);
     }
 
     @JsonAnyGetter
@@ -114,18 +121,17 @@ public final class GhlToolWithToolCall {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(GhlToolWithToolCall other) {
+    private boolean equalTo(TextEditorToolWithToolCall other) {
         return async.equals(other.async)
                 && messages.equals(other.messages)
                 && toolCall.equals(other.toolCall)
-                && metadata.equals(other.metadata)
                 && function.equals(other.function)
                 && server.equals(other.server);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.async, this.messages, this.toolCall, this.metadata, this.function, this.server);
+        return Objects.hash(this.async, this.messages, this.toolCall, this.function, this.server);
     }
 
     @java.lang.Override
@@ -138,25 +144,21 @@ public final class GhlToolWithToolCall {
     }
 
     public interface ToolCallStage {
-        MetadataStage toolCall(@NotNull ToolCall toolCall);
+        _FinalStage toolCall(@NotNull ToolCall toolCall);
 
-        Builder from(GhlToolWithToolCall other);
-    }
-
-    public interface MetadataStage {
-        _FinalStage metadata(@NotNull GhlToolMetadata metadata);
+        Builder from(TextEditorToolWithToolCall other);
     }
 
     public interface _FinalStage {
-        GhlToolWithToolCall build();
+        TextEditorToolWithToolCall build();
 
         _FinalStage async(Optional<Boolean> async);
 
         _FinalStage async(Boolean async);
 
-        _FinalStage messages(Optional<List<GhlToolWithToolCallMessagesItem>> messages);
+        _FinalStage messages(Optional<List<TextEditorToolWithToolCallMessagesItem>> messages);
 
-        _FinalStage messages(List<GhlToolWithToolCallMessagesItem> messages);
+        _FinalStage messages(List<TextEditorToolWithToolCallMessagesItem> messages);
 
         _FinalStage function(Optional<OpenAiFunction> function);
 
@@ -168,16 +170,14 @@ public final class GhlToolWithToolCall {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ToolCallStage, MetadataStage, _FinalStage {
+    public static final class Builder implements ToolCallStage, _FinalStage {
         private ToolCall toolCall;
-
-        private GhlToolMetadata metadata;
 
         private Optional<Server> server = Optional.empty();
 
         private Optional<OpenAiFunction> function = Optional.empty();
 
-        private Optional<List<GhlToolWithToolCallMessagesItem>> messages = Optional.empty();
+        private Optional<List<TextEditorToolWithToolCallMessagesItem>> messages = Optional.empty();
 
         private Optional<Boolean> async = Optional.empty();
 
@@ -187,11 +187,10 @@ public final class GhlToolWithToolCall {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(GhlToolWithToolCall other) {
+        public Builder from(TextEditorToolWithToolCall other) {
             async(other.getAsync());
             messages(other.getMessages());
             toolCall(other.getToolCall());
-            metadata(other.getMetadata());
             function(other.getFunction());
             server(other.getServer());
             return this;
@@ -199,15 +198,8 @@ public final class GhlToolWithToolCall {
 
         @java.lang.Override
         @JsonSetter("toolCall")
-        public MetadataStage toolCall(@NotNull ToolCall toolCall) {
+        public _FinalStage toolCall(@NotNull ToolCall toolCall) {
             this.toolCall = Objects.requireNonNull(toolCall, "toolCall must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("metadata")
-        public _FinalStage metadata(@NotNull GhlToolMetadata metadata) {
-            this.metadata = Objects.requireNonNull(metadata, "metadata must not be null");
             return this;
         }
 
@@ -255,14 +247,14 @@ public final class GhlToolWithToolCall {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage messages(List<GhlToolWithToolCallMessagesItem> messages) {
+        public _FinalStage messages(List<TextEditorToolWithToolCallMessagesItem> messages) {
             this.messages = Optional.ofNullable(messages);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
-        public _FinalStage messages(Optional<List<GhlToolWithToolCallMessagesItem>> messages) {
+        public _FinalStage messages(Optional<List<TextEditorToolWithToolCallMessagesItem>> messages) {
             this.messages = messages;
             return this;
         }
@@ -288,8 +280,8 @@ public final class GhlToolWithToolCall {
         }
 
         @java.lang.Override
-        public GhlToolWithToolCall build() {
-            return new GhlToolWithToolCall(async, messages, toolCall, metadata, function, server, additionalProperties);
+        public TextEditorToolWithToolCall build() {
+            return new TextEditorToolWithToolCall(async, messages, toolCall, function, server, additionalProperties);
         }
     }
 }

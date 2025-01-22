@@ -5,7 +5,7 @@ package com.vapi.api.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TrieveKnowledgeBaseVectorStoreSearchPlanSearchType {
+public enum TrieveKnowledgeBaseSearchPlanSearchType {
     FULLTEXT("fulltext"),
 
     SEMANTIC("semantic"),
@@ -16,7 +16,7 @@ public enum TrieveKnowledgeBaseVectorStoreSearchPlanSearchType {
 
     private final String value;
 
-    TrieveKnowledgeBaseVectorStoreSearchPlanSearchType(String value) {
+    TrieveKnowledgeBaseSearchPlanSearchType(String value) {
         this.value = value;
     }
 

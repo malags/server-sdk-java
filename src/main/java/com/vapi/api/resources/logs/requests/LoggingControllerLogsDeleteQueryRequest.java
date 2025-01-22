@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
+import com.vapi.api.resources.logs.types.LoggingControllerLogsDeleteQueryRequestType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,7 +21,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = LoggingControllerLogsDeleteQueryRequest.Builder.class)
 public final class LoggingControllerLogsDeleteQueryRequest {
-    private final Optional<String> orgId;
+    private final Optional<LoggingControllerLogsDeleteQueryRequestType> type;
 
     private final Optional<String> assistantId;
 
@@ -35,14 +36,14 @@ public final class LoggingControllerLogsDeleteQueryRequest {
     private final Map<String, Object> additionalProperties;
 
     private LoggingControllerLogsDeleteQueryRequest(
-            Optional<String> orgId,
+            Optional<LoggingControllerLogsDeleteQueryRequestType> type,
             Optional<String> assistantId,
             Optional<String> phoneNumberId,
             Optional<String> customerId,
             Optional<String> squadId,
             Optional<String> callId,
             Map<String, Object> additionalProperties) {
-        this.orgId = orgId;
+        this.type = type;
         this.assistantId = assistantId;
         this.phoneNumberId = phoneNumberId;
         this.customerId = customerId;
@@ -52,16 +53,13 @@ public final class LoggingControllerLogsDeleteQueryRequest {
     }
 
     /**
-     * @return This is the unique identifier for the org that this log belongs to.
+     * @return This is the type of the log.
      */
-    @JsonProperty("orgId")
-    public Optional<String> getOrgId() {
-        return orgId;
+    @JsonProperty("type")
+    public Optional<LoggingControllerLogsDeleteQueryRequestType> getType() {
+        return type;
     }
 
-    /**
-     * @return This is the ID of the assistant.
-     */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
         return assistantId;
@@ -112,7 +110,7 @@ public final class LoggingControllerLogsDeleteQueryRequest {
     }
 
     private boolean equalTo(LoggingControllerLogsDeleteQueryRequest other) {
-        return orgId.equals(other.orgId)
+        return type.equals(other.type)
                 && assistantId.equals(other.assistantId)
                 && phoneNumberId.equals(other.phoneNumberId)
                 && customerId.equals(other.customerId)
@@ -123,7 +121,7 @@ public final class LoggingControllerLogsDeleteQueryRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.orgId, this.assistantId, this.phoneNumberId, this.customerId, this.squadId, this.callId);
+                this.type, this.assistantId, this.phoneNumberId, this.customerId, this.squadId, this.callId);
     }
 
     @java.lang.Override
@@ -137,7 +135,7 @@ public final class LoggingControllerLogsDeleteQueryRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> orgId = Optional.empty();
+        private Optional<LoggingControllerLogsDeleteQueryRequestType> type = Optional.empty();
 
         private Optional<String> assistantId = Optional.empty();
 
@@ -155,7 +153,7 @@ public final class LoggingControllerLogsDeleteQueryRequest {
         private Builder() {}
 
         public Builder from(LoggingControllerLogsDeleteQueryRequest other) {
-            orgId(other.getOrgId());
+            type(other.getType());
             assistantId(other.getAssistantId());
             phoneNumberId(other.getPhoneNumberId());
             customerId(other.getCustomerId());
@@ -164,14 +162,14 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
-        @JsonSetter(value = "orgId", nulls = Nulls.SKIP)
-        public Builder orgId(Optional<String> orgId) {
-            this.orgId = orgId;
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<LoggingControllerLogsDeleteQueryRequestType> type) {
+            this.type = type;
             return this;
         }
 
-        public Builder orgId(String orgId) {
-            this.orgId = Optional.ofNullable(orgId);
+        public Builder type(LoggingControllerLogsDeleteQueryRequestType type) {
+            this.type = Optional.ofNullable(type);
             return this;
         }
 
@@ -232,7 +230,7 @@ public final class LoggingControllerLogsDeleteQueryRequest {
 
         public LoggingControllerLogsDeleteQueryRequest build() {
             return new LoggingControllerLogsDeleteQueryRequest(
-                    orgId, assistantId, phoneNumberId, customerId, squadId, callId, additionalProperties);
+                    type, assistantId, phoneNumberId, customerId, squadId, callId, additionalProperties);
         }
     }
 }

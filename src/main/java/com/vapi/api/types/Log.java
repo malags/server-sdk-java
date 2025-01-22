@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,23 +31,23 @@ public final class Log {
 
     private final Optional<LogResource> resource;
 
-    private final double requestDurationSeconds;
+    private final Optional<Double> requestDurationSeconds;
 
-    private final String requestStartedAt;
+    private final Optional<String> requestStartedAt;
 
-    private final String requestFinishedAt;
+    private final Optional<String> requestFinishedAt;
 
-    private final Map<String, Object> requestBody;
+    private final Optional<Map<String, Object>> requestBody;
 
-    private final LogRequestHttpMethod requestHttpMethod;
+    private final Optional<LogRequestHttpMethod> requestHttpMethod;
 
-    private final String requestUrl;
+    private final Optional<String> requestUrl;
 
-    private final String requestPath;
+    private final Optional<String> requestPath;
 
     private final Optional<String> requestQuery;
 
-    private final double responseHttpCode;
+    private final Optional<Double> responseHttpCode;
 
     private final Optional<String> requestIpAddress;
 
@@ -78,15 +77,15 @@ public final class Log {
             LogType type,
             Optional<String> webhookType,
             Optional<LogResource> resource,
-            double requestDurationSeconds,
-            String requestStartedAt,
-            String requestFinishedAt,
-            Map<String, Object> requestBody,
-            LogRequestHttpMethod requestHttpMethod,
-            String requestUrl,
-            String requestPath,
+            Optional<Double> requestDurationSeconds,
+            Optional<String> requestStartedAt,
+            Optional<String> requestFinishedAt,
+            Optional<Map<String, Object>> requestBody,
+            Optional<LogRequestHttpMethod> requestHttpMethod,
+            Optional<String> requestUrl,
+            Optional<String> requestPath,
             Optional<String> requestQuery,
-            double responseHttpCode,
+            Optional<Double> responseHttpCode,
             Optional<String> requestIpAddress,
             Optional<String> requestOrigin,
             Optional<Map<String, Object>> responseBody,
@@ -169,7 +168,7 @@ public final class Log {
      * @return 'This is how long the request took.
      */
     @JsonProperty("requestDurationSeconds")
-    public double getRequestDurationSeconds() {
+    public Optional<Double> getRequestDurationSeconds() {
         return requestDurationSeconds;
     }
 
@@ -177,7 +176,7 @@ public final class Log {
      * @return This is the timestamp at which the request began.
      */
     @JsonProperty("requestStartedAt")
-    public String getRequestStartedAt() {
+    public Optional<String> getRequestStartedAt() {
         return requestStartedAt;
     }
 
@@ -185,7 +184,7 @@ public final class Log {
      * @return This is the timestamp at which the request finished.
      */
     @JsonProperty("requestFinishedAt")
-    public String getRequestFinishedAt() {
+    public Optional<String> getRequestFinishedAt() {
         return requestFinishedAt;
     }
 
@@ -193,7 +192,7 @@ public final class Log {
      * @return This is the body of the request.
      */
     @JsonProperty("requestBody")
-    public Map<String, Object> getRequestBody() {
+    public Optional<Map<String, Object>> getRequestBody() {
         return requestBody;
     }
 
@@ -201,7 +200,7 @@ public final class Log {
      * @return This is the request method.
      */
     @JsonProperty("requestHttpMethod")
-    public LogRequestHttpMethod getRequestHttpMethod() {
+    public Optional<LogRequestHttpMethod> getRequestHttpMethod() {
         return requestHttpMethod;
     }
 
@@ -209,7 +208,7 @@ public final class Log {
      * @return This is the request URL.
      */
     @JsonProperty("requestUrl")
-    public String getRequestUrl() {
+    public Optional<String> getRequestUrl() {
         return requestUrl;
     }
 
@@ -217,7 +216,7 @@ public final class Log {
      * @return This is the request path.
      */
     @JsonProperty("requestPath")
-    public String getRequestPath() {
+    public Optional<String> getRequestPath() {
         return requestPath;
     }
 
@@ -233,7 +232,7 @@ public final class Log {
      * @return This the HTTP status code of the response.
      */
     @JsonProperty("responseHttpCode")
-    public double getResponseHttpCode() {
+    public Optional<Double> getResponseHttpCode() {
         return responseHttpCode;
     }
 
@@ -334,7 +333,7 @@ public final class Log {
                 && type.equals(other.type)
                 && webhookType.equals(other.webhookType)
                 && resource.equals(other.resource)
-                && requestDurationSeconds == other.requestDurationSeconds
+                && requestDurationSeconds.equals(other.requestDurationSeconds)
                 && requestStartedAt.equals(other.requestStartedAt)
                 && requestFinishedAt.equals(other.requestFinishedAt)
                 && requestBody.equals(other.requestBody)
@@ -342,7 +341,7 @@ public final class Log {
                 && requestUrl.equals(other.requestUrl)
                 && requestPath.equals(other.requestPath)
                 && requestQuery.equals(other.requestQuery)
-                && responseHttpCode == other.responseHttpCode
+                && responseHttpCode.equals(other.responseHttpCode)
                 && requestIpAddress.equals(other.requestIpAddress)
                 && requestOrigin.equals(other.requestOrigin)
                 && responseBody.equals(other.responseBody)
@@ -404,35 +403,7 @@ public final class Log {
     }
 
     public interface TypeStage {
-        RequestDurationSecondsStage type(@NotNull LogType type);
-    }
-
-    public interface RequestDurationSecondsStage {
-        RequestStartedAtStage requestDurationSeconds(double requestDurationSeconds);
-    }
-
-    public interface RequestStartedAtStage {
-        RequestFinishedAtStage requestStartedAt(@NotNull String requestStartedAt);
-    }
-
-    public interface RequestFinishedAtStage {
-        RequestHttpMethodStage requestFinishedAt(@NotNull String requestFinishedAt);
-    }
-
-    public interface RequestHttpMethodStage {
-        RequestUrlStage requestHttpMethod(@NotNull LogRequestHttpMethod requestHttpMethod);
-    }
-
-    public interface RequestUrlStage {
-        RequestPathStage requestUrl(@NotNull String requestUrl);
-    }
-
-    public interface RequestPathStage {
-        ResponseHttpCodeStage requestPath(@NotNull String requestPath);
-    }
-
-    public interface ResponseHttpCodeStage {
-        _FinalStage responseHttpCode(double responseHttpCode);
+        _FinalStage type(@NotNull LogType type);
     }
 
     public interface _FinalStage {
@@ -446,15 +417,41 @@ public final class Log {
 
         _FinalStage resource(LogResource resource);
 
+        _FinalStage requestDurationSeconds(Optional<Double> requestDurationSeconds);
+
+        _FinalStage requestDurationSeconds(Double requestDurationSeconds);
+
+        _FinalStage requestStartedAt(Optional<String> requestStartedAt);
+
+        _FinalStage requestStartedAt(String requestStartedAt);
+
+        _FinalStage requestFinishedAt(Optional<String> requestFinishedAt);
+
+        _FinalStage requestFinishedAt(String requestFinishedAt);
+
+        _FinalStage requestBody(Optional<Map<String, Object>> requestBody);
+
         _FinalStage requestBody(Map<String, Object> requestBody);
 
-        _FinalStage putAllRequestBody(Map<String, Object> requestBody);
+        _FinalStage requestHttpMethod(Optional<LogRequestHttpMethod> requestHttpMethod);
 
-        _FinalStage requestBody(String key, Object value);
+        _FinalStage requestHttpMethod(LogRequestHttpMethod requestHttpMethod);
+
+        _FinalStage requestUrl(Optional<String> requestUrl);
+
+        _FinalStage requestUrl(String requestUrl);
+
+        _FinalStage requestPath(Optional<String> requestPath);
+
+        _FinalStage requestPath(String requestPath);
 
         _FinalStage requestQuery(Optional<String> requestQuery);
 
         _FinalStage requestQuery(String requestQuery);
+
+        _FinalStage responseHttpCode(Optional<Double> responseHttpCode);
+
+        _FinalStage responseHttpCode(Double responseHttpCode);
 
         _FinalStage requestIpAddress(Optional<String> requestIpAddress);
 
@@ -498,37 +495,12 @@ public final class Log {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements TimeStage,
-                    OrgIdStage,
-                    TypeStage,
-                    RequestDurationSecondsStage,
-                    RequestStartedAtStage,
-                    RequestFinishedAtStage,
-                    RequestHttpMethodStage,
-                    RequestUrlStage,
-                    RequestPathStage,
-                    ResponseHttpCodeStage,
-                    _FinalStage {
+    public static final class Builder implements TimeStage, OrgIdStage, TypeStage, _FinalStage {
         private String time;
 
         private String orgId;
 
         private LogType type;
-
-        private double requestDurationSeconds;
-
-        private String requestStartedAt;
-
-        private String requestFinishedAt;
-
-        private LogRequestHttpMethod requestHttpMethod;
-
-        private String requestUrl;
-
-        private String requestPath;
-
-        private double responseHttpCode;
 
         private Optional<String> callId = Optional.empty();
 
@@ -550,9 +522,23 @@ public final class Log {
 
         private Optional<String> requestIpAddress = Optional.empty();
 
+        private Optional<Double> responseHttpCode = Optional.empty();
+
         private Optional<String> requestQuery = Optional.empty();
 
-        private Map<String, Object> requestBody = new LinkedHashMap<>();
+        private Optional<String> requestPath = Optional.empty();
+
+        private Optional<String> requestUrl = Optional.empty();
+
+        private Optional<LogRequestHttpMethod> requestHttpMethod = Optional.empty();
+
+        private Optional<Map<String, Object>> requestBody = Optional.empty();
+
+        private Optional<String> requestFinishedAt = Optional.empty();
+
+        private Optional<String> requestStartedAt = Optional.empty();
+
+        private Optional<Double> requestDurationSeconds = Optional.empty();
 
         private Optional<LogResource> resource = Optional.empty();
 
@@ -620,85 +606,8 @@ public final class Log {
          */
         @java.lang.Override
         @JsonSetter("type")
-        public RequestDurationSecondsStage type(@NotNull LogType type) {
+        public _FinalStage type(@NotNull LogType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
-            return this;
-        }
-
-        /**
-         * <p>'This is how long the request took.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("requestDurationSeconds")
-        public RequestStartedAtStage requestDurationSeconds(double requestDurationSeconds) {
-            this.requestDurationSeconds = requestDurationSeconds;
-            return this;
-        }
-
-        /**
-         * <p>This is the timestamp at which the request began.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("requestStartedAt")
-        public RequestFinishedAtStage requestStartedAt(@NotNull String requestStartedAt) {
-            this.requestStartedAt = Objects.requireNonNull(requestStartedAt, "requestStartedAt must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the timestamp at which the request finished.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("requestFinishedAt")
-        public RequestHttpMethodStage requestFinishedAt(@NotNull String requestFinishedAt) {
-            this.requestFinishedAt = Objects.requireNonNull(requestFinishedAt, "requestFinishedAt must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the request method.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("requestHttpMethod")
-        public RequestUrlStage requestHttpMethod(@NotNull LogRequestHttpMethod requestHttpMethod) {
-            this.requestHttpMethod = Objects.requireNonNull(requestHttpMethod, "requestHttpMethod must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the request URL.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("requestUrl")
-        public RequestPathStage requestUrl(@NotNull String requestUrl) {
-            this.requestUrl = Objects.requireNonNull(requestUrl, "requestUrl must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the request path.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("requestPath")
-        public ResponseHttpCodeStage requestPath(@NotNull String requestPath) {
-            this.requestPath = Objects.requireNonNull(requestPath, "requestPath must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This the HTTP status code of the response.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("responseHttpCode")
-        public _FinalStage responseHttpCode(double responseHttpCode) {
-            this.responseHttpCode = responseHttpCode;
             return this;
         }
 
@@ -873,6 +782,23 @@ public final class Log {
         }
 
         /**
+         * <p>This the HTTP status code of the response.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage responseHttpCode(Double responseHttpCode) {
+            this.responseHttpCode = Optional.ofNullable(responseHttpCode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "responseHttpCode", nulls = Nulls.SKIP)
+        public _FinalStage responseHttpCode(Optional<Double> responseHttpCode) {
+            this.responseHttpCode = responseHttpCode;
+            return this;
+        }
+
+        /**
          * <p>This is the request query.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -890,12 +816,53 @@ public final class Log {
         }
 
         /**
-         * <p>This is the body of the request.</p>
+         * <p>This is the request path.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage requestBody(String key, Object value) {
-            this.requestBody.put(key, value);
+        public _FinalStage requestPath(String requestPath) {
+            this.requestPath = Optional.ofNullable(requestPath);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "requestPath", nulls = Nulls.SKIP)
+        public _FinalStage requestPath(Optional<String> requestPath) {
+            this.requestPath = requestPath;
+            return this;
+        }
+
+        /**
+         * <p>This is the request URL.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage requestUrl(String requestUrl) {
+            this.requestUrl = Optional.ofNullable(requestUrl);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "requestUrl", nulls = Nulls.SKIP)
+        public _FinalStage requestUrl(Optional<String> requestUrl) {
+            this.requestUrl = requestUrl;
+            return this;
+        }
+
+        /**
+         * <p>This is the request method.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage requestHttpMethod(LogRequestHttpMethod requestHttpMethod) {
+            this.requestHttpMethod = Optional.ofNullable(requestHttpMethod);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "requestHttpMethod", nulls = Nulls.SKIP)
+        public _FinalStage requestHttpMethod(Optional<LogRequestHttpMethod> requestHttpMethod) {
+            this.requestHttpMethod = requestHttpMethod;
             return this;
         }
 
@@ -904,16 +871,66 @@ public final class Log {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage putAllRequestBody(Map<String, Object> requestBody) {
-            this.requestBody.putAll(requestBody);
+        public _FinalStage requestBody(Map<String, Object> requestBody) {
+            this.requestBody = Optional.ofNullable(requestBody);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "requestBody", nulls = Nulls.SKIP)
-        public _FinalStage requestBody(Map<String, Object> requestBody) {
-            this.requestBody.clear();
-            this.requestBody.putAll(requestBody);
+        public _FinalStage requestBody(Optional<Map<String, Object>> requestBody) {
+            this.requestBody = requestBody;
+            return this;
+        }
+
+        /**
+         * <p>This is the timestamp at which the request finished.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage requestFinishedAt(String requestFinishedAt) {
+            this.requestFinishedAt = Optional.ofNullable(requestFinishedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "requestFinishedAt", nulls = Nulls.SKIP)
+        public _FinalStage requestFinishedAt(Optional<String> requestFinishedAt) {
+            this.requestFinishedAt = requestFinishedAt;
+            return this;
+        }
+
+        /**
+         * <p>This is the timestamp at which the request began.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage requestStartedAt(String requestStartedAt) {
+            this.requestStartedAt = Optional.ofNullable(requestStartedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "requestStartedAt", nulls = Nulls.SKIP)
+        public _FinalStage requestStartedAt(Optional<String> requestStartedAt) {
+            this.requestStartedAt = requestStartedAt;
+            return this;
+        }
+
+        /**
+         * <p>'This is how long the request took.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage requestDurationSeconds(Double requestDurationSeconds) {
+            this.requestDurationSeconds = Optional.ofNullable(requestDurationSeconds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "requestDurationSeconds", nulls = Nulls.SKIP)
+        public _FinalStage requestDurationSeconds(Optional<Double> requestDurationSeconds) {
+            this.requestDurationSeconds = requestDurationSeconds;
             return this;
         }
 

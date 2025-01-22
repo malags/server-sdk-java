@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +19,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = TrieveKnowledgeBaseVectorStoreCreatePlan.Builder.class)
-public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
-    private final List<String> fileIds;
+@JsonDeserialize(builder = TrieveKnowledgeBaseChunkPlan.Builder.class)
+public final class TrieveKnowledgeBaseChunkPlan {
+    private final Optional<List<String>> fileIds;
+
+    private final Optional<List<String>> websites;
 
     private final Optional<Double> targetSplitsPerChunk;
 
@@ -32,13 +33,15 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
 
     private final Map<String, Object> additionalProperties;
 
-    private TrieveKnowledgeBaseVectorStoreCreatePlan(
-            List<String> fileIds,
+    private TrieveKnowledgeBaseChunkPlan(
+            Optional<List<String>> fileIds,
+            Optional<List<String>> websites,
             Optional<Double> targetSplitsPerChunk,
             Optional<List<String>> splitDelimiters,
             Optional<Boolean> rebalanceChunks,
             Map<String, Object> additionalProperties) {
         this.fileIds = fileIds;
+        this.websites = websites;
         this.targetSplitsPerChunk = targetSplitsPerChunk;
         this.splitDelimiters = splitDelimiters;
         this.rebalanceChunks = rebalanceChunks;
@@ -49,8 +52,16 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
      * @return These are the file ids that will be used to create the vector store. To upload files, use the <code>POST /files</code> endpoint.
      */
     @JsonProperty("fileIds")
-    public List<String> getFileIds() {
+    public Optional<List<String>> getFileIds() {
         return fileIds;
+    }
+
+    /**
+     * @return These are the websites that will be used to create the vector store.
+     */
+    @JsonProperty("websites")
+    public Optional<List<String>> getWebsites() {
+        return websites;
     }
 
     /**
@@ -80,8 +91,7 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof TrieveKnowledgeBaseVectorStoreCreatePlan
-                && equalTo((TrieveKnowledgeBaseVectorStoreCreatePlan) other);
+        return other instanceof TrieveKnowledgeBaseChunkPlan && equalTo((TrieveKnowledgeBaseChunkPlan) other);
     }
 
     @JsonAnyGetter
@@ -89,8 +99,9 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(TrieveKnowledgeBaseVectorStoreCreatePlan other) {
+    private boolean equalTo(TrieveKnowledgeBaseChunkPlan other) {
         return fileIds.equals(other.fileIds)
+                && websites.equals(other.websites)
                 && targetSplitsPerChunk.equals(other.targetSplitsPerChunk)
                 && splitDelimiters.equals(other.splitDelimiters)
                 && rebalanceChunks.equals(other.rebalanceChunks);
@@ -98,7 +109,8 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.fileIds, this.targetSplitsPerChunk, this.splitDelimiters, this.rebalanceChunks);
+        return Objects.hash(
+                this.fileIds, this.websites, this.targetSplitsPerChunk, this.splitDelimiters, this.rebalanceChunks);
     }
 
     @java.lang.Override
@@ -112,7 +124,9 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private List<String> fileIds = new ArrayList<>();
+        private Optional<List<String>> fileIds = Optional.empty();
+
+        private Optional<List<String>> websites = Optional.empty();
 
         private Optional<Double> targetSplitsPerChunk = Optional.empty();
 
@@ -125,8 +139,9 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
 
         private Builder() {}
 
-        public Builder from(TrieveKnowledgeBaseVectorStoreCreatePlan other) {
+        public Builder from(TrieveKnowledgeBaseChunkPlan other) {
             fileIds(other.getFileIds());
+            websites(other.getWebsites());
             targetSplitsPerChunk(other.getTargetSplitsPerChunk());
             splitDelimiters(other.getSplitDelimiters());
             rebalanceChunks(other.getRebalanceChunks());
@@ -134,19 +149,24 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
         }
 
         @JsonSetter(value = "fileIds", nulls = Nulls.SKIP)
+        public Builder fileIds(Optional<List<String>> fileIds) {
+            this.fileIds = fileIds;
+            return this;
+        }
+
         public Builder fileIds(List<String> fileIds) {
-            this.fileIds.clear();
-            this.fileIds.addAll(fileIds);
+            this.fileIds = Optional.ofNullable(fileIds);
             return this;
         }
 
-        public Builder addFileIds(String fileIds) {
-            this.fileIds.add(fileIds);
+        @JsonSetter(value = "websites", nulls = Nulls.SKIP)
+        public Builder websites(Optional<List<String>> websites) {
+            this.websites = websites;
             return this;
         }
 
-        public Builder addAllFileIds(List<String> fileIds) {
-            this.fileIds.addAll(fileIds);
+        public Builder websites(List<String> websites) {
+            this.websites = Optional.ofNullable(websites);
             return this;
         }
 
@@ -183,9 +203,9 @@ public final class TrieveKnowledgeBaseVectorStoreCreatePlan {
             return this;
         }
 
-        public TrieveKnowledgeBaseVectorStoreCreatePlan build() {
-            return new TrieveKnowledgeBaseVectorStoreCreatePlan(
-                    fileIds, targetSplitsPerChunk, splitDelimiters, rebalanceChunks, additionalProperties);
+        public TrieveKnowledgeBaseChunkPlan build() {
+            return new TrieveKnowledgeBaseChunkPlan(
+                    fileIds, websites, targetSplitsPerChunk, splitDelimiters, rebalanceChunks, additionalProperties);
         }
     }
 }

@@ -34,6 +34,10 @@ public final class VapiModel {
 
     private final Optional<List<VapiModelStepsItem>> steps;
 
+    private final Optional<String> workflowId;
+
+    private final Optional<Workflow> workflow;
+
     private final String model;
 
     private final Optional<Double> temperature;
@@ -53,6 +57,8 @@ public final class VapiModel {
             Optional<CreateCustomKnowledgeBaseDto> knowledgeBase,
             Optional<String> knowledgeBaseId,
             Optional<List<VapiModelStepsItem>> steps,
+            Optional<String> workflowId,
+            Optional<Workflow> workflow,
             String model,
             Optional<Double> temperature,
             Optional<Double> maxTokens,
@@ -65,6 +71,8 @@ public final class VapiModel {
         this.knowledgeBase = knowledgeBase;
         this.knowledgeBaseId = knowledgeBaseId;
         this.steps = steps;
+        this.workflowId = workflowId;
+        this.workflow = workflow;
         this.model = model;
         this.temperature = temperature;
         this.maxTokens = maxTokens;
@@ -118,6 +126,22 @@ public final class VapiModel {
     @JsonProperty("steps")
     public Optional<List<VapiModelStepsItem>> getSteps() {
         return steps;
+    }
+
+    /**
+     * @return This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.
+     */
+    @JsonProperty("workflowId")
+    public Optional<String> getWorkflowId() {
+        return workflowId;
+    }
+
+    /**
+     * @return This is the workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.
+     */
+    @JsonProperty("workflow")
+    public Optional<Workflow> getWorkflow() {
+        return workflow;
     }
 
     /**
@@ -182,6 +206,8 @@ public final class VapiModel {
                 && knowledgeBase.equals(other.knowledgeBase)
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && steps.equals(other.steps)
+                && workflowId.equals(other.workflowId)
+                && workflow.equals(other.workflow)
                 && model.equals(other.model)
                 && temperature.equals(other.temperature)
                 && maxTokens.equals(other.maxTokens)
@@ -198,6 +224,8 @@ public final class VapiModel {
                 this.knowledgeBase,
                 this.knowledgeBaseId,
                 this.steps,
+                this.workflowId,
+                this.workflow,
                 this.model,
                 this.temperature,
                 this.maxTokens,
@@ -247,6 +275,14 @@ public final class VapiModel {
 
         _FinalStage steps(List<VapiModelStepsItem> steps);
 
+        _FinalStage workflowId(Optional<String> workflowId);
+
+        _FinalStage workflowId(String workflowId);
+
+        _FinalStage workflow(Optional<Workflow> workflow);
+
+        _FinalStage workflow(Workflow workflow);
+
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
@@ -276,6 +312,10 @@ public final class VapiModel {
 
         private Optional<Double> temperature = Optional.empty();
 
+        private Optional<Workflow> workflow = Optional.empty();
+
+        private Optional<String> workflowId = Optional.empty();
+
         private Optional<List<VapiModelStepsItem>> steps = Optional.empty();
 
         private Optional<String> knowledgeBaseId = Optional.empty();
@@ -301,6 +341,8 @@ public final class VapiModel {
             knowledgeBase(other.getKnowledgeBase());
             knowledgeBaseId(other.getKnowledgeBaseId());
             steps(other.getSteps());
+            workflowId(other.getWorkflowId());
+            workflow(other.getWorkflow());
             model(other.getModel());
             temperature(other.getTemperature());
             maxTokens(other.getMaxTokens());
@@ -389,6 +431,40 @@ public final class VapiModel {
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
             this.temperature = temperature;
+            return this;
+        }
+
+        /**
+         * <p>This is the workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage workflow(Workflow workflow) {
+            this.workflow = Optional.ofNullable(workflow);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "workflow", nulls = Nulls.SKIP)
+        public _FinalStage workflow(Optional<Workflow> workflow) {
+            this.workflow = workflow;
+            return this;
+        }
+
+        /**
+         * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage workflowId(String workflowId) {
+            this.workflowId = Optional.ofNullable(workflowId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
+        public _FinalStage workflowId(Optional<String> workflowId) {
+            this.workflowId = workflowId;
             return this;
         }
 
@@ -501,6 +577,8 @@ public final class VapiModel {
                     knowledgeBase,
                     knowledgeBaseId,
                     steps,
+                    workflowId,
+                    workflow,
                     model,
                     temperature,
                     maxTokens,

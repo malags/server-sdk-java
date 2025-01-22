@@ -38,6 +38,10 @@ public final class ClientInboundMessageMessage {
         return new ClientInboundMessageMessage(new SayValue(value));
     }
 
+    public static ClientInboundMessageMessage endCall(ClientInboundMessageEndCall value) {
+        return new ClientInboundMessageMessage(new EndCallValue(value));
+    }
+
     public static ClientInboundMessageMessage transfer(ClientInboundMessageTransfer value) {
         return new ClientInboundMessageMessage(new TransferValue(value));
     }
@@ -52,6 +56,10 @@ public final class ClientInboundMessageMessage {
 
     public boolean isSay() {
         return value instanceof SayValue;
+    }
+
+    public boolean isEndCall() {
+        return value instanceof EndCallValue;
     }
 
     public boolean isTransfer() {
@@ -83,6 +91,13 @@ public final class ClientInboundMessageMessage {
         return Optional.empty();
     }
 
+    public Optional<ClientInboundMessageEndCall> getEndCall() {
+        if (isEndCall()) {
+            return Optional.of(((EndCallValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<ClientInboundMessageTransfer> getTransfer() {
         if (isTransfer()) {
             return Optional.of(((TransferValue) value).value);
@@ -109,6 +124,8 @@ public final class ClientInboundMessageMessage {
 
         T visitSay(ClientInboundMessageSay say);
 
+        T visitEndCall(ClientInboundMessageEndCall endCall);
+
         T visitTransfer(ClientInboundMessageTransfer transfer);
 
         T _visitUnknown(Object unknownType);
@@ -119,6 +136,7 @@ public final class ClientInboundMessageMessage {
         @JsonSubTypes.Type(AddMessageValue.class),
         @JsonSubTypes.Type(ControlValue.class),
         @JsonSubTypes.Type(SayValue.class),
+        @JsonSubTypes.Type(EndCallValue.class),
         @JsonSubTypes.Type(TransferValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -226,6 +244,44 @@ public final class ClientInboundMessageMessage {
         }
 
         private boolean equalTo(SayValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ClientInboundMessageMessage{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("end-call")
+    private static final class EndCallValue implements Value {
+        @JsonUnwrapped
+        private ClientInboundMessageEndCall value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private EndCallValue() {}
+
+        private EndCallValue(ClientInboundMessageEndCall value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitEndCall(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof EndCallValue && equalTo((EndCallValue) other);
+        }
+
+        private boolean equalTo(EndCallValue other) {
             return value.equals(other.value);
         }
 

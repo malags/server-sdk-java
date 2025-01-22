@@ -32,6 +32,8 @@ public final class JsonSchema {
 
     private final Optional<List<String>> required;
 
+    private final Optional<List<String>> enum_;
+
     private final Map<String, Object> additionalProperties;
 
     private JsonSchema(
@@ -40,12 +42,14 @@ public final class JsonSchema {
             Optional<Map<String, Object>> properties,
             Optional<String> description,
             Optional<List<String>> required,
+            Optional<List<String>> enum_,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.items = items;
         this.properties = properties;
         this.description = description;
         this.required = required;
+        this.enum_ = enum_;
         this.additionalProperties = additionalProperties;
     }
 
@@ -96,6 +100,14 @@ public final class JsonSchema {
         return required;
     }
 
+    /**
+     * @return This array specifies the allowed values that can be used to restrict the output of the model.
+     */
+    @JsonProperty("enum")
+    public Optional<List<String>> getEnum() {
+        return enum_;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -112,12 +124,13 @@ public final class JsonSchema {
                 && items.equals(other.items)
                 && properties.equals(other.properties)
                 && description.equals(other.description)
-                && required.equals(other.required);
+                && required.equals(other.required)
+                && enum_.equals(other.enum_);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.items, this.properties, this.description, this.required);
+        return Objects.hash(this.type, this.items, this.properties, this.description, this.required, this.enum_);
     }
 
     @java.lang.Override
@@ -153,11 +166,17 @@ public final class JsonSchema {
         _FinalStage required(Optional<List<String>> required);
 
         _FinalStage required(List<String> required);
+
+        _FinalStage enum_(Optional<List<String>> enum_);
+
+        _FinalStage enum_(List<String> enum_);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TypeStage, _FinalStage {
         private JsonSchemaType type;
+
+        private Optional<List<String>> enum_ = Optional.empty();
 
         private Optional<List<String>> required = Optional.empty();
 
@@ -179,6 +198,7 @@ public final class JsonSchema {
             properties(other.getProperties());
             description(other.getDescription());
             required(other.getRequired());
+            enum_(other.getEnum());
             return this;
         }
 
@@ -194,6 +214,23 @@ public final class JsonSchema {
         @JsonSetter("type")
         public _FinalStage type(@NotNull JsonSchemaType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This array specifies the allowed values that can be used to restrict the output of the model.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage enum_(List<String> enum_) {
+            this.enum_ = Optional.ofNullable(enum_);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "enum", nulls = Nulls.SKIP)
+        public _FinalStage enum_(Optional<List<String>> enum_) {
+            this.enum_ = enum_;
             return this;
         }
 
@@ -270,7 +307,7 @@ public final class JsonSchema {
 
         @java.lang.Override
         public JsonSchema build() {
-            return new JsonSchema(type, items, properties, description, required, additionalProperties);
+            return new JsonSchema(type, items, properties, description, required, enum_, additionalProperties);
         }
     }
 }

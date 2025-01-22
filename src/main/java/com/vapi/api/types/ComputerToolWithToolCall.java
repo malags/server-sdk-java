@@ -20,15 +20,19 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = GhlToolWithToolCall.Builder.class)
-public final class GhlToolWithToolCall {
+@JsonDeserialize(builder = ComputerToolWithToolCall.Builder.class)
+public final class ComputerToolWithToolCall {
     private final Optional<Boolean> async;
 
-    private final Optional<List<GhlToolWithToolCallMessagesItem>> messages;
+    private final Optional<List<ComputerToolWithToolCallMessagesItem>> messages;
 
     private final ToolCall toolCall;
 
-    private final GhlToolMetadata metadata;
+    private final double displayWidthPx;
+
+    private final double displayHeightPx;
+
+    private final Optional<Double> displayNumber;
 
     private final Optional<OpenAiFunction> function;
 
@@ -36,18 +40,22 @@ public final class GhlToolWithToolCall {
 
     private final Map<String, Object> additionalProperties;
 
-    private GhlToolWithToolCall(
+    private ComputerToolWithToolCall(
             Optional<Boolean> async,
-            Optional<List<GhlToolWithToolCallMessagesItem>> messages,
+            Optional<List<ComputerToolWithToolCallMessagesItem>> messages,
             ToolCall toolCall,
-            GhlToolMetadata metadata,
+            double displayWidthPx,
+            double displayHeightPx,
+            Optional<Double> displayNumber,
             Optional<OpenAiFunction> function,
             Optional<Server> server,
             Map<String, Object> additionalProperties) {
         this.async = async;
         this.messages = messages;
         this.toolCall = toolCall;
-        this.metadata = metadata;
+        this.displayWidthPx = displayWidthPx;
+        this.displayHeightPx = displayHeightPx;
+        this.displayNumber = displayNumber;
         this.function = function;
         this.server = server;
         this.additionalProperties = additionalProperties;
@@ -69,8 +77,16 @@ public final class GhlToolWithToolCall {
      * <p>For some tools, this is auto-filled based on special fields like <code>tool.destinations</code>. For others like the function tool, these can be custom configured.</p>
      */
     @JsonProperty("messages")
-    public Optional<List<GhlToolWithToolCallMessagesItem>> getMessages() {
+    public Optional<List<ComputerToolWithToolCallMessagesItem>> getMessages() {
         return messages;
+    }
+
+    /**
+     * @return The sub type of tool.
+     */
+    @JsonProperty("subType")
+    public String getSubType() {
+        return "computer_20241022";
     }
 
     @JsonProperty("toolCall")
@@ -78,9 +94,36 @@ public final class GhlToolWithToolCall {
         return toolCall;
     }
 
-    @JsonProperty("metadata")
-    public GhlToolMetadata getMetadata() {
-        return metadata;
+    /**
+     * @return The name of the tool, fixed to 'computer'
+     */
+    @JsonProperty("name")
+    public String getName() {
+        return "computer";
+    }
+
+    /**
+     * @return The display width in pixels
+     */
+    @JsonProperty("displayWidthPx")
+    public double getDisplayWidthPx() {
+        return displayWidthPx;
+    }
+
+    /**
+     * @return The display height in pixels
+     */
+    @JsonProperty("displayHeightPx")
+    public double getDisplayHeightPx() {
+        return displayHeightPx;
+    }
+
+    /**
+     * @return Optional display number
+     */
+    @JsonProperty("displayNumber")
+    public Optional<Double> getDisplayNumber() {
+        return displayNumber;
     }
 
     /**
@@ -106,7 +149,7 @@ public final class GhlToolWithToolCall {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof GhlToolWithToolCall && equalTo((GhlToolWithToolCall) other);
+        return other instanceof ComputerToolWithToolCall && equalTo((ComputerToolWithToolCall) other);
     }
 
     @JsonAnyGetter
@@ -114,18 +157,28 @@ public final class GhlToolWithToolCall {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(GhlToolWithToolCall other) {
+    private boolean equalTo(ComputerToolWithToolCall other) {
         return async.equals(other.async)
                 && messages.equals(other.messages)
                 && toolCall.equals(other.toolCall)
-                && metadata.equals(other.metadata)
+                && displayWidthPx == other.displayWidthPx
+                && displayHeightPx == other.displayHeightPx
+                && displayNumber.equals(other.displayNumber)
                 && function.equals(other.function)
                 && server.equals(other.server);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.async, this.messages, this.toolCall, this.metadata, this.function, this.server);
+        return Objects.hash(
+                this.async,
+                this.messages,
+                this.toolCall,
+                this.displayWidthPx,
+                this.displayHeightPx,
+                this.displayNumber,
+                this.function,
+                this.server);
     }
 
     @java.lang.Override
@@ -138,25 +191,33 @@ public final class GhlToolWithToolCall {
     }
 
     public interface ToolCallStage {
-        MetadataStage toolCall(@NotNull ToolCall toolCall);
+        DisplayWidthPxStage toolCall(@NotNull ToolCall toolCall);
 
-        Builder from(GhlToolWithToolCall other);
+        Builder from(ComputerToolWithToolCall other);
     }
 
-    public interface MetadataStage {
-        _FinalStage metadata(@NotNull GhlToolMetadata metadata);
+    public interface DisplayWidthPxStage {
+        DisplayHeightPxStage displayWidthPx(double displayWidthPx);
+    }
+
+    public interface DisplayHeightPxStage {
+        _FinalStage displayHeightPx(double displayHeightPx);
     }
 
     public interface _FinalStage {
-        GhlToolWithToolCall build();
+        ComputerToolWithToolCall build();
 
         _FinalStage async(Optional<Boolean> async);
 
         _FinalStage async(Boolean async);
 
-        _FinalStage messages(Optional<List<GhlToolWithToolCallMessagesItem>> messages);
+        _FinalStage messages(Optional<List<ComputerToolWithToolCallMessagesItem>> messages);
 
-        _FinalStage messages(List<GhlToolWithToolCallMessagesItem> messages);
+        _FinalStage messages(List<ComputerToolWithToolCallMessagesItem> messages);
+
+        _FinalStage displayNumber(Optional<Double> displayNumber);
+
+        _FinalStage displayNumber(Double displayNumber);
 
         _FinalStage function(Optional<OpenAiFunction> function);
 
@@ -168,16 +229,20 @@ public final class GhlToolWithToolCall {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ToolCallStage, MetadataStage, _FinalStage {
+    public static final class Builder implements ToolCallStage, DisplayWidthPxStage, DisplayHeightPxStage, _FinalStage {
         private ToolCall toolCall;
 
-        private GhlToolMetadata metadata;
+        private double displayWidthPx;
+
+        private double displayHeightPx;
 
         private Optional<Server> server = Optional.empty();
 
         private Optional<OpenAiFunction> function = Optional.empty();
 
-        private Optional<List<GhlToolWithToolCallMessagesItem>> messages = Optional.empty();
+        private Optional<Double> displayNumber = Optional.empty();
+
+        private Optional<List<ComputerToolWithToolCallMessagesItem>> messages = Optional.empty();
 
         private Optional<Boolean> async = Optional.empty();
 
@@ -187,11 +252,13 @@ public final class GhlToolWithToolCall {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(GhlToolWithToolCall other) {
+        public Builder from(ComputerToolWithToolCall other) {
             async(other.getAsync());
             messages(other.getMessages());
             toolCall(other.getToolCall());
-            metadata(other.getMetadata());
+            displayWidthPx(other.getDisplayWidthPx());
+            displayHeightPx(other.getDisplayHeightPx());
+            displayNumber(other.getDisplayNumber());
             function(other.getFunction());
             server(other.getServer());
             return this;
@@ -199,15 +266,30 @@ public final class GhlToolWithToolCall {
 
         @java.lang.Override
         @JsonSetter("toolCall")
-        public MetadataStage toolCall(@NotNull ToolCall toolCall) {
+        public DisplayWidthPxStage toolCall(@NotNull ToolCall toolCall) {
             this.toolCall = Objects.requireNonNull(toolCall, "toolCall must not be null");
             return this;
         }
 
+        /**
+         * <p>The display width in pixels</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        @JsonSetter("metadata")
-        public _FinalStage metadata(@NotNull GhlToolMetadata metadata) {
-            this.metadata = Objects.requireNonNull(metadata, "metadata must not be null");
+        @JsonSetter("displayWidthPx")
+        public DisplayHeightPxStage displayWidthPx(double displayWidthPx) {
+            this.displayWidthPx = displayWidthPx;
+            return this;
+        }
+
+        /**
+         * <p>The display height in pixels</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("displayHeightPx")
+        public _FinalStage displayHeightPx(double displayHeightPx) {
+            this.displayHeightPx = displayHeightPx;
             return this;
         }
 
@@ -250,19 +332,36 @@ public final class GhlToolWithToolCall {
         }
 
         /**
+         * <p>Optional display number</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage displayNumber(Double displayNumber) {
+            this.displayNumber = Optional.ofNullable(displayNumber);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "displayNumber", nulls = Nulls.SKIP)
+        public _FinalStage displayNumber(Optional<Double> displayNumber) {
+            this.displayNumber = displayNumber;
+            return this;
+        }
+
+        /**
          * <p>These are the messages that will be spoken to the user as the tool is running.</p>
          * <p>For some tools, this is auto-filled based on special fields like <code>tool.destinations</code>. For others like the function tool, these can be custom configured.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage messages(List<GhlToolWithToolCallMessagesItem> messages) {
+        public _FinalStage messages(List<ComputerToolWithToolCallMessagesItem> messages) {
             this.messages = Optional.ofNullable(messages);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
-        public _FinalStage messages(Optional<List<GhlToolWithToolCallMessagesItem>> messages) {
+        public _FinalStage messages(Optional<List<ComputerToolWithToolCallMessagesItem>> messages) {
             this.messages = messages;
             return this;
         }
@@ -288,8 +387,17 @@ public final class GhlToolWithToolCall {
         }
 
         @java.lang.Override
-        public GhlToolWithToolCall build() {
-            return new GhlToolWithToolCall(async, messages, toolCall, metadata, function, server, additionalProperties);
+        public ComputerToolWithToolCall build() {
+            return new ComputerToolWithToolCall(
+                    async,
+                    messages,
+                    toolCall,
+                    displayWidthPx,
+                    displayHeightPx,
+                    displayNumber,
+                    function,
+                    server,
+                    additionalProperties);
         }
     }
 }

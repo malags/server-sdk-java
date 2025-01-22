@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum AzureOpenAiCredentialRegion {
     AUSTRALIA("australia"),
 
-    CANADA("canada"),
+    CANADAEAST("canadaeast"),
+
+    CANADACENTRAL("canadacentral"),
 
     EASTUS_2("eastus2"),
 
@@ -18,7 +20,9 @@ public enum AzureOpenAiCredentialRegion {
 
     INDIA("india"),
 
-    JAPAN("japan"),
+    JAPANEAST("japaneast"),
+
+    JAPANWEST("japanwest"),
 
     UAENORTH("uaenorth"),
 

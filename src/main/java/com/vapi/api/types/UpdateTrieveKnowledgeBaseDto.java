@@ -22,24 +22,20 @@ import java.util.Optional;
 public final class UpdateTrieveKnowledgeBaseDto {
     private final Optional<String> name;
 
-    private final Optional<TrieveKnowledgeBaseVectorStoreSearchPlan> vectorStoreSearchPlan;
+    private final Optional<TrieveKnowledgeBaseSearchPlan> searchPlan;
 
-    private final Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan;
-
-    private final Optional<String> vectorStoreProviderId;
+    private final Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> createPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateTrieveKnowledgeBaseDto(
             Optional<String> name,
-            Optional<TrieveKnowledgeBaseVectorStoreSearchPlan> vectorStoreSearchPlan,
-            Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan,
-            Optional<String> vectorStoreProviderId,
+            Optional<TrieveKnowledgeBaseSearchPlan> searchPlan,
+            Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> createPlan,
             Map<String, Object> additionalProperties) {
         this.name = name;
-        this.vectorStoreSearchPlan = vectorStoreSearchPlan;
-        this.vectorStoreCreatePlan = vectorStoreCreatePlan;
-        this.vectorStoreProviderId = vectorStoreProviderId;
+        this.searchPlan = searchPlan;
+        this.createPlan = createPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -52,32 +48,24 @@ public final class UpdateTrieveKnowledgeBaseDto {
     }
 
     /**
-     * @return This is the plan on how to search the vector store while a call is going on.
-     */
-    @JsonProperty("vectorStoreSearchPlan")
-    public Optional<TrieveKnowledgeBaseVectorStoreSearchPlan> getVectorStoreSearchPlan() {
-        return vectorStoreSearchPlan;
-    }
-
-    /**
-     * @return This is the plan if you want us to create a new vector store on your behalf. To use an existing vector store from your account, use <code>vectoreStoreProviderId</code>
-     */
-    @JsonProperty("vectorStoreCreatePlan")
-    public Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> getVectorStoreCreatePlan() {
-        return vectorStoreCreatePlan;
-    }
-
-    /**
-     * @return This is an vector store that you already have on your account with the provider. To create a new vector store, use vectorStoreCreatePlan.
-     * <p>Usage:</p>
+     * @return This is the searching plan used when searching for relevant chunks from the vector store.
+     * <p>You should configure this if you're running into these issues:</p>
      * <ul>
-     * <li>To bring your own vector store from Trieve, go to https://trieve.ai</li>
-     * <li>Create a dataset, and use the datasetId here.</li>
+     * <li>Too much unnecessary context is being fed as knowledge base context.</li>
+     * <li>Not enough relevant context is being fed as knowledge base context.</li>
      * </ul>
      */
-    @JsonProperty("vectorStoreProviderId")
-    public Optional<String> getVectorStoreProviderId() {
-        return vectorStoreProviderId;
+    @JsonProperty("searchPlan")
+    public Optional<TrieveKnowledgeBaseSearchPlan> getSearchPlan() {
+        return searchPlan;
+    }
+
+    /**
+     * @return This is the plan if you want us to create/import a new vector store using Trieve.
+     */
+    @JsonProperty("createPlan")
+    public Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> getCreatePlan() {
+        return createPlan;
     }
 
     @java.lang.Override
@@ -92,16 +80,12 @@ public final class UpdateTrieveKnowledgeBaseDto {
     }
 
     private boolean equalTo(UpdateTrieveKnowledgeBaseDto other) {
-        return name.equals(other.name)
-                && vectorStoreSearchPlan.equals(other.vectorStoreSearchPlan)
-                && vectorStoreCreatePlan.equals(other.vectorStoreCreatePlan)
-                && vectorStoreProviderId.equals(other.vectorStoreProviderId);
+        return name.equals(other.name) && searchPlan.equals(other.searchPlan) && createPlan.equals(other.createPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.name, this.vectorStoreSearchPlan, this.vectorStoreCreatePlan, this.vectorStoreProviderId);
+        return Objects.hash(this.name, this.searchPlan, this.createPlan);
     }
 
     @java.lang.Override
@@ -117,11 +101,9 @@ public final class UpdateTrieveKnowledgeBaseDto {
     public static final class Builder {
         private Optional<String> name = Optional.empty();
 
-        private Optional<TrieveKnowledgeBaseVectorStoreSearchPlan> vectorStoreSearchPlan = Optional.empty();
+        private Optional<TrieveKnowledgeBaseSearchPlan> searchPlan = Optional.empty();
 
-        private Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan = Optional.empty();
-
-        private Optional<String> vectorStoreProviderId = Optional.empty();
+        private Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> createPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -130,9 +112,8 @@ public final class UpdateTrieveKnowledgeBaseDto {
 
         public Builder from(UpdateTrieveKnowledgeBaseDto other) {
             name(other.getName());
-            vectorStoreSearchPlan(other.getVectorStoreSearchPlan());
-            vectorStoreCreatePlan(other.getVectorStoreCreatePlan());
-            vectorStoreProviderId(other.getVectorStoreProviderId());
+            searchPlan(other.getSearchPlan());
+            createPlan(other.getCreatePlan());
             return this;
         }
 
@@ -147,42 +128,30 @@ public final class UpdateTrieveKnowledgeBaseDto {
             return this;
         }
 
-        @JsonSetter(value = "vectorStoreSearchPlan", nulls = Nulls.SKIP)
-        public Builder vectorStoreSearchPlan(Optional<TrieveKnowledgeBaseVectorStoreSearchPlan> vectorStoreSearchPlan) {
-            this.vectorStoreSearchPlan = vectorStoreSearchPlan;
+        @JsonSetter(value = "searchPlan", nulls = Nulls.SKIP)
+        public Builder searchPlan(Optional<TrieveKnowledgeBaseSearchPlan> searchPlan) {
+            this.searchPlan = searchPlan;
             return this;
         }
 
-        public Builder vectorStoreSearchPlan(TrieveKnowledgeBaseVectorStoreSearchPlan vectorStoreSearchPlan) {
-            this.vectorStoreSearchPlan = Optional.ofNullable(vectorStoreSearchPlan);
+        public Builder searchPlan(TrieveKnowledgeBaseSearchPlan searchPlan) {
+            this.searchPlan = Optional.ofNullable(searchPlan);
             return this;
         }
 
-        @JsonSetter(value = "vectorStoreCreatePlan", nulls = Nulls.SKIP)
-        public Builder vectorStoreCreatePlan(Optional<TrieveKnowledgeBaseVectorStoreCreatePlan> vectorStoreCreatePlan) {
-            this.vectorStoreCreatePlan = vectorStoreCreatePlan;
+        @JsonSetter(value = "createPlan", nulls = Nulls.SKIP)
+        public Builder createPlan(Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> createPlan) {
+            this.createPlan = createPlan;
             return this;
         }
 
-        public Builder vectorStoreCreatePlan(TrieveKnowledgeBaseVectorStoreCreatePlan vectorStoreCreatePlan) {
-            this.vectorStoreCreatePlan = Optional.ofNullable(vectorStoreCreatePlan);
-            return this;
-        }
-
-        @JsonSetter(value = "vectorStoreProviderId", nulls = Nulls.SKIP)
-        public Builder vectorStoreProviderId(Optional<String> vectorStoreProviderId) {
-            this.vectorStoreProviderId = vectorStoreProviderId;
-            return this;
-        }
-
-        public Builder vectorStoreProviderId(String vectorStoreProviderId) {
-            this.vectorStoreProviderId = Optional.ofNullable(vectorStoreProviderId);
+        public Builder createPlan(UpdateTrieveKnowledgeBaseDtoCreatePlan createPlan) {
+            this.createPlan = Optional.ofNullable(createPlan);
             return this;
         }
 
         public UpdateTrieveKnowledgeBaseDto build() {
-            return new UpdateTrieveKnowledgeBaseDto(
-                    name, vectorStoreSearchPlan, vectorStoreCreatePlan, vectorStoreProviderId, additionalProperties);
+            return new UpdateTrieveKnowledgeBaseDto(name, searchPlan, createPlan, additionalProperties);
         }
     }
 }

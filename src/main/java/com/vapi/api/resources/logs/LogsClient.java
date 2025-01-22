@@ -41,9 +41,6 @@ public class LogsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("logs");
-        if (request.getOrgId().isPresent()) {
-            httpUrl.addQueryParameter("orgId", request.getOrgId().get());
-        }
         if (request.getType().isPresent()) {
             httpUrl.addQueryParameter("type", request.getType().get().toString());
         }
@@ -154,8 +151,8 @@ public class LogsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("logs");
-        if (request.getOrgId().isPresent()) {
-            httpUrl.addQueryParameter("orgId", request.getOrgId().get());
+        if (request.getType().isPresent()) {
+            httpUrl.addQueryParameter("type", request.getType().get().toString());
         }
         if (request.getAssistantId().isPresent()) {
             httpUrl.addQueryParameter("assistantId", request.getAssistantId().get());

@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AnalyticsQuery.Builder.class)
 public final class AnalyticsQuery {
+    private final AnalyticsQueryTable table;
+
     private final Optional<List<AnalyticsQueryGroupByItem>> groupBy;
 
     private final String name;
@@ -34,11 +36,13 @@ public final class AnalyticsQuery {
     private final Map<String, Object> additionalProperties;
 
     private AnalyticsQuery(
+            AnalyticsQueryTable table,
             Optional<List<AnalyticsQueryGroupByItem>> groupBy,
             String name,
             Optional<TimeRange> timeRange,
             List<AnalyticsOperation> operations,
             Map<String, Object> additionalProperties) {
+        this.table = table;
         this.groupBy = groupBy;
         this.name = name;
         this.timeRange = timeRange;
@@ -50,8 +54,8 @@ public final class AnalyticsQuery {
      * @return This is the table you want to query.
      */
     @JsonProperty("table")
-    public String getTable() {
-        return "call";
+    public AnalyticsQueryTable getTable() {
+        return table;
     }
 
     /**
@@ -98,7 +102,8 @@ public final class AnalyticsQuery {
     }
 
     private boolean equalTo(AnalyticsQuery other) {
-        return groupBy.equals(other.groupBy)
+        return table.equals(other.table)
+                && groupBy.equals(other.groupBy)
                 && name.equals(other.name)
                 && timeRange.equals(other.timeRange)
                 && operations.equals(other.operations);
@@ -106,7 +111,7 @@ public final class AnalyticsQuery {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.groupBy, this.name, this.timeRange, this.operations);
+        return Objects.hash(this.table, this.groupBy, this.name, this.timeRange, this.operations);
     }
 
     @java.lang.Override
@@ -114,14 +119,18 @@ public final class AnalyticsQuery {
         return ObjectMappers.stringify(this);
     }
 
-    public static NameStage builder() {
+    public static TableStage builder() {
         return new Builder();
+    }
+
+    public interface TableStage {
+        NameStage table(@NotNull AnalyticsQueryTable table);
+
+        Builder from(AnalyticsQuery other);
     }
 
     public interface NameStage {
         _FinalStage name(@NotNull String name);
-
-        Builder from(AnalyticsQuery other);
     }
 
     public interface _FinalStage {
@@ -143,7 +152,9 @@ public final class AnalyticsQuery {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, _FinalStage {
+    public static final class Builder implements TableStage, NameStage, _FinalStage {
+        private AnalyticsQueryTable table;
+
         private String name;
 
         private List<AnalyticsOperation> operations = new ArrayList<>();
@@ -159,10 +170,22 @@ public final class AnalyticsQuery {
 
         @java.lang.Override
         public Builder from(AnalyticsQuery other) {
+            table(other.getTable());
             groupBy(other.getGroupBy());
             name(other.getName());
             timeRange(other.getTimeRange());
             operations(other.getOperations());
+            return this;
+        }
+
+        /**
+         * <p>This is the table you want to query.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("table")
+        public NameStage table(@NotNull AnalyticsQueryTable table) {
+            this.table = Objects.requireNonNull(table, "table must not be null");
             return this;
         }
 
@@ -241,7 +264,7 @@ public final class AnalyticsQuery {
 
         @java.lang.Override
         public AnalyticsQuery build() {
-            return new AnalyticsQuery(groupBy, name, timeRange, operations, additionalProperties);
+            return new AnalyticsQuery(table, groupBy, name, timeRange, operations, additionalProperties);
         }
     }
 }

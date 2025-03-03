@@ -70,6 +70,14 @@ public final class ServerMessageLanguageChangeDetected {
     }
 
     /**
+     * @return This is the type of the message. &quot;language-change-detected&quot; is sent when the transcriber is automatically switched based on the detected language.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "language-change-detected";
+    }
+
+    /**
      * @return This is the ISO-8601 formatted timestamp of when the message was sent.
      */
     @JsonProperty("timestamp")

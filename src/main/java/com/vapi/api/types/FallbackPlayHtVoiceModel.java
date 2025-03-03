@@ -10,7 +10,9 @@ public enum FallbackPlayHtVoiceModel {
 
     PLAY_HT_20_TURBO("PlayHT2.0-turbo"),
 
-    PLAY_30_MINI("Play3.0-mini");
+    PLAY_30_MINI("Play3.0-mini"),
+
+    PLAY_DIALOG("PlayDialog");
 
     private final String value;
 

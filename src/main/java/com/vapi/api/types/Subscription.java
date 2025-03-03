@@ -39,6 +39,10 @@ public final class Subscription {
 
     private final double concurrencyLimitIncluded;
 
+    private final Optional<Double> phoneNumbersCounter;
+
+    private final Optional<Double> phoneNumbersIncluded;
+
     private final double concurrencyLimitPurchased;
 
     private final Optional<Double> monthlyChargeScheduleId;
@@ -69,6 +73,8 @@ public final class Subscription {
 
     private final Optional<Double> minutesUsed;
 
+    private final Optional<OffsetDateTime> minutesUsedNextResetAt;
+
     private final Optional<Double> minutesOverageCost;
 
     private final Optional<List<String>> providersIncluded;
@@ -94,6 +100,8 @@ public final class Subscription {
             String credits,
             double concurrencyCounter,
             double concurrencyLimitIncluded,
+            Optional<Double> phoneNumbersCounter,
+            Optional<Double> phoneNumbersIncluded,
             double concurrencyLimitPurchased,
             Optional<Double> monthlyChargeScheduleId,
             Optional<Double> monthlyCreditCheckScheduleId,
@@ -109,6 +117,7 @@ public final class Subscription {
             Optional<AutoReloadPlan> autoReloadPlan,
             Optional<Double> minutesIncluded,
             Optional<Double> minutesUsed,
+            Optional<OffsetDateTime> minutesUsedNextResetAt,
             Optional<Double> minutesOverageCost,
             Optional<List<String>> providersIncluded,
             Optional<Double> outboundCallsDailyLimit,
@@ -125,6 +134,8 @@ public final class Subscription {
         this.credits = credits;
         this.concurrencyCounter = concurrencyCounter;
         this.concurrencyLimitIncluded = concurrencyLimitIncluded;
+        this.phoneNumbersCounter = phoneNumbersCounter;
+        this.phoneNumbersIncluded = phoneNumbersIncluded;
         this.concurrencyLimitPurchased = concurrencyLimitPurchased;
         this.monthlyChargeScheduleId = monthlyChargeScheduleId;
         this.monthlyCreditCheckScheduleId = monthlyCreditCheckScheduleId;
@@ -140,6 +151,7 @@ public final class Subscription {
         this.autoReloadPlan = autoReloadPlan;
         this.minutesIncluded = minutesIncluded;
         this.minutesUsed = minutesUsed;
+        this.minutesUsedNextResetAt = minutesUsedNextResetAt;
         this.minutesOverageCost = minutesOverageCost;
         this.providersIncluded = providersIncluded;
         this.outboundCallsDailyLimit = outboundCallsDailyLimit;
@@ -214,6 +226,22 @@ public final class Subscription {
     @JsonProperty("concurrencyLimitIncluded")
     public double getConcurrencyLimitIncluded() {
         return concurrencyLimitIncluded;
+    }
+
+    /**
+     * @return This is the number of free phone numbers the subscription has
+     */
+    @JsonProperty("phoneNumbersCounter")
+    public Optional<Double> getPhoneNumbersCounter() {
+        return phoneNumbersCounter;
+    }
+
+    /**
+     * @return This is the maximum number of free phone numbers the subscription can have
+     */
+    @JsonProperty("phoneNumbersIncluded")
+    public Optional<Double> getPhoneNumbersIncluded() {
+        return phoneNumbersIncluded;
     }
 
     /**
@@ -324,7 +352,7 @@ public final class Subscription {
     }
 
     /**
-     * @return The number of minutes included in the subscription. Enterprise only.
+     * @return The number of minutes included in the subscription.
      */
     @JsonProperty("minutesIncluded")
     public Optional<Double> getMinutesIncluded() {
@@ -332,11 +360,19 @@ public final class Subscription {
     }
 
     /**
-     * @return The number of minutes used in the subscription. Enterprise only.
+     * @return The number of minutes used in the subscription.
      */
     @JsonProperty("minutesUsed")
     public Optional<Double> getMinutesUsed() {
         return minutesUsed;
+    }
+
+    /**
+     * @return This is the timestamp at which the number of monthly free minutes is scheduled to reset at.
+     */
+    @JsonProperty("minutesUsedNextResetAt")
+    public Optional<OffsetDateTime> getMinutesUsedNextResetAt() {
+        return minutesUsedNextResetAt;
     }
 
     /**
@@ -415,6 +451,8 @@ public final class Subscription {
                 && credits.equals(other.credits)
                 && concurrencyCounter == other.concurrencyCounter
                 && concurrencyLimitIncluded == other.concurrencyLimitIncluded
+                && phoneNumbersCounter.equals(other.phoneNumbersCounter)
+                && phoneNumbersIncluded.equals(other.phoneNumbersIncluded)
                 && concurrencyLimitPurchased == other.concurrencyLimitPurchased
                 && monthlyChargeScheduleId.equals(other.monthlyChargeScheduleId)
                 && monthlyCreditCheckScheduleId.equals(other.monthlyCreditCheckScheduleId)
@@ -430,6 +468,7 @@ public final class Subscription {
                 && autoReloadPlan.equals(other.autoReloadPlan)
                 && minutesIncluded.equals(other.minutesIncluded)
                 && minutesUsed.equals(other.minutesUsed)
+                && minutesUsedNextResetAt.equals(other.minutesUsedNextResetAt)
                 && minutesOverageCost.equals(other.minutesOverageCost)
                 && providersIncluded.equals(other.providersIncluded)
                 && outboundCallsDailyLimit.equals(other.outboundCallsDailyLimit)
@@ -450,6 +489,8 @@ public final class Subscription {
                 this.credits,
                 this.concurrencyCounter,
                 this.concurrencyLimitIncluded,
+                this.phoneNumbersCounter,
+                this.phoneNumbersIncluded,
                 this.concurrencyLimitPurchased,
                 this.monthlyChargeScheduleId,
                 this.monthlyCreditCheckScheduleId,
@@ -465,6 +506,7 @@ public final class Subscription {
                 this.autoReloadPlan,
                 this.minutesIncluded,
                 this.minutesUsed,
+                this.minutesUsedNextResetAt,
                 this.minutesOverageCost,
                 this.providersIncluded,
                 this.outboundCallsDailyLimit,
@@ -524,6 +566,14 @@ public final class Subscription {
     public interface _FinalStage {
         Subscription build();
 
+        _FinalStage phoneNumbersCounter(Optional<Double> phoneNumbersCounter);
+
+        _FinalStage phoneNumbersCounter(Double phoneNumbersCounter);
+
+        _FinalStage phoneNumbersIncluded(Optional<Double> phoneNumbersIncluded);
+
+        _FinalStage phoneNumbersIncluded(Double phoneNumbersIncluded);
+
         _FinalStage monthlyChargeScheduleId(Optional<Double> monthlyChargeScheduleId);
 
         _FinalStage monthlyChargeScheduleId(Double monthlyChargeScheduleId);
@@ -579,6 +629,10 @@ public final class Subscription {
         _FinalStage minutesUsed(Optional<Double> minutesUsed);
 
         _FinalStage minutesUsed(Double minutesUsed);
+
+        _FinalStage minutesUsedNextResetAt(Optional<OffsetDateTime> minutesUsedNextResetAt);
+
+        _FinalStage minutesUsedNextResetAt(OffsetDateTime minutesUsedNextResetAt);
 
         _FinalStage minutesOverageCost(Optional<Double> minutesOverageCost);
 
@@ -653,6 +707,8 @@ public final class Subscription {
 
         private Optional<Double> minutesOverageCost = Optional.empty();
 
+        private Optional<OffsetDateTime> minutesUsedNextResetAt = Optional.empty();
+
         private Optional<Double> minutesUsed = Optional.empty();
 
         private Optional<Double> minutesIncluded = Optional.empty();
@@ -681,6 +737,10 @@ public final class Subscription {
 
         private Optional<Double> monthlyChargeScheduleId = Optional.empty();
 
+        private Optional<Double> phoneNumbersIncluded = Optional.empty();
+
+        private Optional<Double> phoneNumbersCounter = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -696,6 +756,8 @@ public final class Subscription {
             credits(other.getCredits());
             concurrencyCounter(other.getConcurrencyCounter());
             concurrencyLimitIncluded(other.getConcurrencyLimitIncluded());
+            phoneNumbersCounter(other.getPhoneNumbersCounter());
+            phoneNumbersIncluded(other.getPhoneNumbersIncluded());
             concurrencyLimitPurchased(other.getConcurrencyLimitPurchased());
             monthlyChargeScheduleId(other.getMonthlyChargeScheduleId());
             monthlyCreditCheckScheduleId(other.getMonthlyCreditCheckScheduleId());
@@ -711,6 +773,7 @@ public final class Subscription {
             autoReloadPlan(other.getAutoReloadPlan());
             minutesIncluded(other.getMinutesIncluded());
             minutesUsed(other.getMinutesUsed());
+            minutesUsedNextResetAt(other.getMinutesUsedNextResetAt());
             minutesOverageCost(other.getMinutesOverageCost());
             providersIncluded(other.getProvidersIncluded());
             outboundCallsDailyLimit(other.getOutboundCallsDailyLimit());
@@ -942,7 +1005,24 @@ public final class Subscription {
         }
 
         /**
-         * <p>The number of minutes used in the subscription. Enterprise only.</p>
+         * <p>This is the timestamp at which the number of monthly free minutes is scheduled to reset at.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage minutesUsedNextResetAt(OffsetDateTime minutesUsedNextResetAt) {
+            this.minutesUsedNextResetAt = Optional.ofNullable(minutesUsedNextResetAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "minutesUsedNextResetAt", nulls = Nulls.SKIP)
+        public _FinalStage minutesUsedNextResetAt(Optional<OffsetDateTime> minutesUsedNextResetAt) {
+            this.minutesUsedNextResetAt = minutesUsedNextResetAt;
+            return this;
+        }
+
+        /**
+         * <p>The number of minutes used in the subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -959,7 +1039,7 @@ public final class Subscription {
         }
 
         /**
-         * <p>The number of minutes included in the subscription. Enterprise only.</p>
+         * <p>The number of minutes included in the subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1182,6 +1262,40 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the maximum number of free phone numbers the subscription can have</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage phoneNumbersIncluded(Double phoneNumbersIncluded) {
+            this.phoneNumbersIncluded = Optional.ofNullable(phoneNumbersIncluded);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "phoneNumbersIncluded", nulls = Nulls.SKIP)
+        public _FinalStage phoneNumbersIncluded(Optional<Double> phoneNumbersIncluded) {
+            this.phoneNumbersIncluded = phoneNumbersIncluded;
+            return this;
+        }
+
+        /**
+         * <p>This is the number of free phone numbers the subscription has</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage phoneNumbersCounter(Double phoneNumbersCounter) {
+            this.phoneNumbersCounter = Optional.ofNullable(phoneNumbersCounter);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "phoneNumbersCounter", nulls = Nulls.SKIP)
+        public _FinalStage phoneNumbersCounter(Optional<Double> phoneNumbersCounter) {
+            this.phoneNumbersCounter = phoneNumbersCounter;
+            return this;
+        }
+
         @java.lang.Override
         public Subscription build() {
             return new Subscription(
@@ -1193,6 +1307,8 @@ public final class Subscription {
                     credits,
                     concurrencyCounter,
                     concurrencyLimitIncluded,
+                    phoneNumbersCounter,
+                    phoneNumbersIncluded,
                     concurrencyLimitPurchased,
                     monthlyChargeScheduleId,
                     monthlyCreditCheckScheduleId,
@@ -1208,6 +1324,7 @@ public final class Subscription {
                     autoReloadPlan,
                     minutesIncluded,
                     minutesUsed,
+                    minutesUsedNextResetAt,
                     minutesOverageCost,
                     providersIncluded,
                     outboundCallsDailyLimit,

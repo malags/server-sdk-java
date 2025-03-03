@@ -30,6 +30,14 @@ public final class ClientMessageToolCallsResult {
     }
 
     /**
+     * @return This is the type of the message. &quot;tool-calls-result&quot; is sent to forward the result of a tool call to the client.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "tool-calls-result";
+    }
+
+    /**
      * @return This is the result of the tool call.
      */
     @JsonProperty("toolCallResult")

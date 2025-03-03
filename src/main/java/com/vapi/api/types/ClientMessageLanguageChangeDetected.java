@@ -29,6 +29,14 @@ public final class ClientMessageLanguageChangeDetected {
     }
 
     /**
+     * @return This is the type of the message. &quot;language-change-detected&quot; is sent when the transcriber is automatically switched based on the detected language.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "language-change-detected";
+    }
+
+    /**
      * @return This is the language the transcriber is switched to.
      */
     @JsonProperty("language")

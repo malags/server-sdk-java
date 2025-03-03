@@ -245,6 +245,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("dtmf")
+    @JsonIgnoreProperties("type")
     private static final class DtmfValue implements Value {
         @JsonUnwrapped
         private CreateDtmfToolDto value;
@@ -283,6 +284,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("endCall")
+    @JsonIgnoreProperties("type")
     private static final class EndCallValue implements Value {
         @JsonUnwrapped
         private CreateEndCallToolDto value;
@@ -321,6 +323,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("function")
+    @JsonIgnoreProperties("type")
     private static final class FunctionValue implements Value {
         @JsonUnwrapped
         private CreateFunctionToolDto value;
@@ -359,6 +362,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("ghl")
+    @JsonIgnoreProperties("type")
     private static final class GhlValue implements Value {
         @JsonUnwrapped
         private CreateGhlToolDto value;
@@ -397,6 +401,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("make")
+    @JsonIgnoreProperties("type")
     private static final class MakeValue implements Value {
         @JsonUnwrapped
         private CreateMakeToolDto value;
@@ -435,6 +440,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("transferCall")
+    @JsonIgnoreProperties("type")
     private static final class TransferCallValue implements Value {
         @JsonUnwrapped
         private CreateTransferCallToolDto value;
@@ -473,6 +479,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("output")
+    @JsonIgnoreProperties("type")
     private static final class OutputValue implements Value {
         @JsonUnwrapped
         private CreateOutputToolDto value;
@@ -511,6 +518,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("bash")
+    @JsonIgnoreProperties("type")
     private static final class BashValue implements Value {
         @JsonUnwrapped
         private CreateBashToolDto value;
@@ -549,6 +557,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("computer")
+    @JsonIgnoreProperties("type")
     private static final class ComputerValue implements Value {
         @JsonUnwrapped
         private CreateComputerToolDto value;
@@ -587,6 +596,7 @@ public final class ToolsCreateRequest {
     }
 
     @JsonTypeName("textEditor")
+    @JsonIgnoreProperties("type")
     private static final class TextEditorValue implements Value {
         @JsonUnwrapped
         private CreateTextEditorToolDto value;
@@ -624,6 +634,7 @@ public final class ToolsCreateRequest {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

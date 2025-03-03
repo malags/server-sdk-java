@@ -29,6 +29,8 @@ public final class Server {
 
     private final Optional<Map<String, Object>> headers;
 
+    private final Optional<BackoffPlan> backoffPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private Server(
@@ -36,11 +38,13 @@ public final class Server {
             String url,
             Optional<String> secret,
             Optional<Map<String, Object>> headers,
+            Optional<BackoffPlan> backoffPlan,
             Map<String, Object> additionalProperties) {
         this.timeoutSeconds = timeoutSeconds;
         this.url = url;
         this.secret = secret;
         this.headers = headers;
+        this.backoffPlan = backoffPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +83,14 @@ public final class Server {
         return headers;
     }
 
+    /**
+     * @return This is the backoff plan to use if the request fails.
+     */
+    @JsonProperty("backoffPlan")
+    public Optional<BackoffPlan> getBackoffPlan() {
+        return backoffPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -94,12 +106,13 @@ public final class Server {
         return timeoutSeconds.equals(other.timeoutSeconds)
                 && url.equals(other.url)
                 && secret.equals(other.secret)
-                && headers.equals(other.headers);
+                && headers.equals(other.headers)
+                && backoffPlan.equals(other.backoffPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.timeoutSeconds, this.url, this.secret, this.headers);
+        return Objects.hash(this.timeoutSeconds, this.url, this.secret, this.headers, this.backoffPlan);
     }
 
     @java.lang.Override
@@ -131,11 +144,17 @@ public final class Server {
         _FinalStage headers(Optional<Map<String, Object>> headers);
 
         _FinalStage headers(Map<String, Object> headers);
+
+        _FinalStage backoffPlan(Optional<BackoffPlan> backoffPlan);
+
+        _FinalStage backoffPlan(BackoffPlan backoffPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements UrlStage, _FinalStage {
         private String url;
+
+        private Optional<BackoffPlan> backoffPlan = Optional.empty();
 
         private Optional<Map<String, Object>> headers = Optional.empty();
 
@@ -154,6 +173,7 @@ public final class Server {
             url(other.getUrl());
             secret(other.getSecret());
             headers(other.getHeaders());
+            backoffPlan(other.getBackoffPlan());
             return this;
         }
 
@@ -165,6 +185,23 @@ public final class Server {
         @JsonSetter("url")
         public _FinalStage url(@NotNull String url) {
             this.url = Objects.requireNonNull(url, "url must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the backoff plan to use if the request fails.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage backoffPlan(BackoffPlan backoffPlan) {
+            this.backoffPlan = Optional.ofNullable(backoffPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "backoffPlan", nulls = Nulls.SKIP)
+        public _FinalStage backoffPlan(Optional<BackoffPlan> backoffPlan) {
+            this.backoffPlan = backoffPlan;
             return this;
         }
 
@@ -224,7 +261,7 @@ public final class Server {
 
         @java.lang.Override
         public Server build() {
-            return new Server(timeoutSeconds, url, secret, headers, additionalProperties);
+            return new Server(timeoutSeconds, url, secret, headers, backoffPlan, additionalProperties);
         }
     }
 }

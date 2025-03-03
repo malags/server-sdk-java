@@ -271,6 +271,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("azure")
+    @JsonIgnoreProperties("provider")
     private static final class AzureValue implements Value {
         @JsonUnwrapped
         private AzureVoice value;
@@ -309,6 +310,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("cartesia")
+    @JsonIgnoreProperties("provider")
     private static final class CartesiaValue implements Value {
         @JsonUnwrapped
         private CartesiaVoice value;
@@ -347,6 +349,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("custom-voice")
+    @JsonIgnoreProperties("provider")
     private static final class CustomVoiceValue implements Value {
         @JsonUnwrapped
         private CustomVoice value;
@@ -385,6 +388,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("deepgram")
+    @JsonIgnoreProperties("provider")
     private static final class DeepgramValue implements Value {
         @JsonUnwrapped
         private DeepgramVoice value;
@@ -423,6 +427,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("11labs")
+    @JsonIgnoreProperties("provider")
     private static final class _11LabsValue implements Value {
         @JsonUnwrapped
         private ElevenLabsVoice value;
@@ -461,6 +466,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("lmnt")
+    @JsonIgnoreProperties("provider")
     private static final class LmntValue implements Value {
         @JsonUnwrapped
         private LmntVoice value;
@@ -499,6 +505,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("neets")
+    @JsonIgnoreProperties("provider")
     private static final class NeetsValue implements Value {
         @JsonUnwrapped
         private NeetsVoice value;
@@ -537,6 +544,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("openai")
+    @JsonIgnoreProperties("provider")
     private static final class OpenaiValue implements Value {
         @JsonUnwrapped
         private OpenAiVoice value;
@@ -575,6 +583,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("playht")
+    @JsonIgnoreProperties("provider")
     private static final class PlayhtValue implements Value {
         @JsonUnwrapped
         private PlayHtVoice value;
@@ -613,6 +622,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("rime-ai")
+    @JsonIgnoreProperties("provider")
     private static final class RimeAiValue implements Value {
         @JsonUnwrapped
         private RimeAiVoice value;
@@ -651,6 +661,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("smallest-ai")
+    @JsonIgnoreProperties("provider")
     private static final class SmallestAiValue implements Value {
         @JsonUnwrapped
         private SmallestAiVoice value;
@@ -689,6 +700,7 @@ public final class AssistantOverridesVoice {
     }
 
     @JsonTypeName("tavus")
+    @JsonIgnoreProperties("provider")
     private static final class TavusValue implements Value {
         @JsonUnwrapped
         private TavusVoice value;
@@ -726,6 +738,7 @@ public final class AssistantOverridesVoice {
         }
     }
 
+    @JsonIgnoreProperties("provider")
     private static final class _UnknownValue implements Value {
         private String type;
 

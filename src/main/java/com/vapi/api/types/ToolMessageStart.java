@@ -23,6 +23,8 @@ import java.util.Optional;
 public final class ToolMessageStart {
     private final Optional<List<TextContent>> contents;
 
+    private final Optional<Boolean> blocking;
+
     private final Optional<String> content;
 
     private final Optional<List<Condition>> conditions;
@@ -31,10 +33,12 @@ public final class ToolMessageStart {
 
     private ToolMessageStart(
             Optional<List<TextContent>> contents,
+            Optional<Boolean> blocking,
             Optional<String> content,
             Optional<List<Condition>> conditions,
             Map<String, Object> additionalProperties) {
         this.contents = contents;
+        this.blocking = blocking;
         this.content = content;
         this.conditions = conditions;
         this.additionalProperties = additionalProperties;
@@ -52,6 +56,15 @@ public final class ToolMessageStart {
     @JsonProperty("contents")
     public Optional<List<TextContent>> getContents() {
         return contents;
+    }
+
+    /**
+     * @return This is an optional boolean that if true, the tool call will only trigger after the message is spoken. Default is false.
+     * <p>@default false</p>
+     */
+    @JsonProperty("blocking")
+    public Optional<Boolean> getBlocking() {
+        return blocking;
     }
 
     /**
@@ -82,12 +95,15 @@ public final class ToolMessageStart {
     }
 
     private boolean equalTo(ToolMessageStart other) {
-        return contents.equals(other.contents) && content.equals(other.content) && conditions.equals(other.conditions);
+        return contents.equals(other.contents)
+                && blocking.equals(other.blocking)
+                && content.equals(other.content)
+                && conditions.equals(other.conditions);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.contents, this.content, this.conditions);
+        return Objects.hash(this.contents, this.blocking, this.content, this.conditions);
     }
 
     @java.lang.Override
@@ -103,6 +119,8 @@ public final class ToolMessageStart {
     public static final class Builder {
         private Optional<List<TextContent>> contents = Optional.empty();
 
+        private Optional<Boolean> blocking = Optional.empty();
+
         private Optional<String> content = Optional.empty();
 
         private Optional<List<Condition>> conditions = Optional.empty();
@@ -114,6 +132,7 @@ public final class ToolMessageStart {
 
         public Builder from(ToolMessageStart other) {
             contents(other.getContents());
+            blocking(other.getBlocking());
             content(other.getContent());
             conditions(other.getConditions());
             return this;
@@ -127,6 +146,17 @@ public final class ToolMessageStart {
 
         public Builder contents(List<TextContent> contents) {
             this.contents = Optional.ofNullable(contents);
+            return this;
+        }
+
+        @JsonSetter(value = "blocking", nulls = Nulls.SKIP)
+        public Builder blocking(Optional<Boolean> blocking) {
+            this.blocking = blocking;
+            return this;
+        }
+
+        public Builder blocking(Boolean blocking) {
+            this.blocking = Optional.ofNullable(blocking);
             return this;
         }
 
@@ -153,7 +183,7 @@ public final class ToolMessageStart {
         }
 
         public ToolMessageStart build() {
-            return new ToolMessageStart(contents, content, conditions, additionalProperties);
+            return new ToolMessageStart(contents, blocking, content, conditions, additionalProperties);
         }
     }
 }

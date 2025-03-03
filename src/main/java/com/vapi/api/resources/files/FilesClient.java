@@ -49,6 +49,7 @@ public class FilesClient {
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -89,7 +90,8 @@ public class FilesClient {
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl)
                 .method("POST", body.build())
-                .headers(Headers.of(clientOptions.headers(requestOptions)));
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -132,6 +134,7 @@ public class FilesClient {
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -167,6 +170,7 @@ public class FilesClient {
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -185,6 +189,10 @@ public class FilesClient {
         } catch (IOException e) {
             throw new VapiException("Network error executing HTTP request", e);
         }
+    }
+
+    public File update(String id) {
+        return update(id, UpdateFileDto.builder().build());
     }
 
     public File update(String id, UpdateFileDto request) {
@@ -209,6 +217,7 @@ public class FilesClient {
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {

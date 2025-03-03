@@ -117,6 +117,27 @@ public final class TransferDestinationAssistant {
      * assistant: how can i help?
      * user: i need help with my account</p>
      * </li>
+     * <li>
+     * <p><code>swap-system-message-in-history-and-remove-transfer-tool-messages</code>: This replaces the original system message with the new assistant's system message on transfer and removes transfer tool messages from conversation history sent to the LLM.</p>
+     * <p>Example:</p>
+     * <p>Pre-transfer:
+     * system: assistant1 system message
+     * assistant: assistant1 first message
+     * user: hey, good morning
+     * assistant: how can i help?
+     * user: i need help with my account
+     * transfer-tool
+     * transfer-tool-result
+     * assistant: (destination.message)</p>
+     * <p>Post-transfer:
+     * system: assistant2 system message
+     * assistant: assistant1 first message
+     * user: hey, good morning
+     * assistant: how can i help?
+     * user: i need help with my account
+     * assistant: (destination.message)
+     * assistant: assistant2 first message (or model generated if firstMessageMode is set to <code>assistant-speaks-first-with-model-generated-message</code>)</p>
+     * </li>
      * </ul>
      * <p>@default 'rolling-history'</p>
      */
@@ -305,6 +326,27 @@ public final class TransferDestinationAssistant {
          * user: Yes, please
          * assistant: how can i help?
          * user: i need help with my account</p>
+         * </li>
+         * <li>
+         * <p><code>swap-system-message-in-history-and-remove-transfer-tool-messages</code>: This replaces the original system message with the new assistant's system message on transfer and removes transfer tool messages from conversation history sent to the LLM.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * transfer-tool
+         * transfer-tool-result
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant2 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)
+         * assistant: assistant2 first message (or model generated if firstMessageMode is set to <code>assistant-speaks-first-with-model-generated-message</code>)</p>
          * </li>
          * </ul>
          * <p>@default 'rolling-history'</p>

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -26,11 +27,18 @@ public final class InviteUserDto {
 
     private final InviteUserDtoRole role;
 
+    private final Optional<String> redirectTo;
+
     private final Map<String, Object> additionalProperties;
 
-    private InviteUserDto(List<String> emails, InviteUserDtoRole role, Map<String, Object> additionalProperties) {
+    private InviteUserDto(
+            List<String> emails,
+            InviteUserDtoRole role,
+            Optional<String> redirectTo,
+            Map<String, Object> additionalProperties) {
         this.emails = emails;
         this.role = role;
+        this.redirectTo = redirectTo;
         this.additionalProperties = additionalProperties;
     }
 
@@ -42,6 +50,11 @@ public final class InviteUserDto {
     @JsonProperty("role")
     public InviteUserDtoRole getRole() {
         return role;
+    }
+
+    @JsonProperty("redirectTo")
+    public Optional<String> getRedirectTo() {
+        return redirectTo;
     }
 
     @java.lang.Override
@@ -56,12 +69,12 @@ public final class InviteUserDto {
     }
 
     private boolean equalTo(InviteUserDto other) {
-        return emails.equals(other.emails) && role.equals(other.role);
+        return emails.equals(other.emails) && role.equals(other.role) && redirectTo.equals(other.redirectTo);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.emails, this.role);
+        return Objects.hash(this.emails, this.role, this.redirectTo);
     }
 
     @java.lang.Override
@@ -87,11 +100,17 @@ public final class InviteUserDto {
         _FinalStage addEmails(String emails);
 
         _FinalStage addAllEmails(List<String> emails);
+
+        _FinalStage redirectTo(Optional<String> redirectTo);
+
+        _FinalStage redirectTo(String redirectTo);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements RoleStage, _FinalStage {
         private InviteUserDtoRole role;
+
+        private Optional<String> redirectTo = Optional.empty();
 
         private List<String> emails = new ArrayList<>();
 
@@ -104,6 +123,7 @@ public final class InviteUserDto {
         public Builder from(InviteUserDto other) {
             emails(other.getEmails());
             role(other.getRole());
+            redirectTo(other.getRedirectTo());
             return this;
         }
 
@@ -111,6 +131,19 @@ public final class InviteUserDto {
         @JsonSetter("role")
         public _FinalStage role(@NotNull InviteUserDtoRole role) {
             this.role = Objects.requireNonNull(role, "role must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage redirectTo(String redirectTo) {
+            this.redirectTo = Optional.ofNullable(redirectTo);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "redirectTo", nulls = Nulls.SKIP)
+        public _FinalStage redirectTo(Optional<String> redirectTo) {
+            this.redirectTo = redirectTo;
             return this;
         }
 
@@ -136,7 +169,7 @@ public final class InviteUserDto {
 
         @java.lang.Override
         public InviteUserDto build() {
-            return new InviteUserDto(emails, role, additionalProperties);
+            return new InviteUserDto(emails, role, redirectTo, additionalProperties);
         }
     }
 }

@@ -85,6 +85,14 @@ public final class ServerMessageTransferUpdate {
     }
 
     /**
+     * @return This is the type of the message. &quot;transfer-update&quot; is sent whenever a transfer happens.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "transfer-update";
+    }
+
+    /**
      * @return This is the destination of the transfer.
      */
     @JsonProperty("destination")

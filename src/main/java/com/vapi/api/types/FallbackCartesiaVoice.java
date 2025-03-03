@@ -21,27 +21,39 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FallbackCartesiaVoice.Builder.class)
 public final class FallbackCartesiaVoice {
+    private final String voiceId;
+
     private final Optional<FallbackCartesiaVoiceModel> model;
 
     private final Optional<FallbackCartesiaVoiceLanguage> language;
 
-    private final String voiceId;
+    private final Optional<CartesiaExperimentalControls> experimentalControls;
 
     private final Optional<ChunkPlan> chunkPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private FallbackCartesiaVoice(
+            String voiceId,
             Optional<FallbackCartesiaVoiceModel> model,
             Optional<FallbackCartesiaVoiceLanguage> language,
-            String voiceId,
+            Optional<CartesiaExperimentalControls> experimentalControls,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
+        this.voiceId = voiceId;
         this.model = model;
         this.language = language;
-        this.voiceId = voiceId;
+        this.experimentalControls = experimentalControls;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The ID of the particular voice you want to use.
+     */
+    @JsonProperty("voiceId")
+    public String getVoiceId() {
+        return voiceId;
     }
 
     /**
@@ -61,11 +73,11 @@ public final class FallbackCartesiaVoice {
     }
 
     /**
-     * @return This is the provider-specific ID that will be used.
+     * @return Experimental controls for Cartesia voice generation
      */
-    @JsonProperty("voiceId")
-    public String getVoiceId() {
-        return voiceId;
+    @JsonProperty("experimentalControls")
+    public Optional<CartesiaExperimentalControls> getExperimentalControls() {
+        return experimentalControls;
     }
 
     /**
@@ -88,15 +100,16 @@ public final class FallbackCartesiaVoice {
     }
 
     private boolean equalTo(FallbackCartesiaVoice other) {
-        return model.equals(other.model)
+        return voiceId.equals(other.voiceId)
+                && model.equals(other.model)
                 && language.equals(other.language)
-                && voiceId.equals(other.voiceId)
+                && experimentalControls.equals(other.experimentalControls)
                 && chunkPlan.equals(other.chunkPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.model, this.language, this.voiceId, this.chunkPlan);
+        return Objects.hash(this.voiceId, this.model, this.language, this.experimentalControls, this.chunkPlan);
     }
 
     @java.lang.Override
@@ -125,6 +138,10 @@ public final class FallbackCartesiaVoice {
 
         _FinalStage language(FallbackCartesiaVoiceLanguage language);
 
+        _FinalStage experimentalControls(Optional<CartesiaExperimentalControls> experimentalControls);
+
+        _FinalStage experimentalControls(CartesiaExperimentalControls experimentalControls);
+
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -135,6 +152,8 @@ public final class FallbackCartesiaVoice {
         private String voiceId;
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
+
+        private Optional<CartesiaExperimentalControls> experimentalControls = Optional.empty();
 
         private Optional<FallbackCartesiaVoiceLanguage> language = Optional.empty();
 
@@ -147,15 +166,16 @@ public final class FallbackCartesiaVoice {
 
         @java.lang.Override
         public Builder from(FallbackCartesiaVoice other) {
+            voiceId(other.getVoiceId());
             model(other.getModel());
             language(other.getLanguage());
-            voiceId(other.getVoiceId());
+            experimentalControls(other.getExperimentalControls());
             chunkPlan(other.getChunkPlan());
             return this;
         }
 
         /**
-         * <p>This is the provider-specific ID that will be used.</p>
+         * <p>The ID of the particular voice you want to use.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -179,6 +199,23 @@ public final class FallbackCartesiaVoice {
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
             this.chunkPlan = chunkPlan;
+            return this;
+        }
+
+        /**
+         * <p>Experimental controls for Cartesia voice generation</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage experimentalControls(CartesiaExperimentalControls experimentalControls) {
+            this.experimentalControls = Optional.ofNullable(experimentalControls);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "experimentalControls", nulls = Nulls.SKIP)
+        public _FinalStage experimentalControls(Optional<CartesiaExperimentalControls> experimentalControls) {
+            this.experimentalControls = experimentalControls;
             return this;
         }
 
@@ -218,7 +255,8 @@ public final class FallbackCartesiaVoice {
 
         @java.lang.Override
         public FallbackCartesiaVoice build() {
-            return new FallbackCartesiaVoice(model, language, voiceId, chunkPlan, additionalProperties);
+            return new FallbackCartesiaVoice(
+                    voiceId, model, language, experimentalControls, chunkPlan, additionalProperties);
         }
     }
 }

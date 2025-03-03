@@ -27,16 +27,20 @@ public final class MessagePlan {
 
     private final Optional<Double> idleTimeoutSeconds;
 
+    private final Optional<String> silenceTimeoutMessage;
+
     private final Map<String, Object> additionalProperties;
 
     private MessagePlan(
             Optional<List<String>> idleMessages,
             Optional<Double> idleMessageMaxSpokenCount,
             Optional<Double> idleTimeoutSeconds,
+            Optional<String> silenceTimeoutMessage,
             Map<String, Object> additionalProperties) {
         this.idleMessages = idleMessages;
         this.idleMessageMaxSpokenCount = idleMessageMaxSpokenCount;
         this.idleTimeoutSeconds = idleTimeoutSeconds;
+        this.silenceTimeoutMessage = silenceTimeoutMessage;
         this.additionalProperties = additionalProperties;
     }
 
@@ -72,6 +76,15 @@ public final class MessagePlan {
         return idleTimeoutSeconds;
     }
 
+    /**
+     * @return This is the message that the assistant will say if the call ends due to silence.
+     * <p>If unspecified, it will hang up without saying anything.</p>
+     */
+    @JsonProperty("silenceTimeoutMessage")
+    public Optional<String> getSilenceTimeoutMessage() {
+        return silenceTimeoutMessage;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -86,12 +99,14 @@ public final class MessagePlan {
     private boolean equalTo(MessagePlan other) {
         return idleMessages.equals(other.idleMessages)
                 && idleMessageMaxSpokenCount.equals(other.idleMessageMaxSpokenCount)
-                && idleTimeoutSeconds.equals(other.idleTimeoutSeconds);
+                && idleTimeoutSeconds.equals(other.idleTimeoutSeconds)
+                && silenceTimeoutMessage.equals(other.silenceTimeoutMessage);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.idleMessages, this.idleMessageMaxSpokenCount, this.idleTimeoutSeconds);
+        return Objects.hash(
+                this.idleMessages, this.idleMessageMaxSpokenCount, this.idleTimeoutSeconds, this.silenceTimeoutMessage);
     }
 
     @java.lang.Override
@@ -111,6 +126,8 @@ public final class MessagePlan {
 
         private Optional<Double> idleTimeoutSeconds = Optional.empty();
 
+        private Optional<String> silenceTimeoutMessage = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -120,6 +137,7 @@ public final class MessagePlan {
             idleMessages(other.getIdleMessages());
             idleMessageMaxSpokenCount(other.getIdleMessageMaxSpokenCount());
             idleTimeoutSeconds(other.getIdleTimeoutSeconds());
+            silenceTimeoutMessage(other.getSilenceTimeoutMessage());
             return this;
         }
 
@@ -156,8 +174,24 @@ public final class MessagePlan {
             return this;
         }
 
+        @JsonSetter(value = "silenceTimeoutMessage", nulls = Nulls.SKIP)
+        public Builder silenceTimeoutMessage(Optional<String> silenceTimeoutMessage) {
+            this.silenceTimeoutMessage = silenceTimeoutMessage;
+            return this;
+        }
+
+        public Builder silenceTimeoutMessage(String silenceTimeoutMessage) {
+            this.silenceTimeoutMessage = Optional.ofNullable(silenceTimeoutMessage);
+            return this;
+        }
+
         public MessagePlan build() {
-            return new MessagePlan(idleMessages, idleMessageMaxSpokenCount, idleTimeoutSeconds, additionalProperties);
+            return new MessagePlan(
+                    idleMessages,
+                    idleMessageMaxSpokenCount,
+                    idleTimeoutSeconds,
+                    silenceTimeoutMessage,
+                    additionalProperties);
         }
     }
 }

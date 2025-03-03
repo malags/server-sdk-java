@@ -109,6 +109,7 @@ public final class CreateToolTemplateDtoProviderDetails {
     }
 
     @JsonTypeName("make")
+    @JsonIgnoreProperties("type")
     private static final class MakeValue implements Value {
         @JsonUnwrapped
         private MakeToolProviderDetails value;
@@ -147,6 +148,7 @@ public final class CreateToolTemplateDtoProviderDetails {
     }
 
     @JsonTypeName("ghl")
+    @JsonIgnoreProperties("type")
     private static final class GhlValue implements Value {
         @JsonUnwrapped
         private GhlToolProviderDetails value;
@@ -185,6 +187,7 @@ public final class CreateToolTemplateDtoProviderDetails {
     }
 
     @JsonTypeName("function")
+    @JsonIgnoreProperties("type")
     private static final class FunctionValue implements Value {
         @JsonUnwrapped
         private FunctionToolProviderDetails value;
@@ -222,6 +225,7 @@ public final class CreateToolTemplateDtoProviderDetails {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

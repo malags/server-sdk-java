@@ -22,6 +22,8 @@ import com.vapi.api.resources.assistants.types.UpdateAssistantDtoTranscriber;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoVoice;
 import com.vapi.api.types.AnalysisPlan;
 import com.vapi.api.types.ArtifactPlan;
+import com.vapi.api.types.AssistantHooks;
+import com.vapi.api.types.CompliancePlan;
 import com.vapi.api.types.MessagePlan;
 import com.vapi.api.types.MonitorPlan;
 import com.vapi.api.types.Server;
@@ -47,8 +49,6 @@ public final class UpdateAssistantDto {
     private final Optional<String> firstMessage;
 
     private final Optional<UpdateAssistantDtoFirstMessageMode> firstMessageMode;
-
-    private final Optional<Boolean> hipaaEnabled;
 
     private final Optional<List<UpdateAssistantDtoClientMessagesItem>> clientMessages;
 
@@ -78,6 +78,8 @@ public final class UpdateAssistantDto {
 
     private final Optional<List<String>> endCallPhrases;
 
+    private final Optional<CompliancePlan> compliancePlan;
+
     private final Optional<Map<String, Object>> metadata;
 
     private final Optional<AnalysisPlan> analysisPlan;
@@ -96,6 +98,8 @@ public final class UpdateAssistantDto {
 
     private final Optional<Server> server;
 
+    private final Optional<List<AssistantHooks>> hooks;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateAssistantDto(
@@ -104,7 +108,6 @@ public final class UpdateAssistantDto {
             Optional<UpdateAssistantDtoVoice> voice,
             Optional<String> firstMessage,
             Optional<UpdateAssistantDtoFirstMessageMode> firstMessageMode,
-            Optional<Boolean> hipaaEnabled,
             Optional<List<UpdateAssistantDtoClientMessagesItem>> clientMessages,
             Optional<List<UpdateAssistantDtoServerMessagesItem>> serverMessages,
             Optional<Double> silenceTimeoutSeconds,
@@ -119,6 +122,7 @@ public final class UpdateAssistantDto {
             Optional<String> voicemailMessage,
             Optional<String> endCallMessage,
             Optional<List<String>> endCallPhrases,
+            Optional<CompliancePlan> compliancePlan,
             Optional<Map<String, Object>> metadata,
             Optional<AnalysisPlan> analysisPlan,
             Optional<ArtifactPlan> artifactPlan,
@@ -128,13 +132,13 @@ public final class UpdateAssistantDto {
             Optional<MonitorPlan> monitorPlan,
             Optional<List<String>> credentialIds,
             Optional<Server> server,
+            Optional<List<AssistantHooks>> hooks,
             Map<String, Object> additionalProperties) {
         this.transcriber = transcriber;
         this.model = model;
         this.voice = voice;
         this.firstMessage = firstMessage;
         this.firstMessageMode = firstMessageMode;
-        this.hipaaEnabled = hipaaEnabled;
         this.clientMessages = clientMessages;
         this.serverMessages = serverMessages;
         this.silenceTimeoutSeconds = silenceTimeoutSeconds;
@@ -149,6 +153,7 @@ public final class UpdateAssistantDto {
         this.voicemailMessage = voicemailMessage;
         this.endCallMessage = endCallMessage;
         this.endCallPhrases = endCallPhrases;
+        this.compliancePlan = compliancePlan;
         this.metadata = metadata;
         this.analysisPlan = analysisPlan;
         this.artifactPlan = artifactPlan;
@@ -158,6 +163,7 @@ public final class UpdateAssistantDto {
         this.monitorPlan = monitorPlan;
         this.credentialIds = credentialIds;
         this.server = server;
+        this.hooks = hooks;
         this.additionalProperties = additionalProperties;
     }
 
@@ -207,14 +213,6 @@ public final class UpdateAssistantDto {
     @JsonProperty("firstMessageMode")
     public Optional<UpdateAssistantDtoFirstMessageMode> getFirstMessageMode() {
         return firstMessageMode;
-    }
-
-    /**
-     * @return When this is enabled, no logs, recordings, or transcriptions will be stored. At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.
-     */
-    @JsonProperty("hipaaEnabled")
-    public Optional<Boolean> getHipaaEnabled() {
-        return hipaaEnabled;
     }
 
     /**
@@ -340,6 +338,11 @@ public final class UpdateAssistantDto {
         return endCallPhrases;
     }
 
+    @JsonProperty("compliancePlan")
+    public Optional<CompliancePlan> getCompliancePlan() {
+        return compliancePlan;
+    }
+
     /**
      * @return This is for metadata you want to store on the assistant.
      */
@@ -440,6 +443,14 @@ public final class UpdateAssistantDto {
         return server;
     }
 
+    /**
+     * @return This is a set of actions that will be performed on certain events.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<AssistantHooks>> getHooks() {
+        return hooks;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -457,7 +468,6 @@ public final class UpdateAssistantDto {
                 && voice.equals(other.voice)
                 && firstMessage.equals(other.firstMessage)
                 && firstMessageMode.equals(other.firstMessageMode)
-                && hipaaEnabled.equals(other.hipaaEnabled)
                 && clientMessages.equals(other.clientMessages)
                 && serverMessages.equals(other.serverMessages)
                 && silenceTimeoutSeconds.equals(other.silenceTimeoutSeconds)
@@ -472,6 +482,7 @@ public final class UpdateAssistantDto {
                 && voicemailMessage.equals(other.voicemailMessage)
                 && endCallMessage.equals(other.endCallMessage)
                 && endCallPhrases.equals(other.endCallPhrases)
+                && compliancePlan.equals(other.compliancePlan)
                 && metadata.equals(other.metadata)
                 && analysisPlan.equals(other.analysisPlan)
                 && artifactPlan.equals(other.artifactPlan)
@@ -480,7 +491,8 @@ public final class UpdateAssistantDto {
                 && stopSpeakingPlan.equals(other.stopSpeakingPlan)
                 && monitorPlan.equals(other.monitorPlan)
                 && credentialIds.equals(other.credentialIds)
-                && server.equals(other.server);
+                && server.equals(other.server)
+                && hooks.equals(other.hooks);
     }
 
     @java.lang.Override
@@ -491,7 +503,6 @@ public final class UpdateAssistantDto {
                 this.voice,
                 this.firstMessage,
                 this.firstMessageMode,
-                this.hipaaEnabled,
                 this.clientMessages,
                 this.serverMessages,
                 this.silenceTimeoutSeconds,
@@ -506,6 +517,7 @@ public final class UpdateAssistantDto {
                 this.voicemailMessage,
                 this.endCallMessage,
                 this.endCallPhrases,
+                this.compliancePlan,
                 this.metadata,
                 this.analysisPlan,
                 this.artifactPlan,
@@ -514,7 +526,8 @@ public final class UpdateAssistantDto {
                 this.stopSpeakingPlan,
                 this.monitorPlan,
                 this.credentialIds,
-                this.server);
+                this.server,
+                this.hooks);
     }
 
     @java.lang.Override
@@ -537,8 +550,6 @@ public final class UpdateAssistantDto {
         private Optional<String> firstMessage = Optional.empty();
 
         private Optional<UpdateAssistantDtoFirstMessageMode> firstMessageMode = Optional.empty();
-
-        private Optional<Boolean> hipaaEnabled = Optional.empty();
 
         private Optional<List<UpdateAssistantDtoClientMessagesItem>> clientMessages = Optional.empty();
 
@@ -568,6 +579,8 @@ public final class UpdateAssistantDto {
 
         private Optional<List<String>> endCallPhrases = Optional.empty();
 
+        private Optional<CompliancePlan> compliancePlan = Optional.empty();
+
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
         private Optional<AnalysisPlan> analysisPlan = Optional.empty();
@@ -586,6 +599,8 @@ public final class UpdateAssistantDto {
 
         private Optional<Server> server = Optional.empty();
 
+        private Optional<List<AssistantHooks>> hooks = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -597,7 +612,6 @@ public final class UpdateAssistantDto {
             voice(other.getVoice());
             firstMessage(other.getFirstMessage());
             firstMessageMode(other.getFirstMessageMode());
-            hipaaEnabled(other.getHipaaEnabled());
             clientMessages(other.getClientMessages());
             serverMessages(other.getServerMessages());
             silenceTimeoutSeconds(other.getSilenceTimeoutSeconds());
@@ -612,6 +626,7 @@ public final class UpdateAssistantDto {
             voicemailMessage(other.getVoicemailMessage());
             endCallMessage(other.getEndCallMessage());
             endCallPhrases(other.getEndCallPhrases());
+            compliancePlan(other.getCompliancePlan());
             metadata(other.getMetadata());
             analysisPlan(other.getAnalysisPlan());
             artifactPlan(other.getArtifactPlan());
@@ -621,6 +636,7 @@ public final class UpdateAssistantDto {
             monitorPlan(other.getMonitorPlan());
             credentialIds(other.getCredentialIds());
             server(other.getServer());
+            hooks(other.getHooks());
             return this;
         }
 
@@ -676,17 +692,6 @@ public final class UpdateAssistantDto {
 
         public Builder firstMessageMode(UpdateAssistantDtoFirstMessageMode firstMessageMode) {
             this.firstMessageMode = Optional.ofNullable(firstMessageMode);
-            return this;
-        }
-
-        @JsonSetter(value = "hipaaEnabled", nulls = Nulls.SKIP)
-        public Builder hipaaEnabled(Optional<Boolean> hipaaEnabled) {
-            this.hipaaEnabled = hipaaEnabled;
-            return this;
-        }
-
-        public Builder hipaaEnabled(Boolean hipaaEnabled) {
-            this.hipaaEnabled = Optional.ofNullable(hipaaEnabled);
             return this;
         }
 
@@ -844,6 +849,17 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        @JsonSetter(value = "compliancePlan", nulls = Nulls.SKIP)
+        public Builder compliancePlan(Optional<CompliancePlan> compliancePlan) {
+            this.compliancePlan = compliancePlan;
+            return this;
+        }
+
+        public Builder compliancePlan(CompliancePlan compliancePlan) {
+            this.compliancePlan = Optional.ofNullable(compliancePlan);
+            return this;
+        }
+
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public Builder metadata(Optional<Map<String, Object>> metadata) {
             this.metadata = metadata;
@@ -943,6 +959,17 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public Builder hooks(Optional<List<AssistantHooks>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        public Builder hooks(List<AssistantHooks> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
         public UpdateAssistantDto build() {
             return new UpdateAssistantDto(
                     transcriber,
@@ -950,7 +977,6 @@ public final class UpdateAssistantDto {
                     voice,
                     firstMessage,
                     firstMessageMode,
-                    hipaaEnabled,
                     clientMessages,
                     serverMessages,
                     silenceTimeoutSeconds,
@@ -965,6 +991,7 @@ public final class UpdateAssistantDto {
                     voicemailMessage,
                     endCallMessage,
                     endCallPhrases,
+                    compliancePlan,
                     metadata,
                     analysisPlan,
                     artifactPlan,
@@ -974,6 +1001,7 @@ public final class UpdateAssistantDto {
                     monitorPlan,
                     credentialIds,
                     server,
+                    hooks,
                     additionalProperties);
         }
     }

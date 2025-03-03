@@ -20,6 +20,8 @@ public enum SyncVoiceLibraryDtoProvidersItem {
 
     NEETS("neets"),
 
+    NEUPHONIC("neuphonic"),
+
     OPENAI("openai"),
 
     PLAYHT("playht"),

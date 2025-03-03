@@ -103,7 +103,7 @@ public final class ServerMessageKnowledgeBaseRequestMessagesItem {
         }
 
         @java.lang.Override
-        public ServerMessageKnowledgeBaseRequestMessagesItem deserialize(JsonParser p, DeserializationContext ctxt)
+        public ServerMessageKnowledgeBaseRequestMessagesItem deserialize(JsonParser p, DeserializationContext context)
                 throws IOException {
             Object value = p.readValueAs(Object.class);
             try {

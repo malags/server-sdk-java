@@ -99,6 +99,14 @@ public final class ServerMessageStatusUpdate {
     }
 
     /**
+     * @return This is the type of the message. &quot;status-update&quot; is sent whenever the <code>call.status</code> changes.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "status-update";
+    }
+
+    /**
      * @return This is the status of the call.
      */
     @JsonProperty("status")

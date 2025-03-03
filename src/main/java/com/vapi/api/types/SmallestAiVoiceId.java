@@ -78,7 +78,7 @@ public final class SmallestAiVoiceId {
         }
 
         @java.lang.Override
-        public SmallestAiVoiceId deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public SmallestAiVoiceId deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, SmallestAiVoiceIdEnum.class));

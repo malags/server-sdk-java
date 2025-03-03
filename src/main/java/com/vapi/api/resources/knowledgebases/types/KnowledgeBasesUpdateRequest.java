@@ -90,6 +90,7 @@ public final class KnowledgeBasesUpdateRequest {
     }
 
     @JsonTypeName("trieve")
+    @JsonIgnoreProperties("provider")
     private static final class TrieveValue implements Value {
         @JsonUnwrapped
         private UpdateTrieveKnowledgeBaseDto value;
@@ -128,6 +129,7 @@ public final class KnowledgeBasesUpdateRequest {
     }
 
     @JsonTypeName("custom-knowledge-base")
+    @JsonIgnoreProperties("provider")
     private static final class CustomKnowledgeBaseValue implements Value {
         @JsonUnwrapped
         private UpdateCustomKnowledgeBaseDto value;
@@ -165,6 +167,7 @@ public final class KnowledgeBasesUpdateRequest {
         }
     }
 
+    @JsonIgnoreProperties("provider")
     private static final class _UnknownValue implements Value {
         private String type;
 

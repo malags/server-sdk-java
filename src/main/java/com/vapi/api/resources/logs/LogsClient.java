@@ -108,7 +108,8 @@ public class LogsClient {
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -119,7 +120,7 @@ public class LogsClient {
             if (response.isSuccessful()) {
                 LogsPaginatedResponse parsedResponse =
                         ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), LogsPaginatedResponse.class);
-                double newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
+                double newPageNumber = request.getPage().map(page -> page + 1.0).orElse(1.0);
                 LogsGetRequest nextRequest = LogsGetRequest.builder()
                         .from(request)
                         .page(newPageNumber)

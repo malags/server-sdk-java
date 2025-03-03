@@ -307,6 +307,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("anyscale")
+    @JsonIgnoreProperties("provider")
     private static final class AnyscaleValue implements Value {
         @JsonUnwrapped
         private AnyscaleModel value;
@@ -345,6 +346,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("anthropic")
+    @JsonIgnoreProperties("provider")
     private static final class AnthropicValue implements Value {
         @JsonUnwrapped
         private AnthropicModel value;
@@ -383,6 +385,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("custom-llm")
+    @JsonIgnoreProperties("provider")
     private static final class CustomLlmValue implements Value {
         @JsonUnwrapped
         private CustomLlmModel value;
@@ -421,6 +424,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("deepinfra")
+    @JsonIgnoreProperties("provider")
     private static final class DeepinfraValue implements Value {
         @JsonUnwrapped
         private DeepInfraModel value;
@@ -459,6 +463,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("google")
+    @JsonIgnoreProperties("provider")
     private static final class GoogleValue implements Value {
         @JsonUnwrapped
         private GoogleModel value;
@@ -497,6 +502,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("groq")
+    @JsonIgnoreProperties("provider")
     private static final class GroqValue implements Value {
         @JsonUnwrapped
         private GroqModel value;
@@ -535,6 +541,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("inflection-ai")
+    @JsonIgnoreProperties("provider")
     private static final class InflectionAiValue implements Value {
         @JsonUnwrapped
         private InflectionAiModel value;
@@ -573,6 +580,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("deep-seek")
+    @JsonIgnoreProperties("provider")
     private static final class DeepSeekValue implements Value {
         @JsonUnwrapped
         private DeepSeekModel value;
@@ -611,6 +619,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("openai")
+    @JsonIgnoreProperties("provider")
     private static final class OpenaiValue implements Value {
         @JsonUnwrapped
         private OpenAiModel value;
@@ -649,6 +658,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("openrouter")
+    @JsonIgnoreProperties("provider")
     private static final class OpenrouterValue implements Value {
         @JsonUnwrapped
         private OpenRouterModel value;
@@ -687,6 +697,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("perplexity-ai")
+    @JsonIgnoreProperties("provider")
     private static final class PerplexityAiValue implements Value {
         @JsonUnwrapped
         private PerplexityAiModel value;
@@ -725,6 +736,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("together-ai")
+    @JsonIgnoreProperties("provider")
     private static final class TogetherAiValue implements Value {
         @JsonUnwrapped
         private TogetherAiModel value;
@@ -763,6 +775,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("vapi")
+    @JsonIgnoreProperties("provider")
     private static final class VapiValue implements Value {
         @JsonUnwrapped
         private VapiModel value;
@@ -801,6 +814,7 @@ public final class CreateAssistantDtoModel {
     }
 
     @JsonTypeName("xai")
+    @JsonIgnoreProperties("provider")
     private static final class XaiValue implements Value {
         @JsonUnwrapped
         private XaiModel value;
@@ -838,6 +852,7 @@ public final class CreateAssistantDtoModel {
         }
     }
 
+    @JsonIgnoreProperties("provider")
     private static final class _UnknownValue implements Value {
         private String type;
 

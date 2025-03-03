@@ -102,7 +102,7 @@ public final class ArtifactMessagesItem {
         }
 
         @java.lang.Override
-        public ArtifactMessagesItem deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public ArtifactMessagesItem deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, UserMessage.class));

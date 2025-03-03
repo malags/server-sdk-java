@@ -103,7 +103,7 @@ public final class ServerMessageResponseMessageResponse {
         }
 
         @java.lang.Override
-        public ServerMessageResponseMessageResponse deserialize(JsonParser p, DeserializationContext ctxt)
+        public ServerMessageResponseMessageResponse deserialize(JsonParser p, DeserializationContext context)
                 throws IOException {
             Object value = p.readValueAs(Object.class);
             try {

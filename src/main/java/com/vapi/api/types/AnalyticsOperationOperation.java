@@ -14,7 +14,9 @@ public enum AnalyticsOperationOperation {
 
     MIN("min"),
 
-    MAX("max");
+    MAX("max"),
+
+    HISTORY("history");
 
     private final String value;
 

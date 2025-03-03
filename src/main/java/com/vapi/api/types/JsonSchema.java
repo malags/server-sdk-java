@@ -32,6 +32,12 @@ public final class JsonSchema {
 
     private final Optional<List<String>> required;
 
+    private final Optional<String> regex;
+
+    private final Optional<String> value;
+
+    private final Optional<String> target;
+
     private final Optional<List<String>> enum_;
 
     private final Map<String, Object> additionalProperties;
@@ -42,6 +48,9 @@ public final class JsonSchema {
             Optional<Map<String, Object>> properties,
             Optional<String> description,
             Optional<List<String>> required,
+            Optional<String> regex,
+            Optional<String> value,
+            Optional<String> target,
             Optional<List<String>> enum_,
             Map<String, Object> additionalProperties) {
         this.type = type;
@@ -49,6 +58,9 @@ public final class JsonSchema {
         this.properties = properties;
         this.description = description;
         this.required = required;
+        this.regex = regex;
+        this.value = value;
+        this.target = target;
         this.enum_ = enum_;
         this.additionalProperties = additionalProperties;
     }
@@ -101,6 +113,30 @@ public final class JsonSchema {
     }
 
     /**
+     * @return This is a regex that will be used to validate data in question.
+     */
+    @JsonProperty("regex")
+    public Optional<String> getRegex() {
+        return regex;
+    }
+
+    /**
+     * @return This the value that will be used in filling the property.
+     */
+    @JsonProperty("value")
+    public Optional<String> getValue() {
+        return value;
+    }
+
+    /**
+     * @return This the target variable that will be filled with the value of this property.
+     */
+    @JsonProperty("target")
+    public Optional<String> getTarget() {
+        return target;
+    }
+
+    /**
      * @return This array specifies the allowed values that can be used to restrict the output of the model.
      */
     @JsonProperty("enum")
@@ -125,12 +161,24 @@ public final class JsonSchema {
                 && properties.equals(other.properties)
                 && description.equals(other.description)
                 && required.equals(other.required)
+                && regex.equals(other.regex)
+                && value.equals(other.value)
+                && target.equals(other.target)
                 && enum_.equals(other.enum_);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.items, this.properties, this.description, this.required, this.enum_);
+        return Objects.hash(
+                this.type,
+                this.items,
+                this.properties,
+                this.description,
+                this.required,
+                this.regex,
+                this.value,
+                this.target,
+                this.enum_);
     }
 
     @java.lang.Override
@@ -167,6 +215,18 @@ public final class JsonSchema {
 
         _FinalStage required(List<String> required);
 
+        _FinalStage regex(Optional<String> regex);
+
+        _FinalStage regex(String regex);
+
+        _FinalStage value(Optional<String> value);
+
+        _FinalStage value(String value);
+
+        _FinalStage target(Optional<String> target);
+
+        _FinalStage target(String target);
+
         _FinalStage enum_(Optional<List<String>> enum_);
 
         _FinalStage enum_(List<String> enum_);
@@ -177,6 +237,12 @@ public final class JsonSchema {
         private JsonSchemaType type;
 
         private Optional<List<String>> enum_ = Optional.empty();
+
+        private Optional<String> target = Optional.empty();
+
+        private Optional<String> value = Optional.empty();
+
+        private Optional<String> regex = Optional.empty();
 
         private Optional<List<String>> required = Optional.empty();
 
@@ -198,6 +264,9 @@ public final class JsonSchema {
             properties(other.getProperties());
             description(other.getDescription());
             required(other.getRequired());
+            regex(other.getRegex());
+            value(other.getValue());
+            target(other.getTarget());
             enum_(other.getEnum());
             return this;
         }
@@ -231,6 +300,57 @@ public final class JsonSchema {
         @JsonSetter(value = "enum", nulls = Nulls.SKIP)
         public _FinalStage enum_(Optional<List<String>> enum_) {
             this.enum_ = enum_;
+            return this;
+        }
+
+        /**
+         * <p>This the target variable that will be filled with the value of this property.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage target(String target) {
+            this.target = Optional.ofNullable(target);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "target", nulls = Nulls.SKIP)
+        public _FinalStage target(Optional<String> target) {
+            this.target = target;
+            return this;
+        }
+
+        /**
+         * <p>This the value that will be used in filling the property.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage value(String value) {
+            this.value = Optional.ofNullable(value);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "value", nulls = Nulls.SKIP)
+        public _FinalStage value(Optional<String> value) {
+            this.value = value;
+            return this;
+        }
+
+        /**
+         * <p>This is a regex that will be used to validate data in question.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage regex(String regex) {
+            this.regex = Optional.ofNullable(regex);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "regex", nulls = Nulls.SKIP)
+        public _FinalStage regex(Optional<String> regex) {
+            this.regex = regex;
             return this;
         }
 
@@ -307,7 +427,8 @@ public final class JsonSchema {
 
         @java.lang.Override
         public JsonSchema build() {
-            return new JsonSchema(type, items, properties, description, required, enum_, additionalProperties);
+            return new JsonSchema(
+                    type, items, properties, description, required, regex, value, target, enum_, additionalProperties);
         }
     }
 }

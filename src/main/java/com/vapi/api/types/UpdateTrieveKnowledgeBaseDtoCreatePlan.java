@@ -88,6 +88,7 @@ public final class UpdateTrieveKnowledgeBaseDtoCreatePlan {
     }
 
     @JsonTypeName("create")
+    @JsonIgnoreProperties("type")
     private static final class CreateValue implements Value {
         @JsonUnwrapped
         private TrieveKnowledgeBaseCreate value;
@@ -126,6 +127,7 @@ public final class UpdateTrieveKnowledgeBaseDtoCreatePlan {
     }
 
     @JsonTypeName("import")
+    @JsonIgnoreProperties("type")
     private static final class ImportValue implements Value {
         @JsonUnwrapped
         private TrieveKnowledgeBaseImport value;
@@ -163,6 +165,7 @@ public final class UpdateTrieveKnowledgeBaseDtoCreatePlan {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

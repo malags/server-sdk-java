@@ -32,6 +32,8 @@ public final class VonagePhoneNumber {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<VonagePhoneNumberStatus> status;
+
     private final Optional<String> name;
 
     private final Optional<String> assistantId;
@@ -52,6 +54,7 @@ public final class VonagePhoneNumber {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<VonagePhoneNumberStatus> status,
             Optional<String> name,
             Optional<String> assistantId,
             Optional<String> squadId,
@@ -64,6 +67,7 @@ public final class VonagePhoneNumber {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.status = status;
         this.name = name;
         this.assistantId = assistantId;
         this.squadId = squadId;
@@ -117,6 +121,14 @@ public final class VonagePhoneNumber {
     @JsonProperty("updatedAt")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    /**
+     * @return This is the status of the phone number.
+     */
+    @JsonProperty("status")
+    public Optional<VonagePhoneNumberStatus> getStatus() {
+        return status;
     }
 
     /**
@@ -192,6 +204,7 @@ public final class VonagePhoneNumber {
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && status.equals(other.status)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
                 && squadId.equals(other.squadId)
@@ -208,6 +221,7 @@ public final class VonagePhoneNumber {
                 this.orgId,
                 this.createdAt,
                 this.updatedAt,
+                this.status,
                 this.name,
                 this.assistantId,
                 this.squadId,
@@ -258,6 +272,10 @@ public final class VonagePhoneNumber {
 
         _FinalStage fallbackDestination(VonagePhoneNumberFallbackDestination fallbackDestination);
 
+        _FinalStage status(Optional<VonagePhoneNumberStatus> status);
+
+        _FinalStage status(VonagePhoneNumberStatus status);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -304,6 +322,8 @@ public final class VonagePhoneNumber {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<VonagePhoneNumberStatus> status = Optional.empty();
+
         private Optional<VonagePhoneNumberFallbackDestination> fallbackDestination = Optional.empty();
 
         @JsonAnySetter
@@ -318,6 +338,7 @@ public final class VonagePhoneNumber {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            status(other.getStatus());
             name(other.getName());
             assistantId(other.getAssistantId());
             squadId(other.getSquadId());
@@ -470,6 +491,23 @@ public final class VonagePhoneNumber {
         }
 
         /**
+         * <p>This is the status of the phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage status(VonagePhoneNumberStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<VonagePhoneNumberStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        /**
          * <p>This is the fallback destination an inbound call will be transferred to if:</p>
          * <ol>
          * <li><code>assistantId</code> is not set</li>
@@ -500,6 +538,7 @@ public final class VonagePhoneNumber {
                     orgId,
                     createdAt,
                     updatedAt,
+                    status,
                     name,
                     assistantId,
                     squadId,

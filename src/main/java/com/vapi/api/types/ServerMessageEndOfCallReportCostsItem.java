@@ -163,6 +163,7 @@ public final class ServerMessageEndOfCallReportCostsItem {
     }
 
     @JsonTypeName("transport")
+    @JsonIgnoreProperties("type")
     private static final class TransportValue implements Value {
         @JsonUnwrapped
         private TransportCost value;
@@ -201,6 +202,7 @@ public final class ServerMessageEndOfCallReportCostsItem {
     }
 
     @JsonTypeName("transcriber")
+    @JsonIgnoreProperties("type")
     private static final class TranscriberValue implements Value {
         @JsonUnwrapped
         private TranscriberCost value;
@@ -239,6 +241,7 @@ public final class ServerMessageEndOfCallReportCostsItem {
     }
 
     @JsonTypeName("model")
+    @JsonIgnoreProperties("type")
     private static final class ModelValue implements Value {
         @JsonUnwrapped
         private ModelCost value;
@@ -277,6 +280,7 @@ public final class ServerMessageEndOfCallReportCostsItem {
     }
 
     @JsonTypeName("voice")
+    @JsonIgnoreProperties("type")
     private static final class VoiceValue implements Value {
         @JsonUnwrapped
         private VoiceCost value;
@@ -315,6 +319,7 @@ public final class ServerMessageEndOfCallReportCostsItem {
     }
 
     @JsonTypeName("vapi")
+    @JsonIgnoreProperties("type")
     private static final class VapiValue implements Value {
         @JsonUnwrapped
         private VapiCost value;
@@ -353,6 +358,7 @@ public final class ServerMessageEndOfCallReportCostsItem {
     }
 
     @JsonTypeName("analysis")
+    @JsonIgnoreProperties("type")
     private static final class AnalysisValue implements Value {
         @JsonUnwrapped
         private AnalysisCost value;
@@ -390,6 +396,7 @@ public final class ServerMessageEndOfCallReportCostsItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

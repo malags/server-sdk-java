@@ -74,6 +74,15 @@ public final class ServerMessagePhoneCallControl {
     }
 
     /**
+     * @return This is the type of the message. &quot;phone-call-control&quot; is an advanced type of message.
+     * <p>When it is requested in <code>assistant.serverMessages</code>, the hangup and forwarding responsibilities are delegated to your server. Vapi will no longer do the actual transfer and hangup.</p>
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "phone-call-control";
+    }
+
+    /**
      * @return This is the request to control the phone call.
      */
     @JsonProperty("request")

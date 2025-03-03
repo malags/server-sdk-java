@@ -24,6 +24,10 @@ public final class ArtifactPlan {
 
     private final Optional<Boolean> videoRecordingEnabled;
 
+    private final Optional<Boolean> pcapEnabled;
+
+    private final Optional<String> pcapS3PathPrefix;
+
     private final Optional<TranscriptPlan> transcriptPlan;
 
     private final Optional<String> recordingPath;
@@ -33,11 +37,15 @@ public final class ArtifactPlan {
     private ArtifactPlan(
             Optional<Boolean> recordingEnabled,
             Optional<Boolean> videoRecordingEnabled,
+            Optional<Boolean> pcapEnabled,
+            Optional<String> pcapS3PathPrefix,
             Optional<TranscriptPlan> transcriptPlan,
             Optional<String> recordingPath,
             Map<String, Object> additionalProperties) {
         this.recordingEnabled = recordingEnabled;
         this.videoRecordingEnabled = videoRecordingEnabled;
+        this.pcapEnabled = pcapEnabled;
+        this.pcapS3PathPrefix = pcapS3PathPrefix;
         this.transcriptPlan = transcriptPlan;
         this.recordingPath = recordingPath;
         this.additionalProperties = additionalProperties;
@@ -48,7 +56,7 @@ public final class ArtifactPlan {
      * <p>Usage:</p>
      * <ul>
      * <li>If you don't want to record the calls, set this to false.</li>
-     * <li>If you want to record the calls when <code>assistant.hipaaEnabled</code>, explicity set this to true and make sure to provide S3 or GCP credentials on the Provider Credentials page in the Dashboard.</li>
+     * <li>If you want to record the calls when <code>assistant.hipaaEnabled</code> (deprecated) or <code>assistant.compliancePlan.hipaaEnabled</code> explicity set this to true and make sure to provide S3 or GCP credentials on the Provider Credentials page in the Dashboard.</li>
      * </ul>
      * <p>You can find the recording at <code>call.artifact.recordingUrl</code> and <code>call.artifact.stereoRecordingUrl</code> after the call is ended.</p>
      * <p>@default true</p>
@@ -66,6 +74,31 @@ public final class ArtifactPlan {
     @JsonProperty("videoRecordingEnabled")
     public Optional<Boolean> getVideoRecordingEnabled() {
         return videoRecordingEnabled;
+    }
+
+    /**
+     * @return This determines whether the SIP packet capture is enabled. Defaults to true. Only relevant for <code>phone</code> type calls where phone number's provider is <code>vapi</code> or <code>byo-phone-number</code>.
+     * <p>You can find the packet capture at <code>call.artifact.pcapUrl</code> after the call is ended.</p>
+     * <p>@default true</p>
+     */
+    @JsonProperty("pcapEnabled")
+    public Optional<Boolean> getPcapEnabled() {
+        return pcapEnabled;
+    }
+
+    /**
+     * @return This is the path where the SIP packet capture will be uploaded. This is only used if you have provided S3 or GCP credentials on the Provider Credentials page in the Dashboard.
+     * <p>If credential.s3PathPrefix or credential.bucketPlan.path is set, this will append to it.</p>
+     * <p>Usage:</p>
+     * <ul>
+     * <li>If you want to upload the packet capture to a specific path, set this to the path. Example: <code>/my-assistant-captures</code>.</li>
+     * <li>If you want to upload the packet capture to the root of the bucket, set this to <code>/</code>.</li>
+     * </ul>
+     * <p>@default '/'</p>
+     */
+    @JsonProperty("pcapS3PathPrefix")
+    public Optional<String> getPcapS3PathPrefix() {
+        return pcapS3PathPrefix;
     }
 
     /**
@@ -105,13 +138,21 @@ public final class ArtifactPlan {
     private boolean equalTo(ArtifactPlan other) {
         return recordingEnabled.equals(other.recordingEnabled)
                 && videoRecordingEnabled.equals(other.videoRecordingEnabled)
+                && pcapEnabled.equals(other.pcapEnabled)
+                && pcapS3PathPrefix.equals(other.pcapS3PathPrefix)
                 && transcriptPlan.equals(other.transcriptPlan)
                 && recordingPath.equals(other.recordingPath);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.recordingEnabled, this.videoRecordingEnabled, this.transcriptPlan, this.recordingPath);
+        return Objects.hash(
+                this.recordingEnabled,
+                this.videoRecordingEnabled,
+                this.pcapEnabled,
+                this.pcapS3PathPrefix,
+                this.transcriptPlan,
+                this.recordingPath);
     }
 
     @java.lang.Override
@@ -129,6 +170,10 @@ public final class ArtifactPlan {
 
         private Optional<Boolean> videoRecordingEnabled = Optional.empty();
 
+        private Optional<Boolean> pcapEnabled = Optional.empty();
+
+        private Optional<String> pcapS3PathPrefix = Optional.empty();
+
         private Optional<TranscriptPlan> transcriptPlan = Optional.empty();
 
         private Optional<String> recordingPath = Optional.empty();
@@ -141,6 +186,8 @@ public final class ArtifactPlan {
         public Builder from(ArtifactPlan other) {
             recordingEnabled(other.getRecordingEnabled());
             videoRecordingEnabled(other.getVideoRecordingEnabled());
+            pcapEnabled(other.getPcapEnabled());
+            pcapS3PathPrefix(other.getPcapS3PathPrefix());
             transcriptPlan(other.getTranscriptPlan());
             recordingPath(other.getRecordingPath());
             return this;
@@ -168,6 +215,28 @@ public final class ArtifactPlan {
             return this;
         }
 
+        @JsonSetter(value = "pcapEnabled", nulls = Nulls.SKIP)
+        public Builder pcapEnabled(Optional<Boolean> pcapEnabled) {
+            this.pcapEnabled = pcapEnabled;
+            return this;
+        }
+
+        public Builder pcapEnabled(Boolean pcapEnabled) {
+            this.pcapEnabled = Optional.ofNullable(pcapEnabled);
+            return this;
+        }
+
+        @JsonSetter(value = "pcapS3PathPrefix", nulls = Nulls.SKIP)
+        public Builder pcapS3PathPrefix(Optional<String> pcapS3PathPrefix) {
+            this.pcapS3PathPrefix = pcapS3PathPrefix;
+            return this;
+        }
+
+        public Builder pcapS3PathPrefix(String pcapS3PathPrefix) {
+            this.pcapS3PathPrefix = Optional.ofNullable(pcapS3PathPrefix);
+            return this;
+        }
+
         @JsonSetter(value = "transcriptPlan", nulls = Nulls.SKIP)
         public Builder transcriptPlan(Optional<TranscriptPlan> transcriptPlan) {
             this.transcriptPlan = transcriptPlan;
@@ -192,7 +261,13 @@ public final class ArtifactPlan {
 
         public ArtifactPlan build() {
             return new ArtifactPlan(
-                    recordingEnabled, videoRecordingEnabled, transcriptPlan, recordingPath, additionalProperties);
+                    recordingEnabled,
+                    videoRecordingEnabled,
+                    pcapEnabled,
+                    pcapS3PathPrefix,
+                    transcriptPlan,
+                    recordingPath,
+                    additionalProperties);
         }
     }
 }

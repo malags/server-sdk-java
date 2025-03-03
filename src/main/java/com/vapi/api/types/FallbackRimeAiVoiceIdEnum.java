@@ -6,46 +6,6 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum FallbackRimeAiVoiceIdEnum {
-    MARSH("marsh"),
-
-    BAYOU("bayou"),
-
-    CREEK("creek"),
-
-    BROOK("brook"),
-
-    FLOWER("flower"),
-
-    SPORE("spore"),
-
-    GLACIER("glacier"),
-
-    GULCH("gulch"),
-
-    ALPINE("alpine"),
-
-    COVE("cove"),
-
-    LAGOON("lagoon"),
-
-    TUNDRA("tundra"),
-
-    STEPPE("steppe"),
-
-    MESA("mesa"),
-
-    GROVE("grove"),
-
-    RAINFOREST("rainforest"),
-
-    MORAINE("moraine"),
-
-    WILDFLOWER("wildflower"),
-
-    PEAK("peak"),
-
-    BOULDER("boulder"),
-
     ABBIE("abbie"),
 
     ALLISON("allison"),
@@ -166,7 +126,51 @@ public enum FallbackRimeAiVoiceIdEnum {
 
     VIV("viv"),
 
-    YADIRA("yadira");
+    YADIRA("yadira"),
+
+    MARSH("marsh"),
+
+    BAYOU("bayou"),
+
+    CREEK("creek"),
+
+    BROOK("brook"),
+
+    FLOWER("flower"),
+
+    SPORE("spore"),
+
+    GLACIER("glacier"),
+
+    GULCH("gulch"),
+
+    ALPINE("alpine"),
+
+    COVE("cove"),
+
+    LAGOON("lagoon"),
+
+    TUNDRA("tundra"),
+
+    STEPPE("steppe"),
+
+    MESA("mesa"),
+
+    GROVE("grove"),
+
+    RAINFOREST("rainforest"),
+
+    MORAINE("moraine"),
+
+    WILDFLOWER("wildflower"),
+
+    PEAK("peak"),
+
+    BOULDER("boulder"),
+
+    GYPSUM("gypsum"),
+
+    ZEST("zest");
 
     private final String value;
 

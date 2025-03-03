@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum FallbackRimeAiVoiceModel {
     V_1("v1"),
 
-    MIST("mist");
+    MIST("mist"),
+
+    MISTV_2("mistv2");
 
     private final String value;
 

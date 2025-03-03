@@ -33,8 +33,6 @@ public final class Assistant {
 
     private final Optional<AssistantFirstMessageMode> firstMessageMode;
 
-    private final Optional<Boolean> hipaaEnabled;
-
     private final Optional<List<AssistantClientMessagesItem>> clientMessages;
 
     private final Optional<List<AssistantServerMessagesItem>> serverMessages;
@@ -63,6 +61,8 @@ public final class Assistant {
 
     private final Optional<List<String>> endCallPhrases;
 
+    private final Optional<CompliancePlan> compliancePlan;
+
     private final Optional<Map<String, Object>> metadata;
 
     private final Optional<AnalysisPlan> analysisPlan;
@@ -81,6 +81,8 @@ public final class Assistant {
 
     private final Optional<Server> server;
 
+    private final Optional<List<AssistantHooks>> hooks;
+
     private final String id;
 
     private final String orgId;
@@ -97,7 +99,6 @@ public final class Assistant {
             Optional<AssistantVoice> voice,
             Optional<String> firstMessage,
             Optional<AssistantFirstMessageMode> firstMessageMode,
-            Optional<Boolean> hipaaEnabled,
             Optional<List<AssistantClientMessagesItem>> clientMessages,
             Optional<List<AssistantServerMessagesItem>> serverMessages,
             Optional<Double> silenceTimeoutSeconds,
@@ -112,6 +113,7 @@ public final class Assistant {
             Optional<String> voicemailMessage,
             Optional<String> endCallMessage,
             Optional<List<String>> endCallPhrases,
+            Optional<CompliancePlan> compliancePlan,
             Optional<Map<String, Object>> metadata,
             Optional<AnalysisPlan> analysisPlan,
             Optional<ArtifactPlan> artifactPlan,
@@ -121,6 +123,7 @@ public final class Assistant {
             Optional<MonitorPlan> monitorPlan,
             Optional<List<String>> credentialIds,
             Optional<Server> server,
+            Optional<List<AssistantHooks>> hooks,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -131,7 +134,6 @@ public final class Assistant {
         this.voice = voice;
         this.firstMessage = firstMessage;
         this.firstMessageMode = firstMessageMode;
-        this.hipaaEnabled = hipaaEnabled;
         this.clientMessages = clientMessages;
         this.serverMessages = serverMessages;
         this.silenceTimeoutSeconds = silenceTimeoutSeconds;
@@ -146,6 +148,7 @@ public final class Assistant {
         this.voicemailMessage = voicemailMessage;
         this.endCallMessage = endCallMessage;
         this.endCallPhrases = endCallPhrases;
+        this.compliancePlan = compliancePlan;
         this.metadata = metadata;
         this.analysisPlan = analysisPlan;
         this.artifactPlan = artifactPlan;
@@ -155,6 +158,7 @@ public final class Assistant {
         this.monitorPlan = monitorPlan;
         this.credentialIds = credentialIds;
         this.server = server;
+        this.hooks = hooks;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -208,14 +212,6 @@ public final class Assistant {
     @JsonProperty("firstMessageMode")
     public Optional<AssistantFirstMessageMode> getFirstMessageMode() {
         return firstMessageMode;
-    }
-
-    /**
-     * @return When this is enabled, no logs, recordings, or transcriptions will be stored. At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.
-     */
-    @JsonProperty("hipaaEnabled")
-    public Optional<Boolean> getHipaaEnabled() {
-        return hipaaEnabled;
     }
 
     /**
@@ -341,6 +337,11 @@ public final class Assistant {
         return endCallPhrases;
     }
 
+    @JsonProperty("compliancePlan")
+    public Optional<CompliancePlan> getCompliancePlan() {
+        return compliancePlan;
+    }
+
     /**
      * @return This is for metadata you want to store on the assistant.
      */
@@ -442,6 +443,14 @@ public final class Assistant {
     }
 
     /**
+     * @return This is a set of actions that will be performed on certain events.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<AssistantHooks>> getHooks() {
+        return hooks;
+    }
+
+    /**
      * @return This is the unique identifier for the assistant.
      */
     @JsonProperty("id")
@@ -490,7 +499,6 @@ public final class Assistant {
                 && voice.equals(other.voice)
                 && firstMessage.equals(other.firstMessage)
                 && firstMessageMode.equals(other.firstMessageMode)
-                && hipaaEnabled.equals(other.hipaaEnabled)
                 && clientMessages.equals(other.clientMessages)
                 && serverMessages.equals(other.serverMessages)
                 && silenceTimeoutSeconds.equals(other.silenceTimeoutSeconds)
@@ -505,6 +513,7 @@ public final class Assistant {
                 && voicemailMessage.equals(other.voicemailMessage)
                 && endCallMessage.equals(other.endCallMessage)
                 && endCallPhrases.equals(other.endCallPhrases)
+                && compliancePlan.equals(other.compliancePlan)
                 && metadata.equals(other.metadata)
                 && analysisPlan.equals(other.analysisPlan)
                 && artifactPlan.equals(other.artifactPlan)
@@ -514,6 +523,7 @@ public final class Assistant {
                 && monitorPlan.equals(other.monitorPlan)
                 && credentialIds.equals(other.credentialIds)
                 && server.equals(other.server)
+                && hooks.equals(other.hooks)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
@@ -528,7 +538,6 @@ public final class Assistant {
                 this.voice,
                 this.firstMessage,
                 this.firstMessageMode,
-                this.hipaaEnabled,
                 this.clientMessages,
                 this.serverMessages,
                 this.silenceTimeoutSeconds,
@@ -543,6 +552,7 @@ public final class Assistant {
                 this.voicemailMessage,
                 this.endCallMessage,
                 this.endCallPhrases,
+                this.compliancePlan,
                 this.metadata,
                 this.analysisPlan,
                 this.artifactPlan,
@@ -552,6 +562,7 @@ public final class Assistant {
                 this.monitorPlan,
                 this.credentialIds,
                 this.server,
+                this.hooks,
                 this.id,
                 this.orgId,
                 this.createdAt,
@@ -607,10 +618,6 @@ public final class Assistant {
         _FinalStage firstMessageMode(Optional<AssistantFirstMessageMode> firstMessageMode);
 
         _FinalStage firstMessageMode(AssistantFirstMessageMode firstMessageMode);
-
-        _FinalStage hipaaEnabled(Optional<Boolean> hipaaEnabled);
-
-        _FinalStage hipaaEnabled(Boolean hipaaEnabled);
 
         _FinalStage clientMessages(Optional<List<AssistantClientMessagesItem>> clientMessages);
 
@@ -668,6 +675,10 @@ public final class Assistant {
 
         _FinalStage endCallPhrases(List<String> endCallPhrases);
 
+        _FinalStage compliancePlan(Optional<CompliancePlan> compliancePlan);
+
+        _FinalStage compliancePlan(CompliancePlan compliancePlan);
+
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
         _FinalStage metadata(Map<String, Object> metadata);
@@ -703,6 +714,10 @@ public final class Assistant {
         _FinalStage server(Optional<Server> server);
 
         _FinalStage server(Server server);
+
+        _FinalStage hooks(Optional<List<AssistantHooks>> hooks);
+
+        _FinalStage hooks(List<AssistantHooks> hooks);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -714,6 +729,8 @@ public final class Assistant {
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<List<AssistantHooks>> hooks = Optional.empty();
 
         private Optional<Server> server = Optional.empty();
 
@@ -732,6 +749,8 @@ public final class Assistant {
         private Optional<AnalysisPlan> analysisPlan = Optional.empty();
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
+
+        private Optional<CompliancePlan> compliancePlan = Optional.empty();
 
         private Optional<List<String>> endCallPhrases = Optional.empty();
 
@@ -761,8 +780,6 @@ public final class Assistant {
 
         private Optional<List<AssistantClientMessagesItem>> clientMessages = Optional.empty();
 
-        private Optional<Boolean> hipaaEnabled = Optional.empty();
-
         private Optional<AssistantFirstMessageMode> firstMessageMode = Optional.empty();
 
         private Optional<String> firstMessage = Optional.empty();
@@ -785,7 +802,6 @@ public final class Assistant {
             voice(other.getVoice());
             firstMessage(other.getFirstMessage());
             firstMessageMode(other.getFirstMessageMode());
-            hipaaEnabled(other.getHipaaEnabled());
             clientMessages(other.getClientMessages());
             serverMessages(other.getServerMessages());
             silenceTimeoutSeconds(other.getSilenceTimeoutSeconds());
@@ -800,6 +816,7 @@ public final class Assistant {
             voicemailMessage(other.getVoicemailMessage());
             endCallMessage(other.getEndCallMessage());
             endCallPhrases(other.getEndCallPhrases());
+            compliancePlan(other.getCompliancePlan());
             metadata(other.getMetadata());
             analysisPlan(other.getAnalysisPlan());
             artifactPlan(other.getArtifactPlan());
@@ -809,6 +826,7 @@ public final class Assistant {
             monitorPlan(other.getMonitorPlan());
             credentialIds(other.getCredentialIds());
             server(other.getServer());
+            hooks(other.getHooks());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -857,6 +875,23 @@ public final class Assistant {
         @JsonSetter("updatedAt")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is a set of actions that will be performed on certain events.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage hooks(List<AssistantHooks> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public _FinalStage hooks(Optional<List<AssistantHooks>> hooks) {
+            this.hooks = hooks;
             return this;
         }
 
@@ -1038,6 +1073,19 @@ public final class Assistant {
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
             this.metadata = metadata;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage compliancePlan(CompliancePlan compliancePlan) {
+            this.compliancePlan = Optional.ofNullable(compliancePlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "compliancePlan", nulls = Nulls.SKIP)
+        public _FinalStage compliancePlan(Optional<CompliancePlan> compliancePlan) {
+            this.compliancePlan = compliancePlan;
             return this;
         }
 
@@ -1292,23 +1340,6 @@ public final class Assistant {
         }
 
         /**
-         * <p>When this is enabled, no logs, recordings, or transcriptions will be stored. At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage hipaaEnabled(Boolean hipaaEnabled) {
-            this.hipaaEnabled = Optional.ofNullable(hipaaEnabled);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "hipaaEnabled", nulls = Nulls.SKIP)
-        public _FinalStage hipaaEnabled(Optional<Boolean> hipaaEnabled) {
-            this.hipaaEnabled = hipaaEnabled;
-            return this;
-        }
-
-        /**
          * <p>This is the mode for the first message. Default is 'assistant-speaks-first'.</p>
          * <p>Use:</p>
          * <ul>
@@ -1409,7 +1440,6 @@ public final class Assistant {
                     voice,
                     firstMessage,
                     firstMessageMode,
-                    hipaaEnabled,
                     clientMessages,
                     serverMessages,
                     silenceTimeoutSeconds,
@@ -1424,6 +1454,7 @@ public final class Assistant {
                     voicemailMessage,
                     endCallMessage,
                     endCallPhrases,
+                    compliancePlan,
                     metadata,
                     analysisPlan,
                     artifactPlan,
@@ -1433,6 +1464,7 @@ public final class Assistant {
                     monitorPlan,
                     credentialIds,
                     server,
+                    hooks,
                     id,
                     orgId,
                     createdAt,

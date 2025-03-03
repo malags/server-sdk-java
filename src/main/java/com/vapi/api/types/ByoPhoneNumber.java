@@ -34,6 +34,8 @@ public final class ByoPhoneNumber {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<ByoPhoneNumberStatus> status;
+
     private final Optional<String> name;
 
     private final Optional<String> assistantId;
@@ -55,6 +57,7 @@ public final class ByoPhoneNumber {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<ByoPhoneNumberStatus> status,
             Optional<String> name,
             Optional<String> assistantId,
             Optional<String> squadId,
@@ -68,6 +71,7 @@ public final class ByoPhoneNumber {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.status = status;
         this.name = name;
         this.assistantId = assistantId;
         this.squadId = squadId;
@@ -136,6 +140,14 @@ public final class ByoPhoneNumber {
     @JsonProperty("updatedAt")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    /**
+     * @return This is the status of the phone number.
+     */
+    @JsonProperty("status")
+    public Optional<ByoPhoneNumberStatus> getStatus() {
+        return status;
     }
 
     /**
@@ -213,6 +225,7 @@ public final class ByoPhoneNumber {
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && status.equals(other.status)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
                 && squadId.equals(other.squadId)
@@ -230,6 +243,7 @@ public final class ByoPhoneNumber {
                 this.orgId,
                 this.createdAt,
                 this.updatedAt,
+                this.status,
                 this.name,
                 this.assistantId,
                 this.squadId,
@@ -280,6 +294,10 @@ public final class ByoPhoneNumber {
 
         _FinalStage numberE164CheckEnabled(Boolean numberE164CheckEnabled);
 
+        _FinalStage status(Optional<ByoPhoneNumberStatus> status);
+
+        _FinalStage status(ByoPhoneNumberStatus status);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -324,6 +342,8 @@ public final class ByoPhoneNumber {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<ByoPhoneNumberStatus> status = Optional.empty();
+
         private Optional<Boolean> numberE164CheckEnabled = Optional.empty();
 
         private Optional<ByoPhoneNumberFallbackDestination> fallbackDestination = Optional.empty();
@@ -341,6 +361,7 @@ public final class ByoPhoneNumber {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            status(other.getStatus());
             name(other.getName());
             assistantId(other.getAssistantId());
             squadId(other.getSquadId());
@@ -500,6 +521,23 @@ public final class ByoPhoneNumber {
         }
 
         /**
+         * <p>This is the status of the phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage status(ByoPhoneNumberStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<ByoPhoneNumberStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        /**
          * <p>This is the flag to toggle the E164 check for the <code>number</code> field. This is an advanced property which should be used if you know your use case requires it.</p>
          * <p>Use cases:</p>
          * <ul>
@@ -555,6 +593,7 @@ public final class ByoPhoneNumber {
                     orgId,
                     createdAt,
                     updatedAt,
+                    status,
                     name,
                     assistantId,
                     squadId,

@@ -70,6 +70,14 @@ public final class ServerMessageVoiceInput {
     }
 
     /**
+     * @return This is the type of the message. &quot;voice-input&quot; is sent when a generation is requested from voice provider.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "voice-input";
+    }
+
+    /**
      * @return This is the ISO-8601 formatted timestamp of when the message was sent.
      */
     @JsonProperty("timestamp")

@@ -88,6 +88,7 @@ public final class CreateVapiPhoneNumberDtoFallbackDestination {
     }
 
     @JsonTypeName("number")
+    @JsonIgnoreProperties("type")
     private static final class NumberValue implements Value {
         @JsonUnwrapped
         private TransferDestinationNumber value;
@@ -126,6 +127,7 @@ public final class CreateVapiPhoneNumberDtoFallbackDestination {
     }
 
     @JsonTypeName("sip")
+    @JsonIgnoreProperties("type")
     private static final class SipValue implements Value {
         @JsonUnwrapped
         private TransferDestinationSip value;
@@ -163,6 +165,7 @@ public final class CreateVapiPhoneNumberDtoFallbackDestination {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

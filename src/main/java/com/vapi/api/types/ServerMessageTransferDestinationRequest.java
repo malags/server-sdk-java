@@ -65,6 +65,14 @@ public final class ServerMessageTransferDestinationRequest {
     }
 
     /**
+     * @return This is the type of the message. &quot;transfer-destination-request&quot; is sent when the model is requesting transfer but destination is unknown.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "transfer-destination-request";
+    }
+
+    /**
      * @return This is the ISO-8601 formatted timestamp of when the message was sent.
      */
     @JsonProperty("timestamp")

@@ -88,6 +88,7 @@ public final class BlockCompleteMessageConditionsItem {
     }
 
     @JsonTypeName("model-based")
+    @JsonIgnoreProperties("type")
     private static final class ModelBasedValue implements Value {
         @JsonUnwrapped
         private ModelBasedCondition value;
@@ -126,6 +127,7 @@ public final class BlockCompleteMessageConditionsItem {
     }
 
     @JsonTypeName("rule-based")
+    @JsonIgnoreProperties("type")
     private static final class RuleBasedValue implements Value {
         @JsonUnwrapped
         private RuleBasedCondition value;
@@ -163,6 +165,7 @@ public final class BlockCompleteMessageConditionsItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

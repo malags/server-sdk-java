@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 public final class ServerMessageTranscript {
     private final Optional<ServerMessageTranscriptPhoneNumber> phoneNumber;
 
+    private final ServerMessageTranscriptType type;
+
     private final Optional<String> timestamp;
 
     private final Optional<Artifact> artifact;
@@ -43,6 +45,7 @@ public final class ServerMessageTranscript {
 
     private ServerMessageTranscript(
             Optional<ServerMessageTranscriptPhoneNumber> phoneNumber,
+            ServerMessageTranscriptType type,
             Optional<String> timestamp,
             Optional<Artifact> artifact,
             Optional<CreateAssistantDto> assistant,
@@ -53,6 +56,7 @@ public final class ServerMessageTranscript {
             String transcript,
             Map<String, Object> additionalProperties) {
         this.phoneNumber = phoneNumber;
+        this.type = type;
         this.timestamp = timestamp;
         this.artifact = artifact;
         this.assistant = assistant;
@@ -75,6 +79,14 @@ public final class ServerMessageTranscript {
     @JsonProperty("phoneNumber")
     public Optional<ServerMessageTranscriptPhoneNumber> getPhoneNumber() {
         return phoneNumber;
+    }
+
+    /**
+     * @return This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.
+     */
+    @JsonProperty("type")
+    public ServerMessageTranscriptType getType() {
+        return type;
     }
 
     /**
@@ -171,6 +183,7 @@ public final class ServerMessageTranscript {
 
     private boolean equalTo(ServerMessageTranscript other) {
         return phoneNumber.equals(other.phoneNumber)
+                && type.equals(other.type)
                 && timestamp.equals(other.timestamp)
                 && artifact.equals(other.artifact)
                 && assistant.equals(other.assistant)
@@ -185,6 +198,7 @@ public final class ServerMessageTranscript {
     public int hashCode() {
         return Objects.hash(
                 this.phoneNumber,
+                this.type,
                 this.timestamp,
                 this.artifact,
                 this.assistant,
@@ -200,14 +214,18 @@ public final class ServerMessageTranscript {
         return ObjectMappers.stringify(this);
     }
 
-    public static RoleStage builder() {
+    public static TypeStage builder() {
         return new Builder();
+    }
+
+    public interface TypeStage {
+        RoleStage type(@NotNull ServerMessageTranscriptType type);
+
+        Builder from(ServerMessageTranscript other);
     }
 
     public interface RoleStage {
         TranscriptTypeStage role(@NotNull ServerMessageTranscriptRole role);
-
-        Builder from(ServerMessageTranscript other);
     }
 
     public interface TranscriptTypeStage {
@@ -247,7 +265,10 @@ public final class ServerMessageTranscript {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements RoleStage, TranscriptTypeStage, TranscriptStage, _FinalStage {
+    public static final class Builder
+            implements TypeStage, RoleStage, TranscriptTypeStage, TranscriptStage, _FinalStage {
+        private ServerMessageTranscriptType type;
+
         private ServerMessageTranscriptRole role;
 
         private ServerMessageTranscriptTranscriptType transcriptType;
@@ -274,6 +295,7 @@ public final class ServerMessageTranscript {
         @java.lang.Override
         public Builder from(ServerMessageTranscript other) {
             phoneNumber(other.getPhoneNumber());
+            type(other.getType());
             timestamp(other.getTimestamp());
             artifact(other.getArtifact());
             assistant(other.getAssistant());
@@ -282,6 +304,17 @@ public final class ServerMessageTranscript {
             role(other.getRole());
             transcriptType(other.getTranscriptType());
             transcript(other.getTranscript());
+            return this;
+        }
+
+        /**
+         * <p>This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("type")
+        public RoleStage type(@NotNull ServerMessageTranscriptType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
@@ -446,6 +479,7 @@ public final class ServerMessageTranscript {
         public ServerMessageTranscript build() {
             return new ServerMessageTranscript(
                     phoneNumber,
+                    type,
                     timestamp,
                     artifact,
                     assistant,

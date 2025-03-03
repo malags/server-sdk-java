@@ -35,6 +35,14 @@ public final class ClientMessageSpeechUpdate {
     }
 
     /**
+     * @return This is the type of the message. &quot;speech-update&quot; is sent whenever assistant or user start or stop speaking.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "speech-update";
+    }
+
+    /**
      * @return This is the status of the speech update.
      */
     @JsonProperty("status")

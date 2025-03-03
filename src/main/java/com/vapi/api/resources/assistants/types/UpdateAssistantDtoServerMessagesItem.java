@@ -28,6 +28,8 @@ public enum UpdateAssistantDtoServerMessagesItem {
 
     TRANSCRIPT("transcript"),
 
+    TRANSCRIPT_TRANSCRIPT_TYPE_FINAL("transcript[transcriptType='final']"),
+
     TOOL_CALLS("tool-calls"),
 
     TRANSFER_DESTINATION_REQUEST("transfer-destination-request"),

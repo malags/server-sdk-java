@@ -181,6 +181,7 @@ public final class AnthropicModelToolsItem {
     }
 
     @JsonTypeName("dtmf")
+    @JsonIgnoreProperties("type")
     private static final class DtmfValue implements Value {
         @JsonUnwrapped
         private CreateDtmfToolDto value;
@@ -219,6 +220,7 @@ public final class AnthropicModelToolsItem {
     }
 
     @JsonTypeName("endCall")
+    @JsonIgnoreProperties("type")
     private static final class EndCallValue implements Value {
         @JsonUnwrapped
         private CreateEndCallToolDto value;
@@ -257,6 +259,7 @@ public final class AnthropicModelToolsItem {
     }
 
     @JsonTypeName("voicemail")
+    @JsonIgnoreProperties("type")
     private static final class VoicemailValue implements Value {
         @JsonUnwrapped
         private CreateVoicemailToolDto value;
@@ -295,6 +298,7 @@ public final class AnthropicModelToolsItem {
     }
 
     @JsonTypeName("function")
+    @JsonIgnoreProperties("type")
     private static final class FunctionValue implements Value {
         @JsonUnwrapped
         private CreateFunctionToolDto value;
@@ -333,6 +337,7 @@ public final class AnthropicModelToolsItem {
     }
 
     @JsonTypeName("ghl")
+    @JsonIgnoreProperties("type")
     private static final class GhlValue implements Value {
         @JsonUnwrapped
         private CreateGhlToolDto value;
@@ -371,6 +376,7 @@ public final class AnthropicModelToolsItem {
     }
 
     @JsonTypeName("make")
+    @JsonIgnoreProperties("type")
     private static final class MakeValue implements Value {
         @JsonUnwrapped
         private CreateMakeToolDto value;
@@ -409,6 +415,7 @@ public final class AnthropicModelToolsItem {
     }
 
     @JsonTypeName("transferCall")
+    @JsonIgnoreProperties("type")
     private static final class TransferCallValue implements Value {
         @JsonUnwrapped
         private CreateTransferCallToolDto value;
@@ -446,6 +453,7 @@ public final class AnthropicModelToolsItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

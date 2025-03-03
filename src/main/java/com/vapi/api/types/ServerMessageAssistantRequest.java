@@ -65,6 +65,14 @@ public final class ServerMessageAssistantRequest {
     }
 
     /**
+     * @return This is the type of the message. &quot;assistant-request&quot; is sent to fetch assistant configuration for an incoming call.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "assistant-request";
+    }
+
+    /**
      * @return This is the ISO-8601 formatted timestamp of when the message was sent.
      */
     @JsonProperty("timestamp")

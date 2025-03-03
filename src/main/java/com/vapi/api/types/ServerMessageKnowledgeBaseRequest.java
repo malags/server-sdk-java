@@ -75,6 +75,14 @@ public final class ServerMessageKnowledgeBaseRequest {
     }
 
     /**
+     * @return This is the type of the message. &quot;knowledge-base-request&quot; is sent to request knowledge base documents. To enable, use <code>assistant.knowledgeBase.provider=custom-knowledge-base</code>.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "knowledge-base-request";
+    }
+
+    /**
      * @return These are the messages that are going to be sent to the <code>model</code> right after the <code>knowledge-base-request</code> webhook completes.
      */
     @JsonProperty("messages")

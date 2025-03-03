@@ -31,9 +31,10 @@ public final class ClientOptions {
         this.headers.putAll(headers);
         this.headers.putAll(new HashMap<String, String>() {
             {
+                put("User-Agent", "dev.vapi:server-sdk/0.5.0");
                 put("X-Fern-Language", "JAVA");
                 put("X-Fern-SDK-Name", "com.vapi.fern:api-sdk");
-                put("X-Fern-SDK-Version", "0.4.0");
+                put("X-Fern-SDK-Version", "0.5.0");
             }
         });
         this.headerSuppliers = headerSuppliers;
@@ -86,6 +87,11 @@ public final class ClientOptions {
 
         private int timeout = 60;
 
+        private OkHttpClient httpClient = new OkHttpClient.Builder()
+                .addInterceptor(new RetryInterceptor(3))
+                .callTimeout(this.timeout, TimeUnit.SECONDS)
+                .build();
+
         public Builder environment(Environment environment) {
             this.environment = environment;
             return this;
@@ -109,12 +115,13 @@ public final class ClientOptions {
             return this;
         }
 
+        public Builder httpClient(OkHttpClient httpClient) {
+            this.httpClient = httpClient;
+            return this;
+        }
+
         public ClientOptions build() {
-            OkHttpClient okhttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(new RetryInterceptor(3))
-                    .callTimeout(this.timeout, TimeUnit.SECONDS)
-                    .build();
-            return new ClientOptions(environment, headers, headerSuppliers, okhttpClient, this.timeout);
+            return new ClientOptions(environment, headers, headerSuppliers, httpClient, this.timeout);
         }
     }
 }

@@ -163,6 +163,7 @@ public final class ServerMessageToolCallsToolWithToolCallListItem {
     }
 
     @JsonTypeName("function")
+    @JsonIgnoreProperties("type")
     private static final class FunctionValue implements Value {
         @JsonUnwrapped
         private FunctionToolWithToolCall value;
@@ -201,6 +202,7 @@ public final class ServerMessageToolCallsToolWithToolCallListItem {
     }
 
     @JsonTypeName("ghl")
+    @JsonIgnoreProperties("type")
     private static final class GhlValue implements Value {
         @JsonUnwrapped
         private GhlToolWithToolCall value;
@@ -239,6 +241,7 @@ public final class ServerMessageToolCallsToolWithToolCallListItem {
     }
 
     @JsonTypeName("make")
+    @JsonIgnoreProperties("type")
     private static final class MakeValue implements Value {
         @JsonUnwrapped
         private MakeToolWithToolCall value;
@@ -277,6 +280,7 @@ public final class ServerMessageToolCallsToolWithToolCallListItem {
     }
 
     @JsonTypeName("bash")
+    @JsonIgnoreProperties("type")
     private static final class BashValue implements Value {
         @JsonUnwrapped
         private BashToolWithToolCall value;
@@ -315,6 +319,7 @@ public final class ServerMessageToolCallsToolWithToolCallListItem {
     }
 
     @JsonTypeName("computer")
+    @JsonIgnoreProperties("type")
     private static final class ComputerValue implements Value {
         @JsonUnwrapped
         private ComputerToolWithToolCall value;
@@ -353,6 +358,7 @@ public final class ServerMessageToolCallsToolWithToolCallListItem {
     }
 
     @JsonTypeName("textEditor")
+    @JsonIgnoreProperties("type")
     private static final class TextEditorValue implements Value {
         @JsonUnwrapped
         private TextEditorToolWithToolCall value;
@@ -390,6 +396,7 @@ public final class ServerMessageToolCallsToolWithToolCallListItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

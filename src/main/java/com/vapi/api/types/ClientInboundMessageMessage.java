@@ -145,6 +145,7 @@ public final class ClientInboundMessageMessage {
     }
 
     @JsonTypeName("add-message")
+    @JsonIgnoreProperties("type")
     private static final class AddMessageValue implements Value {
         @JsonUnwrapped
         private ClientInboundMessageAddMessage value;
@@ -183,6 +184,7 @@ public final class ClientInboundMessageMessage {
     }
 
     @JsonTypeName("control")
+    @JsonIgnoreProperties("type")
     private static final class ControlValue implements Value {
         @JsonUnwrapped
         private ClientInboundMessageControl value;
@@ -221,6 +223,7 @@ public final class ClientInboundMessageMessage {
     }
 
     @JsonTypeName("say")
+    @JsonIgnoreProperties("type")
     private static final class SayValue implements Value {
         @JsonUnwrapped
         private ClientInboundMessageSay value;
@@ -259,6 +262,7 @@ public final class ClientInboundMessageMessage {
     }
 
     @JsonTypeName("end-call")
+    @JsonIgnoreProperties("type")
     private static final class EndCallValue implements Value {
         @JsonUnwrapped
         private ClientInboundMessageEndCall value;
@@ -297,6 +301,7 @@ public final class ClientInboundMessageMessage {
     }
 
     @JsonTypeName("transfer")
+    @JsonIgnoreProperties("type")
     private static final class TransferValue implements Value {
         @JsonUnwrapped
         private ClientInboundMessageTransfer value;
@@ -334,6 +339,7 @@ public final class ClientInboundMessageMessage {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

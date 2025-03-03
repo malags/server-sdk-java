@@ -5,6 +5,7 @@ package com.vapi.api;
 
 import com.vapi.api.core.ClientOptions;
 import com.vapi.api.core.Environment;
+import okhttp3.OkHttpClient;
 
 public final class VapiBuilder {
     private ClientOptions.Builder clientOptionsBuilder = ClientOptions.builder();
@@ -39,7 +40,18 @@ public final class VapiBuilder {
         return this;
     }
 
+    /**
+     * Sets the underlying OkHttp client
+     */
+    public VapiBuilder httpClient(OkHttpClient httpClient) {
+        this.clientOptionsBuilder.httpClient(httpClient);
+        return this;
+    }
+
     public Vapi build() {
+        if (token == null) {
+            throw new RuntimeException("Please provide token");
+        }
         this.clientOptionsBuilder.addHeader("Authorization", "Bearer " + this.token);
         clientOptionsBuilder.environment(this.environment);
         return new Vapi(clientOptionsBuilder.build());

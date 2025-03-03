@@ -109,6 +109,7 @@ public final class StartSpeakingPlanCustomEndpointingRulesItem {
     }
 
     @JsonTypeName("assistant")
+    @JsonIgnoreProperties("type")
     private static final class AssistantValue implements Value {
         @JsonUnwrapped
         private AssistantCustomEndpointingRule value;
@@ -147,6 +148,7 @@ public final class StartSpeakingPlanCustomEndpointingRulesItem {
     }
 
     @JsonTypeName("customer")
+    @JsonIgnoreProperties("type")
     private static final class CustomerValue implements Value {
         @JsonUnwrapped
         private CustomerCustomEndpointingRule value;
@@ -185,6 +187,7 @@ public final class StartSpeakingPlanCustomEndpointingRulesItem {
     }
 
     @JsonTypeName("both")
+    @JsonIgnoreProperties("type")
     private static final class BothValue implements Value {
         @JsonUnwrapped
         private BothCustomEndpointingRule value;
@@ -222,6 +225,7 @@ public final class StartSpeakingPlanCustomEndpointingRulesItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

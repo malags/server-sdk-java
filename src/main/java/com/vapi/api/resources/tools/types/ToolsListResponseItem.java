@@ -245,6 +245,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("dtmf")
+    @JsonIgnoreProperties("type")
     private static final class DtmfValue implements Value {
         @JsonUnwrapped
         private DtmfTool value;
@@ -283,6 +284,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("endCall")
+    @JsonIgnoreProperties("type")
     private static final class EndCallValue implements Value {
         @JsonUnwrapped
         private EndCallTool value;
@@ -321,6 +323,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("function")
+    @JsonIgnoreProperties("type")
     private static final class FunctionValue implements Value {
         @JsonUnwrapped
         private FunctionTool value;
@@ -359,6 +362,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("ghl")
+    @JsonIgnoreProperties("type")
     private static final class GhlValue implements Value {
         @JsonUnwrapped
         private GhlTool value;
@@ -397,6 +401,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("make")
+    @JsonIgnoreProperties("type")
     private static final class MakeValue implements Value {
         @JsonUnwrapped
         private MakeTool value;
@@ -435,6 +440,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("transferCall")
+    @JsonIgnoreProperties("type")
     private static final class TransferCallValue implements Value {
         @JsonUnwrapped
         private TransferCallTool value;
@@ -473,6 +479,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("output")
+    @JsonIgnoreProperties("type")
     private static final class OutputValue implements Value {
         @JsonUnwrapped
         private OutputTool value;
@@ -511,6 +518,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("bash")
+    @JsonIgnoreProperties("type")
     private static final class BashValue implements Value {
         @JsonUnwrapped
         private BashTool value;
@@ -549,6 +557,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("computer")
+    @JsonIgnoreProperties("type")
     private static final class ComputerValue implements Value {
         @JsonUnwrapped
         private ComputerTool value;
@@ -587,6 +596,7 @@ public final class ToolsListResponseItem {
     }
 
     @JsonTypeName("textEditor")
+    @JsonIgnoreProperties("type")
     private static final class TextEditorValue implements Value {
         @JsonUnwrapped
         private TextEditorTool value;
@@ -624,6 +634,7 @@ public final class ToolsListResponseItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

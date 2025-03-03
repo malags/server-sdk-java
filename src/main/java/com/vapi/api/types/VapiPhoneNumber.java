@@ -32,6 +32,10 @@ public final class VapiPhoneNumber {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<VapiPhoneNumberStatus> status;
+
+    private final Optional<String> number;
+
     private final Optional<String> name;
 
     private final Optional<String> assistantId;
@@ -40,7 +44,9 @@ public final class VapiPhoneNumber {
 
     private final Optional<Server> server;
 
-    private final String sipUri;
+    private final Optional<String> numberDesiredAreaCode;
+
+    private final Optional<String> sipUri;
 
     private final Optional<SipAuthentication> authentication;
 
@@ -52,11 +58,14 @@ public final class VapiPhoneNumber {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<VapiPhoneNumberStatus> status,
+            Optional<String> number,
             Optional<String> name,
             Optional<String> assistantId,
             Optional<String> squadId,
             Optional<Server> server,
-            String sipUri,
+            Optional<String> numberDesiredAreaCode,
+            Optional<String> sipUri,
             Optional<SipAuthentication> authentication,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
@@ -64,10 +73,13 @@ public final class VapiPhoneNumber {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.status = status;
+        this.number = number;
         this.name = name;
         this.assistantId = assistantId;
         this.squadId = squadId;
         this.server = server;
+        this.numberDesiredAreaCode = numberDesiredAreaCode;
         this.sipUri = sipUri;
         this.authentication = authentication;
         this.additionalProperties = additionalProperties;
@@ -120,6 +132,22 @@ public final class VapiPhoneNumber {
     }
 
     /**
+     * @return This is the status of the phone number.
+     */
+    @JsonProperty("status")
+    public Optional<VapiPhoneNumberStatus> getStatus() {
+        return status;
+    }
+
+    /**
+     * @return These are the digits of the phone number you purchased from Vapi.
+     */
+    @JsonProperty("number")
+    public Optional<String> getNumber() {
+        return number;
+    }
+
+    /**
      * @return This is the name of the phone number. This is just for your own reference.
      */
     @JsonProperty("name")
@@ -160,11 +188,19 @@ public final class VapiPhoneNumber {
     }
 
     /**
+     * @return This is the area code of the phone number to purchase.
+     */
+    @JsonProperty("numberDesiredAreaCode")
+    public Optional<String> getNumberDesiredAreaCode() {
+        return numberDesiredAreaCode;
+    }
+
+    /**
      * @return This is the SIP URI of the phone number. You can SIP INVITE this. The assistant attached to this number will answer.
      * <p>This is case-insensitive.</p>
      */
     @JsonProperty("sipUri")
-    public String getSipUri() {
+    public Optional<String> getSipUri() {
         return sipUri;
     }
 
@@ -194,10 +230,13 @@ public final class VapiPhoneNumber {
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && status.equals(other.status)
+                && number.equals(other.number)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
                 && squadId.equals(other.squadId)
                 && server.equals(other.server)
+                && numberDesiredAreaCode.equals(other.numberDesiredAreaCode)
                 && sipUri.equals(other.sipUri)
                 && authentication.equals(other.authentication);
     }
@@ -210,10 +249,13 @@ public final class VapiPhoneNumber {
                 this.orgId,
                 this.createdAt,
                 this.updatedAt,
+                this.status,
+                this.number,
                 this.name,
                 this.assistantId,
                 this.squadId,
                 this.server,
+                this.numberDesiredAreaCode,
                 this.sipUri,
                 this.authentication);
     }
@@ -242,11 +284,7 @@ public final class VapiPhoneNumber {
     }
 
     public interface UpdatedAtStage {
-        SipUriStage updatedAt(@NotNull OffsetDateTime updatedAt);
-    }
-
-    public interface SipUriStage {
-        _FinalStage sipUri(@NotNull String sipUri);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -255,6 +293,14 @@ public final class VapiPhoneNumber {
         _FinalStage fallbackDestination(Optional<VapiPhoneNumberFallbackDestination> fallbackDestination);
 
         _FinalStage fallbackDestination(VapiPhoneNumberFallbackDestination fallbackDestination);
+
+        _FinalStage status(Optional<VapiPhoneNumberStatus> status);
+
+        _FinalStage status(VapiPhoneNumberStatus status);
+
+        _FinalStage number(Optional<String> number);
+
+        _FinalStage number(String number);
 
         _FinalStage name(Optional<String> name);
 
@@ -272,14 +318,21 @@ public final class VapiPhoneNumber {
 
         _FinalStage server(Server server);
 
+        _FinalStage numberDesiredAreaCode(Optional<String> numberDesiredAreaCode);
+
+        _FinalStage numberDesiredAreaCode(String numberDesiredAreaCode);
+
+        _FinalStage sipUri(Optional<String> sipUri);
+
+        _FinalStage sipUri(String sipUri);
+
         _FinalStage authentication(Optional<SipAuthentication> authentication);
 
         _FinalStage authentication(SipAuthentication authentication);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements IdStage, OrgIdStage, CreatedAtStage, UpdatedAtStage, SipUriStage, _FinalStage {
+    public static final class Builder implements IdStage, OrgIdStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
         private String id;
 
         private String orgId;
@@ -288,9 +341,11 @@ public final class VapiPhoneNumber {
 
         private OffsetDateTime updatedAt;
 
-        private String sipUri;
-
         private Optional<SipAuthentication> authentication = Optional.empty();
+
+        private Optional<String> sipUri = Optional.empty();
+
+        private Optional<String> numberDesiredAreaCode = Optional.empty();
 
         private Optional<Server> server = Optional.empty();
 
@@ -299,6 +354,10 @@ public final class VapiPhoneNumber {
         private Optional<String> assistantId = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<String> number = Optional.empty();
+
+        private Optional<VapiPhoneNumberStatus> status = Optional.empty();
 
         private Optional<VapiPhoneNumberFallbackDestination> fallbackDestination = Optional.empty();
 
@@ -314,10 +373,13 @@ public final class VapiPhoneNumber {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            status(other.getStatus());
+            number(other.getNumber());
             name(other.getName());
             assistantId(other.getAssistantId());
             squadId(other.getSquadId());
             server(other.getServer());
+            numberDesiredAreaCode(other.getNumberDesiredAreaCode());
             sipUri(other.getSipUri());
             authentication(other.getAuthentication());
             return this;
@@ -362,20 +424,8 @@ public final class VapiPhoneNumber {
          */
         @java.lang.Override
         @JsonSetter("updatedAt")
-        public SipUriStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the SIP URI of the phone number. You can SIP INVITE this. The assistant attached to this number will answer.</p>
-         * <p>This is case-insensitive.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("sipUri")
-        public _FinalStage sipUri(@NotNull String sipUri) {
-            this.sipUri = Objects.requireNonNull(sipUri, "sipUri must not be null");
             return this;
         }
 
@@ -394,6 +444,41 @@ public final class VapiPhoneNumber {
         @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
         public _FinalStage authentication(Optional<SipAuthentication> authentication) {
             this.authentication = authentication;
+            return this;
+        }
+
+        /**
+         * <p>This is the SIP URI of the phone number. You can SIP INVITE this. The assistant attached to this number will answer.</p>
+         * <p>This is case-insensitive.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sipUri(String sipUri) {
+            this.sipUri = Optional.ofNullable(sipUri);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "sipUri", nulls = Nulls.SKIP)
+        public _FinalStage sipUri(Optional<String> sipUri) {
+            this.sipUri = sipUri;
+            return this;
+        }
+
+        /**
+         * <p>This is the area code of the phone number to purchase.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage numberDesiredAreaCode(String numberDesiredAreaCode) {
+            this.numberDesiredAreaCode = Optional.ofNullable(numberDesiredAreaCode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "numberDesiredAreaCode", nulls = Nulls.SKIP)
+        public _FinalStage numberDesiredAreaCode(Optional<String> numberDesiredAreaCode) {
+            this.numberDesiredAreaCode = numberDesiredAreaCode;
             return this;
         }
 
@@ -474,6 +559,40 @@ public final class VapiPhoneNumber {
         }
 
         /**
+         * <p>These are the digits of the phone number you purchased from Vapi.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage number(String number) {
+            this.number = Optional.ofNullable(number);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "number", nulls = Nulls.SKIP)
+        public _FinalStage number(Optional<String> number) {
+            this.number = number;
+            return this;
+        }
+
+        /**
+         * <p>This is the status of the phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage status(VapiPhoneNumberStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<VapiPhoneNumberStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        /**
          * <p>This is the fallback destination an inbound call will be transferred to if:</p>
          * <ol>
          * <li><code>assistantId</code> is not set</li>
@@ -504,10 +623,13 @@ public final class VapiPhoneNumber {
                     orgId,
                     createdAt,
                     updatedAt,
+                    status,
+                    number,
                     name,
                     assistantId,
                     squadId,
                     server,
+                    numberDesiredAreaCode,
                     sipUri,
                     authentication,
                     additionalProperties);

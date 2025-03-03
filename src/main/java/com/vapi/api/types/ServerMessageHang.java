@@ -65,6 +65,20 @@ public final class ServerMessageHang {
     }
 
     /**
+     * @return This is the type of the message. &quot;hang&quot; is sent when the assistant is hanging due to a delay. The delay can be caused by many factors, such as:
+     * <ul>
+     * <li>the model is too slow to respond</li>
+     * <li>the voice is too slow to respond</li>
+     * <li>the tool call is still waiting for a response from your server</li>
+     * <li>etc.</li>
+     * </ul>
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "hang";
+    }
+
+    /**
      * @return This is the ISO-8601 formatted timestamp of when the message was sent.
      */
     @JsonProperty("timestamp")

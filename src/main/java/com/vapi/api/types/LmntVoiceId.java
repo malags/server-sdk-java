@@ -78,7 +78,7 @@ public final class LmntVoiceId {
         }
 
         @java.lang.Override
-        public LmntVoiceId deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public LmntVoiceId deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, LmntVoiceIdEnum.class));

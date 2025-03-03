@@ -29,6 +29,14 @@ public final class ClientMessageMetadata {
     }
 
     /**
+     * @return This is the type of the message. &quot;metadata&quot; is sent to forward metadata to the client.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "metadata";
+    }
+
+    /**
      * @return This is the metadata content
      */
     @JsonProperty("metadata")

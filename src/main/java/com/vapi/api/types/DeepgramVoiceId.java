@@ -78,7 +78,7 @@ public final class DeepgramVoiceId {
         }
 
         @java.lang.Override
-        public DeepgramVoiceId deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public DeepgramVoiceId deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, DeepgramVoiceIdEnum.class));

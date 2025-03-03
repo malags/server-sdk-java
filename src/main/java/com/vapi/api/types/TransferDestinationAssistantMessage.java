@@ -79,7 +79,7 @@ public final class TransferDestinationAssistantMessage {
         }
 
         @java.lang.Override
-        public TransferDestinationAssistantMessage deserialize(JsonParser p, DeserializationContext ctxt)
+        public TransferDestinationAssistantMessage deserialize(JsonParser p, DeserializationContext context)
                 throws IOException {
             Object value = p.readValueAs(Object.class);
             try {

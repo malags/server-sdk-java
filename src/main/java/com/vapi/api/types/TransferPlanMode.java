@@ -14,6 +14,8 @@ public enum TransferPlanMode {
 
     WARM_TRANSFER_SAY_SUMMARY("warm-transfer-say-summary"),
 
+    WARM_TRANSFER_TWIML("warm-transfer-twiml"),
+
     WARM_TRANSFER_WAIT_FOR_OPERATOR_TO_SPEAK_FIRST_AND_THEN_SAY_MESSAGE(
             "warm-transfer-wait-for-operator-to-speak-first-and-then-say-message"),
 

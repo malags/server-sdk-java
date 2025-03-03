@@ -112,6 +112,7 @@ public final class BlocksUpdateRequest {
     }
 
     @JsonTypeName("conversation")
+    @JsonIgnoreProperties("type")
     private static final class ConversationValue implements Value {
         @JsonUnwrapped
         private UpdateConversationBlockDto value;
@@ -150,6 +151,7 @@ public final class BlocksUpdateRequest {
     }
 
     @JsonTypeName("tool-call")
+    @JsonIgnoreProperties("type")
     private static final class ToolCallValue implements Value {
         @JsonUnwrapped
         private UpdateToolCallBlockDto value;
@@ -188,6 +190,7 @@ public final class BlocksUpdateRequest {
     }
 
     @JsonTypeName("workflow")
+    @JsonIgnoreProperties("type")
     private static final class WorkflowValue implements Value {
         @JsonUnwrapped
         private UpdateWorkflowBlockDto value;
@@ -225,6 +228,7 @@ public final class BlocksUpdateRequest {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

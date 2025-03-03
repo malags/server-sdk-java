@@ -16,14 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateVapiPhoneNumberDto.Builder.class)
 public final class CreateVapiPhoneNumberDto {
     private final Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination;
 
-    private final String sipUri;
+    private final Optional<String> numberDesiredAreaCode;
+
+    private final Optional<String> sipUri;
 
     private final Optional<SipAuthentication> authentication;
 
@@ -39,7 +40,8 @@ public final class CreateVapiPhoneNumberDto {
 
     private CreateVapiPhoneNumberDto(
             Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination,
-            String sipUri,
+            Optional<String> numberDesiredAreaCode,
+            Optional<String> sipUri,
             Optional<SipAuthentication> authentication,
             Optional<String> name,
             Optional<String> assistantId,
@@ -47,6 +49,7 @@ public final class CreateVapiPhoneNumberDto {
             Optional<Server> server,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
+        this.numberDesiredAreaCode = numberDesiredAreaCode;
         this.sipUri = sipUri;
         this.authentication = authentication;
         this.name = name;
@@ -71,11 +74,19 @@ public final class CreateVapiPhoneNumberDto {
     }
 
     /**
+     * @return This is the area code of the phone number to purchase.
+     */
+    @JsonProperty("numberDesiredAreaCode")
+    public Optional<String> getNumberDesiredAreaCode() {
+        return numberDesiredAreaCode;
+    }
+
+    /**
      * @return This is the SIP URI of the phone number. You can SIP INVITE this. The assistant attached to this number will answer.
      * <p>This is case-insensitive.</p>
      */
     @JsonProperty("sipUri")
-    public String getSipUri() {
+    public Optional<String> getSipUri() {
         return sipUri;
     }
 
@@ -141,6 +152,7 @@ public final class CreateVapiPhoneNumberDto {
 
     private boolean equalTo(CreateVapiPhoneNumberDto other) {
         return fallbackDestination.equals(other.fallbackDestination)
+                && numberDesiredAreaCode.equals(other.numberDesiredAreaCode)
                 && sipUri.equals(other.sipUri)
                 && authentication.equals(other.authentication)
                 && name.equals(other.name)
@@ -153,6 +165,7 @@ public final class CreateVapiPhoneNumberDto {
     public int hashCode() {
         return Objects.hash(
                 this.fallbackDestination,
+                this.numberDesiredAreaCode,
                 this.sipUri,
                 this.authentication,
                 this.name,
@@ -166,68 +179,36 @@ public final class CreateVapiPhoneNumberDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static SipUriStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface SipUriStage {
-        _FinalStage sipUri(@NotNull String sipUri);
-
-        Builder from(CreateVapiPhoneNumberDto other);
-    }
-
-    public interface _FinalStage {
-        CreateVapiPhoneNumberDto build();
-
-        _FinalStage fallbackDestination(Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination);
-
-        _FinalStage fallbackDestination(CreateVapiPhoneNumberDtoFallbackDestination fallbackDestination);
-
-        _FinalStage authentication(Optional<SipAuthentication> authentication);
-
-        _FinalStage authentication(SipAuthentication authentication);
-
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
-
-        _FinalStage assistantId(Optional<String> assistantId);
-
-        _FinalStage assistantId(String assistantId);
-
-        _FinalStage squadId(Optional<String> squadId);
-
-        _FinalStage squadId(String squadId);
-
-        _FinalStage server(Optional<Server> server);
-
-        _FinalStage server(Server server);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements SipUriStage, _FinalStage {
-        private String sipUri;
+    public static final class Builder {
+        private Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination = Optional.empty();
 
-        private Optional<Server> server = Optional.empty();
+        private Optional<String> numberDesiredAreaCode = Optional.empty();
 
-        private Optional<String> squadId = Optional.empty();
-
-        private Optional<String> assistantId = Optional.empty();
-
-        private Optional<String> name = Optional.empty();
+        private Optional<String> sipUri = Optional.empty();
 
         private Optional<SipAuthentication> authentication = Optional.empty();
 
-        private Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination = Optional.empty();
+        private Optional<String> name = Optional.empty();
+
+        private Optional<String> assistantId = Optional.empty();
+
+        private Optional<String> squadId = Optional.empty();
+
+        private Optional<Server> server = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(CreateVapiPhoneNumberDto other) {
             fallbackDestination(other.getFallbackDestination());
+            numberDesiredAreaCode(other.getNumberDesiredAreaCode());
             sipUri(other.getSipUri());
             authentication(other.getAuthentication());
             name(other.getName());
@@ -237,140 +218,98 @@ public final class CreateVapiPhoneNumberDto {
             return this;
         }
 
-        /**
-         * <p>This is the SIP URI of the phone number. You can SIP INVITE this. The assistant attached to this number will answer.</p>
-         * <p>This is case-insensitive.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("sipUri")
-        public _FinalStage sipUri(@NotNull String sipUri) {
-            this.sipUri = Objects.requireNonNull(sipUri, "sipUri must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
-         * <p>The order of precedence is:</p>
-         * <ol>
-         * <li>assistant.server</li>
-         * <li>phoneNumber.server</li>
-         * <li>org.server</li>
-         * </ol>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage server(Server server) {
-            this.server = Optional.ofNullable(server);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "server", nulls = Nulls.SKIP)
-        public _FinalStage server(Optional<Server> server) {
-            this.server = server;
-            return this;
-        }
-
-        /**
-         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
-         * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage squadId(String squadId) {
-            this.squadId = Optional.ofNullable(squadId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
-        public _FinalStage squadId(Optional<String> squadId) {
-            this.squadId = squadId;
-            return this;
-        }
-
-        /**
-         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
-         * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage assistantId(String assistantId) {
-            this.assistantId = Optional.ofNullable(assistantId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
-        public _FinalStage assistantId(Optional<String> assistantId) {
-            this.assistantId = assistantId;
-            return this;
-        }
-
-        /**
-         * <p>This is the name of the phone number. This is just for your own reference.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
-            this.name = name;
-            return this;
-        }
-
-        /**
-         * <p>This enables authentication for incoming SIP INVITE requests to the <code>sipUri</code>.</p>
-         * <p>If not set, any username/password to the 401 challenge of the SIP INVITE will be accepted.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage authentication(SipAuthentication authentication) {
-            this.authentication = Optional.ofNullable(authentication);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
-        public _FinalStage authentication(Optional<SipAuthentication> authentication) {
-            this.authentication = authentication;
-            return this;
-        }
-
-        /**
-         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
-         * <ol>
-         * <li><code>assistantId</code> is not set</li>
-         * <li><code>squadId</code> is not set</li>
-         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
-         * </ol>
-         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage fallbackDestination(CreateVapiPhoneNumberDtoFallbackDestination fallbackDestination) {
-            this.fallbackDestination = Optional.ofNullable(fallbackDestination);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
-        public _FinalStage fallbackDestination(
-                Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination) {
+        public Builder fallbackDestination(Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination) {
             this.fallbackDestination = fallbackDestination;
             return this;
         }
 
-        @java.lang.Override
+        public Builder fallbackDestination(CreateVapiPhoneNumberDtoFallbackDestination fallbackDestination) {
+            this.fallbackDestination = Optional.ofNullable(fallbackDestination);
+            return this;
+        }
+
+        @JsonSetter(value = "numberDesiredAreaCode", nulls = Nulls.SKIP)
+        public Builder numberDesiredAreaCode(Optional<String> numberDesiredAreaCode) {
+            this.numberDesiredAreaCode = numberDesiredAreaCode;
+            return this;
+        }
+
+        public Builder numberDesiredAreaCode(String numberDesiredAreaCode) {
+            this.numberDesiredAreaCode = Optional.ofNullable(numberDesiredAreaCode);
+            return this;
+        }
+
+        @JsonSetter(value = "sipUri", nulls = Nulls.SKIP)
+        public Builder sipUri(Optional<String> sipUri) {
+            this.sipUri = sipUri;
+            return this;
+        }
+
+        public Builder sipUri(String sipUri) {
+            this.sipUri = Optional.ofNullable(sipUri);
+            return this;
+        }
+
+        @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
+        public Builder authentication(Optional<SipAuthentication> authentication) {
+            this.authentication = authentication;
+            return this;
+        }
+
+        public Builder authentication(SipAuthentication authentication) {
+            this.authentication = Optional.ofNullable(authentication);
+            return this;
+        }
+
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public Builder name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
+        public Builder assistantId(Optional<String> assistantId) {
+            this.assistantId = assistantId;
+            return this;
+        }
+
+        public Builder assistantId(String assistantId) {
+            this.assistantId = Optional.ofNullable(assistantId);
+            return this;
+        }
+
+        @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
+        public Builder squadId(Optional<String> squadId) {
+            this.squadId = squadId;
+            return this;
+        }
+
+        public Builder squadId(String squadId) {
+            this.squadId = Optional.ofNullable(squadId);
+            return this;
+        }
+
+        @JsonSetter(value = "server", nulls = Nulls.SKIP)
+        public Builder server(Optional<Server> server) {
+            this.server = server;
+            return this;
+        }
+
+        public Builder server(Server server) {
+            this.server = Optional.ofNullable(server);
+            return this;
+        }
+
         public CreateVapiPhoneNumberDto build() {
             return new CreateVapiPhoneNumberDto(
                     fallbackDestination,
+                    numberDesiredAreaCode,
                     sipUri,
                     authentication,
                     name,

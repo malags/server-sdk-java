@@ -6,6 +6,8 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum GroqModelModel {
+    DEEPSEEK_R_1_DISTILL_LLAMA_70_B("deepseek-r1-distill-llama-70b"),
+
     LLAMA_3370_B_VERSATILE("llama-3.3-70b-versatile"),
 
     LLAMA_31405_B_REASONING("llama-3.1-405b-reasoning"),

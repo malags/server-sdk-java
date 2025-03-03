@@ -27,12 +27,20 @@ public final class Edge {
 
     private final String to;
 
+    private final Optional<Map<String, Object>> metadata;
+
     private final Map<String, Object> additionalProperties;
 
-    private Edge(Optional<EdgeCondition> condition, String from, String to, Map<String, Object> additionalProperties) {
+    private Edge(
+            Optional<EdgeCondition> condition,
+            String from,
+            String to,
+            Optional<Map<String, Object>> metadata,
+            Map<String, Object> additionalProperties) {
         this.condition = condition;
         this.from = from;
         this.to = to;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -51,6 +59,14 @@ public final class Edge {
         return to;
     }
 
+    /**
+     * @return This is for metadata you want to store on the edge.
+     */
+    @JsonProperty("metadata")
+    public Optional<Map<String, Object>> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -63,12 +79,15 @@ public final class Edge {
     }
 
     private boolean equalTo(Edge other) {
-        return condition.equals(other.condition) && from.equals(other.from) && to.equals(other.to);
+        return condition.equals(other.condition)
+                && from.equals(other.from)
+                && to.equals(other.to)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.condition, this.from, this.to);
+        return Objects.hash(this.condition, this.from, this.to, this.metadata);
     }
 
     @java.lang.Override
@@ -96,6 +115,10 @@ public final class Edge {
         _FinalStage condition(Optional<EdgeCondition> condition);
 
         _FinalStage condition(EdgeCondition condition);
+
+        _FinalStage metadata(Optional<Map<String, Object>> metadata);
+
+        _FinalStage metadata(Map<String, Object> metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -103,6 +126,8 @@ public final class Edge {
         private String from;
 
         private String to;
+
+        private Optional<Map<String, Object>> metadata = Optional.empty();
 
         private Optional<EdgeCondition> condition = Optional.empty();
 
@@ -116,6 +141,7 @@ public final class Edge {
             condition(other.getCondition());
             from(other.getFrom());
             to(other.getTo());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -130,6 +156,23 @@ public final class Edge {
         @JsonSetter("to")
         public _FinalStage to(@NotNull String to) {
             this.to = Objects.requireNonNull(to, "to must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is for metadata you want to store on the edge.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage metadata(Map<String, Object> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
+            this.metadata = metadata;
             return this;
         }
 
@@ -148,7 +191,7 @@ public final class Edge {
 
         @java.lang.Override
         public Edge build() {
-            return new Edge(condition, from, to, additionalProperties);
+            return new Edge(condition, from, to, metadata, additionalProperties);
         }
     }
 }

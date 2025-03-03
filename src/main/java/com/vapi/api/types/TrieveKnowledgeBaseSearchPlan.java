@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TrieveKnowledgeBaseSearchPlan.Builder.class)
 public final class TrieveKnowledgeBaseSearchPlan {
+    private final Optional<Double> topK;
+
     private final Optional<Boolean> removeStopWords;
 
     private final Optional<Double> scoreThreshold;
@@ -30,14 +32,24 @@ public final class TrieveKnowledgeBaseSearchPlan {
     private final Map<String, Object> additionalProperties;
 
     private TrieveKnowledgeBaseSearchPlan(
+            Optional<Double> topK,
             Optional<Boolean> removeStopWords,
             Optional<Double> scoreThreshold,
             TrieveKnowledgeBaseSearchPlanSearchType searchType,
             Map<String, Object> additionalProperties) {
+        this.topK = topK;
         this.removeStopWords = removeStopWords;
         this.scoreThreshold = scoreThreshold;
         this.searchType = searchType;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Specifies the number of top chunks to return. This corresponds to the <code>page_size</code> parameter in Trieve.
+     */
+    @JsonProperty("topK")
+    public Optional<Double> getTopK() {
+        return topK;
     }
 
     /**
@@ -76,14 +88,15 @@ public final class TrieveKnowledgeBaseSearchPlan {
     }
 
     private boolean equalTo(TrieveKnowledgeBaseSearchPlan other) {
-        return removeStopWords.equals(other.removeStopWords)
+        return topK.equals(other.topK)
+                && removeStopWords.equals(other.removeStopWords)
                 && scoreThreshold.equals(other.scoreThreshold)
                 && searchType.equals(other.searchType);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.removeStopWords, this.scoreThreshold, this.searchType);
+        return Objects.hash(this.topK, this.removeStopWords, this.scoreThreshold, this.searchType);
     }
 
     @java.lang.Override
@@ -104,6 +117,10 @@ public final class TrieveKnowledgeBaseSearchPlan {
     public interface _FinalStage {
         TrieveKnowledgeBaseSearchPlan build();
 
+        _FinalStage topK(Optional<Double> topK);
+
+        _FinalStage topK(Double topK);
+
         _FinalStage removeStopWords(Optional<Boolean> removeStopWords);
 
         _FinalStage removeStopWords(Boolean removeStopWords);
@@ -121,6 +138,8 @@ public final class TrieveKnowledgeBaseSearchPlan {
 
         private Optional<Boolean> removeStopWords = Optional.empty();
 
+        private Optional<Double> topK = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -128,6 +147,7 @@ public final class TrieveKnowledgeBaseSearchPlan {
 
         @java.lang.Override
         public Builder from(TrieveKnowledgeBaseSearchPlan other) {
+            topK(other.getTopK());
             removeStopWords(other.getRemoveStopWords());
             scoreThreshold(other.getScoreThreshold());
             searchType(other.getSearchType());
@@ -179,9 +199,27 @@ public final class TrieveKnowledgeBaseSearchPlan {
             return this;
         }
 
+        /**
+         * <p>Specifies the number of top chunks to return. This corresponds to the <code>page_size</code> parameter in Trieve.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage topK(Double topK) {
+            this.topK = Optional.ofNullable(topK);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "topK", nulls = Nulls.SKIP)
+        public _FinalStage topK(Optional<Double> topK) {
+            this.topK = topK;
+            return this;
+        }
+
         @java.lang.Override
         public TrieveKnowledgeBaseSearchPlan build() {
-            return new TrieveKnowledgeBaseSearchPlan(removeStopWords, scoreThreshold, searchType, additionalProperties);
+            return new TrieveKnowledgeBaseSearchPlan(
+                    topK, removeStopWords, scoreThreshold, searchType, additionalProperties);
         }
     }
 }

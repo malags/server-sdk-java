@@ -109,6 +109,7 @@ public final class CallbackStepBlock {
     }
 
     @JsonTypeName("conversation")
+    @JsonIgnoreProperties("type")
     private static final class ConversationValue implements Value {
         @JsonUnwrapped
         private CreateConversationBlockDto value;
@@ -147,6 +148,7 @@ public final class CallbackStepBlock {
     }
 
     @JsonTypeName("tool-call")
+    @JsonIgnoreProperties("type")
     private static final class ToolCallValue implements Value {
         @JsonUnwrapped
         private CreateToolCallBlockDto value;
@@ -185,6 +187,7 @@ public final class CallbackStepBlock {
     }
 
     @JsonTypeName("workflow")
+    @JsonIgnoreProperties("type")
     private static final class WorkflowValue implements Value {
         @JsonUnwrapped
         private CreateWorkflowBlockDto value;
@@ -222,6 +225,7 @@ public final class CallbackStepBlock {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

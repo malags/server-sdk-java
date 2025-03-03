@@ -6,6 +6,10 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum OpenAiModelModel {
+    CHATGPT_4_O_LATEST("chatgpt-4o-latest"),
+
+    O_3_MINI("o3-mini"),
+
     O_1_PREVIEW("o1-preview"),
 
     O_1_PREVIEW_20240912("o1-preview-2024-09-12"),

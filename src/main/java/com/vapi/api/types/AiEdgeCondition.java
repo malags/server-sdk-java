@@ -12,32 +12,33 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ProgrammaticEdgeCondition.Builder.class)
-public final class ProgrammaticEdgeCondition {
-    private final Optional<String> booleanExpression;
+@JsonDeserialize(builder = AiEdgeCondition.Builder.class)
+public final class AiEdgeCondition {
+    private final List<String> matches;
 
     private final Map<String, Object> additionalProperties;
 
-    private ProgrammaticEdgeCondition(Optional<String> booleanExpression, Map<String, Object> additionalProperties) {
-        this.booleanExpression = booleanExpression;
+    private AiEdgeCondition(List<String> matches, Map<String, Object> additionalProperties) {
+        this.matches = matches;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("booleanExpression")
-    public Optional<String> getBooleanExpression() {
-        return booleanExpression;
+    @JsonProperty("matches")
+    public List<String> getMatches() {
+        return matches;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ProgrammaticEdgeCondition && equalTo((ProgrammaticEdgeCondition) other);
+        return other instanceof AiEdgeCondition && equalTo((AiEdgeCondition) other);
     }
 
     @JsonAnyGetter
@@ -45,13 +46,13 @@ public final class ProgrammaticEdgeCondition {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ProgrammaticEdgeCondition other) {
-        return booleanExpression.equals(other.booleanExpression);
+    private boolean equalTo(AiEdgeCondition other) {
+        return matches.equals(other.matches);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.booleanExpression);
+        return Objects.hash(this.matches);
     }
 
     @java.lang.Override
@@ -65,31 +66,37 @@ public final class ProgrammaticEdgeCondition {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> booleanExpression = Optional.empty();
+        private List<String> matches = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ProgrammaticEdgeCondition other) {
-            booleanExpression(other.getBooleanExpression());
+        public Builder from(AiEdgeCondition other) {
+            matches(other.getMatches());
             return this;
         }
 
-        @JsonSetter(value = "booleanExpression", nulls = Nulls.SKIP)
-        public Builder booleanExpression(Optional<String> booleanExpression) {
-            this.booleanExpression = booleanExpression;
+        @JsonSetter(value = "matches", nulls = Nulls.SKIP)
+        public Builder matches(List<String> matches) {
+            this.matches.clear();
+            this.matches.addAll(matches);
             return this;
         }
 
-        public Builder booleanExpression(String booleanExpression) {
-            this.booleanExpression = Optional.ofNullable(booleanExpression);
+        public Builder addMatches(String matches) {
+            this.matches.add(matches);
             return this;
         }
 
-        public ProgrammaticEdgeCondition build() {
-            return new ProgrammaticEdgeCondition(booleanExpression, additionalProperties);
+        public Builder addAllMatches(List<String> matches) {
+            this.matches.addAll(matches);
+            return this;
+        }
+
+        public AiEdgeCondition build() {
+            return new AiEdgeCondition(matches, additionalProperties);
         }
     }
 }

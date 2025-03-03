@@ -9,41 +9,62 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Say.Builder.class)
 public final class Say {
-    private final String instruction;
+    private final Optional<String> exact;
+
+    private final Optional<String> prompt;
 
     private final String name;
 
+    private final Optional<Map<String, Object>> metadata;
+
     private final Map<String, Object> additionalProperties;
 
-    private Say(String instruction, String name, Map<String, Object> additionalProperties) {
-        this.instruction = instruction;
+    private Say(
+            Optional<String> exact,
+            Optional<String> prompt,
+            String name,
+            Optional<Map<String, Object>> metadata,
+            Map<String, Object> additionalProperties) {
+        this.exact = exact;
+        this.prompt = prompt;
         this.name = name;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("type")
-    public String getType() {
-        return "say";
+    @JsonProperty("exact")
+    public Optional<String> getExact() {
+        return exact;
     }
 
-    @JsonProperty("instruction")
-    public String getInstruction() {
-        return instruction;
+    @JsonProperty("prompt")
+    public Optional<String> getPrompt() {
+        return prompt;
     }
 
     @JsonProperty("name")
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return This is for metadata you want to store on the task.
+     */
+    @JsonProperty("metadata")
+    public Optional<Map<String, Object>> getMetadata() {
+        return metadata;
     }
 
     @java.lang.Override
@@ -58,12 +79,15 @@ public final class Say {
     }
 
     private boolean equalTo(Say other) {
-        return instruction.equals(other.instruction) && name.equals(other.name);
+        return exact.equals(other.exact)
+                && prompt.equals(other.prompt)
+                && name.equals(other.name)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.instruction, this.name);
+        return Objects.hash(this.exact, this.prompt, this.name, this.metadata);
     }
 
     @java.lang.Override
@@ -71,29 +95,41 @@ public final class Say {
         return ObjectMappers.stringify(this);
     }
 
-    public static InstructionStage builder() {
+    public static NameStage builder() {
         return new Builder();
-    }
-
-    public interface InstructionStage {
-        NameStage instruction(@NotNull String instruction);
-
-        Builder from(Say other);
     }
 
     public interface NameStage {
         _FinalStage name(@NotNull String name);
+
+        Builder from(Say other);
     }
 
     public interface _FinalStage {
         Say build();
+
+        _FinalStage exact(Optional<String> exact);
+
+        _FinalStage exact(String exact);
+
+        _FinalStage prompt(Optional<String> prompt);
+
+        _FinalStage prompt(String prompt);
+
+        _FinalStage metadata(Optional<Map<String, Object>> metadata);
+
+        _FinalStage metadata(Map<String, Object> metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements InstructionStage, NameStage, _FinalStage {
-        private String instruction;
-
+    public static final class Builder implements NameStage, _FinalStage {
         private String name;
+
+        private Optional<Map<String, Object>> metadata = Optional.empty();
+
+        private Optional<String> prompt = Optional.empty();
+
+        private Optional<String> exact = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -102,15 +138,10 @@ public final class Say {
 
         @java.lang.Override
         public Builder from(Say other) {
-            instruction(other.getInstruction());
+            exact(other.getExact());
+            prompt(other.getPrompt());
             name(other.getName());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("instruction")
-        public NameStage instruction(@NotNull String instruction) {
-            this.instruction = Objects.requireNonNull(instruction, "instruction must not be null");
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -121,9 +152,52 @@ public final class Say {
             return this;
         }
 
+        /**
+         * <p>This is for metadata you want to store on the task.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage metadata(Map<String, Object> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage prompt(String prompt) {
+            this.prompt = Optional.ofNullable(prompt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "prompt", nulls = Nulls.SKIP)
+        public _FinalStage prompt(Optional<String> prompt) {
+            this.prompt = prompt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage exact(String exact) {
+            this.exact = Optional.ofNullable(exact);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "exact", nulls = Nulls.SKIP)
+        public _FinalStage exact(Optional<String> exact) {
+            this.exact = exact;
+            return this;
+        }
+
         @java.lang.Override
         public Say build() {
-            return new Say(instruction, name, additionalProperties);
+            return new Say(exact, prompt, name, metadata, additionalProperties);
         }
     }
 }

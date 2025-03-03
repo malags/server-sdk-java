@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,40 +22,91 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Gather.Builder.class)
 public final class Gather {
-    private final Optional<JsonSchema> schema;
+    private final JsonSchema output;
 
-    private final String instruction;
+    private final Optional<Boolean> confirmContent;
+
+    private final Optional<List<Hook>> hooks;
+
+    private final Optional<Double> maxRetries;
+
+    private final Optional<String> literalTemplate;
 
     private final String name;
+
+    private final Optional<Map<String, Object>> metadata;
 
     private final Map<String, Object> additionalProperties;
 
     private Gather(
-            Optional<JsonSchema> schema, String instruction, String name, Map<String, Object> additionalProperties) {
-        this.schema = schema;
-        this.instruction = instruction;
+            JsonSchema output,
+            Optional<Boolean> confirmContent,
+            Optional<List<Hook>> hooks,
+            Optional<Double> maxRetries,
+            Optional<String> literalTemplate,
+            String name,
+            Optional<Map<String, Object>> metadata,
+            Map<String, Object> additionalProperties) {
+        this.output = output;
+        this.confirmContent = confirmContent;
+        this.hooks = hooks;
+        this.maxRetries = maxRetries;
+        this.literalTemplate = literalTemplate;
         this.name = name;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("type")
-    public String getType() {
-        return "gather";
+    @JsonProperty("output")
+    public JsonSchema getOutput() {
+        return output;
     }
 
-    @JsonProperty("schema")
-    public Optional<JsonSchema> getSchema() {
-        return schema;
+    /**
+     * @return This is whether or not the workflow should read back the gathered data to the user, and ask about its correctness.
+     */
+    @JsonProperty("confirmContent")
+    public Optional<Boolean> getConfirmContent() {
+        return confirmContent;
     }
 
-    @JsonProperty("instruction")
-    public String getInstruction() {
-        return instruction;
+    /**
+     * @return This is a list of hooks for a task.
+     * Each hook is a list of tasks to run on a trigger (such as on start, on failure, etc).
+     * Only Say is supported for now.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<Hook>> getHooks() {
+        return hooks;
+    }
+
+    /**
+     * @return This is the number of times we should try to gather the information from the user before we failover to the fail path. An example of this would be a user refusing to give their phone number for privacy reasons, and then going down a different path on account of this
+     */
+    @JsonProperty("maxRetries")
+    public Optional<Double> getMaxRetries() {
+        return maxRetries;
+    }
+
+    /**
+     * @return This is a liquid templating string. On the first call to Gather, the template will be filled out with variables from the context, and will be spoken verbatim to the user. An example would be &quot;Base on your zipcode, it looks like you could be in one of these counties: {{ counties | join: &quot;, &quot; }}. Which one do you live in?&quot;
+     */
+    @JsonProperty("literalTemplate")
+    public Optional<String> getLiteralTemplate() {
+        return literalTemplate;
     }
 
     @JsonProperty("name")
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return This is for metadata you want to store on the task.
+     */
+    @JsonProperty("metadata")
+    public Optional<Map<String, Object>> getMetadata() {
+        return metadata;
     }
 
     @java.lang.Override
@@ -69,12 +121,25 @@ public final class Gather {
     }
 
     private boolean equalTo(Gather other) {
-        return schema.equals(other.schema) && instruction.equals(other.instruction) && name.equals(other.name);
+        return output.equals(other.output)
+                && confirmContent.equals(other.confirmContent)
+                && hooks.equals(other.hooks)
+                && maxRetries.equals(other.maxRetries)
+                && literalTemplate.equals(other.literalTemplate)
+                && name.equals(other.name)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.schema, this.instruction, this.name);
+        return Objects.hash(
+                this.output,
+                this.confirmContent,
+                this.hooks,
+                this.maxRetries,
+                this.literalTemplate,
+                this.name,
+                this.metadata);
     }
 
     @java.lang.Override
@@ -82,12 +147,12 @@ public final class Gather {
         return ObjectMappers.stringify(this);
     }
 
-    public static InstructionStage builder() {
+    public static OutputStage builder() {
         return new Builder();
     }
 
-    public interface InstructionStage {
-        NameStage instruction(@NotNull String instruction);
+    public interface OutputStage {
+        NameStage output(@NotNull JsonSchema output);
 
         Builder from(Gather other);
     }
@@ -99,18 +164,42 @@ public final class Gather {
     public interface _FinalStage {
         Gather build();
 
-        _FinalStage schema(Optional<JsonSchema> schema);
+        _FinalStage confirmContent(Optional<Boolean> confirmContent);
 
-        _FinalStage schema(JsonSchema schema);
+        _FinalStage confirmContent(Boolean confirmContent);
+
+        _FinalStage hooks(Optional<List<Hook>> hooks);
+
+        _FinalStage hooks(List<Hook> hooks);
+
+        _FinalStage maxRetries(Optional<Double> maxRetries);
+
+        _FinalStage maxRetries(Double maxRetries);
+
+        _FinalStage literalTemplate(Optional<String> literalTemplate);
+
+        _FinalStage literalTemplate(String literalTemplate);
+
+        _FinalStage metadata(Optional<Map<String, Object>> metadata);
+
+        _FinalStage metadata(Map<String, Object> metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements InstructionStage, NameStage, _FinalStage {
-        private String instruction;
+    public static final class Builder implements OutputStage, NameStage, _FinalStage {
+        private JsonSchema output;
 
         private String name;
 
-        private Optional<JsonSchema> schema = Optional.empty();
+        private Optional<Map<String, Object>> metadata = Optional.empty();
+
+        private Optional<String> literalTemplate = Optional.empty();
+
+        private Optional<Double> maxRetries = Optional.empty();
+
+        private Optional<List<Hook>> hooks = Optional.empty();
+
+        private Optional<Boolean> confirmContent = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -119,16 +208,20 @@ public final class Gather {
 
         @java.lang.Override
         public Builder from(Gather other) {
-            schema(other.getSchema());
-            instruction(other.getInstruction());
+            output(other.getOutput());
+            confirmContent(other.getConfirmContent());
+            hooks(other.getHooks());
+            maxRetries(other.getMaxRetries());
+            literalTemplate(other.getLiteralTemplate());
             name(other.getName());
+            metadata(other.getMetadata());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("instruction")
-        public NameStage instruction(@NotNull String instruction) {
-            this.instruction = Objects.requireNonNull(instruction, "instruction must not be null");
+        @JsonSetter("output")
+        public NameStage output(@NotNull JsonSchema output) {
+            this.output = Objects.requireNonNull(output, "output must not be null");
             return this;
         }
 
@@ -139,22 +232,97 @@ public final class Gather {
             return this;
         }
 
+        /**
+         * <p>This is for metadata you want to store on the task.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public _FinalStage schema(JsonSchema schema) {
-            this.schema = Optional.ofNullable(schema);
+        public _FinalStage metadata(Map<String, Object> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "schema", nulls = Nulls.SKIP)
-        public _FinalStage schema(Optional<JsonSchema> schema) {
-            this.schema = schema;
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        /**
+         * <p>This is a liquid templating string. On the first call to Gather, the template will be filled out with variables from the context, and will be spoken verbatim to the user. An example would be &quot;Base on your zipcode, it looks like you could be in one of these counties: {{ counties | join: &quot;, &quot; }}. Which one do you live in?&quot;</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage literalTemplate(String literalTemplate) {
+            this.literalTemplate = Optional.ofNullable(literalTemplate);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "literalTemplate", nulls = Nulls.SKIP)
+        public _FinalStage literalTemplate(Optional<String> literalTemplate) {
+            this.literalTemplate = literalTemplate;
+            return this;
+        }
+
+        /**
+         * <p>This is the number of times we should try to gather the information from the user before we failover to the fail path. An example of this would be a user refusing to give their phone number for privacy reasons, and then going down a different path on account of this</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage maxRetries(Double maxRetries) {
+            this.maxRetries = Optional.ofNullable(maxRetries);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "maxRetries", nulls = Nulls.SKIP)
+        public _FinalStage maxRetries(Optional<Double> maxRetries) {
+            this.maxRetries = maxRetries;
+            return this;
+        }
+
+        /**
+         * <p>This is a list of hooks for a task.
+         * Each hook is a list of tasks to run on a trigger (such as on start, on failure, etc).
+         * Only Say is supported for now.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage hooks(List<Hook> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public _FinalStage hooks(Optional<List<Hook>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        /**
+         * <p>This is whether or not the workflow should read back the gathered data to the user, and ask about its correctness.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage confirmContent(Boolean confirmContent) {
+            this.confirmContent = Optional.ofNullable(confirmContent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "confirmContent", nulls = Nulls.SKIP)
+        public _FinalStage confirmContent(Optional<Boolean> confirmContent) {
+            this.confirmContent = confirmContent;
             return this;
         }
 
         @java.lang.Override
         public Gather build() {
-            return new Gather(schema, instruction, name, additionalProperties);
+            return new Gather(
+                    output, confirmContent, hooks, maxRetries, literalTemplate, name, metadata, additionalProperties);
         }
     }
 }

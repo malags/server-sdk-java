@@ -92,6 +92,14 @@ public final class ServerMessageEndOfCallReport {
     }
 
     /**
+     * @return This is the type of the message. &quot;end-of-call-report&quot; is sent when the call ends and post-processing is complete.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "end-of-call-report";
+    }
+
+    /**
      * @return This is the reason the call ended. This can also be found at <code>call.endedReason</code> on GET /call/:id.
      */
     @JsonProperty("endedReason")

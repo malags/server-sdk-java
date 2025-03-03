@@ -27,6 +27,8 @@ public final class TransferPlan {
 
     private final Optional<Map<String, Object>> sipVerb;
 
+    private final Optional<String> twiml;
+
     private final Optional<SummaryPlan> summaryPlan;
 
     private final Map<String, Object> additionalProperties;
@@ -35,11 +37,13 @@ public final class TransferPlan {
             TransferPlanMode mode,
             Optional<TransferPlanMessage> message,
             Optional<Map<String, Object>> sipVerb,
+            Optional<String> twiml,
             Optional<SummaryPlan> summaryPlan,
             Map<String, Object> additionalProperties) {
         this.mode = mode;
         this.message = message;
         this.sipVerb = sipVerb;
+        this.twiml = twiml;
         this.summaryPlan = summaryPlan;
         this.additionalProperties = additionalProperties;
     }
@@ -54,6 +58,7 @@ public final class TransferPlan {
      * <li><code>warm-transfer-say-summary</code>: The assistant dials the destination, provides a summary of the call to the destination party, connects the customer, and leaves the call.</li>
      * <li><code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>: The assistant dials the destination, waits for the operator to speak, delivers the <code>message</code> to the destination party, and then connects the customer.</li>
      * <li><code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code>: The assistant dials the destination, waits for the operator to speak, provides a summary of the call to the destination party, and then connects the customer.</li>
+     * <li><code>warm-transfer-twiml</code>: The assistant dials the destination, executes the twiml instructions on the destination call leg, connects the customer, and leaves the call.</li>
      * </ul>
      * <p>@default 'blind-transfer'</p>
      */
@@ -87,6 +92,25 @@ public final class TransferPlan {
     }
 
     /**
+     * @return This is the TwiML instructions to execute on the destination call leg before connecting the customer.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>Used only when <code>mode</code> is <code>warm-transfer-twiml</code>.</li>
+     * <li>Supports only <code>Play</code>, <code>Say</code>, <code>Gather</code>, <code>Hangup</code> and <code>Pause</code> verbs.</li>
+     * <li>Maximum length is 4096 characters.</li>
+     * </ul>
+     * <p>Example:</p>
+     * <pre><code>&lt;Say voice=&quot;alice&quot; language=&quot;en-US&quot;&gt;Hello, transferring a customer to you.&lt;/Say&gt;
+     * &lt;Pause length=&quot;2&quot;/&gt;
+     * &lt;Say&gt;They called about billing questions.&lt;/Say&gt;
+     * </code></pre>
+     */
+    @JsonProperty("twiml")
+    public Optional<String> getTwiml() {
+        return twiml;
+    }
+
+    /**
      * @return This is the plan for generating a summary of the call to present to the destination party.
      * <p>Usage:</p>
      * <ul>
@@ -113,12 +137,13 @@ public final class TransferPlan {
         return mode.equals(other.mode)
                 && message.equals(other.message)
                 && sipVerb.equals(other.sipVerb)
+                && twiml.equals(other.twiml)
                 && summaryPlan.equals(other.summaryPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.mode, this.message, this.sipVerb, this.summaryPlan);
+        return Objects.hash(this.mode, this.message, this.sipVerb, this.twiml, this.summaryPlan);
     }
 
     @java.lang.Override
@@ -147,6 +172,10 @@ public final class TransferPlan {
 
         _FinalStage sipVerb(Map<String, Object> sipVerb);
 
+        _FinalStage twiml(Optional<String> twiml);
+
+        _FinalStage twiml(String twiml);
+
         _FinalStage summaryPlan(Optional<SummaryPlan> summaryPlan);
 
         _FinalStage summaryPlan(SummaryPlan summaryPlan);
@@ -157,6 +186,8 @@ public final class TransferPlan {
         private TransferPlanMode mode;
 
         private Optional<SummaryPlan> summaryPlan = Optional.empty();
+
+        private Optional<String> twiml = Optional.empty();
 
         private Optional<Map<String, Object>> sipVerb = Optional.empty();
 
@@ -172,6 +203,7 @@ public final class TransferPlan {
             mode(other.getMode());
             message(other.getMessage());
             sipVerb(other.getSipVerb());
+            twiml(other.getTwiml());
             summaryPlan(other.getSummaryPlan());
             return this;
         }
@@ -186,6 +218,7 @@ public final class TransferPlan {
          * <li><code>warm-transfer-say-summary</code>: The assistant dials the destination, provides a summary of the call to the destination party, connects the customer, and leaves the call.</li>
          * <li><code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>: The assistant dials the destination, waits for the operator to speak, delivers the <code>message</code> to the destination party, and then connects the customer.</li>
          * <li><code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code>: The assistant dials the destination, waits for the operator to speak, provides a summary of the call to the destination party, and then connects the customer.</li>
+         * <li><code>warm-transfer-twiml</code>: The assistant dials the destination, executes the twiml instructions on the destination call leg, connects the customer, and leaves the call.</li>
          * </ul>
          * <p>@default 'blind-transfer'</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -215,6 +248,34 @@ public final class TransferPlan {
         @JsonSetter(value = "summaryPlan", nulls = Nulls.SKIP)
         public _FinalStage summaryPlan(Optional<SummaryPlan> summaryPlan) {
             this.summaryPlan = summaryPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the TwiML instructions to execute on the destination call leg before connecting the customer.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-twiml</code>.</li>
+         * <li>Supports only <code>Play</code>, <code>Say</code>, <code>Gather</code>, <code>Hangup</code> and <code>Pause</code> verbs.</li>
+         * <li>Maximum length is 4096 characters.</li>
+         * </ul>
+         * <p>Example:</p>
+         * <pre><code>&lt;Say voice=&quot;alice&quot; language=&quot;en-US&quot;&gt;Hello, transferring a customer to you.&lt;/Say&gt;
+         * &lt;Pause length=&quot;2&quot;/&gt;
+         * &lt;Say&gt;They called about billing questions.&lt;/Say&gt;
+         * </code></pre>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage twiml(String twiml) {
+            this.twiml = Optional.ofNullable(twiml);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "twiml", nulls = Nulls.SKIP)
+        public _FinalStage twiml(Optional<String> twiml) {
+            this.twiml = twiml;
             return this;
         }
 
@@ -262,7 +323,7 @@ public final class TransferPlan {
 
         @java.lang.Override
         public TransferPlan build() {
-            return new TransferPlan(mode, message, sipVerb, summaryPlan, additionalProperties);
+            return new TransferPlan(mode, message, sipVerb, twiml, summaryPlan, additionalProperties);
         }
     }
 }

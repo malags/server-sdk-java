@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
@@ -19,6 +20,14 @@ public final class ClientMessageUserInterrupted {
 
     private ClientMessageUserInterrupted(Map<String, Object> additionalProperties) {
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the type of the message. &quot;user-interrupted&quot; is sent when the user interrupts the assistant.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "user-interrupted";
     }
 
     @java.lang.Override

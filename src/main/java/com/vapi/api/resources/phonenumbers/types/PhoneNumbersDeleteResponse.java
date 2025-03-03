@@ -131,6 +131,7 @@ public final class PhoneNumbersDeleteResponse {
     }
 
     @JsonTypeName("byo-phone-number")
+    @JsonIgnoreProperties("provider")
     private static final class ByoPhoneNumberValue implements Value {
         @JsonUnwrapped
         private ByoPhoneNumber value;
@@ -169,6 +170,7 @@ public final class PhoneNumbersDeleteResponse {
     }
 
     @JsonTypeName("twilio")
+    @JsonIgnoreProperties("provider")
     private static final class TwilioValue implements Value {
         @JsonUnwrapped
         private TwilioPhoneNumber value;
@@ -207,6 +209,7 @@ public final class PhoneNumbersDeleteResponse {
     }
 
     @JsonTypeName("vonage")
+    @JsonIgnoreProperties("provider")
     private static final class VonageValue implements Value {
         @JsonUnwrapped
         private VonagePhoneNumber value;
@@ -245,6 +248,7 @@ public final class PhoneNumbersDeleteResponse {
     }
 
     @JsonTypeName("vapi")
+    @JsonIgnoreProperties("provider")
     private static final class VapiValue implements Value {
         @JsonUnwrapped
         private VapiPhoneNumber value;
@@ -282,6 +286,7 @@ public final class PhoneNumbersDeleteResponse {
         }
     }
 
+    @JsonIgnoreProperties("provider")
     private static final class _UnknownValue implements Value {
         private String type;
 

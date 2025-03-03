@@ -29,7 +29,11 @@ public final class DeepgramTranscriber {
 
     private final Optional<Boolean> codeSwitchingEnabled;
 
+    private final Optional<Boolean> mipOptOut;
+
     private final Optional<List<String>> keywords;
+
+    private final Optional<List<String>> keyterm;
 
     private final Optional<Double> endpointing;
 
@@ -40,14 +44,18 @@ public final class DeepgramTranscriber {
             Optional<DeepgramTranscriberLanguage> language,
             Optional<Boolean> smartFormat,
             Optional<Boolean> codeSwitchingEnabled,
+            Optional<Boolean> mipOptOut,
             Optional<List<String>> keywords,
+            Optional<List<String>> keyterm,
             Optional<Double> endpointing,
             Map<String, Object> additionalProperties) {
         this.model = model;
         this.language = language;
         this.smartFormat = smartFormat;
         this.codeSwitchingEnabled = codeSwitchingEnabled;
+        this.mipOptOut = mipOptOut;
         this.keywords = keywords;
+        this.keyterm = keyterm;
         this.endpointing = endpointing;
         this.additionalProperties = additionalProperties;
     }
@@ -119,11 +127,29 @@ public final class DeepgramTranscriber {
     }
 
     /**
+     * @return If set to true, this will add mip_opt_out=true as a query parameter of all API requests. See https://developers.deepgram.com/docs/the-deepgram-model-improvement-partnership-program#want-to-opt-out
+     * <p>This will only be used if you are using your own Deepgram API key.</p>
+     * <p>@default false</p>
+     */
+    @JsonProperty("mipOptOut")
+    public Optional<Boolean> getMipOptOut() {
+        return mipOptOut;
+    }
+
+    /**
      * @return These keywords are passed to the transcription model to help it pick up use-case specific words. Anything that may not be a common word, like your company name, should be added here.
      */
     @JsonProperty("keywords")
     public Optional<List<String>> getKeywords() {
         return keywords;
+    }
+
+    /**
+     * @return Keyterm Prompting allows you improve Keyword Recall Rate (KRR) for important keyterms or phrases up to 90%.
+     */
+    @JsonProperty("keyterm")
+    public Optional<List<String>> getKeyterm() {
+        return keyterm;
     }
 
     /**
@@ -157,7 +183,9 @@ public final class DeepgramTranscriber {
                 && language.equals(other.language)
                 && smartFormat.equals(other.smartFormat)
                 && codeSwitchingEnabled.equals(other.codeSwitchingEnabled)
+                && mipOptOut.equals(other.mipOptOut)
                 && keywords.equals(other.keywords)
+                && keyterm.equals(other.keyterm)
                 && endpointing.equals(other.endpointing);
     }
 
@@ -168,7 +196,9 @@ public final class DeepgramTranscriber {
                 this.language,
                 this.smartFormat,
                 this.codeSwitchingEnabled,
+                this.mipOptOut,
                 this.keywords,
+                this.keyterm,
                 this.endpointing);
     }
 
@@ -191,7 +221,11 @@ public final class DeepgramTranscriber {
 
         private Optional<Boolean> codeSwitchingEnabled = Optional.empty();
 
+        private Optional<Boolean> mipOptOut = Optional.empty();
+
         private Optional<List<String>> keywords = Optional.empty();
+
+        private Optional<List<String>> keyterm = Optional.empty();
 
         private Optional<Double> endpointing = Optional.empty();
 
@@ -205,7 +239,9 @@ public final class DeepgramTranscriber {
             language(other.getLanguage());
             smartFormat(other.getSmartFormat());
             codeSwitchingEnabled(other.getCodeSwitchingEnabled());
+            mipOptOut(other.getMipOptOut());
             keywords(other.getKeywords());
+            keyterm(other.getKeyterm());
             endpointing(other.getEndpointing());
             return this;
         }
@@ -254,6 +290,17 @@ public final class DeepgramTranscriber {
             return this;
         }
 
+        @JsonSetter(value = "mipOptOut", nulls = Nulls.SKIP)
+        public Builder mipOptOut(Optional<Boolean> mipOptOut) {
+            this.mipOptOut = mipOptOut;
+            return this;
+        }
+
+        public Builder mipOptOut(Boolean mipOptOut) {
+            this.mipOptOut = Optional.ofNullable(mipOptOut);
+            return this;
+        }
+
         @JsonSetter(value = "keywords", nulls = Nulls.SKIP)
         public Builder keywords(Optional<List<String>> keywords) {
             this.keywords = keywords;
@@ -262,6 +309,17 @@ public final class DeepgramTranscriber {
 
         public Builder keywords(List<String> keywords) {
             this.keywords = Optional.ofNullable(keywords);
+            return this;
+        }
+
+        @JsonSetter(value = "keyterm", nulls = Nulls.SKIP)
+        public Builder keyterm(Optional<List<String>> keyterm) {
+            this.keyterm = keyterm;
+            return this;
+        }
+
+        public Builder keyterm(List<String> keyterm) {
+            this.keyterm = Optional.ofNullable(keyterm);
             return this;
         }
 
@@ -278,7 +336,15 @@ public final class DeepgramTranscriber {
 
         public DeepgramTranscriber build() {
             return new DeepgramTranscriber(
-                    model, language, smartFormat, codeSwitchingEnabled, keywords, endpointing, additionalProperties);
+                    model,
+                    language,
+                    smartFormat,
+                    codeSwitchingEnabled,
+                    mipOptOut,
+                    keywords,
+                    keyterm,
+                    endpointing,
+                    additionalProperties);
         }
     }
 }

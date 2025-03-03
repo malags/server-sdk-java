@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 public final class DeepgramVoice {
     private final DeepgramVoiceId voiceId;
 
+    private final Optional<Boolean> mipOptOut;
+
     private final Optional<ChunkPlan> chunkPlan;
 
     private final Optional<FallbackPlan> fallbackPlan;
@@ -31,10 +33,12 @@ public final class DeepgramVoice {
 
     private DeepgramVoice(
             DeepgramVoiceId voiceId,
+            Optional<Boolean> mipOptOut,
             Optional<ChunkPlan> chunkPlan,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
         this.voiceId = voiceId;
+        this.mipOptOut = mipOptOut;
         this.chunkPlan = chunkPlan;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
@@ -46,6 +50,16 @@ public final class DeepgramVoice {
     @JsonProperty("voiceId")
     public DeepgramVoiceId getVoiceId() {
         return voiceId;
+    }
+
+    /**
+     * @return If set to true, this will add mip_opt_out=true as a query parameter of all API requests. See https://developers.deepgram.com/docs/the-deepgram-model-improvement-partnership-program#want-to-opt-out
+     * <p>This will only be used if you are using your own Deepgram API key.</p>
+     * <p>@default false</p>
+     */
+    @JsonProperty("mipOptOut")
+    public Optional<Boolean> getMipOptOut() {
+        return mipOptOut;
     }
 
     /**
@@ -77,13 +91,14 @@ public final class DeepgramVoice {
 
     private boolean equalTo(DeepgramVoice other) {
         return voiceId.equals(other.voiceId)
+                && mipOptOut.equals(other.mipOptOut)
                 && chunkPlan.equals(other.chunkPlan)
                 && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.chunkPlan, this.fallbackPlan);
+        return Objects.hash(this.voiceId, this.mipOptOut, this.chunkPlan, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -104,6 +119,10 @@ public final class DeepgramVoice {
     public interface _FinalStage {
         DeepgramVoice build();
 
+        _FinalStage mipOptOut(Optional<Boolean> mipOptOut);
+
+        _FinalStage mipOptOut(Boolean mipOptOut);
+
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -121,6 +140,8 @@ public final class DeepgramVoice {
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
+        private Optional<Boolean> mipOptOut = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -129,6 +150,7 @@ public final class DeepgramVoice {
         @java.lang.Override
         public Builder from(DeepgramVoice other) {
             voiceId(other.getVoiceId());
+            mipOptOut(other.getMipOptOut());
             chunkPlan(other.getChunkPlan());
             fallbackPlan(other.getFallbackPlan());
             return this;
@@ -179,9 +201,28 @@ public final class DeepgramVoice {
             return this;
         }
 
+        /**
+         * <p>If set to true, this will add mip_opt_out=true as a query parameter of all API requests. See https://developers.deepgram.com/docs/the-deepgram-model-improvement-partnership-program#want-to-opt-out</p>
+         * <p>This will only be used if you are using your own Deepgram API key.</p>
+         * <p>@default false</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage mipOptOut(Boolean mipOptOut) {
+            this.mipOptOut = Optional.ofNullable(mipOptOut);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "mipOptOut", nulls = Nulls.SKIP)
+        public _FinalStage mipOptOut(Optional<Boolean> mipOptOut) {
+            this.mipOptOut = mipOptOut;
+            return this;
+        }
+
         @java.lang.Override
         public DeepgramVoice build() {
-            return new DeepgramVoice(voiceId, chunkPlan, fallbackPlan, additionalProperties);
+            return new DeepgramVoice(voiceId, mipOptOut, chunkPlan, fallbackPlan, additionalProperties);
         }
     }
 }

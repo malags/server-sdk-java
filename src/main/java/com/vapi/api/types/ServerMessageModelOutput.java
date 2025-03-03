@@ -70,6 +70,14 @@ public final class ServerMessageModelOutput {
     }
 
     /**
+     * @return This is the type of the message. &quot;model-output&quot; is sent as the model outputs tokens.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "model-output";
+    }
+
+    /**
      * @return This is the ISO-8601 formatted timestamp of when the message was sent.
      */
     @JsonProperty("timestamp")

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
@@ -19,6 +20,20 @@ public final class ClientMessageHang {
 
     private ClientMessageHang(Map<String, Object> additionalProperties) {
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the type of the message. &quot;hang&quot; is sent when the assistant is hanging due to a delay. The delay can be caused by many factors, such as:
+     * <ul>
+     * <li>the model is too slow to respond</li>
+     * <li>the voice is too slow to respond</li>
+     * <li>the tool call is still waiting for a response from your server</li>
+     * <li>etc.</li>
+     * </ul>
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "hang";
     }
 
     @java.lang.Override

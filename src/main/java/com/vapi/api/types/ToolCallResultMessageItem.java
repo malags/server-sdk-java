@@ -88,6 +88,7 @@ public final class ToolCallResultMessageItem {
     }
 
     @JsonTypeName("request-complete")
+    @JsonIgnoreProperties("type")
     private static final class RequestCompleteValue implements Value {
         @JsonUnwrapped
         private ToolMessageComplete value;
@@ -126,6 +127,7 @@ public final class ToolCallResultMessageItem {
     }
 
     @JsonTypeName("request-failed")
+    @JsonIgnoreProperties("type")
     private static final class RequestFailedValue implements Value {
         @JsonUnwrapped
         private ToolMessageFailed value;
@@ -163,6 +165,7 @@ public final class ToolCallResultMessageItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

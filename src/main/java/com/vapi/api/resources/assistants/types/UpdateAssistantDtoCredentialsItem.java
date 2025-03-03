@@ -701,6 +701,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("anthropic")
+    @JsonIgnoreProperties("provider")
     private static final class AnthropicValue implements Value {
         @JsonUnwrapped
         private CreateAnthropicCredentialDto value;
@@ -739,6 +740,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("anyscale")
+    @JsonIgnoreProperties("provider")
     private static final class AnyscaleValue implements Value {
         @JsonUnwrapped
         private CreateAnyscaleCredentialDto value;
@@ -777,6 +779,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("assembly-ai")
+    @JsonIgnoreProperties("provider")
     private static final class AssemblyAiValue implements Value {
         @JsonUnwrapped
         private CreateAssemblyAiCredentialDto value;
@@ -815,6 +818,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("azure-openai")
+    @JsonIgnoreProperties("provider")
     private static final class AzureOpenaiValue implements Value {
         @JsonUnwrapped
         private CreateAzureOpenAiCredentialDto value;
@@ -853,6 +857,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("azure")
+    @JsonIgnoreProperties("provider")
     private static final class AzureValue implements Value {
         @JsonUnwrapped
         private CreateAzureCredentialDto value;
@@ -891,6 +896,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("byo-sip-trunk")
+    @JsonIgnoreProperties("provider")
     private static final class ByoSipTrunkValue implements Value {
         @JsonUnwrapped
         private CreateByoSipTrunkCredentialDto value;
@@ -929,6 +935,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("cartesia")
+    @JsonIgnoreProperties("provider")
     private static final class CartesiaValue implements Value {
         @JsonUnwrapped
         private CreateCartesiaCredentialDto value;
@@ -967,6 +974,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("cloudflare")
+    @JsonIgnoreProperties("provider")
     private static final class CloudflareValue implements Value {
         @JsonUnwrapped
         private CreateCloudflareCredentialDto value;
@@ -1005,6 +1013,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("custom-llm")
+    @JsonIgnoreProperties("provider")
     private static final class CustomLlmValue implements Value {
         @JsonUnwrapped
         private CreateCustomLlmCredentialDto value;
@@ -1043,6 +1052,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("deepgram")
+    @JsonIgnoreProperties("provider")
     private static final class DeepgramValue implements Value {
         @JsonUnwrapped
         private CreateDeepgramCredentialDto value;
@@ -1081,6 +1091,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("deepinfra")
+    @JsonIgnoreProperties("provider")
     private static final class DeepinfraValue implements Value {
         @JsonUnwrapped
         private CreateDeepInfraCredentialDto value;
@@ -1119,6 +1130,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("deep-seek")
+    @JsonIgnoreProperties("provider")
     private static final class DeepSeekValue implements Value {
         @JsonUnwrapped
         private CreateDeepSeekCredentialDto value;
@@ -1157,6 +1169,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("11labs")
+    @JsonIgnoreProperties("provider")
     private static final class _11LabsValue implements Value {
         @JsonUnwrapped
         private CreateElevenLabsCredentialDto value;
@@ -1195,6 +1208,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("gcp")
+    @JsonIgnoreProperties("provider")
     private static final class GcpValue implements Value {
         @JsonUnwrapped
         private CreateGcpCredentialDto value;
@@ -1233,6 +1247,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("gladia")
+    @JsonIgnoreProperties("provider")
     private static final class GladiaValue implements Value {
         @JsonUnwrapped
         private CreateGladiaCredentialDto value;
@@ -1271,6 +1286,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("gohighlevel")
+    @JsonIgnoreProperties("provider")
     private static final class GohighlevelValue implements Value {
         @JsonUnwrapped
         private CreateGoHighLevelCredentialDto value;
@@ -1309,6 +1325,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("groq")
+    @JsonIgnoreProperties("provider")
     private static final class GroqValue implements Value {
         @JsonUnwrapped
         private CreateGroqCredentialDto value;
@@ -1347,6 +1364,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("langfuse")
+    @JsonIgnoreProperties("provider")
     private static final class LangfuseValue implements Value {
         @JsonUnwrapped
         private CreateLangfuseCredentialDto value;
@@ -1385,6 +1403,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("lmnt")
+    @JsonIgnoreProperties("provider")
     private static final class LmntValue implements Value {
         @JsonUnwrapped
         private CreateLmntCredentialDto value;
@@ -1423,6 +1442,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("make")
+    @JsonIgnoreProperties("provider")
     private static final class MakeValue implements Value {
         @JsonUnwrapped
         private CreateMakeCredentialDto value;
@@ -1461,6 +1481,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("openai")
+    @JsonIgnoreProperties("provider")
     private static final class OpenaiValue implements Value {
         @JsonUnwrapped
         private CreateOpenAiCredentialDto value;
@@ -1499,6 +1520,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("openrouter")
+    @JsonIgnoreProperties("provider")
     private static final class OpenrouterValue implements Value {
         @JsonUnwrapped
         private CreateOpenRouterCredentialDto value;
@@ -1537,6 +1559,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("perplexity-ai")
+    @JsonIgnoreProperties("provider")
     private static final class PerplexityAiValue implements Value {
         @JsonUnwrapped
         private CreatePerplexityAiCredentialDto value;
@@ -1575,6 +1598,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("playht")
+    @JsonIgnoreProperties("provider")
     private static final class PlayhtValue implements Value {
         @JsonUnwrapped
         private CreatePlayHtCredentialDto value;
@@ -1613,6 +1637,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("rime-ai")
+    @JsonIgnoreProperties("provider")
     private static final class RimeAiValue implements Value {
         @JsonUnwrapped
         private CreateRimeAiCredentialDto value;
@@ -1651,6 +1676,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("runpod")
+    @JsonIgnoreProperties("provider")
     private static final class RunpodValue implements Value {
         @JsonUnwrapped
         private CreateRunpodCredentialDto value;
@@ -1689,6 +1715,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("s3")
+    @JsonIgnoreProperties("provider")
     private static final class S3Value implements Value {
         @JsonUnwrapped
         private CreateS3CredentialDto value;
@@ -1727,6 +1754,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("smallest-ai")
+    @JsonIgnoreProperties("provider")
     private static final class SmallestAiValue implements Value {
         @JsonUnwrapped
         private CreateSmallestAiCredentialDto value;
@@ -1765,6 +1793,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("tavus")
+    @JsonIgnoreProperties("provider")
     private static final class TavusValue implements Value {
         @JsonUnwrapped
         private CreateTavusCredentialDto value;
@@ -1803,6 +1832,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("together-ai")
+    @JsonIgnoreProperties("provider")
     private static final class TogetherAiValue implements Value {
         @JsonUnwrapped
         private CreateTogetherAiCredentialDto value;
@@ -1841,6 +1871,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("twilio")
+    @JsonIgnoreProperties("provider")
     private static final class TwilioValue implements Value {
         @JsonUnwrapped
         private CreateTwilioCredentialDto value;
@@ -1879,6 +1910,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("vonage")
+    @JsonIgnoreProperties("provider")
     private static final class VonageValue implements Value {
         @JsonUnwrapped
         private CreateVonageCredentialDto value;
@@ -1917,6 +1949,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("webhook")
+    @JsonIgnoreProperties("provider")
     private static final class WebhookValue implements Value {
         @JsonUnwrapped
         private CreateWebhookCredentialDto value;
@@ -1955,6 +1988,7 @@ public final class UpdateAssistantDtoCredentialsItem {
     }
 
     @JsonTypeName("xai")
+    @JsonIgnoreProperties("provider")
     private static final class XaiValue implements Value {
         @JsonUnwrapped
         private CreateXAiCredentialDto value;
@@ -1992,6 +2026,7 @@ public final class UpdateAssistantDtoCredentialsItem {
         }
     }
 
+    @JsonIgnoreProperties("provider")
     private static final class _UnknownValue implements Value {
         private String type;
 

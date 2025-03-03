@@ -78,7 +78,7 @@ public final class TransferDestinationStepMessage {
         }
 
         @java.lang.Override
-        public TransferDestinationStepMessage deserialize(JsonParser p, DeserializationContext ctxt)
+        public TransferDestinationStepMessage deserialize(JsonParser p, DeserializationContext context)
                 throws IOException {
             Object value = p.readValueAs(Object.class);
             try {

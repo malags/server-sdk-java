@@ -27,16 +27,20 @@ public final class FormatPlan {
 
     private final Optional<List<FormatPlanReplacementsItem>> replacements;
 
+    private final Optional<List<FormatPlanFormattersEnabledItem>> formattersEnabled;
+
     private final Map<String, Object> additionalProperties;
 
     private FormatPlan(
             Optional<Boolean> enabled,
             Optional<Double> numberToDigitsCutoff,
             Optional<List<FormatPlanReplacementsItem>> replacements,
+            Optional<List<FormatPlanFormattersEnabledItem>> formattersEnabled,
             Map<String, Object> additionalProperties) {
         this.enabled = enabled;
         this.numberToDigitsCutoff = numberToDigitsCutoff;
         this.replacements = replacements;
+        this.formattersEnabled = formattersEnabled;
         this.additionalProperties = additionalProperties;
     }
 
@@ -86,6 +90,17 @@ public final class FormatPlan {
         return replacements;
     }
 
+    /**
+     * @return List of formatters to apply. If not provided, all default formatters will be applied.
+     * If provided, only the specified formatters will be applied.
+     * Note: Some essential formatters like angle bracket removal will always be applied.
+     * @default undefined
+     */
+    @JsonProperty("formattersEnabled")
+    public Optional<List<FormatPlanFormattersEnabledItem>> getFormattersEnabled() {
+        return formattersEnabled;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -100,12 +115,13 @@ public final class FormatPlan {
     private boolean equalTo(FormatPlan other) {
         return enabled.equals(other.enabled)
                 && numberToDigitsCutoff.equals(other.numberToDigitsCutoff)
-                && replacements.equals(other.replacements);
+                && replacements.equals(other.replacements)
+                && formattersEnabled.equals(other.formattersEnabled);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.enabled, this.numberToDigitsCutoff, this.replacements);
+        return Objects.hash(this.enabled, this.numberToDigitsCutoff, this.replacements, this.formattersEnabled);
     }
 
     @java.lang.Override
@@ -125,6 +141,8 @@ public final class FormatPlan {
 
         private Optional<List<FormatPlanReplacementsItem>> replacements = Optional.empty();
 
+        private Optional<List<FormatPlanFormattersEnabledItem>> formattersEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -134,6 +152,7 @@ public final class FormatPlan {
             enabled(other.getEnabled());
             numberToDigitsCutoff(other.getNumberToDigitsCutoff());
             replacements(other.getReplacements());
+            formattersEnabled(other.getFormattersEnabled());
             return this;
         }
 
@@ -170,8 +189,19 @@ public final class FormatPlan {
             return this;
         }
 
+        @JsonSetter(value = "formattersEnabled", nulls = Nulls.SKIP)
+        public Builder formattersEnabled(Optional<List<FormatPlanFormattersEnabledItem>> formattersEnabled) {
+            this.formattersEnabled = formattersEnabled;
+            return this;
+        }
+
+        public Builder formattersEnabled(List<FormatPlanFormattersEnabledItem> formattersEnabled) {
+            this.formattersEnabled = Optional.ofNullable(formattersEnabled);
+            return this;
+        }
+
         public FormatPlan build() {
-            return new FormatPlan(enabled, numberToDigitsCutoff, replacements, additionalProperties);
+            return new FormatPlan(enabled, numberToDigitsCutoff, replacements, formattersEnabled, additionalProperties);
         }
     }
 }

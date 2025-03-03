@@ -36,8 +36,6 @@ public final class OpenAiModel {
 
     private final Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels;
 
-    private final Optional<Boolean> semanticCachingEnabled;
-
     private final Optional<Double> temperature;
 
     private final Optional<Double> maxTokens;
@@ -56,7 +54,6 @@ public final class OpenAiModel {
             Optional<String> knowledgeBaseId,
             OpenAiModelModel model,
             Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels,
-            Optional<Boolean> semanticCachingEnabled,
             Optional<Double> temperature,
             Optional<Double> maxTokens,
             Optional<Boolean> emotionRecognitionEnabled,
@@ -69,7 +66,6 @@ public final class OpenAiModel {
         this.knowledgeBaseId = knowledgeBaseId;
         this.model = model;
         this.fallbackModels = fallbackModels;
-        this.semanticCachingEnabled = semanticCachingEnabled;
         this.temperature = temperature;
         this.maxTokens = maxTokens;
         this.emotionRecognitionEnabled = emotionRecognitionEnabled;
@@ -135,11 +131,6 @@ public final class OpenAiModel {
         return fallbackModels;
     }
 
-    @JsonProperty("semanticCachingEnabled")
-    public Optional<Boolean> getSemanticCachingEnabled() {
-        return semanticCachingEnabled;
-    }
-
     /**
      * @return This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.
      */
@@ -195,7 +186,6 @@ public final class OpenAiModel {
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && model.equals(other.model)
                 && fallbackModels.equals(other.fallbackModels)
-                && semanticCachingEnabled.equals(other.semanticCachingEnabled)
                 && temperature.equals(other.temperature)
                 && maxTokens.equals(other.maxTokens)
                 && emotionRecognitionEnabled.equals(other.emotionRecognitionEnabled)
@@ -212,7 +202,6 @@ public final class OpenAiModel {
                 this.knowledgeBaseId,
                 this.model,
                 this.fallbackModels,
-                this.semanticCachingEnabled,
                 this.temperature,
                 this.maxTokens,
                 this.emotionRecognitionEnabled,
@@ -261,10 +250,6 @@ public final class OpenAiModel {
 
         _FinalStage fallbackModels(List<OpenAiModelFallbackModelsItem> fallbackModels);
 
-        _FinalStage semanticCachingEnabled(Optional<Boolean> semanticCachingEnabled);
-
-        _FinalStage semanticCachingEnabled(Boolean semanticCachingEnabled);
-
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
@@ -294,8 +279,6 @@ public final class OpenAiModel {
 
         private Optional<Double> temperature = Optional.empty();
 
-        private Optional<Boolean> semanticCachingEnabled = Optional.empty();
-
         private Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels = Optional.empty();
 
         private Optional<String> knowledgeBaseId = Optional.empty();
@@ -322,7 +305,6 @@ public final class OpenAiModel {
             knowledgeBaseId(other.getKnowledgeBaseId());
             model(other.getModel());
             fallbackModels(other.getFallbackModels());
-            semanticCachingEnabled(other.getSemanticCachingEnabled());
             temperature(other.getTemperature());
             maxTokens(other.getMaxTokens());
             emotionRecognitionEnabled(other.getEmotionRecognitionEnabled());
@@ -410,19 +392,6 @@ public final class OpenAiModel {
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
             this.temperature = temperature;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage semanticCachingEnabled(Boolean semanticCachingEnabled) {
-            this.semanticCachingEnabled = Optional.ofNullable(semanticCachingEnabled);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "semanticCachingEnabled", nulls = Nulls.SKIP)
-        public _FinalStage semanticCachingEnabled(Optional<Boolean> semanticCachingEnabled) {
-            this.semanticCachingEnabled = semanticCachingEnabled;
             return this;
         }
 
@@ -540,7 +509,6 @@ public final class OpenAiModel {
                     knowledgeBaseId,
                     model,
                     fallbackModels,
-                    semanticCachingEnabled,
                     temperature,
                     maxTokens,
                     emotionRecognitionEnabled,

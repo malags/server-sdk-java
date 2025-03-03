@@ -75,6 +75,14 @@ public final class ServerMessageConversationUpdate {
     }
 
     /**
+     * @return This is the type of the message. &quot;conversation-update&quot; is sent when an update is committed to the conversation history.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "conversation-update";
+    }
+
+    /**
      * @return This is the most up-to-date conversation history at the time the message is sent.
      */
     @JsonProperty("messages")

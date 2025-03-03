@@ -88,6 +88,7 @@ public final class WorkflowBlockStepsItem {
     }
 
     @JsonTypeName("handoff")
+    @JsonIgnoreProperties("type")
     private static final class HandoffValue implements Value {
         @JsonUnwrapped
         private HandoffStep value;
@@ -126,6 +127,7 @@ public final class WorkflowBlockStepsItem {
     }
 
     @JsonTypeName("callback")
+    @JsonIgnoreProperties("type")
     private static final class CallbackValue implements Value {
         @JsonUnwrapped
         private CallbackStep value;
@@ -163,6 +165,7 @@ public final class WorkflowBlockStepsItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

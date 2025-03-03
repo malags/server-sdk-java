@@ -6,6 +6,8 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TimeRangeStep {
+    SECOND("second"),
+
     MINUTE("minute"),
 
     HOUR("hour"),

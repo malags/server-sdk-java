@@ -6,7 +6,7 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CallEndedReason {
-    ASSISTANT_NOT_INVALID("assistant-not-invalid"),
+    ASSISTANT_NOT_VALID("assistant-not-valid"),
 
     ASSISTANT_NOT_PROVIDED("assistant-not-provided"),
 
@@ -27,6 +27,8 @@ public enum CallEndedReason {
     ASSISTANT_ENDED_CALL("assistant-ended-call"),
 
     ASSISTANT_SAID_END_CALL_PHRASE("assistant-said-end-call-phrase"),
+
+    ASSISTANT_ENDED_CALL_WITH_HANGUP_TASK("assistant-ended-call-with-hangup-task"),
 
     ASSISTANT_FORWARDED_CALL("assistant-forwarded-call"),
 
@@ -74,9 +76,13 @@ public enum CallEndedReason {
 
     PIPELINE_ERROR_SMALLEST_AI_VOICE_FAILED("pipeline-error-smallest-ai-voice-failed"),
 
+    PIPELINE_ERROR_NEUPHONIC_VOICE_FAILED("pipeline-error-neuphonic-voice-failed"),
+
     PIPELINE_ERROR_DEEPGRAM_TRANSCRIBER_FAILED("pipeline-error-deepgram-transcriber-failed"),
 
     PIPELINE_ERROR_GLADIA_TRANSCRIBER_FAILED("pipeline-error-gladia-transcriber-failed"),
+
+    PIPELINE_ERROR_SPEECHMATICS_TRANSCRIBER_FAILED("pipeline-error-speechmatics-transcriber-failed"),
 
     PIPELINE_ERROR_ASSEMBLY_AI_TRANSCRIBER_FAILED("pipeline-error-assembly-ai-transcriber-failed"),
 
@@ -133,6 +139,8 @@ public enum CallEndedReason {
 
     PIPELINE_ERROR_XAI_LLM_FAILED("pipeline-error-xai-llm-failed"),
 
+    PIPELINE_ERROR_MISTRAL_LLM_FAILED("pipeline-error-mistral-llm-failed"),
+
     PIPELINE_ERROR_INFLECTION_AI_LLM_FAILED("pipeline-error-inflection-ai-llm-failed"),
 
     PIPELINE_ERROR_CEREBRAS_LLM_FAILED("pipeline-error-cerebras-llm-failed"),
@@ -168,6 +176,17 @@ public enum CallEndedReason {
     PIPELINE_ERROR_XAI_429_EXCEEDED_QUOTA("pipeline-error-xai-429-exceeded-quota"),
 
     PIPELINE_ERROR_XAI_500_SERVER_ERROR("pipeline-error-xai-500-server-error"),
+
+    PIPELINE_ERROR_MISTRAL_400_BAD_REQUEST_VALIDATION_FAILED(
+            "pipeline-error-mistral-400-bad-request-validation-failed"),
+
+    PIPELINE_ERROR_MISTRAL_401_UNAUTHORIZED("pipeline-error-mistral-401-unauthorized"),
+
+    PIPELINE_ERROR_MISTRAL_403_MODEL_ACCESS_DENIED("pipeline-error-mistral-403-model-access-denied"),
+
+    PIPELINE_ERROR_MISTRAL_429_EXCEEDED_QUOTA("pipeline-error-mistral-429-exceeded-quota"),
+
+    PIPELINE_ERROR_MISTRAL_500_SERVER_ERROR("pipeline-error-mistral-500-server-error"),
 
     PIPELINE_ERROR_INFLECTION_AI_400_BAD_REQUEST_VALIDATION_FAILED(
             "pipeline-error-inflection-ai-400-bad-request-validation-failed"),

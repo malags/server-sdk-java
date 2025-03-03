@@ -88,6 +88,7 @@ public final class CreateConversationBlockDtoMessagesItem {
     }
 
     @JsonTypeName("block-start")
+    @JsonIgnoreProperties("type")
     private static final class BlockStartValue implements Value {
         @JsonUnwrapped
         private BlockStartMessage value;
@@ -126,6 +127,7 @@ public final class CreateConversationBlockDtoMessagesItem {
     }
 
     @JsonTypeName("block-complete")
+    @JsonIgnoreProperties("type")
     private static final class BlockCompleteValue implements Value {
         @JsonUnwrapped
         private BlockCompleteMessage value;
@@ -163,6 +165,7 @@ public final class CreateConversationBlockDtoMessagesItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

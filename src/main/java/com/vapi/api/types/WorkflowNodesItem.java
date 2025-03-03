@@ -3,116 +3,375 @@
  */
 package com.vapi.api.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.vapi.api.core.ObjectMappers;
-import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
-@JsonDeserialize(using = WorkflowNodesItem.Deserializer.class)
 public final class WorkflowNodesItem {
-    private final Object value;
+    private final Value value;
 
-    private final int type;
-
-    private WorkflowNodesItem(Object value, int type) {
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    private WorkflowNodesItem(Value value) {
         this.value = value;
-        this.type = type;
-    }
-
-    @JsonValue
-    public Object get() {
-        return this.value;
     }
 
     public <T> T visit(Visitor<T> visitor) {
-        if (this.type == 0) {
-            return visitor.visit((Say) this.value);
-        } else if (this.type == 1) {
-            return visitor.visit((Gather) this.value);
-        } else if (this.type == 2) {
-            return visitor.visit((Object) this.value);
-        } else if (this.type == 3) {
-            return visitor.visit((CreateWorkflowDto) this.value);
+        return value.visit(visitor);
+    }
+
+    public static WorkflowNodesItem say(Say value) {
+        return new WorkflowNodesItem(new SayValue(value));
+    }
+
+    public static WorkflowNodesItem gather(Gather value) {
+        return new WorkflowNodesItem(new GatherValue(value));
+    }
+
+    public static WorkflowNodesItem apiRequest(ApiRequest value) {
+        return new WorkflowNodesItem(new ApiRequestValue(value));
+    }
+
+    public static WorkflowNodesItem hangup(Hangup value) {
+        return new WorkflowNodesItem(new HangupValue(value));
+    }
+
+    public static WorkflowNodesItem transfer(Transfer value) {
+        return new WorkflowNodesItem(new TransferValue(value));
+    }
+
+    public boolean isSay() {
+        return value instanceof SayValue;
+    }
+
+    public boolean isGather() {
+        return value instanceof GatherValue;
+    }
+
+    public boolean isApiRequest() {
+        return value instanceof ApiRequestValue;
+    }
+
+    public boolean isHangup() {
+        return value instanceof HangupValue;
+    }
+
+    public boolean isTransfer() {
+        return value instanceof TransferValue;
+    }
+
+    public boolean _isUnknown() {
+        return value instanceof _UnknownValue;
+    }
+
+    public Optional<Say> getSay() {
+        if (isSay()) {
+            return Optional.of(((SayValue) value).value);
         }
-        throw new IllegalStateException("Failed to visit value. This should never happen.");
+        return Optional.empty();
     }
 
-    @java.lang.Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        return other instanceof WorkflowNodesItem && equalTo((WorkflowNodesItem) other);
+    public Optional<Gather> getGather() {
+        if (isGather()) {
+            return Optional.of(((GatherValue) value).value);
+        }
+        return Optional.empty();
     }
 
-    private boolean equalTo(WorkflowNodesItem other) {
-        return value.equals(other.value);
+    public Optional<ApiRequest> getApiRequest() {
+        if (isApiRequest()) {
+            return Optional.of(((ApiRequestValue) value).value);
+        }
+        return Optional.empty();
     }
 
-    @java.lang.Override
-    public int hashCode() {
-        return Objects.hash(this.value);
+    public Optional<Hangup> getHangup() {
+        if (isHangup()) {
+            return Optional.of(((HangupValue) value).value);
+        }
+        return Optional.empty();
     }
 
-    @java.lang.Override
-    public String toString() {
-        return this.value.toString();
+    public Optional<Transfer> getTransfer() {
+        if (isTransfer()) {
+            return Optional.of(((TransferValue) value).value);
+        }
+        return Optional.empty();
     }
 
-    public static WorkflowNodesItem of(Say value) {
-        return new WorkflowNodesItem(value, 0);
+    public Optional<Object> _getUnknown() {
+        if (_isUnknown()) {
+            return Optional.of(((_UnknownValue) value).value);
+        }
+        return Optional.empty();
     }
 
-    public static WorkflowNodesItem of(Gather value) {
-        return new WorkflowNodesItem(value, 1);
-    }
-
-    public static WorkflowNodesItem of(Object value) {
-        return new WorkflowNodesItem(value, 2);
-    }
-
-    public static WorkflowNodesItem of(CreateWorkflowDto value) {
-        return new WorkflowNodesItem(value, 3);
+    @JsonValue
+    private Value getValue() {
+        return this.value;
     }
 
     public interface Visitor<T> {
-        T visit(Say value);
+        T visitSay(Say say);
 
-        T visit(Gather value);
+        T visitGather(Gather gather);
 
-        T visit(Object value);
+        T visitApiRequest(ApiRequest apiRequest);
 
-        T visit(CreateWorkflowDto value);
+        T visitHangup(Hangup hangup);
+
+        T visitTransfer(Transfer transfer);
+
+        T _visitUnknown(Object unknownType);
     }
 
-    static final class Deserializer extends StdDeserializer<WorkflowNodesItem> {
-        Deserializer() {
-            super(WorkflowNodesItem.class);
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
+    @JsonSubTypes({
+        @JsonSubTypes.Type(SayValue.class),
+        @JsonSubTypes.Type(GatherValue.class),
+        @JsonSubTypes.Type(ApiRequestValue.class),
+        @JsonSubTypes.Type(HangupValue.class),
+        @JsonSubTypes.Type(TransferValue.class)
+    })
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private interface Value {
+        <T> T visit(Visitor<T> visitor);
+    }
+
+    @JsonTypeName("say")
+    @JsonIgnoreProperties("type")
+    private static final class SayValue implements Value {
+        @JsonUnwrapped
+        private Say value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SayValue() {}
+
+        private SayValue(Say value) {
+            this.value = value;
         }
 
         @java.lang.Override
-        public WorkflowNodesItem deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-            Object value = p.readValueAs(Object.class);
-            try {
-                return of(ObjectMappers.JSON_MAPPER.convertValue(value, Say.class));
-            } catch (IllegalArgumentException e) {
-            }
-            try {
-                return of(ObjectMappers.JSON_MAPPER.convertValue(value, Gather.class));
-            } catch (IllegalArgumentException e) {
-            }
-            try {
-                return of(ObjectMappers.JSON_MAPPER.convertValue(value, Object.class));
-            } catch (IllegalArgumentException e) {
-            }
-            try {
-                return of(ObjectMappers.JSON_MAPPER.convertValue(value, CreateWorkflowDto.class));
-            } catch (IllegalArgumentException e) {
-            }
-            throw new JsonParseException(p, "Failed to deserialize");
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSay(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SayValue && equalTo((SayValue) other);
+        }
+
+        private boolean equalTo(SayValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "WorkflowNodesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("gather")
+    @JsonIgnoreProperties("type")
+    private static final class GatherValue implements Value {
+        @JsonUnwrapped
+        private Gather value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GatherValue() {}
+
+        private GatherValue(Gather value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGather(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GatherValue && equalTo((GatherValue) other);
+        }
+
+        private boolean equalTo(GatherValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "WorkflowNodesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("apiRequest")
+    @JsonIgnoreProperties("type")
+    private static final class ApiRequestValue implements Value {
+        @JsonUnwrapped
+        private ApiRequest value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ApiRequestValue() {}
+
+        private ApiRequestValue(ApiRequest value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitApiRequest(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ApiRequestValue && equalTo((ApiRequestValue) other);
+        }
+
+        private boolean equalTo(ApiRequestValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "WorkflowNodesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("hangup")
+    @JsonIgnoreProperties("type")
+    private static final class HangupValue implements Value {
+        @JsonUnwrapped
+        private Hangup value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private HangupValue() {}
+
+        private HangupValue(Hangup value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitHangup(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof HangupValue && equalTo((HangupValue) other);
+        }
+
+        private boolean equalTo(HangupValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "WorkflowNodesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("transfer")
+    @JsonIgnoreProperties("type")
+    private static final class TransferValue implements Value {
+        @JsonUnwrapped
+        private Transfer value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TransferValue() {}
+
+        private TransferValue(Transfer value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTransfer(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TransferValue && equalTo((TransferValue) other);
+        }
+
+        private boolean equalTo(TransferValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "WorkflowNodesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonIgnoreProperties("type")
+    private static final class _UnknownValue implements Value {
+        private String type;
+
+        @JsonValue
+        private Object value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private _UnknownValue(@JsonProperty("value") Object value) {}
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor._visitUnknown(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof _UnknownValue && equalTo((_UnknownValue) other);
+        }
+
+        private boolean equalTo(_UnknownValue other) {
+            return type.equals(other.type) && value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.type, this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "WorkflowNodesItem{" + "type: " + type + ", value: " + value + "}";
         }
     }
 }

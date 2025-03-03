@@ -65,6 +65,14 @@ public final class ServerMessageUserInterrupted {
     }
 
     /**
+     * @return This is the type of the message. &quot;user-interrupted&quot; is sent when the user interrupts the assistant.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "user-interrupted";
+    }
+
+    /**
      * @return This is the ISO-8601 formatted timestamp of when the message was sent.
      */
     @JsonProperty("timestamp")

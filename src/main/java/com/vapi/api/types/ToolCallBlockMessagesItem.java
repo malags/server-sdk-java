@@ -88,6 +88,7 @@ public final class ToolCallBlockMessagesItem {
     }
 
     @JsonTypeName("block-start")
+    @JsonIgnoreProperties("type")
     private static final class BlockStartValue implements Value {
         @JsonUnwrapped
         private BlockStartMessage value;
@@ -126,6 +127,7 @@ public final class ToolCallBlockMessagesItem {
     }
 
     @JsonTypeName("block-complete")
+    @JsonIgnoreProperties("type")
     private static final class BlockCompleteValue implements Value {
         @JsonUnwrapped
         private BlockCompleteMessage value;
@@ -163,6 +165,7 @@ public final class ToolCallBlockMessagesItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

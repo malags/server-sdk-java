@@ -245,6 +245,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("dtmf")
+    @JsonIgnoreProperties("type")
     private static final class DtmfValue implements Value {
         @JsonUnwrapped
         private UpdateDtmfToolDto value;
@@ -283,6 +284,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("endCall")
+    @JsonIgnoreProperties("type")
     private static final class EndCallValue implements Value {
         @JsonUnwrapped
         private UpdateEndCallToolDto value;
@@ -321,6 +323,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("function")
+    @JsonIgnoreProperties("type")
     private static final class FunctionValue implements Value {
         @JsonUnwrapped
         private UpdateFunctionToolDto value;
@@ -359,6 +362,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("ghl")
+    @JsonIgnoreProperties("type")
     private static final class GhlValue implements Value {
         @JsonUnwrapped
         private UpdateGhlToolDto value;
@@ -397,6 +401,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("make")
+    @JsonIgnoreProperties("type")
     private static final class MakeValue implements Value {
         @JsonUnwrapped
         private UpdateMakeToolDto value;
@@ -435,6 +440,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("transferCall")
+    @JsonIgnoreProperties("type")
     private static final class TransferCallValue implements Value {
         @JsonUnwrapped
         private UpdateTransferCallToolDto value;
@@ -473,6 +479,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("output")
+    @JsonIgnoreProperties("type")
     private static final class OutputValue implements Value {
         @JsonUnwrapped
         private UpdateOutputToolDto value;
@@ -511,6 +518,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("bash")
+    @JsonIgnoreProperties("type")
     private static final class BashValue implements Value {
         @JsonUnwrapped
         private UpdateBashToolDto value;
@@ -549,6 +557,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("computer")
+    @JsonIgnoreProperties("type")
     private static final class ComputerValue implements Value {
         @JsonUnwrapped
         private UpdateComputerToolDto value;
@@ -587,6 +596,7 @@ public final class ToolsUpdateRequest {
     }
 
     @JsonTypeName("textEditor")
+    @JsonIgnoreProperties("type")
     private static final class TextEditorValue implements Value {
         @JsonUnwrapped
         private UpdateTextEditorToolDto value;
@@ -624,6 +634,7 @@ public final class ToolsUpdateRequest {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

@@ -14,6 +14,9 @@ import com.vapi.api.resources.knowledgebases.KnowledgeBasesClient;
 import com.vapi.api.resources.logs.LogsClient;
 import com.vapi.api.resources.phonenumbers.PhoneNumbersClient;
 import com.vapi.api.resources.squads.SquadsClient;
+import com.vapi.api.resources.testsuiteruns.TestSuiteRunsClient;
+import com.vapi.api.resources.testsuites.TestSuitesClient;
+import com.vapi.api.resources.testsuitetests.TestSuiteTestsClient;
 import com.vapi.api.resources.tools.ToolsClient;
 import java.util.function.Supplier;
 
@@ -40,6 +43,12 @@ public class Vapi {
 
     protected final Supplier<LogsClient> logsClient;
 
+    protected final Supplier<TestSuitesClient> testSuitesClient;
+
+    protected final Supplier<TestSuiteTestsClient> testSuiteTestsClient;
+
+    protected final Supplier<TestSuiteRunsClient> testSuiteRunsClient;
+
     public Vapi(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.callsClient = Suppliers.memoize(() -> new CallsClient(clientOptions));
@@ -52,6 +61,9 @@ public class Vapi {
         this.filesClient = Suppliers.memoize(() -> new FilesClient(clientOptions));
         this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
+        this.testSuitesClient = Suppliers.memoize(() -> new TestSuitesClient(clientOptions));
+        this.testSuiteTestsClient = Suppliers.memoize(() -> new TestSuiteTestsClient(clientOptions));
+        this.testSuiteRunsClient = Suppliers.memoize(() -> new TestSuiteRunsClient(clientOptions));
     }
 
     public CallsClient calls() {
@@ -92,6 +104,18 @@ public class Vapi {
 
     public LogsClient logs() {
         return this.logsClient.get();
+    }
+
+    public TestSuitesClient testSuites() {
+        return this.testSuitesClient.get();
+    }
+
+    public TestSuiteTestsClient testSuiteTests() {
+        return this.testSuiteTestsClient.get();
+    }
+
+    public TestSuiteRunsClient testSuiteRuns() {
+        return this.testSuiteRunsClient.get();
     }
 
     public static VapiBuilder builder() {

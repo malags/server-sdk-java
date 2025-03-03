@@ -127,6 +127,7 @@ public final class CreateGhlToolDtoMessagesItem {
     }
 
     @JsonTypeName("request-start")
+    @JsonIgnoreProperties("type")
     private static final class RequestStartValue implements Value {
         @JsonUnwrapped
         private ToolMessageStart value;
@@ -165,6 +166,7 @@ public final class CreateGhlToolDtoMessagesItem {
     }
 
     @JsonTypeName("request-complete")
+    @JsonIgnoreProperties("type")
     private static final class RequestCompleteValue implements Value {
         @JsonUnwrapped
         private ToolMessageComplete value;
@@ -203,6 +205,7 @@ public final class CreateGhlToolDtoMessagesItem {
     }
 
     @JsonTypeName("request-failed")
+    @JsonIgnoreProperties("type")
     private static final class RequestFailedValue implements Value {
         @JsonUnwrapped
         private ToolMessageFailed value;
@@ -241,6 +244,7 @@ public final class CreateGhlToolDtoMessagesItem {
     }
 
     @JsonTypeName("request-response-delayed")
+    @JsonIgnoreProperties("type")
     private static final class RequestResponseDelayedValue implements Value {
         @JsonUnwrapped
         private ToolMessageDelayed value;
@@ -278,6 +282,7 @@ public final class CreateGhlToolDtoMessagesItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

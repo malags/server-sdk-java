@@ -24,7 +24,9 @@ public enum AnalyticsOperationColumn {
 
     COST_BREAKDOWN_LLM_COMPLETION_TOKENS("costBreakdown.llmCompletionTokens"),
 
-    DURATION("duration");
+    DURATION("duration"),
+
+    CONCURRENCY("concurrency");
 
     private final String value;
 

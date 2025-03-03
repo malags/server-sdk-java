@@ -26,36 +26,51 @@ public final class EdgeCondition {
         return value.visit(visitor);
     }
 
-    public static EdgeCondition semantic(SemanticEdgeCondition value) {
-        return new EdgeCondition(new SemanticValue(value));
+    public static EdgeCondition ai(AiEdgeCondition value) {
+        return new EdgeCondition(new AiValue(value));
     }
 
-    public static EdgeCondition programmatic(ProgrammaticEdgeCondition value) {
-        return new EdgeCondition(new ProgrammaticValue(value));
+    public static EdgeCondition logic(LogicEdgeCondition value) {
+        return new EdgeCondition(new LogicValue(value));
     }
 
-    public boolean isSemantic() {
-        return value instanceof SemanticValue;
+    public static EdgeCondition failed(FailedEdgeCondition value) {
+        return new EdgeCondition(new FailedValue(value));
     }
 
-    public boolean isProgrammatic() {
-        return value instanceof ProgrammaticValue;
+    public boolean isAi() {
+        return value instanceof AiValue;
+    }
+
+    public boolean isLogic() {
+        return value instanceof LogicValue;
+    }
+
+    public boolean isFailed() {
+        return value instanceof FailedValue;
     }
 
     public boolean _isUnknown() {
         return value instanceof _UnknownValue;
     }
 
-    public Optional<SemanticEdgeCondition> getSemantic() {
-        if (isSemantic()) {
-            return Optional.of(((SemanticValue) value).value);
+    public Optional<AiEdgeCondition> getAi() {
+        if (isAi()) {
+            return Optional.of(((AiValue) value).value);
         }
         return Optional.empty();
     }
 
-    public Optional<ProgrammaticEdgeCondition> getProgrammatic() {
-        if (isProgrammatic()) {
-            return Optional.of(((ProgrammaticValue) value).value);
+    public Optional<LogicEdgeCondition> getLogic() {
+        if (isLogic()) {
+            return Optional.of(((LogicValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<FailedEdgeCondition> getFailed() {
+        if (isFailed()) {
+            return Optional.of(((FailedValue) value).value);
         }
         return Optional.empty();
     }
@@ -73,44 +88,51 @@ public final class EdgeCondition {
     }
 
     public interface Visitor<T> {
-        T visitSemantic(SemanticEdgeCondition semantic);
+        T visitAi(AiEdgeCondition ai);
 
-        T visitProgrammatic(ProgrammaticEdgeCondition programmatic);
+        T visitLogic(LogicEdgeCondition logic);
+
+        T visitFailed(FailedEdgeCondition failed);
 
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(SemanticValue.class), @JsonSubTypes.Type(ProgrammaticValue.class)})
+    @JsonSubTypes({
+        @JsonSubTypes.Type(AiValue.class),
+        @JsonSubTypes.Type(LogicValue.class),
+        @JsonSubTypes.Type(FailedValue.class)
+    })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
     }
 
-    @JsonTypeName("semantic")
-    private static final class SemanticValue implements Value {
+    @JsonTypeName("ai")
+    @JsonIgnoreProperties("type")
+    private static final class AiValue implements Value {
         @JsonUnwrapped
-        private SemanticEdgeCondition value;
+        private AiEdgeCondition value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private SemanticValue() {}
+        private AiValue() {}
 
-        private SemanticValue(SemanticEdgeCondition value) {
+        private AiValue(AiEdgeCondition value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitSemantic(value);
+            return visitor.visitAi(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof SemanticValue && equalTo((SemanticValue) other);
+            return other instanceof AiValue && equalTo((AiValue) other);
         }
 
-        private boolean equalTo(SemanticValue other) {
+        private boolean equalTo(AiValue other) {
             return value.equals(other.value);
         }
 
@@ -125,30 +147,31 @@ public final class EdgeCondition {
         }
     }
 
-    @JsonTypeName("programmatic")
-    private static final class ProgrammaticValue implements Value {
+    @JsonTypeName("logic")
+    @JsonIgnoreProperties("type")
+    private static final class LogicValue implements Value {
         @JsonUnwrapped
-        private ProgrammaticEdgeCondition value;
+        private LogicEdgeCondition value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private ProgrammaticValue() {}
+        private LogicValue() {}
 
-        private ProgrammaticValue(ProgrammaticEdgeCondition value) {
+        private LogicValue(LogicEdgeCondition value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitProgrammatic(value);
+            return visitor.visitLogic(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof ProgrammaticValue && equalTo((ProgrammaticValue) other);
+            return other instanceof LogicValue && equalTo((LogicValue) other);
         }
 
-        private boolean equalTo(ProgrammaticValue other) {
+        private boolean equalTo(LogicValue other) {
             return value.equals(other.value);
         }
 
@@ -163,6 +186,46 @@ public final class EdgeCondition {
         }
     }
 
+    @JsonTypeName("failed")
+    @JsonIgnoreProperties("type")
+    private static final class FailedValue implements Value {
+        @JsonUnwrapped
+        private FailedEdgeCondition value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private FailedValue() {}
+
+        private FailedValue(FailedEdgeCondition value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitFailed(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof FailedValue && equalTo((FailedValue) other);
+        }
+
+        private boolean equalTo(FailedValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "EdgeCondition{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

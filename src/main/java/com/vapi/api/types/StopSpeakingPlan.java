@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,16 +27,24 @@ public final class StopSpeakingPlan {
 
     private final Optional<Double> backoffSeconds;
 
+    private final Optional<List<String>> acknowledgementPhrases;
+
+    private final Optional<List<String>> interruptionPhrases;
+
     private final Map<String, Object> additionalProperties;
 
     private StopSpeakingPlan(
             Optional<Double> numWords,
             Optional<Double> voiceSeconds,
             Optional<Double> backoffSeconds,
+            Optional<List<String>> acknowledgementPhrases,
+            Optional<List<String>> interruptionPhrases,
             Map<String, Object> additionalProperties) {
         this.numWords = numWords;
         this.voiceSeconds = voiceSeconds;
         this.backoffSeconds = backoffSeconds;
+        this.acknowledgementPhrases = acknowledgementPhrases;
+        this.interruptionPhrases = interruptionPhrases;
         this.additionalProperties = additionalProperties;
     }
 
@@ -78,6 +87,24 @@ public final class StopSpeakingPlan {
         return backoffSeconds;
     }
 
+    /**
+     * @return These are the phrases that will never interrupt the assistant, even if numWords threshold is met.
+     * These are typically acknowledgement or backchanneling phrases.
+     */
+    @JsonProperty("acknowledgementPhrases")
+    public Optional<List<String>> getAcknowledgementPhrases() {
+        return acknowledgementPhrases;
+    }
+
+    /**
+     * @return These are the phrases that will always interrupt the assistant immediately, regardless of numWords.
+     * These are typically phrases indicating disagreement or desire to stop.
+     */
+    @JsonProperty("interruptionPhrases")
+    public Optional<List<String>> getInterruptionPhrases() {
+        return interruptionPhrases;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -92,12 +119,19 @@ public final class StopSpeakingPlan {
     private boolean equalTo(StopSpeakingPlan other) {
         return numWords.equals(other.numWords)
                 && voiceSeconds.equals(other.voiceSeconds)
-                && backoffSeconds.equals(other.backoffSeconds);
+                && backoffSeconds.equals(other.backoffSeconds)
+                && acknowledgementPhrases.equals(other.acknowledgementPhrases)
+                && interruptionPhrases.equals(other.interruptionPhrases);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.numWords, this.voiceSeconds, this.backoffSeconds);
+        return Objects.hash(
+                this.numWords,
+                this.voiceSeconds,
+                this.backoffSeconds,
+                this.acknowledgementPhrases,
+                this.interruptionPhrases);
     }
 
     @java.lang.Override
@@ -117,6 +151,10 @@ public final class StopSpeakingPlan {
 
         private Optional<Double> backoffSeconds = Optional.empty();
 
+        private Optional<List<String>> acknowledgementPhrases = Optional.empty();
+
+        private Optional<List<String>> interruptionPhrases = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -126,6 +164,8 @@ public final class StopSpeakingPlan {
             numWords(other.getNumWords());
             voiceSeconds(other.getVoiceSeconds());
             backoffSeconds(other.getBackoffSeconds());
+            acknowledgementPhrases(other.getAcknowledgementPhrases());
+            interruptionPhrases(other.getInterruptionPhrases());
             return this;
         }
 
@@ -162,8 +202,36 @@ public final class StopSpeakingPlan {
             return this;
         }
 
+        @JsonSetter(value = "acknowledgementPhrases", nulls = Nulls.SKIP)
+        public Builder acknowledgementPhrases(Optional<List<String>> acknowledgementPhrases) {
+            this.acknowledgementPhrases = acknowledgementPhrases;
+            return this;
+        }
+
+        public Builder acknowledgementPhrases(List<String> acknowledgementPhrases) {
+            this.acknowledgementPhrases = Optional.ofNullable(acknowledgementPhrases);
+            return this;
+        }
+
+        @JsonSetter(value = "interruptionPhrases", nulls = Nulls.SKIP)
+        public Builder interruptionPhrases(Optional<List<String>> interruptionPhrases) {
+            this.interruptionPhrases = interruptionPhrases;
+            return this;
+        }
+
+        public Builder interruptionPhrases(List<String> interruptionPhrases) {
+            this.interruptionPhrases = Optional.ofNullable(interruptionPhrases);
+            return this;
+        }
+
         public StopSpeakingPlan build() {
-            return new StopSpeakingPlan(numWords, voiceSeconds, backoffSeconds, additionalProperties);
+            return new StopSpeakingPlan(
+                    numWords,
+                    voiceSeconds,
+                    backoffSeconds,
+                    acknowledgementPhrases,
+                    interruptionPhrases,
+                    additionalProperties);
         }
     }
 }

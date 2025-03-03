@@ -88,6 +88,7 @@ public final class FormatPlanReplacementsItem {
     }
 
     @JsonTypeName("exact")
+    @JsonIgnoreProperties("type")
     private static final class ExactValue implements Value {
         @JsonUnwrapped
         private ExactReplacement value;
@@ -126,6 +127,7 @@ public final class FormatPlanReplacementsItem {
     }
 
     @JsonTypeName("regex")
+    @JsonIgnoreProperties("type")
     private static final class RegexValue implements Value {
         @JsonUnwrapped
         private RegexReplacement value;
@@ -163,6 +165,7 @@ public final class FormatPlanReplacementsItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

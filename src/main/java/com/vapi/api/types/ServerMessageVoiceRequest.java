@@ -74,6 +74,30 @@ public final class ServerMessageVoiceRequest {
     }
 
     /**
+     * @return This is the type of the message. &quot;voice-request&quot; is sent when using <code>assistant.voice={ &quot;type&quot;: &quot;custom-voice&quot; }</code>.
+     * <p>Here is what the request will look like:</p>
+     * <p>POST https://{assistant.voice.server.url}
+     * Content-Type: application/json</p>
+     * <p>{
+     * &quot;messsage&quot;: {
+     * &quot;type&quot;: &quot;voice-request&quot;,
+     * &quot;text&quot;: &quot;Hello, world!&quot;,
+     * &quot;sampleRate&quot;: 24000,
+     * ...other metadata about the call...
+     * }
+     * }</p>
+     * <p>The expected response is 1-channel 16-bit raw PCM audio at the sample rate specified in the request. Here is how the response will be piped to the transport:</p>
+     * <pre><code>response.on('data', (chunk: Buffer) =&gt; {
+     *   outputStream.write(chunk);
+     * });
+     * </code></pre>
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "voice-request";
+    }
+
+    /**
      * @return This is the ISO-8601 formatted timestamp of when the message was sent.
      */
     @JsonProperty("timestamp")

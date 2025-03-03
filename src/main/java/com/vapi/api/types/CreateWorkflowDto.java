@@ -41,11 +41,6 @@ public final class CreateWorkflowDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("type")
-    public String getType() {
-        return "workflow";
-    }
-
     @JsonProperty("nodes")
     public List<CreateWorkflowDtoNodesItem> getNodes() {
         return nodes;

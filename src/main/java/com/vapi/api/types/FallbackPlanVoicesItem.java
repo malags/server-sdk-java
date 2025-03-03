@@ -271,6 +271,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("azure")
+    @JsonIgnoreProperties("provider")
     private static final class AzureValue implements Value {
         @JsonUnwrapped
         private FallbackAzureVoice value;
@@ -309,6 +310,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("cartesia")
+    @JsonIgnoreProperties("provider")
     private static final class CartesiaValue implements Value {
         @JsonUnwrapped
         private FallbackCartesiaVoice value;
@@ -347,6 +349,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("custom-voice")
+    @JsonIgnoreProperties("provider")
     private static final class CustomVoiceValue implements Value {
         @JsonUnwrapped
         private FallbackCustomVoice value;
@@ -385,6 +388,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("deepgram")
+    @JsonIgnoreProperties("provider")
     private static final class DeepgramValue implements Value {
         @JsonUnwrapped
         private FallbackDeepgramVoice value;
@@ -423,6 +427,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("11labs")
+    @JsonIgnoreProperties("provider")
     private static final class _11LabsValue implements Value {
         @JsonUnwrapped
         private FallbackElevenLabsVoice value;
@@ -461,6 +466,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("lmnt")
+    @JsonIgnoreProperties("provider")
     private static final class LmntValue implements Value {
         @JsonUnwrapped
         private FallbackLmntVoice value;
@@ -499,6 +505,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("neets")
+    @JsonIgnoreProperties("provider")
     private static final class NeetsValue implements Value {
         @JsonUnwrapped
         private FallbackNeetsVoice value;
@@ -537,6 +544,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("openai")
+    @JsonIgnoreProperties("provider")
     private static final class OpenaiValue implements Value {
         @JsonUnwrapped
         private FallbackOpenAiVoice value;
@@ -575,6 +583,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("playht")
+    @JsonIgnoreProperties("provider")
     private static final class PlayhtValue implements Value {
         @JsonUnwrapped
         private FallbackPlayHtVoice value;
@@ -613,6 +622,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("rime-ai")
+    @JsonIgnoreProperties("provider")
     private static final class RimeAiValue implements Value {
         @JsonUnwrapped
         private FallbackRimeAiVoice value;
@@ -651,6 +661,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("smallest-ai")
+    @JsonIgnoreProperties("provider")
     private static final class SmallestAiValue implements Value {
         @JsonUnwrapped
         private FallbackSmallestAiVoice value;
@@ -689,6 +700,7 @@ public final class FallbackPlanVoicesItem {
     }
 
     @JsonTypeName("tavus")
+    @JsonIgnoreProperties("provider")
     private static final class TavusValue implements Value {
         @JsonUnwrapped
         private FallbackTavusVoice value;
@@ -726,6 +738,7 @@ public final class FallbackPlanVoicesItem {
         }
     }
 
+    @JsonIgnoreProperties("provider")
     private static final class _UnknownValue implements Value {
         private String type;
 

@@ -22,11 +22,16 @@ import java.util.Optional;
 public final class ClientInboundMessageTransfer {
     private final Optional<ClientInboundMessageTransferDestination> destination;
 
+    private final Optional<String> content;
+
     private final Map<String, Object> additionalProperties;
 
     private ClientInboundMessageTransfer(
-            Optional<ClientInboundMessageTransferDestination> destination, Map<String, Object> additionalProperties) {
+            Optional<ClientInboundMessageTransferDestination> destination,
+            Optional<String> content,
+            Map<String, Object> additionalProperties) {
         this.destination = destination;
+        this.content = content;
         this.additionalProperties = additionalProperties;
     }
 
@@ -36,6 +41,14 @@ public final class ClientInboundMessageTransfer {
     @JsonProperty("destination")
     public Optional<ClientInboundMessageTransferDestination> getDestination() {
         return destination;
+    }
+
+    /**
+     * @return This is the content to say.
+     */
+    @JsonProperty("content")
+    public Optional<String> getContent() {
+        return content;
     }
 
     @java.lang.Override
@@ -50,12 +63,12 @@ public final class ClientInboundMessageTransfer {
     }
 
     private boolean equalTo(ClientInboundMessageTransfer other) {
-        return destination.equals(other.destination);
+        return destination.equals(other.destination) && content.equals(other.content);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.destination);
+        return Objects.hash(this.destination, this.content);
     }
 
     @java.lang.Override
@@ -71,6 +84,8 @@ public final class ClientInboundMessageTransfer {
     public static final class Builder {
         private Optional<ClientInboundMessageTransferDestination> destination = Optional.empty();
 
+        private Optional<String> content = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -78,6 +93,7 @@ public final class ClientInboundMessageTransfer {
 
         public Builder from(ClientInboundMessageTransfer other) {
             destination(other.getDestination());
+            content(other.getContent());
             return this;
         }
 
@@ -92,8 +108,19 @@ public final class ClientInboundMessageTransfer {
             return this;
         }
 
+        @JsonSetter(value = "content", nulls = Nulls.SKIP)
+        public Builder content(Optional<String> content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder content(String content) {
+            this.content = Optional.ofNullable(content);
+            return this;
+        }
+
         public ClientInboundMessageTransfer build() {
-            return new ClientInboundMessageTransfer(destination, additionalProperties);
+            return new ClientInboundMessageTransfer(destination, content, additionalProperties);
         }
     }
 }

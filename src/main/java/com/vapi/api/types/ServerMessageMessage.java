@@ -3,1041 +3,272 @@
  */
 package com.vapi.api.types;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.vapi.api.core.ObjectMappers;
+import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
+@JsonDeserialize(using = ServerMessageMessage.Deserializer.class)
 public final class ServerMessageMessage {
-    private final Value value;
+    private final Object value;
 
-    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    private ServerMessageMessage(Value value) {
+    private final int type;
+
+    private ServerMessageMessage(Object value, int type) {
         this.value = value;
-    }
-
-    public <T> T visit(Visitor<T> visitor) {
-        return value.visit(visitor);
-    }
-
-    public static ServerMessageMessage assistantRequest(ServerMessageAssistantRequest value) {
-        return new ServerMessageMessage(new AssistantRequestValue(value));
-    }
-
-    public static ServerMessageMessage conversationUpdate(ServerMessageConversationUpdate value) {
-        return new ServerMessageMessage(new ConversationUpdateValue(value));
-    }
-
-    public static ServerMessageMessage endOfCallReport(ServerMessageEndOfCallReport value) {
-        return new ServerMessageMessage(new EndOfCallReportValue(value));
-    }
-
-    public static ServerMessageMessage hang(ServerMessageHang value) {
-        return new ServerMessageMessage(new HangValue(value));
-    }
-
-    public static ServerMessageMessage knowledgeBaseRequest(ServerMessageKnowledgeBaseRequest value) {
-        return new ServerMessageMessage(new KnowledgeBaseRequestValue(value));
-    }
-
-    public static ServerMessageMessage modelOutput(ServerMessageModelOutput value) {
-        return new ServerMessageMessage(new ModelOutputValue(value));
-    }
-
-    public static ServerMessageMessage phoneCallControl(ServerMessagePhoneCallControl value) {
-        return new ServerMessageMessage(new PhoneCallControlValue(value));
-    }
-
-    public static ServerMessageMessage speechUpdate(ServerMessageSpeechUpdate value) {
-        return new ServerMessageMessage(new SpeechUpdateValue(value));
-    }
-
-    public static ServerMessageMessage statusUpdate(ServerMessageStatusUpdate value) {
-        return new ServerMessageMessage(new StatusUpdateValue(value));
-    }
-
-    public static ServerMessageMessage toolCalls(ServerMessageToolCalls value) {
-        return new ServerMessageMessage(new ToolCallsValue(value));
-    }
-
-    public static ServerMessageMessage transferDestinationRequest(ServerMessageTransferDestinationRequest value) {
-        return new ServerMessageMessage(new TransferDestinationRequestValue(value));
-    }
-
-    public static ServerMessageMessage transferUpdate(ServerMessageTransferUpdate value) {
-        return new ServerMessageMessage(new TransferUpdateValue(value));
-    }
-
-    public static ServerMessageMessage transcript(ServerMessageTranscript value) {
-        return new ServerMessageMessage(new TranscriptValue(value));
-    }
-
-    public static ServerMessageMessage userInterrupted(ServerMessageUserInterrupted value) {
-        return new ServerMessageMessage(new UserInterruptedValue(value));
-    }
-
-    public static ServerMessageMessage languageChangeDetected(ServerMessageLanguageChangeDetected value) {
-        return new ServerMessageMessage(new LanguageChangeDetectedValue(value));
-    }
-
-    public static ServerMessageMessage voiceInput(ServerMessageVoiceInput value) {
-        return new ServerMessageMessage(new VoiceInputValue(value));
-    }
-
-    public static ServerMessageMessage voiceRequest(ServerMessageVoiceRequest value) {
-        return new ServerMessageMessage(new VoiceRequestValue(value));
-    }
-
-    public boolean isAssistantRequest() {
-        return value instanceof AssistantRequestValue;
-    }
-
-    public boolean isConversationUpdate() {
-        return value instanceof ConversationUpdateValue;
-    }
-
-    public boolean isEndOfCallReport() {
-        return value instanceof EndOfCallReportValue;
-    }
-
-    public boolean isHang() {
-        return value instanceof HangValue;
-    }
-
-    public boolean isKnowledgeBaseRequest() {
-        return value instanceof KnowledgeBaseRequestValue;
-    }
-
-    public boolean isModelOutput() {
-        return value instanceof ModelOutputValue;
-    }
-
-    public boolean isPhoneCallControl() {
-        return value instanceof PhoneCallControlValue;
-    }
-
-    public boolean isSpeechUpdate() {
-        return value instanceof SpeechUpdateValue;
-    }
-
-    public boolean isStatusUpdate() {
-        return value instanceof StatusUpdateValue;
-    }
-
-    public boolean isToolCalls() {
-        return value instanceof ToolCallsValue;
-    }
-
-    public boolean isTransferDestinationRequest() {
-        return value instanceof TransferDestinationRequestValue;
-    }
-
-    public boolean isTransferUpdate() {
-        return value instanceof TransferUpdateValue;
-    }
-
-    public boolean isTranscript() {
-        return value instanceof TranscriptValue;
-    }
-
-    public boolean isUserInterrupted() {
-        return value instanceof UserInterruptedValue;
-    }
-
-    public boolean isLanguageChangeDetected() {
-        return value instanceof LanguageChangeDetectedValue;
-    }
-
-    public boolean isVoiceInput() {
-        return value instanceof VoiceInputValue;
-    }
-
-    public boolean isVoiceRequest() {
-        return value instanceof VoiceRequestValue;
-    }
-
-    public boolean _isUnknown() {
-        return value instanceof _UnknownValue;
-    }
-
-    public Optional<ServerMessageAssistantRequest> getAssistantRequest() {
-        if (isAssistantRequest()) {
-            return Optional.of(((AssistantRequestValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageConversationUpdate> getConversationUpdate() {
-        if (isConversationUpdate()) {
-            return Optional.of(((ConversationUpdateValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageEndOfCallReport> getEndOfCallReport() {
-        if (isEndOfCallReport()) {
-            return Optional.of(((EndOfCallReportValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageHang> getHang() {
-        if (isHang()) {
-            return Optional.of(((HangValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageKnowledgeBaseRequest> getKnowledgeBaseRequest() {
-        if (isKnowledgeBaseRequest()) {
-            return Optional.of(((KnowledgeBaseRequestValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageModelOutput> getModelOutput() {
-        if (isModelOutput()) {
-            return Optional.of(((ModelOutputValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessagePhoneCallControl> getPhoneCallControl() {
-        if (isPhoneCallControl()) {
-            return Optional.of(((PhoneCallControlValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageSpeechUpdate> getSpeechUpdate() {
-        if (isSpeechUpdate()) {
-            return Optional.of(((SpeechUpdateValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageStatusUpdate> getStatusUpdate() {
-        if (isStatusUpdate()) {
-            return Optional.of(((StatusUpdateValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageToolCalls> getToolCalls() {
-        if (isToolCalls()) {
-            return Optional.of(((ToolCallsValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageTransferDestinationRequest> getTransferDestinationRequest() {
-        if (isTransferDestinationRequest()) {
-            return Optional.of(((TransferDestinationRequestValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageTransferUpdate> getTransferUpdate() {
-        if (isTransferUpdate()) {
-            return Optional.of(((TransferUpdateValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageTranscript> getTranscript() {
-        if (isTranscript()) {
-            return Optional.of(((TranscriptValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageUserInterrupted> getUserInterrupted() {
-        if (isUserInterrupted()) {
-            return Optional.of(((UserInterruptedValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageLanguageChangeDetected> getLanguageChangeDetected() {
-        if (isLanguageChangeDetected()) {
-            return Optional.of(((LanguageChangeDetectedValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageVoiceInput> getVoiceInput() {
-        if (isVoiceInput()) {
-            return Optional.of(((VoiceInputValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<ServerMessageVoiceRequest> getVoiceRequest() {
-        if (isVoiceRequest()) {
-            return Optional.of(((VoiceRequestValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<Object> _getUnknown() {
-        if (_isUnknown()) {
-            return Optional.of(((_UnknownValue) value).value);
-        }
-        return Optional.empty();
+        this.type = type;
     }
 
     @JsonValue
-    private Value getValue() {
+    public Object get() {
         return this.value;
     }
 
+    public <T> T visit(Visitor<T> visitor) {
+        if (this.type == 0) {
+            return visitor.visit((ServerMessageAssistantRequest) this.value);
+        } else if (this.type == 1) {
+            return visitor.visit((ServerMessageConversationUpdate) this.value);
+        } else if (this.type == 2) {
+            return visitor.visit((ServerMessageEndOfCallReport) this.value);
+        } else if (this.type == 3) {
+            return visitor.visit((ServerMessageHang) this.value);
+        } else if (this.type == 4) {
+            return visitor.visit((ServerMessageKnowledgeBaseRequest) this.value);
+        } else if (this.type == 5) {
+            return visitor.visit((ServerMessageModelOutput) this.value);
+        } else if (this.type == 6) {
+            return visitor.visit((ServerMessagePhoneCallControl) this.value);
+        } else if (this.type == 7) {
+            return visitor.visit((ServerMessageSpeechUpdate) this.value);
+        } else if (this.type == 8) {
+            return visitor.visit((ServerMessageStatusUpdate) this.value);
+        } else if (this.type == 9) {
+            return visitor.visit((ServerMessageToolCalls) this.value);
+        } else if (this.type == 10) {
+            return visitor.visit((ServerMessageTransferDestinationRequest) this.value);
+        } else if (this.type == 11) {
+            return visitor.visit((ServerMessageTransferUpdate) this.value);
+        } else if (this.type == 12) {
+            return visitor.visit((ServerMessageTranscript) this.value);
+        } else if (this.type == 13) {
+            return visitor.visit((ServerMessageUserInterrupted) this.value);
+        } else if (this.type == 14) {
+            return visitor.visit((ServerMessageLanguageChangeDetected) this.value);
+        } else if (this.type == 15) {
+            return visitor.visit((ServerMessageVoiceInput) this.value);
+        } else if (this.type == 16) {
+            return visitor.visit((ServerMessageVoiceRequest) this.value);
+        }
+        throw new IllegalStateException("Failed to visit value. This should never happen.");
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        return other instanceof ServerMessageMessage && equalTo((ServerMessageMessage) other);
+    }
+
+    private boolean equalTo(ServerMessageMessage other) {
+        return value.equals(other.value);
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return Objects.hash(this.value);
+    }
+
+    @java.lang.Override
+    public String toString() {
+        return this.value.toString();
+    }
+
+    public static ServerMessageMessage of(ServerMessageAssistantRequest value) {
+        return new ServerMessageMessage(value, 0);
+    }
+
+    public static ServerMessageMessage of(ServerMessageConversationUpdate value) {
+        return new ServerMessageMessage(value, 1);
+    }
+
+    public static ServerMessageMessage of(ServerMessageEndOfCallReport value) {
+        return new ServerMessageMessage(value, 2);
+    }
+
+    public static ServerMessageMessage of(ServerMessageHang value) {
+        return new ServerMessageMessage(value, 3);
+    }
+
+    public static ServerMessageMessage of(ServerMessageKnowledgeBaseRequest value) {
+        return new ServerMessageMessage(value, 4);
+    }
+
+    public static ServerMessageMessage of(ServerMessageModelOutput value) {
+        return new ServerMessageMessage(value, 5);
+    }
+
+    public static ServerMessageMessage of(ServerMessagePhoneCallControl value) {
+        return new ServerMessageMessage(value, 6);
+    }
+
+    public static ServerMessageMessage of(ServerMessageSpeechUpdate value) {
+        return new ServerMessageMessage(value, 7);
+    }
+
+    public static ServerMessageMessage of(ServerMessageStatusUpdate value) {
+        return new ServerMessageMessage(value, 8);
+    }
+
+    public static ServerMessageMessage of(ServerMessageToolCalls value) {
+        return new ServerMessageMessage(value, 9);
+    }
+
+    public static ServerMessageMessage of(ServerMessageTransferDestinationRequest value) {
+        return new ServerMessageMessage(value, 10);
+    }
+
+    public static ServerMessageMessage of(ServerMessageTransferUpdate value) {
+        return new ServerMessageMessage(value, 11);
+    }
+
+    public static ServerMessageMessage of(ServerMessageTranscript value) {
+        return new ServerMessageMessage(value, 12);
+    }
+
+    public static ServerMessageMessage of(ServerMessageUserInterrupted value) {
+        return new ServerMessageMessage(value, 13);
+    }
+
+    public static ServerMessageMessage of(ServerMessageLanguageChangeDetected value) {
+        return new ServerMessageMessage(value, 14);
+    }
+
+    public static ServerMessageMessage of(ServerMessageVoiceInput value) {
+        return new ServerMessageMessage(value, 15);
+    }
+
+    public static ServerMessageMessage of(ServerMessageVoiceRequest value) {
+        return new ServerMessageMessage(value, 16);
+    }
+
     public interface Visitor<T> {
-        T visitAssistantRequest(ServerMessageAssistantRequest assistantRequest);
+        T visit(ServerMessageAssistantRequest value);
 
-        T visitConversationUpdate(ServerMessageConversationUpdate conversationUpdate);
+        T visit(ServerMessageConversationUpdate value);
 
-        T visitEndOfCallReport(ServerMessageEndOfCallReport endOfCallReport);
+        T visit(ServerMessageEndOfCallReport value);
 
-        T visitHang(ServerMessageHang hang);
+        T visit(ServerMessageHang value);
 
-        T visitKnowledgeBaseRequest(ServerMessageKnowledgeBaseRequest knowledgeBaseRequest);
+        T visit(ServerMessageKnowledgeBaseRequest value);
 
-        T visitModelOutput(ServerMessageModelOutput modelOutput);
+        T visit(ServerMessageModelOutput value);
 
-        T visitPhoneCallControl(ServerMessagePhoneCallControl phoneCallControl);
+        T visit(ServerMessagePhoneCallControl value);
 
-        T visitSpeechUpdate(ServerMessageSpeechUpdate speechUpdate);
+        T visit(ServerMessageSpeechUpdate value);
 
-        T visitStatusUpdate(ServerMessageStatusUpdate statusUpdate);
+        T visit(ServerMessageStatusUpdate value);
 
-        T visitToolCalls(ServerMessageToolCalls toolCalls);
+        T visit(ServerMessageToolCalls value);
 
-        T visitTransferDestinationRequest(ServerMessageTransferDestinationRequest transferDestinationRequest);
+        T visit(ServerMessageTransferDestinationRequest value);
 
-        T visitTransferUpdate(ServerMessageTransferUpdate transferUpdate);
+        T visit(ServerMessageTransferUpdate value);
 
-        T visitTranscript(ServerMessageTranscript transcript);
+        T visit(ServerMessageTranscript value);
 
-        T visitUserInterrupted(ServerMessageUserInterrupted userInterrupted);
+        T visit(ServerMessageUserInterrupted value);
 
-        T visitLanguageChangeDetected(ServerMessageLanguageChangeDetected languageChangeDetected);
+        T visit(ServerMessageLanguageChangeDetected value);
 
-        T visitVoiceInput(ServerMessageVoiceInput voiceInput);
+        T visit(ServerMessageVoiceInput value);
 
-        T visitVoiceRequest(ServerMessageVoiceRequest voiceRequest);
-
-        T _visitUnknown(Object unknownType);
+        T visit(ServerMessageVoiceRequest value);
     }
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({
-        @JsonSubTypes.Type(AssistantRequestValue.class),
-        @JsonSubTypes.Type(ConversationUpdateValue.class),
-        @JsonSubTypes.Type(EndOfCallReportValue.class),
-        @JsonSubTypes.Type(HangValue.class),
-        @JsonSubTypes.Type(KnowledgeBaseRequestValue.class),
-        @JsonSubTypes.Type(ModelOutputValue.class),
-        @JsonSubTypes.Type(PhoneCallControlValue.class),
-        @JsonSubTypes.Type(SpeechUpdateValue.class),
-        @JsonSubTypes.Type(StatusUpdateValue.class),
-        @JsonSubTypes.Type(ToolCallsValue.class),
-        @JsonSubTypes.Type(TransferDestinationRequestValue.class),
-        @JsonSubTypes.Type(TransferUpdateValue.class),
-        @JsonSubTypes.Type(TranscriptValue.class),
-        @JsonSubTypes.Type(UserInterruptedValue.class),
-        @JsonSubTypes.Type(LanguageChangeDetectedValue.class),
-        @JsonSubTypes.Type(VoiceInputValue.class),
-        @JsonSubTypes.Type(VoiceRequestValue.class)
-    })
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private interface Value {
-        <T> T visit(Visitor<T> visitor);
-    }
-
-    @JsonTypeName("assistant-request")
-    private static final class AssistantRequestValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageAssistantRequest value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private AssistantRequestValue() {}
-
-        private AssistantRequestValue(ServerMessageAssistantRequest value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitAssistantRequest(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof AssistantRequestValue && equalTo((AssistantRequestValue) other);
-        }
-
-        private boolean equalTo(AssistantRequestValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("conversation-update")
-    private static final class ConversationUpdateValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageConversationUpdate value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private ConversationUpdateValue() {}
-
-        private ConversationUpdateValue(ServerMessageConversationUpdate value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitConversationUpdate(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof ConversationUpdateValue && equalTo((ConversationUpdateValue) other);
-        }
-
-        private boolean equalTo(ConversationUpdateValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("end-of-call-report")
-    private static final class EndOfCallReportValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageEndOfCallReport value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private EndOfCallReportValue() {}
-
-        private EndOfCallReportValue(ServerMessageEndOfCallReport value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitEndOfCallReport(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof EndOfCallReportValue && equalTo((EndOfCallReportValue) other);
-        }
-
-        private boolean equalTo(EndOfCallReportValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("hang")
-    private static final class HangValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageHang value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private HangValue() {}
-
-        private HangValue(ServerMessageHang value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitHang(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof HangValue && equalTo((HangValue) other);
-        }
-
-        private boolean equalTo(HangValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("knowledge-base-request")
-    private static final class KnowledgeBaseRequestValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageKnowledgeBaseRequest value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private KnowledgeBaseRequestValue() {}
-
-        private KnowledgeBaseRequestValue(ServerMessageKnowledgeBaseRequest value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitKnowledgeBaseRequest(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof KnowledgeBaseRequestValue && equalTo((KnowledgeBaseRequestValue) other);
-        }
-
-        private boolean equalTo(KnowledgeBaseRequestValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("model-output")
-    private static final class ModelOutputValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageModelOutput value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private ModelOutputValue() {}
-
-        private ModelOutputValue(ServerMessageModelOutput value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitModelOutput(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof ModelOutputValue && equalTo((ModelOutputValue) other);
-        }
-
-        private boolean equalTo(ModelOutputValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("phone-call-control")
-    private static final class PhoneCallControlValue implements Value {
-        @JsonUnwrapped
-        private ServerMessagePhoneCallControl value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private PhoneCallControlValue() {}
-
-        private PhoneCallControlValue(ServerMessagePhoneCallControl value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitPhoneCallControl(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof PhoneCallControlValue && equalTo((PhoneCallControlValue) other);
-        }
-
-        private boolean equalTo(PhoneCallControlValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("speech-update")
-    private static final class SpeechUpdateValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageSpeechUpdate value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private SpeechUpdateValue() {}
-
-        private SpeechUpdateValue(ServerMessageSpeechUpdate value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitSpeechUpdate(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof SpeechUpdateValue && equalTo((SpeechUpdateValue) other);
-        }
-
-        private boolean equalTo(SpeechUpdateValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("status-update")
-    private static final class StatusUpdateValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageStatusUpdate value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private StatusUpdateValue() {}
-
-        private StatusUpdateValue(ServerMessageStatusUpdate value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitStatusUpdate(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof StatusUpdateValue && equalTo((StatusUpdateValue) other);
-        }
-
-        private boolean equalTo(StatusUpdateValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("tool-calls")
-    private static final class ToolCallsValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageToolCalls value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private ToolCallsValue() {}
-
-        private ToolCallsValue(ServerMessageToolCalls value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitToolCalls(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof ToolCallsValue && equalTo((ToolCallsValue) other);
-        }
-
-        private boolean equalTo(ToolCallsValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("transfer-destination-request")
-    private static final class TransferDestinationRequestValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageTransferDestinationRequest value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private TransferDestinationRequestValue() {}
-
-        private TransferDestinationRequestValue(ServerMessageTransferDestinationRequest value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitTransferDestinationRequest(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof TransferDestinationRequestValue && equalTo((TransferDestinationRequestValue) other);
-        }
-
-        private boolean equalTo(TransferDestinationRequestValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("transfer-update")
-    private static final class TransferUpdateValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageTransferUpdate value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private TransferUpdateValue() {}
-
-        private TransferUpdateValue(ServerMessageTransferUpdate value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitTransferUpdate(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof TransferUpdateValue && equalTo((TransferUpdateValue) other);
-        }
-
-        private boolean equalTo(TransferUpdateValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("transcript")
-    private static final class TranscriptValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageTranscript value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private TranscriptValue() {}
-
-        private TranscriptValue(ServerMessageTranscript value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitTranscript(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof TranscriptValue && equalTo((TranscriptValue) other);
-        }
-
-        private boolean equalTo(TranscriptValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("user-interrupted")
-    private static final class UserInterruptedValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageUserInterrupted value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private UserInterruptedValue() {}
-
-        private UserInterruptedValue(ServerMessageUserInterrupted value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitUserInterrupted(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof UserInterruptedValue && equalTo((UserInterruptedValue) other);
-        }
-
-        private boolean equalTo(UserInterruptedValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("language-change-detected")
-    private static final class LanguageChangeDetectedValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageLanguageChangeDetected value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private LanguageChangeDetectedValue() {}
-
-        private LanguageChangeDetectedValue(ServerMessageLanguageChangeDetected value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitLanguageChangeDetected(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof LanguageChangeDetectedValue && equalTo((LanguageChangeDetectedValue) other);
-        }
-
-        private boolean equalTo(LanguageChangeDetectedValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("voice-input")
-    private static final class VoiceInputValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageVoiceInput value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private VoiceInputValue() {}
-
-        private VoiceInputValue(ServerMessageVoiceInput value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitVoiceInput(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof VoiceInputValue && equalTo((VoiceInputValue) other);
-        }
-
-        private boolean equalTo(VoiceInputValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("voice-request")
-    private static final class VoiceRequestValue implements Value {
-        @JsonUnwrapped
-        private ServerMessageVoiceRequest value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private VoiceRequestValue() {}
-
-        private VoiceRequestValue(ServerMessageVoiceRequest value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitVoiceRequest(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof VoiceRequestValue && equalTo((VoiceRequestValue) other);
-        }
-
-        private boolean equalTo(VoiceRequestValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "value: " + value + "}";
-        }
-    }
-
-    private static final class _UnknownValue implements Value {
-        private String type;
-
-        @JsonValue
-        private Object value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private _UnknownValue(@JsonProperty("value") Object value) {}
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor._visitUnknown(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof _UnknownValue && equalTo((_UnknownValue) other);
-        }
-
-        private boolean equalTo(_UnknownValue other) {
-            return type.equals(other.type) && value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.type, this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageMessage{" + "type: " + type + ", value: " + value + "}";
+    static final class Deserializer extends StdDeserializer<ServerMessageMessage> {
+        Deserializer() {
+            super(ServerMessageMessage.class);
+        }
+
+        @java.lang.Override
+        public ServerMessageMessage deserialize(JsonParser p, DeserializationContext context) throws IOException {
+            Object value = p.readValueAs(Object.class);
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageAssistantRequest.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageConversationUpdate.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageEndOfCallReport.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageHang.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageKnowledgeBaseRequest.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageModelOutput.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessagePhoneCallControl.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageSpeechUpdate.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageStatusUpdate.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageToolCalls.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageTransferDestinationRequest.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageTransferUpdate.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageTranscript.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageUserInterrupted.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageLanguageChangeDetected.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageVoiceInput.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageVoiceRequest.class));
+            } catch (IllegalArgumentException e) {
+            }
+            throw new JsonParseException(p, "Failed to deserialize");
         }
     }
 }

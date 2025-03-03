@@ -167,7 +167,7 @@ public final class LogsGetRequest {
     }
 
     /**
-     * @return This is the sort order for pagination. Defaults to 'ASC'.
+     * @return This is the sort order for pagination. Defaults to 'DESC'.
      */
     @JsonProperty("sortOrder")
     public Optional<LogsGetRequestSortOrder> getSortOrder() {

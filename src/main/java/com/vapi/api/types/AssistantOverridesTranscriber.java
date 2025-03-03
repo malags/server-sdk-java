@@ -163,6 +163,7 @@ public final class AssistantOverridesTranscriber {
     }
 
     @JsonTypeName("assembly-ai")
+    @JsonIgnoreProperties("provider")
     private static final class AssemblyAiValue implements Value {
         @JsonUnwrapped
         private AssemblyAiTranscriber value;
@@ -201,6 +202,7 @@ public final class AssistantOverridesTranscriber {
     }
 
     @JsonTypeName("azure")
+    @JsonIgnoreProperties("provider")
     private static final class AzureValue implements Value {
         @JsonUnwrapped
         private AzureSpeechTranscriber value;
@@ -239,6 +241,7 @@ public final class AssistantOverridesTranscriber {
     }
 
     @JsonTypeName("custom-transcriber")
+    @JsonIgnoreProperties("provider")
     private static final class CustomTranscriberValue implements Value {
         @JsonUnwrapped
         private CustomTranscriber value;
@@ -277,6 +280,7 @@ public final class AssistantOverridesTranscriber {
     }
 
     @JsonTypeName("deepgram")
+    @JsonIgnoreProperties("provider")
     private static final class DeepgramValue implements Value {
         @JsonUnwrapped
         private DeepgramTranscriber value;
@@ -315,6 +319,7 @@ public final class AssistantOverridesTranscriber {
     }
 
     @JsonTypeName("gladia")
+    @JsonIgnoreProperties("provider")
     private static final class GladiaValue implements Value {
         @JsonUnwrapped
         private GladiaTranscriber value;
@@ -353,6 +358,7 @@ public final class AssistantOverridesTranscriber {
     }
 
     @JsonTypeName("talkscriber")
+    @JsonIgnoreProperties("provider")
     private static final class TalkscriberValue implements Value {
         @JsonUnwrapped
         private TalkscriberTranscriber value;
@@ -390,6 +396,7 @@ public final class AssistantOverridesTranscriber {
         }
     }
 
+    @JsonIgnoreProperties("provider")
     private static final class _UnknownValue implements Value {
         private String type;
 

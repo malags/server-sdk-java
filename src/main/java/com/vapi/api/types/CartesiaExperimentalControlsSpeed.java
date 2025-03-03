@@ -5,16 +5,20 @@ package com.vapi.api.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum OrgWithOrgUserRole {
-    ADMIN("admin"),
+public enum CartesiaExperimentalControlsSpeed {
+    SLOWEST("slowest"),
 
-    EDITOR("editor"),
+    SLOW("slow"),
 
-    VIEWER("viewer");
+    NORMAL("normal"),
+
+    FAST("fast"),
+
+    FASTEST("fastest");
 
     private final String value;
 
-    OrgWithOrgUserRole(String value) {
+    CartesiaExperimentalControlsSpeed(String value) {
         this.value = value;
     }
 

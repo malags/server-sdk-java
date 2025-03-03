@@ -32,6 +32,8 @@ public final class TwilioPhoneNumber {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<TwilioPhoneNumberStatus> status;
+
     private final Optional<String> name;
 
     private final Optional<String> assistantId;
@@ -54,6 +56,7 @@ public final class TwilioPhoneNumber {
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<TwilioPhoneNumberStatus> status,
             Optional<String> name,
             Optional<String> assistantId,
             Optional<String> squadId,
@@ -67,6 +70,7 @@ public final class TwilioPhoneNumber {
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.status = status;
         this.name = name;
         this.assistantId = assistantId;
         this.squadId = squadId;
@@ -121,6 +125,14 @@ public final class TwilioPhoneNumber {
     @JsonProperty("updatedAt")
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    /**
+     * @return This is the status of the phone number.
+     */
+    @JsonProperty("status")
+    public Optional<TwilioPhoneNumberStatus> getStatus() {
+        return status;
     }
 
     /**
@@ -204,6 +216,7 @@ public final class TwilioPhoneNumber {
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && status.equals(other.status)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
                 && squadId.equals(other.squadId)
@@ -221,6 +234,7 @@ public final class TwilioPhoneNumber {
                 this.orgId,
                 this.createdAt,
                 this.updatedAt,
+                this.status,
                 this.name,
                 this.assistantId,
                 this.squadId,
@@ -276,6 +290,10 @@ public final class TwilioPhoneNumber {
 
         _FinalStage fallbackDestination(TwilioPhoneNumberFallbackDestination fallbackDestination);
 
+        _FinalStage status(Optional<TwilioPhoneNumberStatus> status);
+
+        _FinalStage status(TwilioPhoneNumberStatus status);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -325,6 +343,8 @@ public final class TwilioPhoneNumber {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<TwilioPhoneNumberStatus> status = Optional.empty();
+
         private Optional<TwilioPhoneNumberFallbackDestination> fallbackDestination = Optional.empty();
 
         @JsonAnySetter
@@ -339,6 +359,7 @@ public final class TwilioPhoneNumber {
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            status(other.getStatus());
             name(other.getName());
             assistantId(other.getAssistantId());
             squadId(other.getSquadId());
@@ -503,6 +524,23 @@ public final class TwilioPhoneNumber {
         }
 
         /**
+         * <p>This is the status of the phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage status(TwilioPhoneNumberStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<TwilioPhoneNumberStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        /**
          * <p>This is the fallback destination an inbound call will be transferred to if:</p>
          * <ol>
          * <li><code>assistantId</code> is not set</li>
@@ -533,6 +571,7 @@ public final class TwilioPhoneNumber {
                     orgId,
                     createdAt,
                     updatedAt,
+                    status,
                     name,
                     assistantId,
                     squadId,

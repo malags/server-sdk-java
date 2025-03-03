@@ -31,8 +31,6 @@ public final class AssistantOverrides {
 
     private final Optional<AssistantOverridesFirstMessageMode> firstMessageMode;
 
-    private final Optional<Boolean> hipaaEnabled;
-
     private final Optional<List<AssistantOverridesClientMessagesItem>> clientMessages;
 
     private final Optional<List<AssistantOverridesServerMessagesItem>> serverMessages;
@@ -63,6 +61,8 @@ public final class AssistantOverrides {
 
     private final Optional<List<String>> endCallPhrases;
 
+    private final Optional<CompliancePlan> compliancePlan;
+
     private final Optional<Map<String, Object>> metadata;
 
     private final Optional<AnalysisPlan> analysisPlan;
@@ -81,6 +81,8 @@ public final class AssistantOverrides {
 
     private final Optional<Server> server;
 
+    private final Optional<List<AssistantHooks>> hooks;
+
     private final Map<String, Object> additionalProperties;
 
     private AssistantOverrides(
@@ -89,7 +91,6 @@ public final class AssistantOverrides {
             Optional<AssistantOverridesVoice> voice,
             Optional<String> firstMessage,
             Optional<AssistantOverridesFirstMessageMode> firstMessageMode,
-            Optional<Boolean> hipaaEnabled,
             Optional<List<AssistantOverridesClientMessagesItem>> clientMessages,
             Optional<List<AssistantOverridesServerMessagesItem>> serverMessages,
             Optional<Double> silenceTimeoutSeconds,
@@ -105,6 +106,7 @@ public final class AssistantOverrides {
             Optional<String> voicemailMessage,
             Optional<String> endCallMessage,
             Optional<List<String>> endCallPhrases,
+            Optional<CompliancePlan> compliancePlan,
             Optional<Map<String, Object>> metadata,
             Optional<AnalysisPlan> analysisPlan,
             Optional<ArtifactPlan> artifactPlan,
@@ -114,13 +116,13 @@ public final class AssistantOverrides {
             Optional<MonitorPlan> monitorPlan,
             Optional<List<String>> credentialIds,
             Optional<Server> server,
+            Optional<List<AssistantHooks>> hooks,
             Map<String, Object> additionalProperties) {
         this.transcriber = transcriber;
         this.model = model;
         this.voice = voice;
         this.firstMessage = firstMessage;
         this.firstMessageMode = firstMessageMode;
-        this.hipaaEnabled = hipaaEnabled;
         this.clientMessages = clientMessages;
         this.serverMessages = serverMessages;
         this.silenceTimeoutSeconds = silenceTimeoutSeconds;
@@ -136,6 +138,7 @@ public final class AssistantOverrides {
         this.voicemailMessage = voicemailMessage;
         this.endCallMessage = endCallMessage;
         this.endCallPhrases = endCallPhrases;
+        this.compliancePlan = compliancePlan;
         this.metadata = metadata;
         this.analysisPlan = analysisPlan;
         this.artifactPlan = artifactPlan;
@@ -145,6 +148,7 @@ public final class AssistantOverrides {
         this.monitorPlan = monitorPlan;
         this.credentialIds = credentialIds;
         this.server = server;
+        this.hooks = hooks;
         this.additionalProperties = additionalProperties;
     }
 
@@ -194,14 +198,6 @@ public final class AssistantOverrides {
     @JsonProperty("firstMessageMode")
     public Optional<AssistantOverridesFirstMessageMode> getFirstMessageMode() {
         return firstMessageMode;
-    }
-
-    /**
-     * @return When this is enabled, no logs, recordings, or transcriptions will be stored. At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.
-     */
-    @JsonProperty("hipaaEnabled")
-    public Optional<Boolean> getHipaaEnabled() {
-        return hipaaEnabled;
     }
 
     /**
@@ -342,6 +338,11 @@ public final class AssistantOverrides {
         return endCallPhrases;
     }
 
+    @JsonProperty("compliancePlan")
+    public Optional<CompliancePlan> getCompliancePlan() {
+        return compliancePlan;
+    }
+
     /**
      * @return This is for metadata you want to store on the assistant.
      */
@@ -442,6 +443,14 @@ public final class AssistantOverrides {
         return server;
     }
 
+    /**
+     * @return This is a set of actions that will be performed on certain events.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<AssistantHooks>> getHooks() {
+        return hooks;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -459,7 +468,6 @@ public final class AssistantOverrides {
                 && voice.equals(other.voice)
                 && firstMessage.equals(other.firstMessage)
                 && firstMessageMode.equals(other.firstMessageMode)
-                && hipaaEnabled.equals(other.hipaaEnabled)
                 && clientMessages.equals(other.clientMessages)
                 && serverMessages.equals(other.serverMessages)
                 && silenceTimeoutSeconds.equals(other.silenceTimeoutSeconds)
@@ -475,6 +483,7 @@ public final class AssistantOverrides {
                 && voicemailMessage.equals(other.voicemailMessage)
                 && endCallMessage.equals(other.endCallMessage)
                 && endCallPhrases.equals(other.endCallPhrases)
+                && compliancePlan.equals(other.compliancePlan)
                 && metadata.equals(other.metadata)
                 && analysisPlan.equals(other.analysisPlan)
                 && artifactPlan.equals(other.artifactPlan)
@@ -483,7 +492,8 @@ public final class AssistantOverrides {
                 && stopSpeakingPlan.equals(other.stopSpeakingPlan)
                 && monitorPlan.equals(other.monitorPlan)
                 && credentialIds.equals(other.credentialIds)
-                && server.equals(other.server);
+                && server.equals(other.server)
+                && hooks.equals(other.hooks);
     }
 
     @java.lang.Override
@@ -494,7 +504,6 @@ public final class AssistantOverrides {
                 this.voice,
                 this.firstMessage,
                 this.firstMessageMode,
-                this.hipaaEnabled,
                 this.clientMessages,
                 this.serverMessages,
                 this.silenceTimeoutSeconds,
@@ -510,6 +519,7 @@ public final class AssistantOverrides {
                 this.voicemailMessage,
                 this.endCallMessage,
                 this.endCallPhrases,
+                this.compliancePlan,
                 this.metadata,
                 this.analysisPlan,
                 this.artifactPlan,
@@ -518,7 +528,8 @@ public final class AssistantOverrides {
                 this.stopSpeakingPlan,
                 this.monitorPlan,
                 this.credentialIds,
-                this.server);
+                this.server,
+                this.hooks);
     }
 
     @java.lang.Override
@@ -541,8 +552,6 @@ public final class AssistantOverrides {
         private Optional<String> firstMessage = Optional.empty();
 
         private Optional<AssistantOverridesFirstMessageMode> firstMessageMode = Optional.empty();
-
-        private Optional<Boolean> hipaaEnabled = Optional.empty();
 
         private Optional<List<AssistantOverridesClientMessagesItem>> clientMessages = Optional.empty();
 
@@ -574,6 +583,8 @@ public final class AssistantOverrides {
 
         private Optional<List<String>> endCallPhrases = Optional.empty();
 
+        private Optional<CompliancePlan> compliancePlan = Optional.empty();
+
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
         private Optional<AnalysisPlan> analysisPlan = Optional.empty();
@@ -592,6 +603,8 @@ public final class AssistantOverrides {
 
         private Optional<Server> server = Optional.empty();
 
+        private Optional<List<AssistantHooks>> hooks = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -603,7 +616,6 @@ public final class AssistantOverrides {
             voice(other.getVoice());
             firstMessage(other.getFirstMessage());
             firstMessageMode(other.getFirstMessageMode());
-            hipaaEnabled(other.getHipaaEnabled());
             clientMessages(other.getClientMessages());
             serverMessages(other.getServerMessages());
             silenceTimeoutSeconds(other.getSilenceTimeoutSeconds());
@@ -619,6 +631,7 @@ public final class AssistantOverrides {
             voicemailMessage(other.getVoicemailMessage());
             endCallMessage(other.getEndCallMessage());
             endCallPhrases(other.getEndCallPhrases());
+            compliancePlan(other.getCompliancePlan());
             metadata(other.getMetadata());
             analysisPlan(other.getAnalysisPlan());
             artifactPlan(other.getArtifactPlan());
@@ -628,6 +641,7 @@ public final class AssistantOverrides {
             monitorPlan(other.getMonitorPlan());
             credentialIds(other.getCredentialIds());
             server(other.getServer());
+            hooks(other.getHooks());
             return this;
         }
 
@@ -683,17 +697,6 @@ public final class AssistantOverrides {
 
         public Builder firstMessageMode(AssistantOverridesFirstMessageMode firstMessageMode) {
             this.firstMessageMode = Optional.ofNullable(firstMessageMode);
-            return this;
-        }
-
-        @JsonSetter(value = "hipaaEnabled", nulls = Nulls.SKIP)
-        public Builder hipaaEnabled(Optional<Boolean> hipaaEnabled) {
-            this.hipaaEnabled = hipaaEnabled;
-            return this;
-        }
-
-        public Builder hipaaEnabled(Boolean hipaaEnabled) {
-            this.hipaaEnabled = Optional.ofNullable(hipaaEnabled);
             return this;
         }
 
@@ -862,6 +865,17 @@ public final class AssistantOverrides {
             return this;
         }
 
+        @JsonSetter(value = "compliancePlan", nulls = Nulls.SKIP)
+        public Builder compliancePlan(Optional<CompliancePlan> compliancePlan) {
+            this.compliancePlan = compliancePlan;
+            return this;
+        }
+
+        public Builder compliancePlan(CompliancePlan compliancePlan) {
+            this.compliancePlan = Optional.ofNullable(compliancePlan);
+            return this;
+        }
+
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public Builder metadata(Optional<Map<String, Object>> metadata) {
             this.metadata = metadata;
@@ -961,6 +975,17 @@ public final class AssistantOverrides {
             return this;
         }
 
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public Builder hooks(Optional<List<AssistantHooks>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        public Builder hooks(List<AssistantHooks> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
         public AssistantOverrides build() {
             return new AssistantOverrides(
                     transcriber,
@@ -968,7 +993,6 @@ public final class AssistantOverrides {
                     voice,
                     firstMessage,
                     firstMessageMode,
-                    hipaaEnabled,
                     clientMessages,
                     serverMessages,
                     silenceTimeoutSeconds,
@@ -984,6 +1008,7 @@ public final class AssistantOverrides {
                     voicemailMessage,
                     endCallMessage,
                     endCallPhrases,
+                    compliancePlan,
                     metadata,
                     analysisPlan,
                     artifactPlan,
@@ -993,6 +1018,7 @@ public final class AssistantOverrides {
                     monitorPlan,
                     credentialIds,
                     server,
+                    hooks,
                     additionalProperties);
         }
     }

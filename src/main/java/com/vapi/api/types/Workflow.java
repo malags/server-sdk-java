@@ -58,11 +58,6 @@ public final class Workflow {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("type")
-    public String getType() {
-        return "workflow";
-    }
-
     @JsonProperty("nodes")
     public List<WorkflowNodesItem> getNodes() {
         return nodes;

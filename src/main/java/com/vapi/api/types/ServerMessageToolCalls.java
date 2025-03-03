@@ -24,6 +24,8 @@ import java.util.Optional;
 public final class ServerMessageToolCalls {
     private final Optional<ServerMessageToolCallsPhoneNumber> phoneNumber;
 
+    private final Optional<String> type;
+
     private final List<ServerMessageToolCallsToolWithToolCallListItem> toolWithToolCallList;
 
     private final Optional<String> timestamp;
@@ -42,6 +44,7 @@ public final class ServerMessageToolCalls {
 
     private ServerMessageToolCalls(
             Optional<ServerMessageToolCallsPhoneNumber> phoneNumber,
+            Optional<String> type,
             List<ServerMessageToolCallsToolWithToolCallListItem> toolWithToolCallList,
             Optional<String> timestamp,
             Optional<Artifact> artifact,
@@ -51,6 +54,7 @@ public final class ServerMessageToolCalls {
             List<ToolCall> toolCallList,
             Map<String, Object> additionalProperties) {
         this.phoneNumber = phoneNumber;
+        this.type = type;
         this.toolWithToolCallList = toolWithToolCallList;
         this.timestamp = timestamp;
         this.artifact = artifact;
@@ -72,6 +76,14 @@ public final class ServerMessageToolCalls {
     @JsonProperty("phoneNumber")
     public Optional<ServerMessageToolCallsPhoneNumber> getPhoneNumber() {
         return phoneNumber;
+    }
+
+    /**
+     * @return This is the type of the message. &quot;tool-calls&quot; is sent to call a tool.
+     */
+    @JsonProperty("type")
+    public Optional<String> getType() {
+        return type;
     }
 
     /**
@@ -160,6 +172,7 @@ public final class ServerMessageToolCalls {
 
     private boolean equalTo(ServerMessageToolCalls other) {
         return phoneNumber.equals(other.phoneNumber)
+                && type.equals(other.type)
                 && toolWithToolCallList.equals(other.toolWithToolCallList)
                 && timestamp.equals(other.timestamp)
                 && artifact.equals(other.artifact)
@@ -173,6 +186,7 @@ public final class ServerMessageToolCalls {
     public int hashCode() {
         return Objects.hash(
                 this.phoneNumber,
+                this.type,
                 this.toolWithToolCallList,
                 this.timestamp,
                 this.artifact,
@@ -195,6 +209,8 @@ public final class ServerMessageToolCalls {
     public static final class Builder {
         private Optional<ServerMessageToolCallsPhoneNumber> phoneNumber = Optional.empty();
 
+        private Optional<String> type = Optional.empty();
+
         private List<ServerMessageToolCallsToolWithToolCallListItem> toolWithToolCallList = new ArrayList<>();
 
         private Optional<String> timestamp = Optional.empty();
@@ -216,6 +232,7 @@ public final class ServerMessageToolCalls {
 
         public Builder from(ServerMessageToolCalls other) {
             phoneNumber(other.getPhoneNumber());
+            type(other.getType());
             toolWithToolCallList(other.getToolWithToolCallList());
             timestamp(other.getTimestamp());
             artifact(other.getArtifact());
@@ -234,6 +251,17 @@ public final class ServerMessageToolCalls {
 
         public Builder phoneNumber(ServerMessageToolCallsPhoneNumber phoneNumber) {
             this.phoneNumber = Optional.ofNullable(phoneNumber);
+            return this;
+        }
+
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<String> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(String type) {
+            this.type = Optional.ofNullable(type);
             return this;
         }
 
@@ -330,6 +358,7 @@ public final class ServerMessageToolCalls {
         public ServerMessageToolCalls build() {
             return new ServerMessageToolCalls(
                     phoneNumber,
+                    type,
                     toolWithToolCallList,
                     timestamp,
                     artifact,

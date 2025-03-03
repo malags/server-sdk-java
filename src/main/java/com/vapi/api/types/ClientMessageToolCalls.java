@@ -17,10 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageToolCalls.Builder.class)
 public final class ClientMessageToolCalls {
+    private final Optional<String> type;
+
     private final List<ClientMessageToolCallsToolWithToolCallListItem> toolWithToolCallList;
 
     private final List<ToolCall> toolCallList;
@@ -28,12 +31,22 @@ public final class ClientMessageToolCalls {
     private final Map<String, Object> additionalProperties;
 
     private ClientMessageToolCalls(
+            Optional<String> type,
             List<ClientMessageToolCallsToolWithToolCallListItem> toolWithToolCallList,
             List<ToolCall> toolCallList,
             Map<String, Object> additionalProperties) {
+        this.type = type;
         this.toolWithToolCallList = toolWithToolCallList;
         this.toolCallList = toolCallList;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the type of the message. &quot;tool-calls&quot; is sent to call a tool.
+     */
+    @JsonProperty("type")
+    public Optional<String> getType() {
+        return type;
     }
 
     /**
@@ -64,12 +77,14 @@ public final class ClientMessageToolCalls {
     }
 
     private boolean equalTo(ClientMessageToolCalls other) {
-        return toolWithToolCallList.equals(other.toolWithToolCallList) && toolCallList.equals(other.toolCallList);
+        return type.equals(other.type)
+                && toolWithToolCallList.equals(other.toolWithToolCallList)
+                && toolCallList.equals(other.toolCallList);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.toolWithToolCallList, this.toolCallList);
+        return Objects.hash(this.type, this.toolWithToolCallList, this.toolCallList);
     }
 
     @java.lang.Override
@@ -83,6 +98,8 @@ public final class ClientMessageToolCalls {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> type = Optional.empty();
+
         private List<ClientMessageToolCallsToolWithToolCallListItem> toolWithToolCallList = new ArrayList<>();
 
         private List<ToolCall> toolCallList = new ArrayList<>();
@@ -93,8 +110,20 @@ public final class ClientMessageToolCalls {
         private Builder() {}
 
         public Builder from(ClientMessageToolCalls other) {
+            type(other.getType());
             toolWithToolCallList(other.getToolWithToolCallList());
             toolCallList(other.getToolCallList());
+            return this;
+        }
+
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<String> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(String type) {
+            this.type = Optional.ofNullable(type);
             return this;
         }
 
@@ -134,7 +163,7 @@ public final class ClientMessageToolCalls {
         }
 
         public ClientMessageToolCalls build() {
-            return new ClientMessageToolCalls(toolWithToolCallList, toolCallList, additionalProperties);
+            return new ClientMessageToolCalls(type, toolWithToolCallList, toolCallList, additionalProperties);
         }
     }
 }

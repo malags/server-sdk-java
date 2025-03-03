@@ -127,6 +127,7 @@ public final class TransferCallToolDestinationsItem {
     }
 
     @JsonTypeName("assistant")
+    @JsonIgnoreProperties("type")
     private static final class AssistantValue implements Value {
         @JsonUnwrapped
         private TransferDestinationAssistant value;
@@ -165,6 +166,7 @@ public final class TransferCallToolDestinationsItem {
     }
 
     @JsonTypeName("step")
+    @JsonIgnoreProperties("type")
     private static final class StepValue implements Value {
         @JsonUnwrapped
         private TransferDestinationStep value;
@@ -203,6 +205,7 @@ public final class TransferCallToolDestinationsItem {
     }
 
     @JsonTypeName("number")
+    @JsonIgnoreProperties("type")
     private static final class NumberValue implements Value {
         @JsonUnwrapped
         private TransferDestinationNumber value;
@@ -241,6 +244,7 @@ public final class TransferCallToolDestinationsItem {
     }
 
     @JsonTypeName("sip")
+    @JsonIgnoreProperties("type")
     private static final class SipValue implements Value {
         @JsonUnwrapped
         private TransferDestinationSip value;
@@ -278,6 +282,7 @@ public final class TransferCallToolDestinationsItem {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

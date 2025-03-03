@@ -127,6 +127,7 @@ public final class ServerMessageTransferDestinationRequestPhoneNumber {
     }
 
     @JsonTypeName("byo-phone-number")
+    @JsonIgnoreProperties("provider")
     private static final class ByoPhoneNumberValue implements Value {
         @JsonUnwrapped
         private CreateByoPhoneNumberDto value;
@@ -165,6 +166,7 @@ public final class ServerMessageTransferDestinationRequestPhoneNumber {
     }
 
     @JsonTypeName("twilio")
+    @JsonIgnoreProperties("provider")
     private static final class TwilioValue implements Value {
         @JsonUnwrapped
         private CreateTwilioPhoneNumberDto value;
@@ -203,6 +205,7 @@ public final class ServerMessageTransferDestinationRequestPhoneNumber {
     }
 
     @JsonTypeName("vonage")
+    @JsonIgnoreProperties("provider")
     private static final class VonageValue implements Value {
         @JsonUnwrapped
         private CreateVonagePhoneNumberDto value;
@@ -241,6 +244,7 @@ public final class ServerMessageTransferDestinationRequestPhoneNumber {
     }
 
     @JsonTypeName("vapi")
+    @JsonIgnoreProperties("provider")
     private static final class VapiValue implements Value {
         @JsonUnwrapped
         private CreateVapiPhoneNumberDto value;
@@ -278,6 +282,7 @@ public final class ServerMessageTransferDestinationRequestPhoneNumber {
         }
     }
 
+    @JsonIgnoreProperties("provider")
     private static final class _UnknownValue implements Value {
         private String type;
 

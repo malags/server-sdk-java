@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageTranscript.Builder.class)
 public final class ClientMessageTranscript {
+    private final ClientMessageTranscriptType type;
+
     private final ClientMessageTranscriptRole role;
 
     private final ClientMessageTranscriptTranscriptType transcriptType;
@@ -28,14 +30,24 @@ public final class ClientMessageTranscript {
     private final Map<String, Object> additionalProperties;
 
     private ClientMessageTranscript(
+            ClientMessageTranscriptType type,
             ClientMessageTranscriptRole role,
             ClientMessageTranscriptTranscriptType transcriptType,
             String transcript,
             Map<String, Object> additionalProperties) {
+        this.type = type;
         this.role = role;
         this.transcriptType = transcriptType;
         this.transcript = transcript;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.
+     */
+    @JsonProperty("type")
+    public ClientMessageTranscriptType getType() {
+        return type;
     }
 
     /**
@@ -74,14 +86,15 @@ public final class ClientMessageTranscript {
     }
 
     private boolean equalTo(ClientMessageTranscript other) {
-        return role.equals(other.role)
+        return type.equals(other.type)
+                && role.equals(other.role)
                 && transcriptType.equals(other.transcriptType)
                 && transcript.equals(other.transcript);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.role, this.transcriptType, this.transcript);
+        return Objects.hash(this.type, this.role, this.transcriptType, this.transcript);
     }
 
     @java.lang.Override
@@ -89,14 +102,18 @@ public final class ClientMessageTranscript {
         return ObjectMappers.stringify(this);
     }
 
-    public static RoleStage builder() {
+    public static TypeStage builder() {
         return new Builder();
+    }
+
+    public interface TypeStage {
+        RoleStage type(@NotNull ClientMessageTranscriptType type);
+
+        Builder from(ClientMessageTranscript other);
     }
 
     public interface RoleStage {
         TranscriptTypeStage role(@NotNull ClientMessageTranscriptRole role);
-
-        Builder from(ClientMessageTranscript other);
     }
 
     public interface TranscriptTypeStage {
@@ -112,7 +129,10 @@ public final class ClientMessageTranscript {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements RoleStage, TranscriptTypeStage, TranscriptStage, _FinalStage {
+    public static final class Builder
+            implements TypeStage, RoleStage, TranscriptTypeStage, TranscriptStage, _FinalStage {
+        private ClientMessageTranscriptType type;
+
         private ClientMessageTranscriptRole role;
 
         private ClientMessageTranscriptTranscriptType transcriptType;
@@ -126,9 +146,21 @@ public final class ClientMessageTranscript {
 
         @java.lang.Override
         public Builder from(ClientMessageTranscript other) {
+            type(other.getType());
             role(other.getRole());
             transcriptType(other.getTranscriptType());
             transcript(other.getTranscript());
+            return this;
+        }
+
+        /**
+         * <p>This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("type")
+        public RoleStage type(@NotNull ClientMessageTranscriptType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
@@ -167,7 +199,7 @@ public final class ClientMessageTranscript {
 
         @java.lang.Override
         public ClientMessageTranscript build() {
-            return new ClientMessageTranscript(role, transcriptType, transcript, additionalProperties);
+            return new ClientMessageTranscript(type, role, transcriptType, transcript, additionalProperties);
         }
     }
 }

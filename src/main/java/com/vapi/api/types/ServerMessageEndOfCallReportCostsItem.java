@@ -46,6 +46,10 @@ public final class ServerMessageEndOfCallReportCostsItem {
         return new ServerMessageEndOfCallReportCostsItem(new VapiValue(value));
     }
 
+    public static ServerMessageEndOfCallReportCostsItem voicemailDetection(VoicemailDetectionCost value) {
+        return new ServerMessageEndOfCallReportCostsItem(new VoicemailDetectionValue(value));
+    }
+
     public static ServerMessageEndOfCallReportCostsItem analysis(AnalysisCost value) {
         return new ServerMessageEndOfCallReportCostsItem(new AnalysisValue(value));
     }
@@ -68,6 +72,10 @@ public final class ServerMessageEndOfCallReportCostsItem {
 
     public boolean isVapi() {
         return value instanceof VapiValue;
+    }
+
+    public boolean isVoicemailDetection() {
+        return value instanceof VoicemailDetectionValue;
     }
 
     public boolean isAnalysis() {
@@ -113,6 +121,13 @@ public final class ServerMessageEndOfCallReportCostsItem {
         return Optional.empty();
     }
 
+    public Optional<VoicemailDetectionCost> getVoicemailDetection() {
+        if (isVoicemailDetection()) {
+            return Optional.of(((VoicemailDetectionValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<AnalysisCost> getAnalysis() {
         if (isAnalysis()) {
             return Optional.of(((AnalysisValue) value).value);
@@ -143,6 +158,8 @@ public final class ServerMessageEndOfCallReportCostsItem {
 
         T visitVapi(VapiCost vapi);
 
+        T visitVoicemailDetection(VoicemailDetectionCost voicemailDetection);
+
         T visitAnalysis(AnalysisCost analysis);
 
         T _visitUnknown(Object unknownType);
@@ -155,6 +172,7 @@ public final class ServerMessageEndOfCallReportCostsItem {
         @JsonSubTypes.Type(ModelValue.class),
         @JsonSubTypes.Type(VoiceValue.class),
         @JsonSubTypes.Type(VapiValue.class),
+        @JsonSubTypes.Type(VoicemailDetectionValue.class),
         @JsonSubTypes.Type(AnalysisValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -343,6 +361,45 @@ public final class ServerMessageEndOfCallReportCostsItem {
         }
 
         private boolean equalTo(VapiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ServerMessageEndOfCallReportCostsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("voicemail-detection")
+    @JsonIgnoreProperties("type")
+    private static final class VoicemailDetectionValue implements Value {
+        @JsonUnwrapped
+        private VoicemailDetectionCost value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private VoicemailDetectionValue() {}
+
+        private VoicemailDetectionValue(VoicemailDetectionCost value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitVoicemailDetection(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof VoicemailDetectionValue && equalTo((VoicemailDetectionValue) other);
+        }
+
+        private boolean equalTo(VoicemailDetectionValue other) {
             return value.equals(other.value);
         }
 

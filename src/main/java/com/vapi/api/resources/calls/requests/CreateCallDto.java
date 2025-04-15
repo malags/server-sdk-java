@@ -17,7 +17,9 @@ import com.vapi.api.types.CreateAssistantDto;
 import com.vapi.api.types.CreateCustomerDto;
 import com.vapi.api.types.CreateSquadDto;
 import com.vapi.api.types.ImportTwilioPhoneNumberDto;
+import com.vapi.api.types.SchedulePlan;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,7 +27,13 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateCallDto.Builder.class)
 public final class CreateCallDto {
+    private final Optional<List<CreateCustomerDto>> customers;
+
     private final Optional<String> name;
+
+    private final Optional<SchedulePlan> schedulePlan;
+
+    private final Optional<Map<String, Object>> transport;
 
     private final Optional<String> assistantId;
 
@@ -48,7 +56,10 @@ public final class CreateCallDto {
     private final Map<String, Object> additionalProperties;
 
     private CreateCallDto(
+            Optional<List<CreateCustomerDto>> customers,
             Optional<String> name,
+            Optional<SchedulePlan> schedulePlan,
+            Optional<Map<String, Object>> transport,
             Optional<String> assistantId,
             Optional<CreateAssistantDto> assistant,
             Optional<AssistantOverrides> assistantOverrides,
@@ -59,7 +70,10 @@ public final class CreateCallDto {
             Optional<String> customerId,
             Optional<CreateCustomerDto> customer,
             Map<String, Object> additionalProperties) {
+        this.customers = customers;
         this.name = name;
+        this.schedulePlan = schedulePlan;
+        this.transport = transport;
         this.assistantId = assistantId;
         this.assistant = assistant;
         this.assistantOverrides = assistantOverrides;
@@ -73,11 +87,36 @@ public final class CreateCallDto {
     }
 
     /**
+     * @return This is used to issue batch calls to multiple customers.
+     * <p>Only relevant for <code>outboundPhoneCall</code>. To call a single customer, use <code>customer</code> instead.</p>
+     */
+    @JsonProperty("customers")
+    public Optional<List<CreateCustomerDto>> getCustomers() {
+        return customers;
+    }
+
+    /**
      * @return This is the name of the call. This is just for your own reference.
      */
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    /**
+     * @return This is the schedule plan of the call.
+     */
+    @JsonProperty("schedulePlan")
+    public Optional<SchedulePlan> getSchedulePlan() {
+        return schedulePlan;
+    }
+
+    /**
+     * @return This is the transport of the call.
+     */
+    @JsonProperty("transport")
+    public Optional<Map<String, Object>> getTransport() {
+        return transport;
     }
 
     /**
@@ -168,7 +207,10 @@ public final class CreateCallDto {
     }
 
     private boolean equalTo(CreateCallDto other) {
-        return name.equals(other.name)
+        return customers.equals(other.customers)
+                && name.equals(other.name)
+                && schedulePlan.equals(other.schedulePlan)
+                && transport.equals(other.transport)
                 && assistantId.equals(other.assistantId)
                 && assistant.equals(other.assistant)
                 && assistantOverrides.equals(other.assistantOverrides)
@@ -183,7 +225,10 @@ public final class CreateCallDto {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.customers,
                 this.name,
+                this.schedulePlan,
+                this.transport,
                 this.assistantId,
                 this.assistant,
                 this.assistantOverrides,
@@ -206,7 +251,13 @@ public final class CreateCallDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<CreateCustomerDto>> customers = Optional.empty();
+
         private Optional<String> name = Optional.empty();
+
+        private Optional<SchedulePlan> schedulePlan = Optional.empty();
+
+        private Optional<Map<String, Object>> transport = Optional.empty();
 
         private Optional<String> assistantId = Optional.empty();
 
@@ -232,7 +283,10 @@ public final class CreateCallDto {
         private Builder() {}
 
         public Builder from(CreateCallDto other) {
+            customers(other.getCustomers());
             name(other.getName());
+            schedulePlan(other.getSchedulePlan());
+            transport(other.getTransport());
             assistantId(other.getAssistantId());
             assistant(other.getAssistant());
             assistantOverrides(other.getAssistantOverrides());
@@ -245,6 +299,17 @@ public final class CreateCallDto {
             return this;
         }
 
+        @JsonSetter(value = "customers", nulls = Nulls.SKIP)
+        public Builder customers(Optional<List<CreateCustomerDto>> customers) {
+            this.customers = customers;
+            return this;
+        }
+
+        public Builder customers(List<CreateCustomerDto> customers) {
+            this.customers = Optional.ofNullable(customers);
+            return this;
+        }
+
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -253,6 +318,28 @@ public final class CreateCallDto {
 
         public Builder name(String name) {
             this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        @JsonSetter(value = "schedulePlan", nulls = Nulls.SKIP)
+        public Builder schedulePlan(Optional<SchedulePlan> schedulePlan) {
+            this.schedulePlan = schedulePlan;
+            return this;
+        }
+
+        public Builder schedulePlan(SchedulePlan schedulePlan) {
+            this.schedulePlan = Optional.ofNullable(schedulePlan);
+            return this;
+        }
+
+        @JsonSetter(value = "transport", nulls = Nulls.SKIP)
+        public Builder transport(Optional<Map<String, Object>> transport) {
+            this.transport = transport;
+            return this;
+        }
+
+        public Builder transport(Map<String, Object> transport) {
+            this.transport = Optional.ofNullable(transport);
             return this;
         }
 
@@ -357,7 +444,10 @@ public final class CreateCallDto {
 
         public CreateCallDto build() {
             return new CreateCallDto(
+                    customers,
                     name,
+                    schedulePlan,
+                    transport,
                     assistantId,
                     assistant,
                     assistantOverrides,

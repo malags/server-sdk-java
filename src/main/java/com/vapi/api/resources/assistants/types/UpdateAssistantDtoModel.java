@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.vapi.api.types.AnthropicModel;
 import com.vapi.api.types.AnyscaleModel;
+import com.vapi.api.types.CerebrasModel;
 import com.vapi.api.types.CustomLlmModel;
 import com.vapi.api.types.DeepInfraModel;
 import com.vapi.api.types.DeepSeekModel;
@@ -48,12 +49,20 @@ public final class UpdateAssistantDtoModel {
         return new UpdateAssistantDtoModel(new AnthropicValue(value));
     }
 
+    public static UpdateAssistantDtoModel cerebras(CerebrasModel value) {
+        return new UpdateAssistantDtoModel(new CerebrasValue(value));
+    }
+
     public static UpdateAssistantDtoModel customLlm(CustomLlmModel value) {
         return new UpdateAssistantDtoModel(new CustomLlmValue(value));
     }
 
     public static UpdateAssistantDtoModel deepinfra(DeepInfraModel value) {
         return new UpdateAssistantDtoModel(new DeepinfraValue(value));
+    }
+
+    public static UpdateAssistantDtoModel deepSeek(DeepSeekModel value) {
+        return new UpdateAssistantDtoModel(new DeepSeekValue(value));
     }
 
     public static UpdateAssistantDtoModel google(GoogleModel value) {
@@ -66,10 +75,6 @@ public final class UpdateAssistantDtoModel {
 
     public static UpdateAssistantDtoModel inflectionAi(InflectionAiModel value) {
         return new UpdateAssistantDtoModel(new InflectionAiValue(value));
-    }
-
-    public static UpdateAssistantDtoModel deepSeek(DeepSeekModel value) {
-        return new UpdateAssistantDtoModel(new DeepSeekValue(value));
     }
 
     public static UpdateAssistantDtoModel openai(OpenAiModel value) {
@@ -104,12 +109,20 @@ public final class UpdateAssistantDtoModel {
         return value instanceof AnthropicValue;
     }
 
+    public boolean isCerebras() {
+        return value instanceof CerebrasValue;
+    }
+
     public boolean isCustomLlm() {
         return value instanceof CustomLlmValue;
     }
 
     public boolean isDeepinfra() {
         return value instanceof DeepinfraValue;
+    }
+
+    public boolean isDeepSeek() {
+        return value instanceof DeepSeekValue;
     }
 
     public boolean isGoogle() {
@@ -122,10 +135,6 @@ public final class UpdateAssistantDtoModel {
 
     public boolean isInflectionAi() {
         return value instanceof InflectionAiValue;
-    }
-
-    public boolean isDeepSeek() {
-        return value instanceof DeepSeekValue;
     }
 
     public boolean isOpenai() {
@@ -170,6 +179,13 @@ public final class UpdateAssistantDtoModel {
         return Optional.empty();
     }
 
+    public Optional<CerebrasModel> getCerebras() {
+        if (isCerebras()) {
+            return Optional.of(((CerebrasValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<CustomLlmModel> getCustomLlm() {
         if (isCustomLlm()) {
             return Optional.of(((CustomLlmValue) value).value);
@@ -180,6 +196,13 @@ public final class UpdateAssistantDtoModel {
     public Optional<DeepInfraModel> getDeepinfra() {
         if (isDeepinfra()) {
             return Optional.of(((DeepinfraValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<DeepSeekModel> getDeepSeek() {
+        if (isDeepSeek()) {
+            return Optional.of(((DeepSeekValue) value).value);
         }
         return Optional.empty();
     }
@@ -201,13 +224,6 @@ public final class UpdateAssistantDtoModel {
     public Optional<InflectionAiModel> getInflectionAi() {
         if (isInflectionAi()) {
             return Optional.of(((InflectionAiValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<DeepSeekModel> getDeepSeek() {
-        if (isDeepSeek()) {
-            return Optional.of(((DeepSeekValue) value).value);
         }
         return Optional.empty();
     }
@@ -271,17 +287,19 @@ public final class UpdateAssistantDtoModel {
 
         T visitAnthropic(AnthropicModel anthropic);
 
+        T visitCerebras(CerebrasModel cerebras);
+
         T visitCustomLlm(CustomLlmModel customLlm);
 
         T visitDeepinfra(DeepInfraModel deepinfra);
+
+        T visitDeepSeek(DeepSeekModel deepSeek);
 
         T visitGoogle(GoogleModel google);
 
         T visitGroq(GroqModel groq);
 
         T visitInflectionAi(InflectionAiModel inflectionAi);
-
-        T visitDeepSeek(DeepSeekModel deepSeek);
 
         T visitOpenai(OpenAiModel openai);
 
@@ -302,12 +320,13 @@ public final class UpdateAssistantDtoModel {
     @JsonSubTypes({
         @JsonSubTypes.Type(AnyscaleValue.class),
         @JsonSubTypes.Type(AnthropicValue.class),
+        @JsonSubTypes.Type(CerebrasValue.class),
         @JsonSubTypes.Type(CustomLlmValue.class),
         @JsonSubTypes.Type(DeepinfraValue.class),
+        @JsonSubTypes.Type(DeepSeekValue.class),
         @JsonSubTypes.Type(GoogleValue.class),
         @JsonSubTypes.Type(GroqValue.class),
         @JsonSubTypes.Type(InflectionAiValue.class),
-        @JsonSubTypes.Type(DeepSeekValue.class),
         @JsonSubTypes.Type(OpenaiValue.class),
         @JsonSubTypes.Type(OpenrouterValue.class),
         @JsonSubTypes.Type(PerplexityAiValue.class),
@@ -398,6 +417,45 @@ public final class UpdateAssistantDtoModel {
         }
     }
 
+    @JsonTypeName("cerebras")
+    @JsonIgnoreProperties("provider")
+    private static final class CerebrasValue implements Value {
+        @JsonUnwrapped
+        private CerebrasModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private CerebrasValue() {}
+
+        private CerebrasValue(CerebrasModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCerebras(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof CerebrasValue && equalTo((CerebrasValue) other);
+        }
+
+        private boolean equalTo(CerebrasValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoModel{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("custom-llm")
     @JsonIgnoreProperties("provider")
     private static final class CustomLlmValue implements Value {
@@ -462,6 +520,45 @@ public final class UpdateAssistantDtoModel {
         }
 
         private boolean equalTo(DeepinfraValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoModel{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("deep-seek")
+    @JsonIgnoreProperties("provider")
+    private static final class DeepSeekValue implements Value {
+        @JsonUnwrapped
+        private DeepSeekModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private DeepSeekValue() {}
+
+        private DeepSeekValue(DeepSeekModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitDeepSeek(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof DeepSeekValue && equalTo((DeepSeekValue) other);
+        }
+
+        private boolean equalTo(DeepSeekValue other) {
             return value.equals(other.value);
         }
 
@@ -579,45 +676,6 @@ public final class UpdateAssistantDtoModel {
         }
 
         private boolean equalTo(InflectionAiValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateAssistantDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("deep-seek")
-    @JsonIgnoreProperties("provider")
-    private static final class DeepSeekValue implements Value {
-        @JsonUnwrapped
-        private DeepSeekModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private DeepSeekValue() {}
-
-        private DeepSeekValue(DeepSeekModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitDeepSeek(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof DeepSeekValue && equalTo((DeepSeekValue) other);
-        }
-
-        private boolean equalTo(DeepSeekValue other) {
             return value.equals(other.value);
         }
 

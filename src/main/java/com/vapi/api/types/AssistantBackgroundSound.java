@@ -4,21 +4,91 @@
 package com.vapi.api.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.vapi.api.core.ObjectMappers;
+import java.io.IOException;
+import java.util.Objects;
 
-public enum AssistantBackgroundSound {
-    OFF("off"),
+@JsonDeserialize(using = AssistantBackgroundSound.Deserializer.class)
+public final class AssistantBackgroundSound {
+    private final Object value;
 
-    OFFICE("office");
+    private final int type;
 
-    private final String value;
-
-    AssistantBackgroundSound(String value) {
+    private AssistantBackgroundSound(Object value, int type) {
         this.value = value;
+        this.type = type;
     }
 
     @JsonValue
+    public Object get() {
+        return this.value;
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        if (this.type == 0) {
+            return visitor.visit((AssistantBackgroundSoundZero) this.value);
+        } else if (this.type == 1) {
+            return visitor.visit((String) this.value);
+        }
+        throw new IllegalStateException("Failed to visit value. This should never happen.");
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        return other instanceof AssistantBackgroundSound && equalTo((AssistantBackgroundSound) other);
+    }
+
+    private boolean equalTo(AssistantBackgroundSound other) {
+        return value.equals(other.value);
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return Objects.hash(this.value);
+    }
+
     @java.lang.Override
     public String toString() {
-        return this.value;
+        return this.value.toString();
+    }
+
+    public static AssistantBackgroundSound of(AssistantBackgroundSoundZero value) {
+        return new AssistantBackgroundSound(value, 0);
+    }
+
+    public static AssistantBackgroundSound of(String value) {
+        return new AssistantBackgroundSound(value, 1);
+    }
+
+    public interface Visitor<T> {
+        T visit(AssistantBackgroundSoundZero value);
+
+        T visit(String value);
+    }
+
+    static final class Deserializer extends StdDeserializer<AssistantBackgroundSound> {
+        Deserializer() {
+            super(AssistantBackgroundSound.class);
+        }
+
+        @java.lang.Override
+        public AssistantBackgroundSound deserialize(JsonParser p, DeserializationContext context) throws IOException {
+            Object value = p.readValueAs(Object.class);
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, AssistantBackgroundSoundZero.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, String.class));
+            } catch (IllegalArgumentException e) {
+            }
+            throw new JsonParseException(p, "Failed to deserialize");
+        }
     }
 }

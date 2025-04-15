@@ -31,9 +31,13 @@ public final class ElevenLabsVoice {
 
     private final Optional<Boolean> useSpeakerBoost;
 
+    private final Optional<Double> speed;
+
     private final Optional<Double> optimizeStreamingLatency;
 
     private final Optional<Boolean> enableSsmlParsing;
+
+    private final Optional<Boolean> autoMode;
 
     private final Optional<ElevenLabsVoiceModel> model;
 
@@ -51,8 +55,10 @@ public final class ElevenLabsVoice {
             Optional<Double> similarityBoost,
             Optional<Double> style,
             Optional<Boolean> useSpeakerBoost,
+            Optional<Double> speed,
             Optional<Double> optimizeStreamingLatency,
             Optional<Boolean> enableSsmlParsing,
+            Optional<Boolean> autoMode,
             Optional<ElevenLabsVoiceModel> model,
             Optional<ChunkPlan> chunkPlan,
             Optional<String> language,
@@ -63,8 +69,10 @@ public final class ElevenLabsVoice {
         this.similarityBoost = similarityBoost;
         this.style = style;
         this.useSpeakerBoost = useSpeakerBoost;
+        this.speed = speed;
         this.optimizeStreamingLatency = optimizeStreamingLatency;
         this.enableSsmlParsing = enableSsmlParsing;
+        this.autoMode = autoMode;
         this.model = model;
         this.chunkPlan = chunkPlan;
         this.language = language;
@@ -113,6 +121,14 @@ public final class ElevenLabsVoice {
     }
 
     /**
+     * @return Defines the speed for voice settings.
+     */
+    @JsonProperty("speed")
+    public Optional<Double> getSpeed() {
+        return speed;
+    }
+
+    /**
      * @return Defines the optimize streaming latency for voice settings. Defaults to 3.
      */
     @JsonProperty("optimizeStreamingLatency")
@@ -127,6 +143,14 @@ public final class ElevenLabsVoice {
     @JsonProperty("enableSsmlParsing")
     public Optional<Boolean> getEnableSsmlParsing() {
         return enableSsmlParsing;
+    }
+
+    /**
+     * @return Defines the auto mode for voice settings. Defaults to false.
+     */
+    @JsonProperty("autoMode")
+    public Optional<Boolean> getAutoMode() {
+        return autoMode;
     }
 
     /**
@@ -178,8 +202,10 @@ public final class ElevenLabsVoice {
                 && similarityBoost.equals(other.similarityBoost)
                 && style.equals(other.style)
                 && useSpeakerBoost.equals(other.useSpeakerBoost)
+                && speed.equals(other.speed)
                 && optimizeStreamingLatency.equals(other.optimizeStreamingLatency)
                 && enableSsmlParsing.equals(other.enableSsmlParsing)
+                && autoMode.equals(other.autoMode)
                 && model.equals(other.model)
                 && chunkPlan.equals(other.chunkPlan)
                 && language.equals(other.language)
@@ -194,8 +220,10 @@ public final class ElevenLabsVoice {
                 this.similarityBoost,
                 this.style,
                 this.useSpeakerBoost,
+                this.speed,
                 this.optimizeStreamingLatency,
                 this.enableSsmlParsing,
+                this.autoMode,
                 this.model,
                 this.chunkPlan,
                 this.language,
@@ -236,6 +264,10 @@ public final class ElevenLabsVoice {
 
         _FinalStage useSpeakerBoost(Boolean useSpeakerBoost);
 
+        _FinalStage speed(Optional<Double> speed);
+
+        _FinalStage speed(Double speed);
+
         _FinalStage optimizeStreamingLatency(Optional<Double> optimizeStreamingLatency);
 
         _FinalStage optimizeStreamingLatency(Double optimizeStreamingLatency);
@@ -243,6 +275,10 @@ public final class ElevenLabsVoice {
         _FinalStage enableSsmlParsing(Optional<Boolean> enableSsmlParsing);
 
         _FinalStage enableSsmlParsing(Boolean enableSsmlParsing);
+
+        _FinalStage autoMode(Optional<Boolean> autoMode);
+
+        _FinalStage autoMode(Boolean autoMode);
 
         _FinalStage model(Optional<ElevenLabsVoiceModel> model);
 
@@ -273,9 +309,13 @@ public final class ElevenLabsVoice {
 
         private Optional<ElevenLabsVoiceModel> model = Optional.empty();
 
+        private Optional<Boolean> autoMode = Optional.empty();
+
         private Optional<Boolean> enableSsmlParsing = Optional.empty();
 
         private Optional<Double> optimizeStreamingLatency = Optional.empty();
+
+        private Optional<Double> speed = Optional.empty();
 
         private Optional<Boolean> useSpeakerBoost = Optional.empty();
 
@@ -297,8 +337,10 @@ public final class ElevenLabsVoice {
             similarityBoost(other.getSimilarityBoost());
             style(other.getStyle());
             useSpeakerBoost(other.getUseSpeakerBoost());
+            speed(other.getSpeed());
             optimizeStreamingLatency(other.getOptimizeStreamingLatency());
             enableSsmlParsing(other.getEnableSsmlParsing());
+            autoMode(other.getAutoMode());
             model(other.getModel());
             chunkPlan(other.getChunkPlan());
             language(other.getLanguage());
@@ -386,6 +428,23 @@ public final class ElevenLabsVoice {
         }
 
         /**
+         * <p>Defines the auto mode for voice settings. Defaults to false.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage autoMode(Boolean autoMode) {
+            this.autoMode = Optional.ofNullable(autoMode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "autoMode", nulls = Nulls.SKIP)
+        public _FinalStage autoMode(Optional<Boolean> autoMode) {
+            this.autoMode = autoMode;
+            return this;
+        }
+
+        /**
          * <p>This enables the use of https://elevenlabs.io/docs/speech-synthesis/prompting#pronunciation. Defaults to false to save latency.</p>
          * <p>@default false</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -417,6 +476,23 @@ public final class ElevenLabsVoice {
         @JsonSetter(value = "optimizeStreamingLatency", nulls = Nulls.SKIP)
         public _FinalStage optimizeStreamingLatency(Optional<Double> optimizeStreamingLatency) {
             this.optimizeStreamingLatency = optimizeStreamingLatency;
+            return this;
+        }
+
+        /**
+         * <p>Defines the speed for voice settings.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage speed(Double speed) {
+            this.speed = Optional.ofNullable(speed);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "speed", nulls = Nulls.SKIP)
+        public _FinalStage speed(Optional<Double> speed) {
+            this.speed = speed;
             return this;
         }
 
@@ -496,8 +572,10 @@ public final class ElevenLabsVoice {
                     similarityBoost,
                     style,
                     useSpeakerBoost,
+                    speed,
                     optimizeStreamingLatency,
                     enableSsmlParsing,
+                    autoMode,
                     model,
                     chunkPlan,
                     language,

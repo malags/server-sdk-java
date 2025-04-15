@@ -34,6 +34,10 @@ public final class FallbackPlanVoicesItem {
         return new FallbackPlanVoicesItem(new CartesiaValue(value));
     }
 
+    public static FallbackPlanVoicesItem hume(FallbackHumeVoice value) {
+        return new FallbackPlanVoicesItem(new HumeValue(value));
+    }
+
     public static FallbackPlanVoicesItem customVoice(FallbackCustomVoice value) {
         return new FallbackPlanVoicesItem(new CustomVoiceValue(value));
     }
@@ -46,12 +50,12 @@ public final class FallbackPlanVoicesItem {
         return new FallbackPlanVoicesItem(new _11LabsValue(value));
     }
 
-    public static FallbackPlanVoicesItem lmnt(FallbackLmntVoice value) {
-        return new FallbackPlanVoicesItem(new LmntValue(value));
+    public static FallbackPlanVoicesItem vapi(FallbackVapiVoice value) {
+        return new FallbackPlanVoicesItem(new VapiValue(value));
     }
 
-    public static FallbackPlanVoicesItem neets(FallbackNeetsVoice value) {
-        return new FallbackPlanVoicesItem(new NeetsValue(value));
+    public static FallbackPlanVoicesItem lmnt(FallbackLmntVoice value) {
+        return new FallbackPlanVoicesItem(new LmntValue(value));
     }
 
     public static FallbackPlanVoicesItem openai(FallbackOpenAiVoice value) {
@@ -82,6 +86,10 @@ public final class FallbackPlanVoicesItem {
         return value instanceof CartesiaValue;
     }
 
+    public boolean isHume() {
+        return value instanceof HumeValue;
+    }
+
     public boolean isCustomVoice() {
         return value instanceof CustomVoiceValue;
     }
@@ -94,12 +102,12 @@ public final class FallbackPlanVoicesItem {
         return value instanceof _11LabsValue;
     }
 
-    public boolean isLmnt() {
-        return value instanceof LmntValue;
+    public boolean isVapi() {
+        return value instanceof VapiValue;
     }
 
-    public boolean isNeets() {
-        return value instanceof NeetsValue;
+    public boolean isLmnt() {
+        return value instanceof LmntValue;
     }
 
     public boolean isOpenai() {
@@ -140,6 +148,13 @@ public final class FallbackPlanVoicesItem {
         return Optional.empty();
     }
 
+    public Optional<FallbackHumeVoice> getHume() {
+        if (isHume()) {
+            return Optional.of(((HumeValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<FallbackCustomVoice> getCustomVoice() {
         if (isCustomVoice()) {
             return Optional.of(((CustomVoiceValue) value).value);
@@ -161,16 +176,16 @@ public final class FallbackPlanVoicesItem {
         return Optional.empty();
     }
 
-    public Optional<FallbackLmntVoice> getLmnt() {
-        if (isLmnt()) {
-            return Optional.of(((LmntValue) value).value);
+    public Optional<FallbackVapiVoice> getVapi() {
+        if (isVapi()) {
+            return Optional.of(((VapiValue) value).value);
         }
         return Optional.empty();
     }
 
-    public Optional<FallbackNeetsVoice> getNeets() {
-        if (isNeets()) {
-            return Optional.of(((NeetsValue) value).value);
+    public Optional<FallbackLmntVoice> getLmnt() {
+        if (isLmnt()) {
+            return Optional.of(((LmntValue) value).value);
         }
         return Optional.empty();
     }
@@ -227,15 +242,17 @@ public final class FallbackPlanVoicesItem {
 
         T visitCartesia(FallbackCartesiaVoice cartesia);
 
+        T visitHume(FallbackHumeVoice hume);
+
         T visitCustomVoice(FallbackCustomVoice customVoice);
 
         T visitDeepgram(FallbackDeepgramVoice deepgram);
 
         T visit11Labs(FallbackElevenLabsVoice _11Labs);
 
-        T visitLmnt(FallbackLmntVoice lmnt);
+        T visitVapi(FallbackVapiVoice vapi);
 
-        T visitNeets(FallbackNeetsVoice neets);
+        T visitLmnt(FallbackLmntVoice lmnt);
 
         T visitOpenai(FallbackOpenAiVoice openai);
 
@@ -254,11 +271,12 @@ public final class FallbackPlanVoicesItem {
     @JsonSubTypes({
         @JsonSubTypes.Type(AzureValue.class),
         @JsonSubTypes.Type(CartesiaValue.class),
+        @JsonSubTypes.Type(HumeValue.class),
         @JsonSubTypes.Type(CustomVoiceValue.class),
         @JsonSubTypes.Type(DeepgramValue.class),
         @JsonSubTypes.Type(_11LabsValue.class),
+        @JsonSubTypes.Type(VapiValue.class),
         @JsonSubTypes.Type(LmntValue.class),
-        @JsonSubTypes.Type(NeetsValue.class),
         @JsonSubTypes.Type(OpenaiValue.class),
         @JsonSubTypes.Type(PlayhtValue.class),
         @JsonSubTypes.Type(RimeAiValue.class),
@@ -334,6 +352,45 @@ public final class FallbackPlanVoicesItem {
         }
 
         private boolean equalTo(CartesiaValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "FallbackPlanVoicesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("hume")
+    @JsonIgnoreProperties("provider")
+    private static final class HumeValue implements Value {
+        @JsonUnwrapped
+        private FallbackHumeVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private HumeValue() {}
+
+        private HumeValue(FallbackHumeVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitHume(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof HumeValue && equalTo((HumeValue) other);
+        }
+
+        private boolean equalTo(HumeValue other) {
             return value.equals(other.value);
         }
 
@@ -465,6 +522,45 @@ public final class FallbackPlanVoicesItem {
         }
     }
 
+    @JsonTypeName("vapi")
+    @JsonIgnoreProperties("provider")
+    private static final class VapiValue implements Value {
+        @JsonUnwrapped
+        private FallbackVapiVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private VapiValue() {}
+
+        private VapiValue(FallbackVapiVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitVapi(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof VapiValue && equalTo((VapiValue) other);
+        }
+
+        private boolean equalTo(VapiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "FallbackPlanVoicesItem{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("lmnt")
     @JsonIgnoreProperties("provider")
     private static final class LmntValue implements Value {
@@ -490,45 +586,6 @@ public final class FallbackPlanVoicesItem {
         }
 
         private boolean equalTo(LmntValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "FallbackPlanVoicesItem{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("neets")
-    @JsonIgnoreProperties("provider")
-    private static final class NeetsValue implements Value {
-        @JsonUnwrapped
-        private FallbackNeetsVoice value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private NeetsValue() {}
-
-        private NeetsValue(FallbackNeetsVoice value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitNeets(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof NeetsValue && equalTo((NeetsValue) other);
-        }
-
-        private boolean equalTo(NeetsValue other) {
             return value.equals(other.value);
         }
 

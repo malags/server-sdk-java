@@ -24,14 +24,18 @@ public final class TalkscriberTranscriber {
 
     private final Optional<TalkscriberTranscriberLanguage> language;
 
+    private final Optional<FallbackTranscriberPlan> fallbackPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private TalkscriberTranscriber(
             Optional<String> model,
             Optional<TalkscriberTranscriberLanguage> language,
+            Optional<FallbackTranscriberPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
         this.model = model;
         this.language = language;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -51,6 +55,14 @@ public final class TalkscriberTranscriber {
         return language;
     }
 
+    /**
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+     */
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackTranscriberPlan> getFallbackPlan() {
+        return fallbackPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -63,12 +75,12 @@ public final class TalkscriberTranscriber {
     }
 
     private boolean equalTo(TalkscriberTranscriber other) {
-        return model.equals(other.model) && language.equals(other.language);
+        return model.equals(other.model) && language.equals(other.language) && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.model, this.language);
+        return Objects.hash(this.model, this.language, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -86,6 +98,8 @@ public final class TalkscriberTranscriber {
 
         private Optional<TalkscriberTranscriberLanguage> language = Optional.empty();
 
+        private Optional<FallbackTranscriberPlan> fallbackPlan = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -94,6 +108,7 @@ public final class TalkscriberTranscriber {
         public Builder from(TalkscriberTranscriber other) {
             model(other.getModel());
             language(other.getLanguage());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -119,8 +134,19 @@ public final class TalkscriberTranscriber {
             return this;
         }
 
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public Builder fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
+            return this;
+        }
+
+        public Builder fallbackPlan(FallbackTranscriberPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
         public TalkscriberTranscriber build() {
-            return new TalkscriberTranscriber(model, language, additionalProperties);
+            return new TalkscriberTranscriber(model, language, fallbackPlan, additionalProperties);
         }
     }
 }

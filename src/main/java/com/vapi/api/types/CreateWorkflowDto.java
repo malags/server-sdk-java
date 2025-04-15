@@ -17,12 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateWorkflowDto.Builder.class)
 public final class CreateWorkflowDto {
     private final List<CreateWorkflowDtoNodesItem> nodes;
+
+    private final Optional<CreateWorkflowDtoModel> model;
 
     private final String name;
 
@@ -32,10 +35,12 @@ public final class CreateWorkflowDto {
 
     private CreateWorkflowDto(
             List<CreateWorkflowDtoNodesItem> nodes,
+            Optional<CreateWorkflowDtoModel> model,
             String name,
             List<Edge> edges,
             Map<String, Object> additionalProperties) {
         this.nodes = nodes;
+        this.model = model;
         this.name = name;
         this.edges = edges;
         this.additionalProperties = additionalProperties;
@@ -44,6 +49,14 @@ public final class CreateWorkflowDto {
     @JsonProperty("nodes")
     public List<CreateWorkflowDtoNodesItem> getNodes() {
         return nodes;
+    }
+
+    /**
+     * @return These are the options for the workflow's LLM.
+     */
+    @JsonProperty("model")
+    public Optional<CreateWorkflowDtoModel> getModel() {
+        return model;
     }
 
     @JsonProperty("name")
@@ -68,12 +81,15 @@ public final class CreateWorkflowDto {
     }
 
     private boolean equalTo(CreateWorkflowDto other) {
-        return nodes.equals(other.nodes) && name.equals(other.name) && edges.equals(other.edges);
+        return nodes.equals(other.nodes)
+                && model.equals(other.model)
+                && name.equals(other.name)
+                && edges.equals(other.edges);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.nodes, this.name, this.edges);
+        return Objects.hash(this.nodes, this.model, this.name, this.edges);
     }
 
     @java.lang.Override
@@ -100,6 +116,10 @@ public final class CreateWorkflowDto {
 
         _FinalStage addAllNodes(List<CreateWorkflowDtoNodesItem> nodes);
 
+        _FinalStage model(Optional<CreateWorkflowDtoModel> model);
+
+        _FinalStage model(CreateWorkflowDtoModel model);
+
         _FinalStage edges(List<Edge> edges);
 
         _FinalStage addEdges(Edge edges);
@@ -113,6 +133,8 @@ public final class CreateWorkflowDto {
 
         private List<Edge> edges = new ArrayList<>();
 
+        private Optional<CreateWorkflowDtoModel> model = Optional.empty();
+
         private List<CreateWorkflowDtoNodesItem> nodes = new ArrayList<>();
 
         @JsonAnySetter
@@ -123,6 +145,7 @@ public final class CreateWorkflowDto {
         @java.lang.Override
         public Builder from(CreateWorkflowDto other) {
             nodes(other.getNodes());
+            model(other.getModel());
             name(other.getName());
             edges(other.getEdges());
             return this;
@@ -155,6 +178,23 @@ public final class CreateWorkflowDto {
             return this;
         }
 
+        /**
+         * <p>These are the options for the workflow's LLM.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage model(CreateWorkflowDtoModel model) {
+            this.model = Optional.ofNullable(model);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "model", nulls = Nulls.SKIP)
+        public _FinalStage model(Optional<CreateWorkflowDtoModel> model) {
+            this.model = model;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllNodes(List<CreateWorkflowDtoNodesItem> nodes) {
             this.nodes.addAll(nodes);
@@ -177,7 +217,7 @@ public final class CreateWorkflowDto {
 
         @java.lang.Override
         public CreateWorkflowDto build() {
-            return new CreateWorkflowDto(nodes, name, edges, additionalProperties);
+            return new CreateWorkflowDto(nodes, model, name, edges, additionalProperties);
         }
     }
 }

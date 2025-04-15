@@ -24,12 +24,18 @@ public final class ClientInboundMessageSay {
 
     private final Optional<Boolean> endCallAfterSpoken;
 
+    private final Optional<Boolean> interruptionsEnabled;
+
     private final Map<String, Object> additionalProperties;
 
     private ClientInboundMessageSay(
-            Optional<String> content, Optional<Boolean> endCallAfterSpoken, Map<String, Object> additionalProperties) {
+            Optional<String> content,
+            Optional<Boolean> endCallAfterSpoken,
+            Optional<Boolean> interruptionsEnabled,
+            Map<String, Object> additionalProperties) {
         this.content = content;
         this.endCallAfterSpoken = endCallAfterSpoken;
+        this.interruptionsEnabled = interruptionsEnabled;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,6 +55,14 @@ public final class ClientInboundMessageSay {
         return endCallAfterSpoken;
     }
 
+    /**
+     * @return This is the flag for whether the message is interruptible.
+     */
+    @JsonProperty("interruptionsEnabled")
+    public Optional<Boolean> getInterruptionsEnabled() {
+        return interruptionsEnabled;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -61,12 +75,14 @@ public final class ClientInboundMessageSay {
     }
 
     private boolean equalTo(ClientInboundMessageSay other) {
-        return content.equals(other.content) && endCallAfterSpoken.equals(other.endCallAfterSpoken);
+        return content.equals(other.content)
+                && endCallAfterSpoken.equals(other.endCallAfterSpoken)
+                && interruptionsEnabled.equals(other.interruptionsEnabled);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.content, this.endCallAfterSpoken);
+        return Objects.hash(this.content, this.endCallAfterSpoken, this.interruptionsEnabled);
     }
 
     @java.lang.Override
@@ -84,6 +100,8 @@ public final class ClientInboundMessageSay {
 
         private Optional<Boolean> endCallAfterSpoken = Optional.empty();
 
+        private Optional<Boolean> interruptionsEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -92,6 +110,7 @@ public final class ClientInboundMessageSay {
         public Builder from(ClientInboundMessageSay other) {
             content(other.getContent());
             endCallAfterSpoken(other.getEndCallAfterSpoken());
+            interruptionsEnabled(other.getInterruptionsEnabled());
             return this;
         }
 
@@ -117,8 +136,19 @@ public final class ClientInboundMessageSay {
             return this;
         }
 
+        @JsonSetter(value = "interruptionsEnabled", nulls = Nulls.SKIP)
+        public Builder interruptionsEnabled(Optional<Boolean> interruptionsEnabled) {
+            this.interruptionsEnabled = interruptionsEnabled;
+            return this;
+        }
+
+        public Builder interruptionsEnabled(Boolean interruptionsEnabled) {
+            this.interruptionsEnabled = Optional.ofNullable(interruptionsEnabled);
+            return this;
+        }
+
         public ClientInboundMessageSay build() {
-            return new ClientInboundMessageSay(content, endCallAfterSpoken, additionalProperties);
+            return new ClientInboundMessageSay(content, endCallAfterSpoken, interruptionsEnabled, additionalProperties);
         }
     }
 }

@@ -10,7 +10,9 @@ public enum CallType {
 
     OUTBOUND_PHONE_CALL("outboundPhoneCall"),
 
-    WEB_CALL("webCall");
+    WEB_CALL("webCall"),
+
+    VAPI_WEBSOCKET_CALL("vapi.websocketCall");
 
     private final String value;
 

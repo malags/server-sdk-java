@@ -32,6 +32,14 @@ public final class TrieveKnowledgeBaseCreate {
     }
 
     /**
+     * @return This is to create a new dataset on Trieve.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "create";
+    }
+
+    /**
      * @return These are the chunk plans used to create the dataset.
      */
     @JsonProperty("chunkPlans")

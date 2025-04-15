@@ -31,11 +31,17 @@ public final class DeepgramTranscriber {
 
     private final Optional<Boolean> mipOptOut;
 
+    private final Optional<Boolean> numerals;
+
+    private final Optional<Double> confidenceThreshold;
+
     private final Optional<List<String>> keywords;
 
     private final Optional<List<String>> keyterm;
 
     private final Optional<Double> endpointing;
+
+    private final Optional<FallbackTranscriberPlan> fallbackPlan;
 
     private final Map<String, Object> additionalProperties;
 
@@ -45,18 +51,24 @@ public final class DeepgramTranscriber {
             Optional<Boolean> smartFormat,
             Optional<Boolean> codeSwitchingEnabled,
             Optional<Boolean> mipOptOut,
+            Optional<Boolean> numerals,
+            Optional<Double> confidenceThreshold,
             Optional<List<String>> keywords,
             Optional<List<String>> keyterm,
             Optional<Double> endpointing,
+            Optional<FallbackTranscriberPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
         this.model = model;
         this.language = language;
         this.smartFormat = smartFormat;
         this.codeSwitchingEnabled = codeSwitchingEnabled;
         this.mipOptOut = mipOptOut;
+        this.numerals = numerals;
+        this.confidenceThreshold = confidenceThreshold;
         this.keywords = keywords;
         this.keyterm = keyterm;
         this.endpointing = endpointing;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -137,6 +149,24 @@ public final class DeepgramTranscriber {
     }
 
     /**
+     * @return If set to true, this will cause deepgram to convert spoken numbers to literal numerals. For example, &quot;my phone number is nine-seven-two...&quot; would become &quot;my phone number is 972...&quot;
+     * <p>@default false</p>
+     */
+    @JsonProperty("numerals")
+    public Optional<Boolean> getNumerals() {
+        return numerals;
+    }
+
+    /**
+     * @return Transcripts below this confidence threshold will be discarded.
+     * <p>@default 0.4</p>
+     */
+    @JsonProperty("confidenceThreshold")
+    public Optional<Double> getConfidenceThreshold() {
+        return confidenceThreshold;
+    }
+
+    /**
      * @return These keywords are passed to the transcription model to help it pick up use-case specific words. Anything that may not be a common word, like your company name, should be added here.
      */
     @JsonProperty("keywords")
@@ -167,6 +197,14 @@ public final class DeepgramTranscriber {
         return endpointing;
     }
 
+    /**
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+     */
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackTranscriberPlan> getFallbackPlan() {
+        return fallbackPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -184,9 +222,12 @@ public final class DeepgramTranscriber {
                 && smartFormat.equals(other.smartFormat)
                 && codeSwitchingEnabled.equals(other.codeSwitchingEnabled)
                 && mipOptOut.equals(other.mipOptOut)
+                && numerals.equals(other.numerals)
+                && confidenceThreshold.equals(other.confidenceThreshold)
                 && keywords.equals(other.keywords)
                 && keyterm.equals(other.keyterm)
-                && endpointing.equals(other.endpointing);
+                && endpointing.equals(other.endpointing)
+                && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
@@ -197,9 +238,12 @@ public final class DeepgramTranscriber {
                 this.smartFormat,
                 this.codeSwitchingEnabled,
                 this.mipOptOut,
+                this.numerals,
+                this.confidenceThreshold,
                 this.keywords,
                 this.keyterm,
-                this.endpointing);
+                this.endpointing,
+                this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -223,11 +267,17 @@ public final class DeepgramTranscriber {
 
         private Optional<Boolean> mipOptOut = Optional.empty();
 
+        private Optional<Boolean> numerals = Optional.empty();
+
+        private Optional<Double> confidenceThreshold = Optional.empty();
+
         private Optional<List<String>> keywords = Optional.empty();
 
         private Optional<List<String>> keyterm = Optional.empty();
 
         private Optional<Double> endpointing = Optional.empty();
+
+        private Optional<FallbackTranscriberPlan> fallbackPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -240,9 +290,12 @@ public final class DeepgramTranscriber {
             smartFormat(other.getSmartFormat());
             codeSwitchingEnabled(other.getCodeSwitchingEnabled());
             mipOptOut(other.getMipOptOut());
+            numerals(other.getNumerals());
+            confidenceThreshold(other.getConfidenceThreshold());
             keywords(other.getKeywords());
             keyterm(other.getKeyterm());
             endpointing(other.getEndpointing());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -301,6 +354,28 @@ public final class DeepgramTranscriber {
             return this;
         }
 
+        @JsonSetter(value = "numerals", nulls = Nulls.SKIP)
+        public Builder numerals(Optional<Boolean> numerals) {
+            this.numerals = numerals;
+            return this;
+        }
+
+        public Builder numerals(Boolean numerals) {
+            this.numerals = Optional.ofNullable(numerals);
+            return this;
+        }
+
+        @JsonSetter(value = "confidenceThreshold", nulls = Nulls.SKIP)
+        public Builder confidenceThreshold(Optional<Double> confidenceThreshold) {
+            this.confidenceThreshold = confidenceThreshold;
+            return this;
+        }
+
+        public Builder confidenceThreshold(Double confidenceThreshold) {
+            this.confidenceThreshold = Optional.ofNullable(confidenceThreshold);
+            return this;
+        }
+
         @JsonSetter(value = "keywords", nulls = Nulls.SKIP)
         public Builder keywords(Optional<List<String>> keywords) {
             this.keywords = keywords;
@@ -334,6 +409,17 @@ public final class DeepgramTranscriber {
             return this;
         }
 
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public Builder fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
+            return this;
+        }
+
+        public Builder fallbackPlan(FallbackTranscriberPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
         public DeepgramTranscriber build() {
             return new DeepgramTranscriber(
                     model,
@@ -341,9 +427,12 @@ public final class DeepgramTranscriber {
                     smartFormat,
                     codeSwitchingEnabled,
                     mipOptOut,
+                    numerals,
+                    confidenceThreshold,
                     keywords,
                     keyterm,
                     endpointing,
+                    fallbackPlan,
                     additionalProperties);
         }
     }

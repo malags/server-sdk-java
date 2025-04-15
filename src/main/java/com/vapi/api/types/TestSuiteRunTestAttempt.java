@@ -17,23 +17,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TestSuiteRunTestAttempt.Builder.class)
 public final class TestSuiteRunTestAttempt {
     private final List<TestSuiteRunScorerAi> scorerResults;
 
-    private final TestSuiteRunTestAttemptCall call;
+    private final Optional<TestSuiteRunTestAttemptCall> call;
+
+    private final Optional<String> callId;
+
+    private final Optional<TestSuiteRunTestAttemptMetadata> metadata;
 
     private final Map<String, Object> additionalProperties;
 
     private TestSuiteRunTestAttempt(
             List<TestSuiteRunScorerAi> scorerResults,
-            TestSuiteRunTestAttemptCall call,
+            Optional<TestSuiteRunTestAttemptCall> call,
+            Optional<String> callId,
+            Optional<TestSuiteRunTestAttemptMetadata> metadata,
             Map<String, Object> additionalProperties) {
         this.scorerResults = scorerResults;
         this.call = call;
+        this.callId = callId;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,8 +57,24 @@ public final class TestSuiteRunTestAttempt {
      * @return This is the call made during the test attempt.
      */
     @JsonProperty("call")
-    public TestSuiteRunTestAttemptCall getCall() {
+    public Optional<TestSuiteRunTestAttemptCall> getCall() {
         return call;
+    }
+
+    /**
+     * @return This is the call ID for the test attempt.
+     */
+    @JsonProperty("callId")
+    public Optional<String> getCallId() {
+        return callId;
+    }
+
+    /**
+     * @return This is the metadata for the test attempt.
+     */
+    @JsonProperty("metadata")
+    public Optional<TestSuiteRunTestAttemptMetadata> getMetadata() {
+        return metadata;
     }
 
     @java.lang.Override
@@ -65,12 +89,15 @@ public final class TestSuiteRunTestAttempt {
     }
 
     private boolean equalTo(TestSuiteRunTestAttempt other) {
-        return scorerResults.equals(other.scorerResults) && call.equals(other.call);
+        return scorerResults.equals(other.scorerResults)
+                && call.equals(other.call)
+                && callId.equals(other.callId)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.scorerResults, this.call);
+        return Objects.hash(this.scorerResults, this.call, this.callId, this.metadata);
     }
 
     @java.lang.Override
@@ -78,86 +105,85 @@ public final class TestSuiteRunTestAttempt {
         return ObjectMappers.stringify(this);
     }
 
-    public static CallStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface CallStage {
-        _FinalStage call(@NotNull TestSuiteRunTestAttemptCall call);
-
-        Builder from(TestSuiteRunTestAttempt other);
-    }
-
-    public interface _FinalStage {
-        TestSuiteRunTestAttempt build();
-
-        _FinalStage scorerResults(List<TestSuiteRunScorerAi> scorerResults);
-
-        _FinalStage addScorerResults(TestSuiteRunScorerAi scorerResults);
-
-        _FinalStage addAllScorerResults(List<TestSuiteRunScorerAi> scorerResults);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CallStage, _FinalStage {
-        private TestSuiteRunTestAttemptCall call;
-
+    public static final class Builder {
         private List<TestSuiteRunScorerAi> scorerResults = new ArrayList<>();
+
+        private Optional<TestSuiteRunTestAttemptCall> call = Optional.empty();
+
+        private Optional<String> callId = Optional.empty();
+
+        private Optional<TestSuiteRunTestAttemptMetadata> metadata = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(TestSuiteRunTestAttempt other) {
             scorerResults(other.getScorerResults());
             call(other.getCall());
+            callId(other.getCallId());
+            metadata(other.getMetadata());
             return this;
         }
 
-        /**
-         * <p>This is the call made during the test attempt.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("call")
-        public _FinalStage call(@NotNull TestSuiteRunTestAttemptCall call) {
-            this.call = Objects.requireNonNull(call, "call must not be null");
-            return this;
-        }
-
-        /**
-         * <p>These are the results of the scorers used to evaluate the test attempt.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage addAllScorerResults(List<TestSuiteRunScorerAi> scorerResults) {
-            this.scorerResults.addAll(scorerResults);
-            return this;
-        }
-
-        /**
-         * <p>These are the results of the scorers used to evaluate the test attempt.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage addScorerResults(TestSuiteRunScorerAi scorerResults) {
-            this.scorerResults.add(scorerResults);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "scorerResults", nulls = Nulls.SKIP)
-        public _FinalStage scorerResults(List<TestSuiteRunScorerAi> scorerResults) {
+        public Builder scorerResults(List<TestSuiteRunScorerAi> scorerResults) {
             this.scorerResults.clear();
             this.scorerResults.addAll(scorerResults);
             return this;
         }
 
-        @java.lang.Override
+        public Builder addScorerResults(TestSuiteRunScorerAi scorerResults) {
+            this.scorerResults.add(scorerResults);
+            return this;
+        }
+
+        public Builder addAllScorerResults(List<TestSuiteRunScorerAi> scorerResults) {
+            this.scorerResults.addAll(scorerResults);
+            return this;
+        }
+
+        @JsonSetter(value = "call", nulls = Nulls.SKIP)
+        public Builder call(Optional<TestSuiteRunTestAttemptCall> call) {
+            this.call = call;
+            return this;
+        }
+
+        public Builder call(TestSuiteRunTestAttemptCall call) {
+            this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        @JsonSetter(value = "callId", nulls = Nulls.SKIP)
+        public Builder callId(Optional<String> callId) {
+            this.callId = callId;
+            return this;
+        }
+
+        public Builder callId(String callId) {
+            this.callId = Optional.ofNullable(callId);
+            return this;
+        }
+
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public Builder metadata(Optional<TestSuiteRunTestAttemptMetadata> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        public Builder metadata(TestSuiteRunTestAttemptMetadata metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
         public TestSuiteRunTestAttempt build() {
-            return new TestSuiteRunTestAttempt(scorerResults, call, additionalProperties);
+            return new TestSuiteRunTestAttempt(scorerResults, call, callId, metadata, additionalProperties);
         }
     }
 }

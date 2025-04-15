@@ -6,6 +6,8 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CallStatus {
+    SCHEDULED("scheduled"),
+
     QUEUED("queued"),
 
     RINGING("ringing"),

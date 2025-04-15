@@ -16,13 +16,15 @@ import com.vapi.api.types.CartesiaVoice;
 import com.vapi.api.types.CustomVoice;
 import com.vapi.api.types.DeepgramVoice;
 import com.vapi.api.types.ElevenLabsVoice;
+import com.vapi.api.types.HumeVoice;
 import com.vapi.api.types.LmntVoice;
-import com.vapi.api.types.NeetsVoice;
+import com.vapi.api.types.NeuphonicVoice;
 import com.vapi.api.types.OpenAiVoice;
 import com.vapi.api.types.PlayHtVoice;
 import com.vapi.api.types.RimeAiVoice;
 import com.vapi.api.types.SmallestAiVoice;
 import com.vapi.api.types.TavusVoice;
+import com.vapi.api.types.VapiVoice;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -58,12 +60,16 @@ public final class UpdateAssistantDtoVoice {
         return new UpdateAssistantDtoVoice(new _11LabsValue(value));
     }
 
+    public static UpdateAssistantDtoVoice hume(HumeVoice value) {
+        return new UpdateAssistantDtoVoice(new HumeValue(value));
+    }
+
     public static UpdateAssistantDtoVoice lmnt(LmntVoice value) {
         return new UpdateAssistantDtoVoice(new LmntValue(value));
     }
 
-    public static UpdateAssistantDtoVoice neets(NeetsVoice value) {
-        return new UpdateAssistantDtoVoice(new NeetsValue(value));
+    public static UpdateAssistantDtoVoice neuphonic(NeuphonicVoice value) {
+        return new UpdateAssistantDtoVoice(new NeuphonicValue(value));
     }
 
     public static UpdateAssistantDtoVoice openai(OpenAiVoice value) {
@@ -86,6 +92,10 @@ public final class UpdateAssistantDtoVoice {
         return new UpdateAssistantDtoVoice(new TavusValue(value));
     }
 
+    public static UpdateAssistantDtoVoice vapi(VapiVoice value) {
+        return new UpdateAssistantDtoVoice(new VapiValue(value));
+    }
+
     public boolean isAzure() {
         return value instanceof AzureValue;
     }
@@ -106,12 +116,16 @@ public final class UpdateAssistantDtoVoice {
         return value instanceof _11LabsValue;
     }
 
+    public boolean isHume() {
+        return value instanceof HumeValue;
+    }
+
     public boolean isLmnt() {
         return value instanceof LmntValue;
     }
 
-    public boolean isNeets() {
-        return value instanceof NeetsValue;
+    public boolean isNeuphonic() {
+        return value instanceof NeuphonicValue;
     }
 
     public boolean isOpenai() {
@@ -132,6 +146,10 @@ public final class UpdateAssistantDtoVoice {
 
     public boolean isTavus() {
         return value instanceof TavusValue;
+    }
+
+    public boolean isVapi() {
+        return value instanceof VapiValue;
     }
 
     public boolean _isUnknown() {
@@ -173,6 +191,13 @@ public final class UpdateAssistantDtoVoice {
         return Optional.empty();
     }
 
+    public Optional<HumeVoice> getHume() {
+        if (isHume()) {
+            return Optional.of(((HumeValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<LmntVoice> getLmnt() {
         if (isLmnt()) {
             return Optional.of(((LmntValue) value).value);
@@ -180,9 +205,9 @@ public final class UpdateAssistantDtoVoice {
         return Optional.empty();
     }
 
-    public Optional<NeetsVoice> getNeets() {
-        if (isNeets()) {
-            return Optional.of(((NeetsValue) value).value);
+    public Optional<NeuphonicVoice> getNeuphonic() {
+        if (isNeuphonic()) {
+            return Optional.of(((NeuphonicValue) value).value);
         }
         return Optional.empty();
     }
@@ -222,6 +247,13 @@ public final class UpdateAssistantDtoVoice {
         return Optional.empty();
     }
 
+    public Optional<VapiVoice> getVapi() {
+        if (isVapi()) {
+            return Optional.of(((VapiValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -245,9 +277,11 @@ public final class UpdateAssistantDtoVoice {
 
         T visit11Labs(ElevenLabsVoice _11Labs);
 
+        T visitHume(HumeVoice hume);
+
         T visitLmnt(LmntVoice lmnt);
 
-        T visitNeets(NeetsVoice neets);
+        T visitNeuphonic(NeuphonicVoice neuphonic);
 
         T visitOpenai(OpenAiVoice openai);
 
@@ -259,6 +293,8 @@ public final class UpdateAssistantDtoVoice {
 
         T visitTavus(TavusVoice tavus);
 
+        T visitVapi(VapiVoice vapi);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -269,13 +305,15 @@ public final class UpdateAssistantDtoVoice {
         @JsonSubTypes.Type(CustomVoiceValue.class),
         @JsonSubTypes.Type(DeepgramValue.class),
         @JsonSubTypes.Type(_11LabsValue.class),
+        @JsonSubTypes.Type(HumeValue.class),
         @JsonSubTypes.Type(LmntValue.class),
-        @JsonSubTypes.Type(NeetsValue.class),
+        @JsonSubTypes.Type(NeuphonicValue.class),
         @JsonSubTypes.Type(OpenaiValue.class),
         @JsonSubTypes.Type(PlayhtValue.class),
         @JsonSubTypes.Type(RimeAiValue.class),
         @JsonSubTypes.Type(SmallestAiValue.class),
-        @JsonSubTypes.Type(TavusValue.class)
+        @JsonSubTypes.Type(TavusValue.class),
+        @JsonSubTypes.Type(VapiValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -477,6 +515,45 @@ public final class UpdateAssistantDtoVoice {
         }
     }
 
+    @JsonTypeName("hume")
+    @JsonIgnoreProperties("provider")
+    private static final class HumeValue implements Value {
+        @JsonUnwrapped
+        private HumeVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private HumeValue() {}
+
+        private HumeValue(HumeVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitHume(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof HumeValue && equalTo((HumeValue) other);
+        }
+
+        private boolean equalTo(HumeValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoVoice{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("lmnt")
     @JsonIgnoreProperties("provider")
     private static final class LmntValue implements Value {
@@ -516,31 +593,31 @@ public final class UpdateAssistantDtoVoice {
         }
     }
 
-    @JsonTypeName("neets")
+    @JsonTypeName("neuphonic")
     @JsonIgnoreProperties("provider")
-    private static final class NeetsValue implements Value {
+    private static final class NeuphonicValue implements Value {
         @JsonUnwrapped
-        private NeetsVoice value;
+        private NeuphonicVoice value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private NeetsValue() {}
+        private NeuphonicValue() {}
 
-        private NeetsValue(NeetsVoice value) {
+        private NeuphonicValue(NeuphonicVoice value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitNeets(value);
+            return visitor.visitNeuphonic(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof NeetsValue && equalTo((NeetsValue) other);
+            return other instanceof NeuphonicValue && equalTo((NeuphonicValue) other);
         }
 
-        private boolean equalTo(NeetsValue other) {
+        private boolean equalTo(NeuphonicValue other) {
             return value.equals(other.value);
         }
 
@@ -736,6 +813,45 @@ public final class UpdateAssistantDtoVoice {
         }
 
         private boolean equalTo(TavusValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoVoice{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("vapi")
+    @JsonIgnoreProperties("provider")
+    private static final class VapiValue implements Value {
+        @JsonUnwrapped
+        private VapiVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private VapiValue() {}
+
+        private VapiValue(VapiVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitVapi(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof VapiValue && equalTo((VapiValue) other);
+        }
+
+        private boolean equalTo(VapiValue other) {
             return value.equals(other.value);
         }
 

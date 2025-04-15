@@ -34,6 +34,8 @@ public final class UpdateOrgDto {
 
     private final Optional<Double> concurrencyLimit;
 
+    private final Optional<CompliancePlan> compliancePlan;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateOrgDto(
@@ -44,6 +46,7 @@ public final class UpdateOrgDto {
             Optional<Double> billingLimit,
             Optional<Server> server,
             Optional<Double> concurrencyLimit,
+            Optional<CompliancePlan> compliancePlan,
             Map<String, Object> additionalProperties) {
         this.hipaaEnabled = hipaaEnabled;
         this.subscriptionId = subscriptionId;
@@ -52,6 +55,7 @@ public final class UpdateOrgDto {
         this.billingLimit = billingLimit;
         this.server = server;
         this.concurrencyLimit = concurrencyLimit;
+        this.compliancePlan = compliancePlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -119,6 +123,19 @@ public final class UpdateOrgDto {
         return concurrencyLimit;
     }
 
+    /**
+     * @return Stores the information about the compliance plan enforced at the organization level. Currently pciEnabled is supported through this field.
+     * When this is enabled, any logs, recordings, or transcriptions will be shipped to the customer endpoints if provided else lost.
+     * At the end of the call, you will receive an end-of-call-report message to store on your server, if webhook is provided.
+     * Defaults to false.
+     * When PCI is enabled, only PCI-compliant Providers will be available for LLM, Voice and transcribers.
+     * This is due to the compliance requirements of PCI. Other providers may not meet these requirements.
+     */
+    @JsonProperty("compliancePlan")
+    public Optional<CompliancePlan> getCompliancePlan() {
+        return compliancePlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -137,7 +154,8 @@ public final class UpdateOrgDto {
                 && channel.equals(other.channel)
                 && billingLimit.equals(other.billingLimit)
                 && server.equals(other.server)
-                && concurrencyLimit.equals(other.concurrencyLimit);
+                && concurrencyLimit.equals(other.concurrencyLimit)
+                && compliancePlan.equals(other.compliancePlan);
     }
 
     @java.lang.Override
@@ -149,7 +167,8 @@ public final class UpdateOrgDto {
                 this.channel,
                 this.billingLimit,
                 this.server,
-                this.concurrencyLimit);
+                this.concurrencyLimit,
+                this.compliancePlan);
     }
 
     @java.lang.Override
@@ -177,6 +196,8 @@ public final class UpdateOrgDto {
 
         private Optional<Double> concurrencyLimit = Optional.empty();
 
+        private Optional<CompliancePlan> compliancePlan = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -190,6 +211,7 @@ public final class UpdateOrgDto {
             billingLimit(other.getBillingLimit());
             server(other.getServer());
             concurrencyLimit(other.getConcurrencyLimit());
+            compliancePlan(other.getCompliancePlan());
             return this;
         }
 
@@ -270,6 +292,17 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        @JsonSetter(value = "compliancePlan", nulls = Nulls.SKIP)
+        public Builder compliancePlan(Optional<CompliancePlan> compliancePlan) {
+            this.compliancePlan = compliancePlan;
+            return this;
+        }
+
+        public Builder compliancePlan(CompliancePlan compliancePlan) {
+            this.compliancePlan = Optional.ofNullable(compliancePlan);
+            return this;
+        }
+
         public UpdateOrgDto build() {
             return new UpdateOrgDto(
                     hipaaEnabled,
@@ -279,6 +312,7 @@ public final class UpdateOrgDto {
                     billingLimit,
                     server,
                     concurrencyLimit,
+                    compliancePlan,
                     additionalProperties);
         }
     }

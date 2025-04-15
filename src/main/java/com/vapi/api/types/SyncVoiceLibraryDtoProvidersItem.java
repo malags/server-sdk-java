@@ -6,6 +6,8 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum SyncVoiceLibraryDtoProvidersItem {
+    VAPI("vapi"),
+
     ELEVEN_LABS("11labs"),
 
     AZURE("azure"),
@@ -16,9 +18,9 @@ public enum SyncVoiceLibraryDtoProvidersItem {
 
     DEEPGRAM("deepgram"),
 
-    LMNT("lmnt"),
+    HUME("hume"),
 
-    NEETS("neets"),
+    LMNT("lmnt"),
 
     NEUPHONIC("neuphonic"),
 
@@ -30,7 +32,9 @@ public enum SyncVoiceLibraryDtoProvidersItem {
 
     SMALLEST_AI("smallest-ai"),
 
-    TAVUS("tavus");
+    TAVUS("tavus"),
+
+    SESAME("sesame");
 
     private final String value;
 

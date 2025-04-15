@@ -29,6 +29,14 @@ public final class TrieveKnowledgeBaseImport {
     }
 
     /**
+     * @return This is to import an existing dataset from Trieve.
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "import";
+    }
+
+    /**
      * @return This is the <code>datasetId</code> of the dataset on your Trieve account.
      */
     @JsonProperty("providerId")

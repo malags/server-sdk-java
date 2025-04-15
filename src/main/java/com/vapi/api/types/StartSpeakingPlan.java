@@ -23,7 +23,9 @@ import java.util.Optional;
 public final class StartSpeakingPlan {
     private final Optional<Double> waitSeconds;
 
-    private final Optional<Boolean> smartEndpointingEnabled;
+    private final Optional<Map<String, Object>> smartEndpointingEnabled;
+
+    private final Optional<StartSpeakingPlanSmartEndpointingPlan> smartEndpointingPlan;
 
     private final Optional<List<StartSpeakingPlanCustomEndpointingRulesItem>> customEndpointingRules;
 
@@ -33,12 +35,14 @@ public final class StartSpeakingPlan {
 
     private StartSpeakingPlan(
             Optional<Double> waitSeconds,
-            Optional<Boolean> smartEndpointingEnabled,
+            Optional<Map<String, Object>> smartEndpointingEnabled,
+            Optional<StartSpeakingPlanSmartEndpointingPlan> smartEndpointingPlan,
             Optional<List<StartSpeakingPlanCustomEndpointingRulesItem>> customEndpointingRules,
             Optional<TranscriptionEndpointingPlan> transcriptionEndpointingPlan,
             Map<String, Object> additionalProperties) {
         this.waitSeconds = waitSeconds;
         this.smartEndpointingEnabled = smartEndpointingEnabled;
+        this.smartEndpointingPlan = smartEndpointingPlan;
         this.customEndpointingRules = customEndpointingRules;
         this.transcriptionEndpointingPlan = transcriptionEndpointingPlan;
         this.additionalProperties = additionalProperties;
@@ -63,19 +67,19 @@ public final class StartSpeakingPlan {
         return waitSeconds;
     }
 
-    /**
-     * @return This determines if a customer speech is considered done (endpointing) using a Vapi custom-trained model on customer's speech. This is good for middle-of-thought detection.
-     * <p>Once an endpoint is triggered, the request is sent to <code>assistant.model</code>.</p>
-     * <p>Usage:</p>
-     * <ul>
-     * <li>If your conversations are long-form and you want assistant to wait smartly even if customer pauses for a bit to think, you can use this instead.</li>
-     * </ul>
-     * <p>This overrides <code>transcriptionEndpointingPlan</code>.</p>
-     * <p>@default false</p>
-     */
     @JsonProperty("smartEndpointingEnabled")
-    public Optional<Boolean> getSmartEndpointingEnabled() {
+    public Optional<Map<String, Object>> getSmartEndpointingEnabled() {
         return smartEndpointingEnabled;
+    }
+
+    /**
+     * @return This is the plan for smart endpointing. Pick between Vapi smart endpointing or LiveKit smart endpointing (or nothing). We strongly recommend using livekit endpointing when working in English. LiveKit endpointing is not supported in other languages, yet.
+     * <p>If this is set, it will override and take precedence over <code>transcriptionEndpointingPlan</code>.
+     * This plan will still be overridden by any matching <code>customEndpointingRules</code>.</p>
+     */
+    @JsonProperty("smartEndpointingPlan")
+    public Optional<StartSpeakingPlanSmartEndpointingPlan> getSmartEndpointingPlan() {
+        return smartEndpointingPlan;
     }
 
     /**
@@ -86,8 +90,14 @@ public final class StartSpeakingPlan {
      * <li>If you have questions where the customer may pause to look up information like &quot;what's my account number?&quot;, you can set a longer timeout.</li>
      * <li>If you want to wait longer while customer is enumerating a list of numbers, you can set a longer timeout.</li>
      * </ul>
-     * <p>These override <code>transcriptionEndpointingPlan</code> and <code>smartEndpointingEnabled</code> when a rule is matched.</p>
+     * <p>These rules have the highest precedence and will override both <code>smartEndpointingPlan</code> and <code>transcriptionEndpointingPlan</code> when a rule is matched.</p>
      * <p>The rules are evaluated in order and the first one that matches will be used.</p>
+     * <p>Order of precedence for endpointing:</p>
+     * <ol>
+     * <li>customEndpointingRules (if any match)</li>
+     * <li>smartEndpointingPlan (if set)</li>
+     * <li>transcriptionEndpointingPlan</li>
+     * </ol>
      * <p>@default []</p>
      */
     @JsonProperty("customEndpointingRules")
@@ -98,6 +108,8 @@ public final class StartSpeakingPlan {
     /**
      * @return This determines how a customer speech is considered done (endpointing) using the transcription of customer's speech.
      * <p>Once an endpoint is triggered, the request is sent to <code>assistant.model</code>.</p>
+     * <p>Note: This plan is only used if <code>smartEndpointingPlan</code> is not set. If both are provided, <code>smartEndpointingPlan</code> takes precedence.
+     * This plan will also be overridden by any matching <code>customEndpointingRules</code>.</p>
      */
     @JsonProperty("transcriptionEndpointingPlan")
     public Optional<TranscriptionEndpointingPlan> getTranscriptionEndpointingPlan() {
@@ -118,6 +130,7 @@ public final class StartSpeakingPlan {
     private boolean equalTo(StartSpeakingPlan other) {
         return waitSeconds.equals(other.waitSeconds)
                 && smartEndpointingEnabled.equals(other.smartEndpointingEnabled)
+                && smartEndpointingPlan.equals(other.smartEndpointingPlan)
                 && customEndpointingRules.equals(other.customEndpointingRules)
                 && transcriptionEndpointingPlan.equals(other.transcriptionEndpointingPlan);
     }
@@ -127,6 +140,7 @@ public final class StartSpeakingPlan {
         return Objects.hash(
                 this.waitSeconds,
                 this.smartEndpointingEnabled,
+                this.smartEndpointingPlan,
                 this.customEndpointingRules,
                 this.transcriptionEndpointingPlan);
     }
@@ -144,7 +158,9 @@ public final class StartSpeakingPlan {
     public static final class Builder {
         private Optional<Double> waitSeconds = Optional.empty();
 
-        private Optional<Boolean> smartEndpointingEnabled = Optional.empty();
+        private Optional<Map<String, Object>> smartEndpointingEnabled = Optional.empty();
+
+        private Optional<StartSpeakingPlanSmartEndpointingPlan> smartEndpointingPlan = Optional.empty();
 
         private Optional<List<StartSpeakingPlanCustomEndpointingRulesItem>> customEndpointingRules = Optional.empty();
 
@@ -158,6 +174,7 @@ public final class StartSpeakingPlan {
         public Builder from(StartSpeakingPlan other) {
             waitSeconds(other.getWaitSeconds());
             smartEndpointingEnabled(other.getSmartEndpointingEnabled());
+            smartEndpointingPlan(other.getSmartEndpointingPlan());
             customEndpointingRules(other.getCustomEndpointingRules());
             transcriptionEndpointingPlan(other.getTranscriptionEndpointingPlan());
             return this;
@@ -175,13 +192,24 @@ public final class StartSpeakingPlan {
         }
 
         @JsonSetter(value = "smartEndpointingEnabled", nulls = Nulls.SKIP)
-        public Builder smartEndpointingEnabled(Optional<Boolean> smartEndpointingEnabled) {
+        public Builder smartEndpointingEnabled(Optional<Map<String, Object>> smartEndpointingEnabled) {
             this.smartEndpointingEnabled = smartEndpointingEnabled;
             return this;
         }
 
-        public Builder smartEndpointingEnabled(Boolean smartEndpointingEnabled) {
+        public Builder smartEndpointingEnabled(Map<String, Object> smartEndpointingEnabled) {
             this.smartEndpointingEnabled = Optional.ofNullable(smartEndpointingEnabled);
+            return this;
+        }
+
+        @JsonSetter(value = "smartEndpointingPlan", nulls = Nulls.SKIP)
+        public Builder smartEndpointingPlan(Optional<StartSpeakingPlanSmartEndpointingPlan> smartEndpointingPlan) {
+            this.smartEndpointingPlan = smartEndpointingPlan;
+            return this;
+        }
+
+        public Builder smartEndpointingPlan(StartSpeakingPlanSmartEndpointingPlan smartEndpointingPlan) {
+            this.smartEndpointingPlan = Optional.ofNullable(smartEndpointingPlan);
             return this;
         }
 
@@ -214,6 +242,7 @@ public final class StartSpeakingPlan {
             return new StartSpeakingPlan(
                     waitSeconds,
                     smartEndpointingEnabled,
+                    smartEndpointingPlan,
                     customEndpointingRules,
                     transcriptionEndpointingPlan,
                     additionalProperties);

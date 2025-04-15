@@ -9,30 +9,31 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AiEdgeCondition.Builder.class)
 public final class AiEdgeCondition {
-    private final List<String> matches;
+    private final String prompt;
 
     private final Map<String, Object> additionalProperties;
 
-    private AiEdgeCondition(List<String> matches, Map<String, Object> additionalProperties) {
-        this.matches = matches;
+    private AiEdgeCondition(String prompt, Map<String, Object> additionalProperties) {
+        this.prompt = prompt;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("matches")
-    public List<String> getMatches() {
-        return matches;
+    /**
+     * @return This is the prompt for the AI edge condition. It should evaluate to a boolean.
+     */
+    @JsonProperty("prompt")
+    public String getPrompt() {
+        return prompt;
     }
 
     @java.lang.Override
@@ -47,12 +48,12 @@ public final class AiEdgeCondition {
     }
 
     private boolean equalTo(AiEdgeCondition other) {
-        return matches.equals(other.matches);
+        return prompt.equals(other.prompt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.matches);
+        return Objects.hash(this.prompt);
     }
 
     @java.lang.Override
@@ -60,43 +61,49 @@ public final class AiEdgeCondition {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static PromptStage builder() {
         return new Builder();
     }
 
+    public interface PromptStage {
+        _FinalStage prompt(@NotNull String prompt);
+
+        Builder from(AiEdgeCondition other);
+    }
+
+    public interface _FinalStage {
+        AiEdgeCondition build();
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private List<String> matches = new ArrayList<>();
+    public static final class Builder implements PromptStage, _FinalStage {
+        private String prompt;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(AiEdgeCondition other) {
-            matches(other.getMatches());
+            prompt(other.getPrompt());
             return this;
         }
 
-        @JsonSetter(value = "matches", nulls = Nulls.SKIP)
-        public Builder matches(List<String> matches) {
-            this.matches.clear();
-            this.matches.addAll(matches);
+        /**
+         * <p>This is the prompt for the AI edge condition. It should evaluate to a boolean.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("prompt")
+        public _FinalStage prompt(@NotNull String prompt) {
+            this.prompt = Objects.requireNonNull(prompt, "prompt must not be null");
             return this;
         }
 
-        public Builder addMatches(String matches) {
-            this.matches.add(matches);
-            return this;
-        }
-
-        public Builder addAllMatches(List<String> matches) {
-            this.matches.addAll(matches);
-            return this;
-        }
-
+        @java.lang.Override
         public AiEdgeCondition build() {
-            return new AiEdgeCondition(matches, additionalProperties);
+            return new AiEdgeCondition(prompt, additionalProperties);
         }
     }
 }

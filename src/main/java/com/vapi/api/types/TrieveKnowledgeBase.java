@@ -25,7 +25,7 @@ public final class TrieveKnowledgeBase {
 
     private final Optional<TrieveKnowledgeBaseSearchPlan> searchPlan;
 
-    private final Optional<TrieveKnowledgeBaseCreatePlan> createPlan;
+    private final Optional<TrieveKnowledgeBaseImport> createPlan;
 
     private final String id;
 
@@ -36,7 +36,7 @@ public final class TrieveKnowledgeBase {
     private TrieveKnowledgeBase(
             Optional<String> name,
             Optional<TrieveKnowledgeBaseSearchPlan> searchPlan,
-            Optional<TrieveKnowledgeBaseCreatePlan> createPlan,
+            Optional<TrieveKnowledgeBaseImport> createPlan,
             String id,
             String orgId,
             Map<String, Object> additionalProperties) {
@@ -73,7 +73,7 @@ public final class TrieveKnowledgeBase {
      * @return This is the plan if you want us to create/import a new vector store using Trieve.
      */
     @JsonProperty("createPlan")
-    public Optional<TrieveKnowledgeBaseCreatePlan> getCreatePlan() {
+    public Optional<TrieveKnowledgeBaseImport> getCreatePlan() {
         return createPlan;
     }
 
@@ -147,9 +147,9 @@ public final class TrieveKnowledgeBase {
 
         _FinalStage searchPlan(TrieveKnowledgeBaseSearchPlan searchPlan);
 
-        _FinalStage createPlan(Optional<TrieveKnowledgeBaseCreatePlan> createPlan);
+        _FinalStage createPlan(Optional<TrieveKnowledgeBaseImport> createPlan);
 
-        _FinalStage createPlan(TrieveKnowledgeBaseCreatePlan createPlan);
+        _FinalStage createPlan(TrieveKnowledgeBaseImport createPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -158,7 +158,7 @@ public final class TrieveKnowledgeBase {
 
         private String orgId;
 
-        private Optional<TrieveKnowledgeBaseCreatePlan> createPlan = Optional.empty();
+        private Optional<TrieveKnowledgeBaseImport> createPlan = Optional.empty();
 
         private Optional<TrieveKnowledgeBaseSearchPlan> searchPlan = Optional.empty();
 
@@ -206,14 +206,14 @@ public final class TrieveKnowledgeBase {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage createPlan(TrieveKnowledgeBaseCreatePlan createPlan) {
+        public _FinalStage createPlan(TrieveKnowledgeBaseImport createPlan) {
             this.createPlan = Optional.ofNullable(createPlan);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "createPlan", nulls = Nulls.SKIP)
-        public _FinalStage createPlan(Optional<TrieveKnowledgeBaseCreatePlan> createPlan) {
+        public _FinalStage createPlan(Optional<TrieveKnowledgeBaseImport> createPlan) {
             this.createPlan = createPlan;
             return this;
         }

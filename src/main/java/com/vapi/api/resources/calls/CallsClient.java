@@ -14,6 +14,7 @@ import com.vapi.api.core.VapiException;
 import com.vapi.api.resources.calls.requests.CallsListRequest;
 import com.vapi.api.resources.calls.requests.CreateCallDto;
 import com.vapi.api.resources.calls.requests.UpdateCallDto;
+import com.vapi.api.resources.calls.types.CallsCreateResponse;
 import com.vapi.api.types.Call;
 import java.io.IOException;
 import java.util.List;
@@ -115,15 +116,15 @@ public class CallsClient {
         }
     }
 
-    public Call create() {
+    public CallsCreateResponse create() {
         return create(CreateCallDto.builder().build());
     }
 
-    public Call create(CreateCallDto request) {
+    public CallsCreateResponse create(CreateCallDto request) {
         return create(request, null);
     }
 
-    public Call create(CreateCallDto request, RequestOptions requestOptions) {
+    public CallsCreateResponse create(CreateCallDto request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("call")
@@ -149,7 +150,7 @@ public class CallsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Call.class);
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CallsCreateResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new VapiApiException(

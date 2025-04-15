@@ -26,6 +26,10 @@ public final class AssistantOverridesCredentialsItem {
         return value.visit(visitor);
     }
 
+    public static AssistantOverridesCredentialsItem _11Labs(CreateElevenLabsCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new _11LabsValue(value));
+    }
+
     public static AssistantOverridesCredentialsItem anthropic(CreateAnthropicCredentialDto value) {
         return new AssistantOverridesCredentialsItem(new AnthropicValue(value));
     }
@@ -54,6 +58,10 @@ public final class AssistantOverridesCredentialsItem {
         return new AssistantOverridesCredentialsItem(new CartesiaValue(value));
     }
 
+    public static AssistantOverridesCredentialsItem cerebras(CreateCerebrasCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new CerebrasValue(value));
+    }
+
     public static AssistantOverridesCredentialsItem cloudflare(CreateCloudflareCredentialDto value) {
         return new AssistantOverridesCredentialsItem(new CloudflareValue(value));
     }
@@ -74,10 +82,6 @@ public final class AssistantOverridesCredentialsItem {
         return new AssistantOverridesCredentialsItem(new DeepSeekValue(value));
     }
 
-    public static AssistantOverridesCredentialsItem _11Labs(CreateElevenLabsCredentialDto value) {
-        return new AssistantOverridesCredentialsItem(new _11LabsValue(value));
-    }
-
     public static AssistantOverridesCredentialsItem gcp(CreateGcpCredentialDto value) {
         return new AssistantOverridesCredentialsItem(new GcpValue(value));
     }
@@ -90,8 +94,16 @@ public final class AssistantOverridesCredentialsItem {
         return new AssistantOverridesCredentialsItem(new GohighlevelValue(value));
     }
 
+    public static AssistantOverridesCredentialsItem google(CreateGoogleCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new GoogleValue(value));
+    }
+
     public static AssistantOverridesCredentialsItem groq(CreateGroqCredentialDto value) {
         return new AssistantOverridesCredentialsItem(new GroqValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem inflectionAi(CreateInflectionAiCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new InflectionAiValue(value));
     }
 
     public static AssistantOverridesCredentialsItem langfuse(CreateLangfuseCredentialDto value) {
@@ -134,6 +146,10 @@ public final class AssistantOverridesCredentialsItem {
         return new AssistantOverridesCredentialsItem(new S3Value(value));
     }
 
+    public static AssistantOverridesCredentialsItem supabase(CreateSupabaseCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new SupabaseValue(value));
+    }
+
     public static AssistantOverridesCredentialsItem smallestAi(CreateSmallestAiCredentialDto value) {
         return new AssistantOverridesCredentialsItem(new SmallestAiValue(value));
     }
@@ -160,6 +176,50 @@ public final class AssistantOverridesCredentialsItem {
 
     public static AssistantOverridesCredentialsItem xai(CreateXAiCredentialDto value) {
         return new AssistantOverridesCredentialsItem(new XaiValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem neuphonic(CreateNeuphonicCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new NeuphonicValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem hume(CreateHumeCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new HumeValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem mistral(CreateMistralCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new MistralValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem speechmatics(CreateSpeechmaticsCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new SpeechmaticsValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem trieve(CreateTrieveCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new TrieveValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem googleCalendarOauth2Client(
+            CreateGoogleCalendarOAuth2ClientCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new GoogleCalendarOauth2ClientValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem googleCalendarOauth2Authorization(
+            CreateGoogleCalendarOAuth2AuthorizationCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new GoogleCalendarOauth2AuthorizationValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem googleSheetsOauth2Authorization(
+            CreateGoogleSheetsOAuth2AuthorizationCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new GoogleSheetsOauth2AuthorizationValue(value));
+    }
+
+    public static AssistantOverridesCredentialsItem slackOauth2Authorization(
+            CreateSlackOAuth2AuthorizationCredentialDto value) {
+        return new AssistantOverridesCredentialsItem(new SlackOauth2AuthorizationValue(value));
+    }
+
+    public boolean is11Labs() {
+        return value instanceof _11LabsValue;
     }
 
     public boolean isAnthropic() {
@@ -190,6 +250,10 @@ public final class AssistantOverridesCredentialsItem {
         return value instanceof CartesiaValue;
     }
 
+    public boolean isCerebras() {
+        return value instanceof CerebrasValue;
+    }
+
     public boolean isCloudflare() {
         return value instanceof CloudflareValue;
     }
@@ -210,10 +274,6 @@ public final class AssistantOverridesCredentialsItem {
         return value instanceof DeepSeekValue;
     }
 
-    public boolean is11Labs() {
-        return value instanceof _11LabsValue;
-    }
-
     public boolean isGcp() {
         return value instanceof GcpValue;
     }
@@ -226,8 +286,16 @@ public final class AssistantOverridesCredentialsItem {
         return value instanceof GohighlevelValue;
     }
 
+    public boolean isGoogle() {
+        return value instanceof GoogleValue;
+    }
+
     public boolean isGroq() {
         return value instanceof GroqValue;
+    }
+
+    public boolean isInflectionAi() {
+        return value instanceof InflectionAiValue;
     }
 
     public boolean isLangfuse() {
@@ -270,6 +338,10 @@ public final class AssistantOverridesCredentialsItem {
         return value instanceof S3Value;
     }
 
+    public boolean isSupabase() {
+        return value instanceof SupabaseValue;
+    }
+
     public boolean isSmallestAi() {
         return value instanceof SmallestAiValue;
     }
@@ -298,8 +370,51 @@ public final class AssistantOverridesCredentialsItem {
         return value instanceof XaiValue;
     }
 
+    public boolean isNeuphonic() {
+        return value instanceof NeuphonicValue;
+    }
+
+    public boolean isHume() {
+        return value instanceof HumeValue;
+    }
+
+    public boolean isMistral() {
+        return value instanceof MistralValue;
+    }
+
+    public boolean isSpeechmatics() {
+        return value instanceof SpeechmaticsValue;
+    }
+
+    public boolean isTrieve() {
+        return value instanceof TrieveValue;
+    }
+
+    public boolean isGoogleCalendarOauth2Client() {
+        return value instanceof GoogleCalendarOauth2ClientValue;
+    }
+
+    public boolean isGoogleCalendarOauth2Authorization() {
+        return value instanceof GoogleCalendarOauth2AuthorizationValue;
+    }
+
+    public boolean isGoogleSheetsOauth2Authorization() {
+        return value instanceof GoogleSheetsOauth2AuthorizationValue;
+    }
+
+    public boolean isSlackOauth2Authorization() {
+        return value instanceof SlackOauth2AuthorizationValue;
+    }
+
     public boolean _isUnknown() {
         return value instanceof _UnknownValue;
+    }
+
+    public Optional<CreateElevenLabsCredentialDto> get11Labs() {
+        if (is11Labs()) {
+            return Optional.of(((_11LabsValue) value).value);
+        }
+        return Optional.empty();
     }
 
     public Optional<CreateAnthropicCredentialDto> getAnthropic() {
@@ -351,6 +466,13 @@ public final class AssistantOverridesCredentialsItem {
         return Optional.empty();
     }
 
+    public Optional<CreateCerebrasCredentialDto> getCerebras() {
+        if (isCerebras()) {
+            return Optional.of(((CerebrasValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<CreateCloudflareCredentialDto> getCloudflare() {
         if (isCloudflare()) {
             return Optional.of(((CloudflareValue) value).value);
@@ -386,13 +508,6 @@ public final class AssistantOverridesCredentialsItem {
         return Optional.empty();
     }
 
-    public Optional<CreateElevenLabsCredentialDto> get11Labs() {
-        if (is11Labs()) {
-            return Optional.of(((_11LabsValue) value).value);
-        }
-        return Optional.empty();
-    }
-
     public Optional<CreateGcpCredentialDto> getGcp() {
         if (isGcp()) {
             return Optional.of(((GcpValue) value).value);
@@ -414,9 +529,23 @@ public final class AssistantOverridesCredentialsItem {
         return Optional.empty();
     }
 
+    public Optional<CreateGoogleCredentialDto> getGoogle() {
+        if (isGoogle()) {
+            return Optional.of(((GoogleValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<CreateGroqCredentialDto> getGroq() {
         if (isGroq()) {
             return Optional.of(((GroqValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateInflectionAiCredentialDto> getInflectionAi() {
+        if (isInflectionAi()) {
+            return Optional.of(((InflectionAiValue) value).value);
         }
         return Optional.empty();
     }
@@ -491,6 +620,13 @@ public final class AssistantOverridesCredentialsItem {
         return Optional.empty();
     }
 
+    public Optional<CreateSupabaseCredentialDto> getSupabase() {
+        if (isSupabase()) {
+            return Optional.of(((SupabaseValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<CreateSmallestAiCredentialDto> getSmallestAi() {
         if (isSmallestAi()) {
             return Optional.of(((SmallestAiValue) value).value);
@@ -540,6 +676,69 @@ public final class AssistantOverridesCredentialsItem {
         return Optional.empty();
     }
 
+    public Optional<CreateNeuphonicCredentialDto> getNeuphonic() {
+        if (isNeuphonic()) {
+            return Optional.of(((NeuphonicValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateHumeCredentialDto> getHume() {
+        if (isHume()) {
+            return Optional.of(((HumeValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateMistralCredentialDto> getMistral() {
+        if (isMistral()) {
+            return Optional.of(((MistralValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateSpeechmaticsCredentialDto> getSpeechmatics() {
+        if (isSpeechmatics()) {
+            return Optional.of(((SpeechmaticsValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateTrieveCredentialDto> getTrieve() {
+        if (isTrieve()) {
+            return Optional.of(((TrieveValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoogleCalendarOAuth2ClientCredentialDto> getGoogleCalendarOauth2Client() {
+        if (isGoogleCalendarOauth2Client()) {
+            return Optional.of(((GoogleCalendarOauth2ClientValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoogleCalendarOAuth2AuthorizationCredentialDto> getGoogleCalendarOauth2Authorization() {
+        if (isGoogleCalendarOauth2Authorization()) {
+            return Optional.of(((GoogleCalendarOauth2AuthorizationValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoogleSheetsOAuth2AuthorizationCredentialDto> getGoogleSheetsOauth2Authorization() {
+        if (isGoogleSheetsOauth2Authorization()) {
+            return Optional.of(((GoogleSheetsOauth2AuthorizationValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateSlackOAuth2AuthorizationCredentialDto> getSlackOauth2Authorization() {
+        if (isSlackOauth2Authorization()) {
+            return Optional.of(((SlackOauth2AuthorizationValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -553,6 +752,8 @@ public final class AssistantOverridesCredentialsItem {
     }
 
     public interface Visitor<T> {
+        T visit11Labs(CreateElevenLabsCredentialDto _11Labs);
+
         T visitAnthropic(CreateAnthropicCredentialDto anthropic);
 
         T visitAnyscale(CreateAnyscaleCredentialDto anyscale);
@@ -567,6 +768,8 @@ public final class AssistantOverridesCredentialsItem {
 
         T visitCartesia(CreateCartesiaCredentialDto cartesia);
 
+        T visitCerebras(CreateCerebrasCredentialDto cerebras);
+
         T visitCloudflare(CreateCloudflareCredentialDto cloudflare);
 
         T visitCustomLlm(CreateCustomLlmCredentialDto customLlm);
@@ -577,15 +780,17 @@ public final class AssistantOverridesCredentialsItem {
 
         T visitDeepSeek(CreateDeepSeekCredentialDto deepSeek);
 
-        T visit11Labs(CreateElevenLabsCredentialDto _11Labs);
-
         T visitGcp(CreateGcpCredentialDto gcp);
 
         T visitGladia(CreateGladiaCredentialDto gladia);
 
         T visitGohighlevel(CreateGoHighLevelCredentialDto gohighlevel);
 
+        T visitGoogle(CreateGoogleCredentialDto google);
+
         T visitGroq(CreateGroqCredentialDto groq);
+
+        T visitInflectionAi(CreateInflectionAiCredentialDto inflectionAi);
 
         T visitLangfuse(CreateLangfuseCredentialDto langfuse);
 
@@ -607,6 +812,8 @@ public final class AssistantOverridesCredentialsItem {
 
         T visitS3(CreateS3CredentialDto s3);
 
+        T visitSupabase(CreateSupabaseCredentialDto supabase);
+
         T visitSmallestAi(CreateSmallestAiCredentialDto smallestAi);
 
         T visitTavus(CreateTavusCredentialDto tavus);
@@ -621,11 +828,32 @@ public final class AssistantOverridesCredentialsItem {
 
         T visitXai(CreateXAiCredentialDto xai);
 
+        T visitNeuphonic(CreateNeuphonicCredentialDto neuphonic);
+
+        T visitHume(CreateHumeCredentialDto hume);
+
+        T visitMistral(CreateMistralCredentialDto mistral);
+
+        T visitSpeechmatics(CreateSpeechmaticsCredentialDto speechmatics);
+
+        T visitTrieve(CreateTrieveCredentialDto trieve);
+
+        T visitGoogleCalendarOauth2Client(CreateGoogleCalendarOAuth2ClientCredentialDto googleCalendarOauth2Client);
+
+        T visitGoogleCalendarOauth2Authorization(
+                CreateGoogleCalendarOAuth2AuthorizationCredentialDto googleCalendarOauth2Authorization);
+
+        T visitGoogleSheetsOauth2Authorization(
+                CreateGoogleSheetsOAuth2AuthorizationCredentialDto googleSheetsOauth2Authorization);
+
+        T visitSlackOauth2Authorization(CreateSlackOAuth2AuthorizationCredentialDto slackOauth2Authorization);
+
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "provider", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
+        @JsonSubTypes.Type(_11LabsValue.class),
         @JsonSubTypes.Type(AnthropicValue.class),
         @JsonSubTypes.Type(AnyscaleValue.class),
         @JsonSubTypes.Type(AssemblyAiValue.class),
@@ -633,16 +861,18 @@ public final class AssistantOverridesCredentialsItem {
         @JsonSubTypes.Type(AzureValue.class),
         @JsonSubTypes.Type(ByoSipTrunkValue.class),
         @JsonSubTypes.Type(CartesiaValue.class),
+        @JsonSubTypes.Type(CerebrasValue.class),
         @JsonSubTypes.Type(CloudflareValue.class),
         @JsonSubTypes.Type(CustomLlmValue.class),
         @JsonSubTypes.Type(DeepgramValue.class),
         @JsonSubTypes.Type(DeepinfraValue.class),
         @JsonSubTypes.Type(DeepSeekValue.class),
-        @JsonSubTypes.Type(_11LabsValue.class),
         @JsonSubTypes.Type(GcpValue.class),
         @JsonSubTypes.Type(GladiaValue.class),
         @JsonSubTypes.Type(GohighlevelValue.class),
+        @JsonSubTypes.Type(GoogleValue.class),
         @JsonSubTypes.Type(GroqValue.class),
+        @JsonSubTypes.Type(InflectionAiValue.class),
         @JsonSubTypes.Type(LangfuseValue.class),
         @JsonSubTypes.Type(LmntValue.class),
         @JsonSubTypes.Type(MakeValue.class),
@@ -653,17 +883,66 @@ public final class AssistantOverridesCredentialsItem {
         @JsonSubTypes.Type(RimeAiValue.class),
         @JsonSubTypes.Type(RunpodValue.class),
         @JsonSubTypes.Type(S3Value.class),
+        @JsonSubTypes.Type(SupabaseValue.class),
         @JsonSubTypes.Type(SmallestAiValue.class),
         @JsonSubTypes.Type(TavusValue.class),
         @JsonSubTypes.Type(TogetherAiValue.class),
         @JsonSubTypes.Type(TwilioValue.class),
         @JsonSubTypes.Type(VonageValue.class),
         @JsonSubTypes.Type(WebhookValue.class),
-        @JsonSubTypes.Type(XaiValue.class)
+        @JsonSubTypes.Type(XaiValue.class),
+        @JsonSubTypes.Type(NeuphonicValue.class),
+        @JsonSubTypes.Type(HumeValue.class),
+        @JsonSubTypes.Type(MistralValue.class),
+        @JsonSubTypes.Type(SpeechmaticsValue.class),
+        @JsonSubTypes.Type(TrieveValue.class),
+        @JsonSubTypes.Type(GoogleCalendarOauth2ClientValue.class),
+        @JsonSubTypes.Type(GoogleCalendarOauth2AuthorizationValue.class),
+        @JsonSubTypes.Type(GoogleSheetsOauth2AuthorizationValue.class),
+        @JsonSubTypes.Type(SlackOauth2AuthorizationValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
+    }
+
+    @JsonTypeName("11labs")
+    @JsonIgnoreProperties("provider")
+    private static final class _11LabsValue implements Value {
+        @JsonUnwrapped
+        private CreateElevenLabsCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private _11LabsValue() {}
+
+        private _11LabsValue(CreateElevenLabsCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visit11Labs(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof _11LabsValue && equalTo((_11LabsValue) other);
+        }
+
+        private boolean equalTo(_11LabsValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
     }
 
     @JsonTypeName("anthropic")
@@ -939,6 +1218,45 @@ public final class AssistantOverridesCredentialsItem {
         }
     }
 
+    @JsonTypeName("cerebras")
+    @JsonIgnoreProperties("provider")
+    private static final class CerebrasValue implements Value {
+        @JsonUnwrapped
+        private CreateCerebrasCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private CerebrasValue() {}
+
+        private CerebrasValue(CreateCerebrasCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCerebras(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof CerebrasValue && equalTo((CerebrasValue) other);
+        }
+
+        private boolean equalTo(CerebrasValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("cloudflare")
     @JsonIgnoreProperties("provider")
     private static final class CloudflareValue implements Value {
@@ -1134,45 +1452,6 @@ public final class AssistantOverridesCredentialsItem {
         }
     }
 
-    @JsonTypeName("11labs")
-    @JsonIgnoreProperties("provider")
-    private static final class _11LabsValue implements Value {
-        @JsonUnwrapped
-        private CreateElevenLabsCredentialDto value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private _11LabsValue() {}
-
-        private _11LabsValue(CreateElevenLabsCredentialDto value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visit11Labs(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof _11LabsValue && equalTo((_11LabsValue) other);
-        }
-
-        private boolean equalTo(_11LabsValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
-        }
-    }
-
     @JsonTypeName("gcp")
     @JsonIgnoreProperties("provider")
     private static final class GcpValue implements Value {
@@ -1290,6 +1569,45 @@ public final class AssistantOverridesCredentialsItem {
         }
     }
 
+    @JsonTypeName("google")
+    @JsonIgnoreProperties("provider")
+    private static final class GoogleValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleValue() {}
+
+        private GoogleValue(CreateGoogleCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogle(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleValue && equalTo((GoogleValue) other);
+        }
+
+        private boolean equalTo(GoogleValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("groq")
     @JsonIgnoreProperties("provider")
     private static final class GroqValue implements Value {
@@ -1315,6 +1633,45 @@ public final class AssistantOverridesCredentialsItem {
         }
 
         private boolean equalTo(GroqValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("inflection-ai")
+    @JsonIgnoreProperties("provider")
+    private static final class InflectionAiValue implements Value {
+        @JsonUnwrapped
+        private CreateInflectionAiCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private InflectionAiValue() {}
+
+        private InflectionAiValue(CreateInflectionAiCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitInflectionAi(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof InflectionAiValue && equalTo((InflectionAiValue) other);
+        }
+
+        private boolean equalTo(InflectionAiValue other) {
             return value.equals(other.value);
         }
 
@@ -1719,6 +2076,45 @@ public final class AssistantOverridesCredentialsItem {
         }
     }
 
+    @JsonTypeName("supabase")
+    @JsonIgnoreProperties("provider")
+    private static final class SupabaseValue implements Value {
+        @JsonUnwrapped
+        private CreateSupabaseCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SupabaseValue() {}
+
+        private SupabaseValue(CreateSupabaseCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSupabase(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SupabaseValue && equalTo((SupabaseValue) other);
+        }
+
+        private boolean equalTo(SupabaseValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("smallest-ai")
     @JsonIgnoreProperties("provider")
     private static final class SmallestAiValue implements Value {
@@ -1978,6 +2374,359 @@ public final class AssistantOverridesCredentialsItem {
         }
 
         private boolean equalTo(XaiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("neuphonic")
+    @JsonIgnoreProperties("provider")
+    private static final class NeuphonicValue implements Value {
+        @JsonUnwrapped
+        private CreateNeuphonicCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private NeuphonicValue() {}
+
+        private NeuphonicValue(CreateNeuphonicCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitNeuphonic(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof NeuphonicValue && equalTo((NeuphonicValue) other);
+        }
+
+        private boolean equalTo(NeuphonicValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("hume")
+    @JsonIgnoreProperties("provider")
+    private static final class HumeValue implements Value {
+        @JsonUnwrapped
+        private CreateHumeCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private HumeValue() {}
+
+        private HumeValue(CreateHumeCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitHume(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof HumeValue && equalTo((HumeValue) other);
+        }
+
+        private boolean equalTo(HumeValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("mistral")
+    @JsonIgnoreProperties("provider")
+    private static final class MistralValue implements Value {
+        @JsonUnwrapped
+        private CreateMistralCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private MistralValue() {}
+
+        private MistralValue(CreateMistralCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitMistral(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof MistralValue && equalTo((MistralValue) other);
+        }
+
+        private boolean equalTo(MistralValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("speechmatics")
+    @JsonIgnoreProperties("provider")
+    private static final class SpeechmaticsValue implements Value {
+        @JsonUnwrapped
+        private CreateSpeechmaticsCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SpeechmaticsValue() {}
+
+        private SpeechmaticsValue(CreateSpeechmaticsCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSpeechmatics(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SpeechmaticsValue && equalTo((SpeechmaticsValue) other);
+        }
+
+        private boolean equalTo(SpeechmaticsValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("trieve")
+    @JsonIgnoreProperties("provider")
+    private static final class TrieveValue implements Value {
+        @JsonUnwrapped
+        private CreateTrieveCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TrieveValue() {}
+
+        private TrieveValue(CreateTrieveCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTrieve(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TrieveValue && equalTo((TrieveValue) other);
+        }
+
+        private boolean equalTo(TrieveValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.oauth2-client")
+    @JsonIgnoreProperties("provider")
+    private static final class GoogleCalendarOauth2ClientValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleCalendarOAuth2ClientCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarOauth2ClientValue() {}
+
+        private GoogleCalendarOauth2ClientValue(CreateGoogleCalendarOAuth2ClientCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarOauth2Client(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarOauth2ClientValue && equalTo((GoogleCalendarOauth2ClientValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarOauth2ClientValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.oauth2-authorization")
+    @JsonIgnoreProperties("provider")
+    private static final class GoogleCalendarOauth2AuthorizationValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleCalendarOAuth2AuthorizationCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarOauth2AuthorizationValue() {}
+
+        private GoogleCalendarOauth2AuthorizationValue(CreateGoogleCalendarOAuth2AuthorizationCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarOauth2Authorization(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarOauth2AuthorizationValue
+                    && equalTo((GoogleCalendarOauth2AuthorizationValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarOauth2AuthorizationValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.sheets.oauth2-authorization")
+    @JsonIgnoreProperties("provider")
+    private static final class GoogleSheetsOauth2AuthorizationValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleSheetsOAuth2AuthorizationCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleSheetsOauth2AuthorizationValue() {}
+
+        private GoogleSheetsOauth2AuthorizationValue(CreateGoogleSheetsOAuth2AuthorizationCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleSheetsOauth2Authorization(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleSheetsOauth2AuthorizationValue
+                    && equalTo((GoogleSheetsOauth2AuthorizationValue) other);
+        }
+
+        private boolean equalTo(GoogleSheetsOauth2AuthorizationValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("slack.oauth2-authorization")
+    @JsonIgnoreProperties("provider")
+    private static final class SlackOauth2AuthorizationValue implements Value {
+        @JsonUnwrapped
+        private CreateSlackOAuth2AuthorizationCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SlackOauth2AuthorizationValue() {}
+
+        private SlackOauth2AuthorizationValue(CreateSlackOAuth2AuthorizationCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSlackOauth2Authorization(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SlackOauth2AuthorizationValue && equalTo((SlackOauth2AuthorizationValue) other);
+        }
+
+        private boolean equalTo(SlackOauth2AuthorizationValue other) {
             return value.equals(other.value);
         }
 

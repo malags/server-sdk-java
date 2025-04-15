@@ -6,9 +6,11 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum FileStatus {
-    INDEXED("indexed"),
+    PROCESSING("processing"),
 
-    NOT_INDEXED("not_indexed");
+    DONE("done"),
+
+    FAILED("failed");
 
     private final String value;
 

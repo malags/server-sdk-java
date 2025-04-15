@@ -23,6 +23,10 @@ import org.jetbrains.annotations.NotNull;
 public final class FallbackOpenAiVoice {
     private final FallbackOpenAiVoiceId voiceId;
 
+    private final Optional<FallbackOpenAiVoiceModel> model;
+
+    private final Optional<String> instructions;
+
     private final Optional<Double> speed;
 
     private final Optional<ChunkPlan> chunkPlan;
@@ -31,10 +35,14 @@ public final class FallbackOpenAiVoice {
 
     private FallbackOpenAiVoice(
             FallbackOpenAiVoiceId voiceId,
+            Optional<FallbackOpenAiVoiceModel> model,
+            Optional<String> instructions,
             Optional<Double> speed,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
         this.voiceId = voiceId;
+        this.model = model;
+        this.instructions = instructions;
         this.speed = speed;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
@@ -47,6 +55,23 @@ public final class FallbackOpenAiVoice {
     @JsonProperty("voiceId")
     public FallbackOpenAiVoiceId getVoiceId() {
         return voiceId;
+    }
+
+    /**
+     * @return This is the model that will be used for text-to-speech.
+     */
+    @JsonProperty("model")
+    public Optional<FallbackOpenAiVoiceModel> getModel() {
+        return model;
+    }
+
+    /**
+     * @return This is a prompt that allows you to control the voice of your generated audio.
+     * Does not work with 'tts-1' or 'tts-1-hd' models.
+     */
+    @JsonProperty("instructions")
+    public Optional<String> getInstructions() {
+        return instructions;
     }
 
     /**
@@ -77,12 +102,16 @@ public final class FallbackOpenAiVoice {
     }
 
     private boolean equalTo(FallbackOpenAiVoice other) {
-        return voiceId.equals(other.voiceId) && speed.equals(other.speed) && chunkPlan.equals(other.chunkPlan);
+        return voiceId.equals(other.voiceId)
+                && model.equals(other.model)
+                && instructions.equals(other.instructions)
+                && speed.equals(other.speed)
+                && chunkPlan.equals(other.chunkPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.speed, this.chunkPlan);
+        return Objects.hash(this.voiceId, this.model, this.instructions, this.speed, this.chunkPlan);
     }
 
     @java.lang.Override
@@ -103,6 +132,14 @@ public final class FallbackOpenAiVoice {
     public interface _FinalStage {
         FallbackOpenAiVoice build();
 
+        _FinalStage model(Optional<FallbackOpenAiVoiceModel> model);
+
+        _FinalStage model(FallbackOpenAiVoiceModel model);
+
+        _FinalStage instructions(Optional<String> instructions);
+
+        _FinalStage instructions(String instructions);
+
         _FinalStage speed(Optional<Double> speed);
 
         _FinalStage speed(Double speed);
@@ -120,6 +157,10 @@ public final class FallbackOpenAiVoice {
 
         private Optional<Double> speed = Optional.empty();
 
+        private Optional<String> instructions = Optional.empty();
+
+        private Optional<FallbackOpenAiVoiceModel> model = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -128,6 +169,8 @@ public final class FallbackOpenAiVoice {
         @java.lang.Override
         public Builder from(FallbackOpenAiVoice other) {
             voiceId(other.getVoiceId());
+            model(other.getModel());
+            instructions(other.getInstructions());
             speed(other.getSpeed());
             chunkPlan(other.getChunkPlan());
             return this;
@@ -179,9 +222,44 @@ public final class FallbackOpenAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is a prompt that allows you to control the voice of your generated audio.
+         * Does not work with 'tts-1' or 'tts-1-hd' models.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage instructions(String instructions) {
+            this.instructions = Optional.ofNullable(instructions);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "instructions", nulls = Nulls.SKIP)
+        public _FinalStage instructions(Optional<String> instructions) {
+            this.instructions = instructions;
+            return this;
+        }
+
+        /**
+         * <p>This is the model that will be used for text-to-speech.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage model(FallbackOpenAiVoiceModel model) {
+            this.model = Optional.ofNullable(model);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "model", nulls = Nulls.SKIP)
+        public _FinalStage model(Optional<FallbackOpenAiVoiceModel> model) {
+            this.model = model;
+            return this;
+        }
+
         @java.lang.Override
         public FallbackOpenAiVoice build() {
-            return new FallbackOpenAiVoice(voiceId, speed, chunkPlan, additionalProperties);
+            return new FallbackOpenAiVoice(voiceId, model, instructions, speed, chunkPlan, additionalProperties);
         }
     }
 }

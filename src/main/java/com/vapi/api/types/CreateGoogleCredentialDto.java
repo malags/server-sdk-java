@@ -34,14 +34,6 @@ public final class CreateGoogleCredentialDto {
     }
 
     /**
-     * @return This is the key for Gemini in Google AI Studio. Get it from here: https://aistudio.google.com/app/apikey
-     */
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "google";
-    }
-
-    /**
      * @return This is not returned in the API.
      */
     @JsonProperty("apiKey")

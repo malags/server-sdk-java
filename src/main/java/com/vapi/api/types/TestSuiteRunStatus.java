@@ -10,7 +10,9 @@ public enum TestSuiteRunStatus {
 
     IN_PROGRESS("in-progress"),
 
-    COMPLETED("completed");
+    COMPLETED("completed"),
+
+    FAILED("failed");
 
     private final String value;
 

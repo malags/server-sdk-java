@@ -32,8 +32,6 @@ public final class VapiModel {
 
     private final Optional<String> knowledgeBaseId;
 
-    private final Optional<List<VapiModelStepsItem>> steps;
-
     private final Optional<String> workflowId;
 
     private final Optional<Workflow> workflow;
@@ -56,7 +54,6 @@ public final class VapiModel {
             Optional<List<String>> toolIds,
             Optional<CreateCustomKnowledgeBaseDto> knowledgeBase,
             Optional<String> knowledgeBaseId,
-            Optional<List<VapiModelStepsItem>> steps,
             Optional<String> workflowId,
             Optional<Workflow> workflow,
             String model,
@@ -70,7 +67,6 @@ public final class VapiModel {
         this.toolIds = toolIds;
         this.knowledgeBase = knowledgeBase;
         this.knowledgeBaseId = knowledgeBaseId;
-        this.steps = steps;
         this.workflowId = workflowId;
         this.workflow = workflow;
         this.model = model;
@@ -121,11 +117,6 @@ public final class VapiModel {
     @JsonProperty("knowledgeBaseId")
     public Optional<String> getKnowledgeBaseId() {
         return knowledgeBaseId;
-    }
-
-    @JsonProperty("steps")
-    public Optional<List<VapiModelStepsItem>> getSteps() {
-        return steps;
     }
 
     /**
@@ -205,7 +196,6 @@ public final class VapiModel {
                 && toolIds.equals(other.toolIds)
                 && knowledgeBase.equals(other.knowledgeBase)
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
-                && steps.equals(other.steps)
                 && workflowId.equals(other.workflowId)
                 && workflow.equals(other.workflow)
                 && model.equals(other.model)
@@ -223,7 +213,6 @@ public final class VapiModel {
                 this.toolIds,
                 this.knowledgeBase,
                 this.knowledgeBaseId,
-                this.steps,
                 this.workflowId,
                 this.workflow,
                 this.model,
@@ -271,10 +260,6 @@ public final class VapiModel {
 
         _FinalStage knowledgeBaseId(String knowledgeBaseId);
 
-        _FinalStage steps(Optional<List<VapiModelStepsItem>> steps);
-
-        _FinalStage steps(List<VapiModelStepsItem> steps);
-
         _FinalStage workflowId(Optional<String> workflowId);
 
         _FinalStage workflowId(String workflowId);
@@ -316,8 +301,6 @@ public final class VapiModel {
 
         private Optional<String> workflowId = Optional.empty();
 
-        private Optional<List<VapiModelStepsItem>> steps = Optional.empty();
-
         private Optional<String> knowledgeBaseId = Optional.empty();
 
         private Optional<CreateCustomKnowledgeBaseDto> knowledgeBase = Optional.empty();
@@ -340,7 +323,6 @@ public final class VapiModel {
             toolIds(other.getToolIds());
             knowledgeBase(other.getKnowledgeBase());
             knowledgeBaseId(other.getKnowledgeBaseId());
-            steps(other.getSteps());
             workflowId(other.getWorkflowId());
             workflow(other.getWorkflow());
             model(other.getModel());
@@ -468,19 +450,6 @@ public final class VapiModel {
             return this;
         }
 
-        @java.lang.Override
-        public _FinalStage steps(List<VapiModelStepsItem> steps) {
-            this.steps = Optional.ofNullable(steps);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "steps", nulls = Nulls.SKIP)
-        public _FinalStage steps(Optional<List<VapiModelStepsItem>> steps) {
-            this.steps = steps;
-            return this;
-        }
-
         /**
          * <p>This is the ID of the knowledge base the model will use.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -576,7 +545,6 @@ public final class VapiModel {
                     toolIds,
                     knowledgeBase,
                     knowledgeBaseId,
-                    steps,
                     workflowId,
                     workflow,
                     model,

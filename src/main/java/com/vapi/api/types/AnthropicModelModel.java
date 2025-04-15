@@ -16,7 +16,9 @@ public enum AnthropicModelModel {
 
     CLAUDE_35_SONNET_20241022("claude-3-5-sonnet-20241022"),
 
-    CLAUDE_35_HAIKU_20241022("claude-3-5-haiku-20241022");
+    CLAUDE_35_HAIKU_20241022("claude-3-5-haiku-20241022"),
+
+    CLAUDE_37_SONNET_20250219("claude-3-7-sonnet-20250219");
 
     private final String value;
 

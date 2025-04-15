@@ -24,6 +24,8 @@ public final class CreateCustomerDto {
 
     private final Optional<String> extension;
 
+    private final Optional<AssistantOverrides> assistantOverrides;
+
     private final Optional<String> number;
 
     private final Optional<String> sipUri;
@@ -35,12 +37,14 @@ public final class CreateCustomerDto {
     private CreateCustomerDto(
             Optional<Boolean> numberE164CheckEnabled,
             Optional<String> extension,
+            Optional<AssistantOverrides> assistantOverrides,
             Optional<String> number,
             Optional<String> sipUri,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.numberE164CheckEnabled = numberE164CheckEnabled;
         this.extension = extension;
+        this.assistantOverrides = assistantOverrides;
         this.number = number;
         this.sipUri = sipUri;
         this.name = name;
@@ -68,6 +72,15 @@ public final class CreateCustomerDto {
     @JsonProperty("extension")
     public Optional<String> getExtension() {
         return extension;
+    }
+
+    /**
+     * @return These are the overrides for the assistant's settings and template variables specific to this customer.
+     * This allows customization of the assistant's behavior for individual customers in batch calls.
+     */
+    @JsonProperty("assistantOverrides")
+    public Optional<AssistantOverrides> getAssistantOverrides() {
+        return assistantOverrides;
     }
 
     /**
@@ -109,6 +122,7 @@ public final class CreateCustomerDto {
     private boolean equalTo(CreateCustomerDto other) {
         return numberE164CheckEnabled.equals(other.numberE164CheckEnabled)
                 && extension.equals(other.extension)
+                && assistantOverrides.equals(other.assistantOverrides)
                 && number.equals(other.number)
                 && sipUri.equals(other.sipUri)
                 && name.equals(other.name);
@@ -116,7 +130,13 @@ public final class CreateCustomerDto {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.numberE164CheckEnabled, this.extension, this.number, this.sipUri, this.name);
+        return Objects.hash(
+                this.numberE164CheckEnabled,
+                this.extension,
+                this.assistantOverrides,
+                this.number,
+                this.sipUri,
+                this.name);
     }
 
     @java.lang.Override
@@ -134,6 +154,8 @@ public final class CreateCustomerDto {
 
         private Optional<String> extension = Optional.empty();
 
+        private Optional<AssistantOverrides> assistantOverrides = Optional.empty();
+
         private Optional<String> number = Optional.empty();
 
         private Optional<String> sipUri = Optional.empty();
@@ -148,6 +170,7 @@ public final class CreateCustomerDto {
         public Builder from(CreateCustomerDto other) {
             numberE164CheckEnabled(other.getNumberE164CheckEnabled());
             extension(other.getExtension());
+            assistantOverrides(other.getAssistantOverrides());
             number(other.getNumber());
             sipUri(other.getSipUri());
             name(other.getName());
@@ -173,6 +196,17 @@ public final class CreateCustomerDto {
 
         public Builder extension(String extension) {
             this.extension = Optional.ofNullable(extension);
+            return this;
+        }
+
+        @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
+        public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
+            this.assistantOverrides = assistantOverrides;
+            return this;
+        }
+
+        public Builder assistantOverrides(AssistantOverrides assistantOverrides) {
+            this.assistantOverrides = Optional.ofNullable(assistantOverrides);
             return this;
         }
 
@@ -210,7 +244,8 @@ public final class CreateCustomerDto {
         }
 
         public CreateCustomerDto build() {
-            return new CreateCustomerDto(numberE164CheckEnabled, extension, number, sipUri, name, additionalProperties);
+            return new CreateCustomerDto(
+                    numberE164CheckEnabled, extension, assistantOverrides, number, sipUri, name, additionalProperties);
         }
     }
 }

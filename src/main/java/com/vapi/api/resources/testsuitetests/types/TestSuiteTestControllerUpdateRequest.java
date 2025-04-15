@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.vapi.api.types.UpdateTestSuiteTestChatDto;
 import com.vapi.api.types.UpdateTestSuiteTestVoiceDto;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,8 +32,16 @@ public final class TestSuiteTestControllerUpdateRequest {
         return new TestSuiteTestControllerUpdateRequest(new VoiceValue(value));
     }
 
+    public static TestSuiteTestControllerUpdateRequest chat(UpdateTestSuiteTestChatDto value) {
+        return new TestSuiteTestControllerUpdateRequest(new ChatValue(value));
+    }
+
     public boolean isVoice() {
         return value instanceof VoiceValue;
+    }
+
+    public boolean isChat() {
+        return value instanceof ChatValue;
     }
 
     public boolean _isUnknown() {
@@ -42,6 +51,13 @@ public final class TestSuiteTestControllerUpdateRequest {
     public Optional<UpdateTestSuiteTestVoiceDto> getVoice() {
         if (isVoice()) {
             return Optional.of(((VoiceValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<UpdateTestSuiteTestChatDto> getChat() {
+        if (isChat()) {
+            return Optional.of(((ChatValue) value).value);
         }
         return Optional.empty();
     }
@@ -61,11 +77,13 @@ public final class TestSuiteTestControllerUpdateRequest {
     public interface Visitor<T> {
         T visitVoice(UpdateTestSuiteTestVoiceDto voice);
 
+        T visitChat(UpdateTestSuiteTestChatDto chat);
+
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes(@JsonSubTypes.Type(VoiceValue.class))
+    @JsonSubTypes({@JsonSubTypes.Type(VoiceValue.class), @JsonSubTypes.Type(ChatValue.class)})
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -96,6 +114,45 @@ public final class TestSuiteTestControllerUpdateRequest {
         }
 
         private boolean equalTo(VoiceValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "TestSuiteTestControllerUpdateRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("chat")
+    @JsonIgnoreProperties("type")
+    private static final class ChatValue implements Value {
+        @JsonUnwrapped
+        private UpdateTestSuiteTestChatDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ChatValue() {}
+
+        private ChatValue(UpdateTestSuiteTestChatDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitChat(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ChatValue && equalTo((ChatValue) other);
+        }
+
+        private boolean equalTo(ChatValue other) {
             return value.equals(other.value);
         }
 

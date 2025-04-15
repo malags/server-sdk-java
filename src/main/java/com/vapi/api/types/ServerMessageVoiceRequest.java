@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ServerMessageVoiceRequest {
     private final Optional<ServerMessageVoiceRequestPhoneNumber> phoneNumber;
 
-    private final Optional<String> timestamp;
+    private final Optional<Double> timestamp;
 
     private final Optional<Artifact> artifact;
 
@@ -41,7 +41,7 @@ public final class ServerMessageVoiceRequest {
 
     private ServerMessageVoiceRequest(
             Optional<ServerMessageVoiceRequestPhoneNumber> phoneNumber,
-            Optional<String> timestamp,
+            Optional<Double> timestamp,
             Optional<Artifact> artifact,
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
@@ -98,10 +98,10 @@ public final class ServerMessageVoiceRequest {
     }
 
     /**
-     * @return This is the ISO-8601 formatted timestamp of when the message was sent.
+     * @return This is the timestamp of when the message was sent in milliseconds since Unix Epoch.
      */
     @JsonProperty("timestamp")
-    public Optional<String> getTimestamp() {
+    public Optional<Double> getTimestamp() {
         return timestamp;
     }
 
@@ -231,9 +231,9 @@ public final class ServerMessageVoiceRequest {
 
         _FinalStage phoneNumber(ServerMessageVoiceRequestPhoneNumber phoneNumber);
 
-        _FinalStage timestamp(Optional<String> timestamp);
+        _FinalStage timestamp(Optional<Double> timestamp);
 
-        _FinalStage timestamp(String timestamp);
+        _FinalStage timestamp(Double timestamp);
 
         _FinalStage artifact(Optional<Artifact> artifact);
 
@@ -266,7 +266,7 @@ public final class ServerMessageVoiceRequest {
 
         private Optional<Artifact> artifact = Optional.empty();
 
-        private Optional<String> timestamp = Optional.empty();
+        private Optional<Double> timestamp = Optional.empty();
 
         private Optional<ServerMessageVoiceRequestPhoneNumber> phoneNumber = Optional.empty();
 
@@ -396,18 +396,18 @@ public final class ServerMessageVoiceRequest {
         }
 
         /**
-         * <p>This is the ISO-8601 formatted timestamp of when the message was sent.</p>
+         * <p>This is the timestamp of when the message was sent in milliseconds since Unix Epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage timestamp(String timestamp) {
+        public _FinalStage timestamp(Double timestamp) {
             this.timestamp = Optional.ofNullable(timestamp);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
-        public _FinalStage timestamp(Optional<String> timestamp) {
+        public _FinalStage timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
             return this;
         }

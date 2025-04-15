@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,6 +25,8 @@ public final class AnalysisPlan {
 
     private final Optional<StructuredDataPlan> structuredDataPlan;
 
+    private final Optional<List<StructuredDataMultiPlan>> structuredDataMultiPlan;
+
     private final Optional<SuccessEvaluationPlan> successEvaluationPlan;
 
     private final Map<String, Object> additionalProperties;
@@ -31,10 +34,12 @@ public final class AnalysisPlan {
     private AnalysisPlan(
             Optional<SummaryPlan> summaryPlan,
             Optional<StructuredDataPlan> structuredDataPlan,
+            Optional<List<StructuredDataMultiPlan>> structuredDataMultiPlan,
             Optional<SuccessEvaluationPlan> successEvaluationPlan,
             Map<String, Object> additionalProperties) {
         this.summaryPlan = summaryPlan;
         this.structuredDataPlan = structuredDataPlan;
+        this.structuredDataMultiPlan = structuredDataMultiPlan;
         this.successEvaluationPlan = successEvaluationPlan;
         this.additionalProperties = additionalProperties;
     }
@@ -53,6 +58,14 @@ public final class AnalysisPlan {
     @JsonProperty("structuredDataPlan")
     public Optional<StructuredDataPlan> getStructuredDataPlan() {
         return structuredDataPlan;
+    }
+
+    /**
+     * @return This is an array of structured data plan catalogs. Each entry includes a <code>key</code> and a <code>plan</code> for generating the structured data from the call. This outputs to <code>call.analysis.structuredDataMulti</code>.
+     */
+    @JsonProperty("structuredDataMultiPlan")
+    public Optional<List<StructuredDataMultiPlan>> getStructuredDataMultiPlan() {
+        return structuredDataMultiPlan;
     }
 
     /**
@@ -77,12 +90,14 @@ public final class AnalysisPlan {
     private boolean equalTo(AnalysisPlan other) {
         return summaryPlan.equals(other.summaryPlan)
                 && structuredDataPlan.equals(other.structuredDataPlan)
+                && structuredDataMultiPlan.equals(other.structuredDataMultiPlan)
                 && successEvaluationPlan.equals(other.successEvaluationPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.summaryPlan, this.structuredDataPlan, this.successEvaluationPlan);
+        return Objects.hash(
+                this.summaryPlan, this.structuredDataPlan, this.structuredDataMultiPlan, this.successEvaluationPlan);
     }
 
     @java.lang.Override
@@ -100,6 +115,8 @@ public final class AnalysisPlan {
 
         private Optional<StructuredDataPlan> structuredDataPlan = Optional.empty();
 
+        private Optional<List<StructuredDataMultiPlan>> structuredDataMultiPlan = Optional.empty();
+
         private Optional<SuccessEvaluationPlan> successEvaluationPlan = Optional.empty();
 
         @JsonAnySetter
@@ -110,6 +127,7 @@ public final class AnalysisPlan {
         public Builder from(AnalysisPlan other) {
             summaryPlan(other.getSummaryPlan());
             structuredDataPlan(other.getStructuredDataPlan());
+            structuredDataMultiPlan(other.getStructuredDataMultiPlan());
             successEvaluationPlan(other.getSuccessEvaluationPlan());
             return this;
         }
@@ -136,6 +154,17 @@ public final class AnalysisPlan {
             return this;
         }
 
+        @JsonSetter(value = "structuredDataMultiPlan", nulls = Nulls.SKIP)
+        public Builder structuredDataMultiPlan(Optional<List<StructuredDataMultiPlan>> structuredDataMultiPlan) {
+            this.structuredDataMultiPlan = structuredDataMultiPlan;
+            return this;
+        }
+
+        public Builder structuredDataMultiPlan(List<StructuredDataMultiPlan> structuredDataMultiPlan) {
+            this.structuredDataMultiPlan = Optional.ofNullable(structuredDataMultiPlan);
+            return this;
+        }
+
         @JsonSetter(value = "successEvaluationPlan", nulls = Nulls.SKIP)
         public Builder successEvaluationPlan(Optional<SuccessEvaluationPlan> successEvaluationPlan) {
             this.successEvaluationPlan = successEvaluationPlan;
@@ -148,7 +177,12 @@ public final class AnalysisPlan {
         }
 
         public AnalysisPlan build() {
-            return new AnalysisPlan(summaryPlan, structuredDataPlan, successEvaluationPlan, additionalProperties);
+            return new AnalysisPlan(
+                    summaryPlan,
+                    structuredDataPlan,
+                    structuredDataMultiPlan,
+                    successEvaluationPlan,
+                    additionalProperties);
         }
     }
 }

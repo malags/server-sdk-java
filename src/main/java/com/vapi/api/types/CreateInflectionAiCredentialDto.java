@@ -35,14 +35,6 @@ public final class CreateInflectionAiCredentialDto {
     }
 
     /**
-     * @return This is the api key for Pi in InflectionAI's console. Get it from here: https://developers.inflection.ai/keys, billing will need to be setup
-     */
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "inflection-ai";
-    }
-
-    /**
      * @return This is not returned in the API.
      */
     @JsonProperty("apiKey")

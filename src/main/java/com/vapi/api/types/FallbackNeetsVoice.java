@@ -16,38 +16,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FallbackNeetsVoice.Builder.class)
 public final class FallbackNeetsVoice {
-    private final FallbackNeetsVoiceId voiceId;
-
-    private final Optional<ChunkPlan> chunkPlan;
+    private final Optional<Object> voiceId;
 
     private final Map<String, Object> additionalProperties;
 
-    private FallbackNeetsVoice(
-            FallbackNeetsVoiceId voiceId, Optional<ChunkPlan> chunkPlan, Map<String, Object> additionalProperties) {
+    private FallbackNeetsVoice(Optional<Object> voiceId, Map<String, Object> additionalProperties) {
         this.voiceId = voiceId;
-        this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return This is the provider-specific ID that will be used.
-     */
     @JsonProperty("voiceId")
-    public FallbackNeetsVoiceId getVoiceId() {
+    public Optional<Object> getVoiceId() {
         return voiceId;
-    }
-
-    /**
-     * @return This is the plan for chunking the model output before it is sent to the voice provider.
-     */
-    @JsonProperty("chunkPlan")
-    public Optional<ChunkPlan> getChunkPlan() {
-        return chunkPlan;
     }
 
     @java.lang.Override
@@ -62,12 +46,12 @@ public final class FallbackNeetsVoice {
     }
 
     private boolean equalTo(FallbackNeetsVoice other) {
-        return voiceId.equals(other.voiceId) && chunkPlan.equals(other.chunkPlan);
+        return voiceId.equals(other.voiceId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.chunkPlan);
+        return Objects.hash(this.voiceId);
     }
 
     @java.lang.Override
@@ -75,73 +59,37 @@ public final class FallbackNeetsVoice {
         return ObjectMappers.stringify(this);
     }
 
-    public static VoiceIdStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface VoiceIdStage {
-        _FinalStage voiceId(@NotNull FallbackNeetsVoiceId voiceId);
-
-        Builder from(FallbackNeetsVoice other);
-    }
-
-    public interface _FinalStage {
-        FallbackNeetsVoice build();
-
-        _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
-
-        _FinalStage chunkPlan(ChunkPlan chunkPlan);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements VoiceIdStage, _FinalStage {
-        private FallbackNeetsVoiceId voiceId;
-
-        private Optional<ChunkPlan> chunkPlan = Optional.empty();
+    public static final class Builder {
+        private Optional<Object> voiceId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(FallbackNeetsVoice other) {
             voiceId(other.getVoiceId());
-            chunkPlan(other.getChunkPlan());
             return this;
         }
 
-        /**
-         * <p>This is the provider-specific ID that will be used.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("voiceId")
-        public _FinalStage voiceId(@NotNull FallbackNeetsVoiceId voiceId) {
-            this.voiceId = Objects.requireNonNull(voiceId, "voiceId must not be null");
+        @JsonSetter(value = "voiceId", nulls = Nulls.SKIP)
+        public Builder voiceId(Optional<Object> voiceId) {
+            this.voiceId = voiceId;
             return this;
         }
 
-        /**
-         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage chunkPlan(ChunkPlan chunkPlan) {
-            this.chunkPlan = Optional.ofNullable(chunkPlan);
+        public Builder voiceId(Object voiceId) {
+            this.voiceId = Optional.ofNullable(voiceId);
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
-        public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
-            this.chunkPlan = chunkPlan;
-            return this;
-        }
-
-        @java.lang.Override
         public FallbackNeetsVoice build() {
-            return new FallbackNeetsVoice(voiceId, chunkPlan, additionalProperties);
+            return new FallbackNeetsVoice(voiceId, additionalProperties);
         }
     }
 }

@@ -22,14 +22,16 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TestSuiteTestsPaginatedResponse.Builder.class)
 public final class TestSuiteTestsPaginatedResponse {
-    private final List<TestSuiteTestVoice> results;
+    private final List<TestSuiteTestsPaginatedResponseResultsItem> results;
 
     private final PaginationMeta metadata;
 
     private final Map<String, Object> additionalProperties;
 
     private TestSuiteTestsPaginatedResponse(
-            List<TestSuiteTestVoice> results, PaginationMeta metadata, Map<String, Object> additionalProperties) {
+            List<TestSuiteTestsPaginatedResponseResultsItem> results,
+            PaginationMeta metadata,
+            Map<String, Object> additionalProperties) {
         this.results = results;
         this.metadata = metadata;
         this.additionalProperties = additionalProperties;
@@ -39,7 +41,7 @@ public final class TestSuiteTestsPaginatedResponse {
      * @return A list of test suite tests.
      */
     @JsonProperty("results")
-    public List<TestSuiteTestVoice> getResults() {
+    public List<TestSuiteTestsPaginatedResponseResultsItem> getResults() {
         return results;
     }
 
@@ -89,18 +91,18 @@ public final class TestSuiteTestsPaginatedResponse {
     public interface _FinalStage {
         TestSuiteTestsPaginatedResponse build();
 
-        _FinalStage results(List<TestSuiteTestVoice> results);
+        _FinalStage results(List<TestSuiteTestsPaginatedResponseResultsItem> results);
 
-        _FinalStage addResults(TestSuiteTestVoice results);
+        _FinalStage addResults(TestSuiteTestsPaginatedResponseResultsItem results);
 
-        _FinalStage addAllResults(List<TestSuiteTestVoice> results);
+        _FinalStage addAllResults(List<TestSuiteTestsPaginatedResponseResultsItem> results);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MetadataStage, _FinalStage {
         private PaginationMeta metadata;
 
-        private List<TestSuiteTestVoice> results = new ArrayList<>();
+        private List<TestSuiteTestsPaginatedResponseResultsItem> results = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -130,7 +132,7 @@ public final class TestSuiteTestsPaginatedResponse {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addAllResults(List<TestSuiteTestVoice> results) {
+        public _FinalStage addAllResults(List<TestSuiteTestsPaginatedResponseResultsItem> results) {
             this.results.addAll(results);
             return this;
         }
@@ -140,14 +142,14 @@ public final class TestSuiteTestsPaginatedResponse {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addResults(TestSuiteTestVoice results) {
+        public _FinalStage addResults(TestSuiteTestsPaginatedResponseResultsItem results) {
             this.results.add(results);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
-        public _FinalStage results(List<TestSuiteTestVoice> results) {
+        public _FinalStage results(List<TestSuiteTestsPaginatedResponseResultsItem> results) {
             this.results.clear();
             this.results.addAll(results);
             return this;

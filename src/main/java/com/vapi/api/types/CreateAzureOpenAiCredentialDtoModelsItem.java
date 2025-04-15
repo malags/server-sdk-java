@@ -6,7 +6,7 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CreateAzureOpenAiCredentialDtoModelsItem {
-    GPT_4_O_20240806_PTU("gpt-4o-2024-08-06-ptu"),
+    GPT_4_O_20241120("gpt-4o-2024-11-20"),
 
     GPT_4_O_20240806("gpt-4o-2024-08-06"),
 

@@ -22,7 +22,7 @@ import java.util.Optional;
 public final class ServerMessageTransferDestinationRequest {
     private final Optional<ServerMessageTransferDestinationRequestPhoneNumber> phoneNumber;
 
-    private final Optional<String> timestamp;
+    private final Optional<Double> timestamp;
 
     private final Optional<Artifact> artifact;
 
@@ -36,7 +36,7 @@ public final class ServerMessageTransferDestinationRequest {
 
     private ServerMessageTransferDestinationRequest(
             Optional<ServerMessageTransferDestinationRequestPhoneNumber> phoneNumber,
-            Optional<String> timestamp,
+            Optional<Double> timestamp,
             Optional<Artifact> artifact,
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
@@ -73,10 +73,10 @@ public final class ServerMessageTransferDestinationRequest {
     }
 
     /**
-     * @return This is the ISO-8601 formatted timestamp of when the message was sent.
+     * @return This is the timestamp of when the message was sent in milliseconds since Unix Epoch.
      */
     @JsonProperty("timestamp")
-    public Optional<String> getTimestamp() {
+    public Optional<Double> getTimestamp() {
         return timestamp;
     }
 
@@ -168,7 +168,7 @@ public final class ServerMessageTransferDestinationRequest {
     public static final class Builder {
         private Optional<ServerMessageTransferDestinationRequestPhoneNumber> phoneNumber = Optional.empty();
 
-        private Optional<String> timestamp = Optional.empty();
+        private Optional<Double> timestamp = Optional.empty();
 
         private Optional<Artifact> artifact = Optional.empty();
 
@@ -205,12 +205,12 @@ public final class ServerMessageTransferDestinationRequest {
         }
 
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
-        public Builder timestamp(Optional<String> timestamp) {
+        public Builder timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
             return this;
         }
 
-        public Builder timestamp(String timestamp) {
+        public Builder timestamp(Double timestamp) {
             this.timestamp = Optional.ofNullable(timestamp);
             return this;
         }

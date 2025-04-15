@@ -6,6 +6,14 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum OpenAiModelFallbackModelsItem {
+    GPT_41("gpt-4.1"),
+
+    GPT_41_MINI("gpt-4.1-mini"),
+
+    GPT_41_NANO("gpt-4.1-nano"),
+
+    GPT_45_PREVIEW("gpt-4.5-preview"),
+
     CHATGPT_4_O_LATEST("chatgpt-4o-latest"),
 
     O_3_MINI("o3-mini"),
@@ -24,9 +32,9 @@ public enum OpenAiModelFallbackModelsItem {
 
     GPT_4_O_MINI_REALTIME_PREVIEW_20241217("gpt-4o-mini-realtime-preview-2024-12-17"),
 
-    GPT_4_O_MINI("gpt-4o-mini"),
-
     GPT_4_O_MINI_20240718("gpt-4o-mini-2024-07-18"),
+
+    GPT_4_O_MINI("gpt-4o-mini"),
 
     GPT_4_O("gpt-4o"),
 

@@ -18,12 +18,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Workflow.Builder.class)
 public final class Workflow {
     private final List<WorkflowNodesItem> nodes;
+
+    private final Optional<WorkflowModel> model;
 
     private final String id;
 
@@ -41,6 +44,7 @@ public final class Workflow {
 
     private Workflow(
             List<WorkflowNodesItem> nodes,
+            Optional<WorkflowModel> model,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -49,6 +53,7 @@ public final class Workflow {
             List<Edge> edges,
             Map<String, Object> additionalProperties) {
         this.nodes = nodes;
+        this.model = model;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -61,6 +66,14 @@ public final class Workflow {
     @JsonProperty("nodes")
     public List<WorkflowNodesItem> getNodes() {
         return nodes;
+    }
+
+    /**
+     * @return These are the options for the workflow's LLM.
+     */
+    @JsonProperty("model")
+    public Optional<WorkflowModel> getModel() {
+        return model;
     }
 
     @JsonProperty("id")
@@ -106,6 +119,7 @@ public final class Workflow {
 
     private boolean equalTo(Workflow other) {
         return nodes.equals(other.nodes)
+                && model.equals(other.model)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
@@ -116,7 +130,8 @@ public final class Workflow {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.nodes, this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.edges);
+        return Objects.hash(
+                this.nodes, this.model, this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.edges);
     }
 
     @java.lang.Override
@@ -159,6 +174,10 @@ public final class Workflow {
 
         _FinalStage addAllNodes(List<WorkflowNodesItem> nodes);
 
+        _FinalStage model(Optional<WorkflowModel> model);
+
+        _FinalStage model(WorkflowModel model);
+
         _FinalStage edges(List<Edge> edges);
 
         _FinalStage addEdges(Edge edges);
@@ -181,6 +200,8 @@ public final class Workflow {
 
         private List<Edge> edges = new ArrayList<>();
 
+        private Optional<WorkflowModel> model = Optional.empty();
+
         private List<WorkflowNodesItem> nodes = new ArrayList<>();
 
         @JsonAnySetter
@@ -191,6 +212,7 @@ public final class Workflow {
         @java.lang.Override
         public Builder from(Workflow other) {
             nodes(other.getNodes());
+            model(other.getModel());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -255,6 +277,23 @@ public final class Workflow {
             return this;
         }
 
+        /**
+         * <p>These are the options for the workflow's LLM.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage model(WorkflowModel model) {
+            this.model = Optional.ofNullable(model);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "model", nulls = Nulls.SKIP)
+        public _FinalStage model(Optional<WorkflowModel> model) {
+            this.model = model;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllNodes(List<WorkflowNodesItem> nodes) {
             this.nodes.addAll(nodes);
@@ -277,7 +316,7 @@ public final class Workflow {
 
         @java.lang.Override
         public Workflow build() {
-            return new Workflow(nodes, id, orgId, createdAt, updatedAt, name, edges, additionalProperties);
+            return new Workflow(nodes, model, id, orgId, createdAt, updatedAt, name, edges, additionalProperties);
         }
     }
 }

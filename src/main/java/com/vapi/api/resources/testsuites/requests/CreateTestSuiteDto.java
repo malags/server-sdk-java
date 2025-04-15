@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
+import com.vapi.api.types.TargetPlan;
+import com.vapi.api.types.TesterPlan;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,12 +26,22 @@ public final class CreateTestSuiteDto {
 
     private final Optional<String> phoneNumberId;
 
+    private final Optional<TesterPlan> testerPlan;
+
+    private final Optional<TargetPlan> targetPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateTestSuiteDto(
-            Optional<String> name, Optional<String> phoneNumberId, Map<String, Object> additionalProperties) {
+            Optional<String> name,
+            Optional<String> phoneNumberId,
+            Optional<TesterPlan> testerPlan,
+            Optional<TargetPlan> targetPlan,
+            Map<String, Object> additionalProperties) {
         this.name = name;
         this.phoneNumberId = phoneNumberId;
+        this.testerPlan = testerPlan;
+        this.targetPlan = targetPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,6 +61,23 @@ public final class CreateTestSuiteDto {
         return phoneNumberId;
     }
 
+    /**
+     * @return Override the default tester plan by providing custom assistant configuration for the test agent.
+     * <p>We recommend only using this if you are confident, as we have already set sensible defaults on the tester plan.</p>
+     */
+    @JsonProperty("testerPlan")
+    public Optional<TesterPlan> getTesterPlan() {
+        return testerPlan;
+    }
+
+    /**
+     * @return These are the configuration for the assistant / phone number that is being tested.
+     */
+    @JsonProperty("targetPlan")
+    public Optional<TargetPlan> getTargetPlan() {
+        return targetPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -61,12 +90,15 @@ public final class CreateTestSuiteDto {
     }
 
     private boolean equalTo(CreateTestSuiteDto other) {
-        return name.equals(other.name) && phoneNumberId.equals(other.phoneNumberId);
+        return name.equals(other.name)
+                && phoneNumberId.equals(other.phoneNumberId)
+                && testerPlan.equals(other.testerPlan)
+                && targetPlan.equals(other.targetPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.phoneNumberId);
+        return Objects.hash(this.name, this.phoneNumberId, this.testerPlan, this.targetPlan);
     }
 
     @java.lang.Override
@@ -84,6 +116,10 @@ public final class CreateTestSuiteDto {
 
         private Optional<String> phoneNumberId = Optional.empty();
 
+        private Optional<TesterPlan> testerPlan = Optional.empty();
+
+        private Optional<TargetPlan> targetPlan = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -92,6 +128,8 @@ public final class CreateTestSuiteDto {
         public Builder from(CreateTestSuiteDto other) {
             name(other.getName());
             phoneNumberId(other.getPhoneNumberId());
+            testerPlan(other.getTesterPlan());
+            targetPlan(other.getTargetPlan());
             return this;
         }
 
@@ -117,8 +155,30 @@ public final class CreateTestSuiteDto {
             return this;
         }
 
+        @JsonSetter(value = "testerPlan", nulls = Nulls.SKIP)
+        public Builder testerPlan(Optional<TesterPlan> testerPlan) {
+            this.testerPlan = testerPlan;
+            return this;
+        }
+
+        public Builder testerPlan(TesterPlan testerPlan) {
+            this.testerPlan = Optional.ofNullable(testerPlan);
+            return this;
+        }
+
+        @JsonSetter(value = "targetPlan", nulls = Nulls.SKIP)
+        public Builder targetPlan(Optional<TargetPlan> targetPlan) {
+            this.targetPlan = targetPlan;
+            return this;
+        }
+
+        public Builder targetPlan(TargetPlan targetPlan) {
+            this.targetPlan = Optional.ofNullable(targetPlan);
+            return this;
+        }
+
         public CreateTestSuiteDto build() {
-            return new CreateTestSuiteDto(name, phoneNumberId, additionalProperties);
+            return new CreateTestSuiteDto(name, phoneNumberId, testerPlan, targetPlan, additionalProperties);
         }
     }
 }

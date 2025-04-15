@@ -89,6 +89,12 @@ public final class Subscription {
 
     private final Optional<String> couponUsageLeft;
 
+    private final Optional<InvoicePlan> invoicePlan;
+
+    private final Optional<Boolean> pciEnabled;
+
+    private final Optional<String> pciCommonPaperAgreementId;
+
     private final Map<String, Object> additionalProperties;
 
     private Subscription(
@@ -125,6 +131,9 @@ public final class Subscription {
             Optional<OffsetDateTime> outboundCallsCounterNextResetAt,
             Optional<List<String>> couponIds,
             Optional<String> couponUsageLeft,
+            Optional<InvoicePlan> invoicePlan,
+            Optional<Boolean> pciEnabled,
+            Optional<String> pciCommonPaperAgreementId,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.createdAt = createdAt;
@@ -159,6 +168,9 @@ public final class Subscription {
         this.outboundCallsCounterNextResetAt = outboundCallsCounterNextResetAt;
         this.couponIds = couponIds;
         this.couponUsageLeft = couponUsageLeft;
+        this.invoicePlan = invoicePlan;
+        this.pciEnabled = pciEnabled;
+        this.pciCommonPaperAgreementId = pciCommonPaperAgreementId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -431,6 +443,31 @@ public final class Subscription {
         return couponUsageLeft;
     }
 
+    /**
+     * @return This is the invoice plan for the subscription.
+     */
+    @JsonProperty("invoicePlan")
+    public Optional<InvoicePlan> getInvoicePlan() {
+        return invoicePlan;
+    }
+
+    /**
+     * @return This is the PCI enabled flag for the subscription. It determines whether orgs under this
+     * subscription have the option to enable PCI compliance.
+     */
+    @JsonProperty("pciEnabled")
+    public Optional<Boolean> getPciEnabled() {
+        return pciEnabled;
+    }
+
+    /**
+     * @return This is the ID for the Common Paper agreement outlining the PCI contract.
+     */
+    @JsonProperty("pciCommonPaperAgreementId")
+    public Optional<String> getPciCommonPaperAgreementId() {
+        return pciCommonPaperAgreementId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -475,7 +512,10 @@ public final class Subscription {
                 && outboundCallsCounter.equals(other.outboundCallsCounter)
                 && outboundCallsCounterNextResetAt.equals(other.outboundCallsCounterNextResetAt)
                 && couponIds.equals(other.couponIds)
-                && couponUsageLeft.equals(other.couponUsageLeft);
+                && couponUsageLeft.equals(other.couponUsageLeft)
+                && invoicePlan.equals(other.invoicePlan)
+                && pciEnabled.equals(other.pciEnabled)
+                && pciCommonPaperAgreementId.equals(other.pciCommonPaperAgreementId);
     }
 
     @java.lang.Override
@@ -513,7 +553,10 @@ public final class Subscription {
                 this.outboundCallsCounter,
                 this.outboundCallsCounterNextResetAt,
                 this.couponIds,
-                this.couponUsageLeft);
+                this.couponUsageLeft,
+                this.invoicePlan,
+                this.pciEnabled,
+                this.pciCommonPaperAgreementId);
     }
 
     @java.lang.Override
@@ -661,6 +704,18 @@ public final class Subscription {
         _FinalStage couponUsageLeft(Optional<String> couponUsageLeft);
 
         _FinalStage couponUsageLeft(String couponUsageLeft);
+
+        _FinalStage invoicePlan(Optional<InvoicePlan> invoicePlan);
+
+        _FinalStage invoicePlan(InvoicePlan invoicePlan);
+
+        _FinalStage pciEnabled(Optional<Boolean> pciEnabled);
+
+        _FinalStage pciEnabled(Boolean pciEnabled);
+
+        _FinalStage pciCommonPaperAgreementId(Optional<String> pciCommonPaperAgreementId);
+
+        _FinalStage pciCommonPaperAgreementId(String pciCommonPaperAgreementId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -692,6 +747,12 @@ public final class Subscription {
         private double concurrencyLimitIncluded;
 
         private double concurrencyLimitPurchased;
+
+        private Optional<String> pciCommonPaperAgreementId = Optional.empty();
+
+        private Optional<Boolean> pciEnabled = Optional.empty();
+
+        private Optional<InvoicePlan> invoicePlan = Optional.empty();
 
         private Optional<String> couponUsageLeft = Optional.empty();
 
@@ -781,6 +842,9 @@ public final class Subscription {
             outboundCallsCounterNextResetAt(other.getOutboundCallsCounterNextResetAt());
             couponIds(other.getCouponIds());
             couponUsageLeft(other.getCouponUsageLeft());
+            invoicePlan(other.getInvoicePlan());
+            pciEnabled(other.getPciEnabled());
+            pciCommonPaperAgreementId(other.getPciCommonPaperAgreementId());
             return this;
         }
 
@@ -882,6 +946,58 @@ public final class Subscription {
         @JsonSetter("concurrencyLimitPurchased")
         public _FinalStage concurrencyLimitPurchased(double concurrencyLimitPurchased) {
             this.concurrencyLimitPurchased = concurrencyLimitPurchased;
+            return this;
+        }
+
+        /**
+         * <p>This is the ID for the Common Paper agreement outlining the PCI contract.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage pciCommonPaperAgreementId(String pciCommonPaperAgreementId) {
+            this.pciCommonPaperAgreementId = Optional.ofNullable(pciCommonPaperAgreementId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pciCommonPaperAgreementId", nulls = Nulls.SKIP)
+        public _FinalStage pciCommonPaperAgreementId(Optional<String> pciCommonPaperAgreementId) {
+            this.pciCommonPaperAgreementId = pciCommonPaperAgreementId;
+            return this;
+        }
+
+        /**
+         * <p>This is the PCI enabled flag for the subscription. It determines whether orgs under this
+         * subscription have the option to enable PCI compliance.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage pciEnabled(Boolean pciEnabled) {
+            this.pciEnabled = Optional.ofNullable(pciEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pciEnabled", nulls = Nulls.SKIP)
+        public _FinalStage pciEnabled(Optional<Boolean> pciEnabled) {
+            this.pciEnabled = pciEnabled;
+            return this;
+        }
+
+        /**
+         * <p>This is the invoice plan for the subscription.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage invoicePlan(InvoicePlan invoicePlan) {
+            this.invoicePlan = Optional.ofNullable(invoicePlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "invoicePlan", nulls = Nulls.SKIP)
+        public _FinalStage invoicePlan(Optional<InvoicePlan> invoicePlan) {
+            this.invoicePlan = invoicePlan;
             return this;
         }
 
@@ -1332,6 +1448,9 @@ public final class Subscription {
                     outboundCallsCounterNextResetAt,
                     couponIds,
                     couponUsageLeft,
+                    invoicePlan,
+                    pciEnabled,
+                    pciCommonPaperAgreementId,
                     additionalProperties);
         }
     }

@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -23,14 +25,18 @@ public final class ClientMessageSpeechUpdate {
 
     private final ClientMessageSpeechUpdateRole role;
 
+    private final Optional<Double> turn;
+
     private final Map<String, Object> additionalProperties;
 
     private ClientMessageSpeechUpdate(
             ClientMessageSpeechUpdateStatus status,
             ClientMessageSpeechUpdateRole role,
+            Optional<Double> turn,
             Map<String, Object> additionalProperties) {
         this.status = status;
         this.role = role;
+        this.turn = turn;
         this.additionalProperties = additionalProperties;
     }
 
@@ -58,6 +64,14 @@ public final class ClientMessageSpeechUpdate {
         return role;
     }
 
+    /**
+     * @return This is the turn number of the speech update (0-indexed).
+     */
+    @JsonProperty("turn")
+    public Optional<Double> getTurn() {
+        return turn;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -70,12 +84,12 @@ public final class ClientMessageSpeechUpdate {
     }
 
     private boolean equalTo(ClientMessageSpeechUpdate other) {
-        return status.equals(other.status) && role.equals(other.role);
+        return status.equals(other.status) && role.equals(other.role) && turn.equals(other.turn);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.status, this.role);
+        return Objects.hash(this.status, this.role, this.turn);
     }
 
     @java.lang.Override
@@ -99,6 +113,10 @@ public final class ClientMessageSpeechUpdate {
 
     public interface _FinalStage {
         ClientMessageSpeechUpdate build();
+
+        _FinalStage turn(Optional<Double> turn);
+
+        _FinalStage turn(Double turn);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -106,6 +124,8 @@ public final class ClientMessageSpeechUpdate {
         private ClientMessageSpeechUpdateStatus status;
 
         private ClientMessageSpeechUpdateRole role;
+
+        private Optional<Double> turn = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -116,6 +136,7 @@ public final class ClientMessageSpeechUpdate {
         public Builder from(ClientMessageSpeechUpdate other) {
             status(other.getStatus());
             role(other.getRole());
+            turn(other.getTurn());
             return this;
         }
 
@@ -141,9 +162,26 @@ public final class ClientMessageSpeechUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the turn number of the speech update (0-indexed).</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage turn(Double turn) {
+            this.turn = Optional.ofNullable(turn);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "turn", nulls = Nulls.SKIP)
+        public _FinalStage turn(Optional<Double> turn) {
+            this.turn = turn;
+            return this;
+        }
+
         @java.lang.Override
         public ClientMessageSpeechUpdate build() {
-            return new ClientMessageSpeechUpdate(status, role, additionalProperties);
+            return new ClientMessageSpeechUpdate(status, role, turn, additionalProperties);
         }
     }
 }

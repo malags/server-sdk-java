@@ -22,7 +22,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ChatCompletionsDto.Builder.class)
 public final class ChatCompletionsDto {
-    private final List<ChatCompletionMessage> messages;
+    private final List<ChatCompletionMessageWorkflows> messages;
 
     private final Optional<String> workflowId;
 
@@ -31,7 +31,7 @@ public final class ChatCompletionsDto {
     private final Map<String, Object> additionalProperties;
 
     private ChatCompletionsDto(
-            List<ChatCompletionMessage> messages,
+            List<ChatCompletionMessageWorkflows> messages,
             Optional<String> workflowId,
             Optional<CreateWorkflowDto> workflow,
             Map<String, Object> additionalProperties) {
@@ -42,7 +42,7 @@ public final class ChatCompletionsDto {
     }
 
     @JsonProperty("messages")
-    public List<ChatCompletionMessage> getMessages() {
+    public List<ChatCompletionMessageWorkflows> getMessages() {
         return messages;
     }
 
@@ -89,7 +89,7 @@ public final class ChatCompletionsDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private List<ChatCompletionMessage> messages = new ArrayList<>();
+        private List<ChatCompletionMessageWorkflows> messages = new ArrayList<>();
 
         private Optional<String> workflowId = Optional.empty();
 
@@ -108,18 +108,18 @@ public final class ChatCompletionsDto {
         }
 
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
-        public Builder messages(List<ChatCompletionMessage> messages) {
+        public Builder messages(List<ChatCompletionMessageWorkflows> messages) {
             this.messages.clear();
             this.messages.addAll(messages);
             return this;
         }
 
-        public Builder addMessages(ChatCompletionMessage messages) {
+        public Builder addMessages(ChatCompletionMessageWorkflows messages) {
             this.messages.add(messages);
             return this;
         }
 
-        public Builder addAllMessages(List<ChatCompletionMessage> messages) {
+        public Builder addAllMessages(List<ChatCompletionMessageWorkflows> messages) {
             this.messages.addAll(messages);
             return this;
         }

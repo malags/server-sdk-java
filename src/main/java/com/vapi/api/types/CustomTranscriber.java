@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,10 +23,14 @@ import org.jetbrains.annotations.NotNull;
 public final class CustomTranscriber {
     private final Server server;
 
+    private final Optional<FallbackTranscriberPlan> fallbackPlan;
+
     private final Map<String, Object> additionalProperties;
 
-    private CustomTranscriber(Server server, Map<String, Object> additionalProperties) {
+    private CustomTranscriber(
+            Server server, Optional<FallbackTranscriberPlan> fallbackPlan, Map<String, Object> additionalProperties) {
         this.server = server;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +85,14 @@ public final class CustomTranscriber {
         return server;
     }
 
+    /**
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+     */
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackTranscriberPlan> getFallbackPlan() {
+        return fallbackPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -91,12 +105,12 @@ public final class CustomTranscriber {
     }
 
     private boolean equalTo(CustomTranscriber other) {
-        return server.equals(other.server);
+        return server.equals(other.server) && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.server);
+        return Objects.hash(this.server, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -116,11 +130,17 @@ public final class CustomTranscriber {
 
     public interface _FinalStage {
         CustomTranscriber build();
+
+        _FinalStage fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan);
+
+        _FinalStage fallbackPlan(FallbackTranscriberPlan fallbackPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ServerStage, _FinalStage {
         private Server server;
+
+        private Optional<FallbackTranscriberPlan> fallbackPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -130,6 +150,7 @@ public final class CustomTranscriber {
         @java.lang.Override
         public Builder from(CustomTranscriber other) {
             server(other.getServer());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -187,9 +208,26 @@ public final class CustomTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackPlan(FallbackTranscriberPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public _FinalStage fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
+            return this;
+        }
+
         @java.lang.Override
         public CustomTranscriber build() {
-            return new CustomTranscriber(server, additionalProperties);
+            return new CustomTranscriber(server, fallbackPlan, additionalProperties);
         }
     }
 }

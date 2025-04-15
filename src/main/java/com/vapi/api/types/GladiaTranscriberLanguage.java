@@ -86,8 +86,6 @@ public enum GladiaTranscriberLanguage {
 
     JA("ja"),
 
-    JP("jp"),
-
     JV("jv"),
 
     KN("kn"),
@@ -126,7 +124,7 @@ public enum GladiaTranscriberLanguage {
 
     MN("mn"),
 
-    MYMR("mymr"),
+    MY("my"),
 
     NE("ne"),
 

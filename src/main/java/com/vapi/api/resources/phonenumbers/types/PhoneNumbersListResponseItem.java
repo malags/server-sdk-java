@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.vapi.api.types.ByoPhoneNumber;
+import com.vapi.api.types.TelnyxPhoneNumber;
 import com.vapi.api.types.TwilioPhoneNumber;
 import com.vapi.api.types.VapiPhoneNumber;
 import com.vapi.api.types.VonagePhoneNumber;
@@ -46,6 +47,10 @@ public final class PhoneNumbersListResponseItem {
         return new PhoneNumbersListResponseItem(new VapiValue(value));
     }
 
+    public static PhoneNumbersListResponseItem telnyx(TelnyxPhoneNumber value) {
+        return new PhoneNumbersListResponseItem(new TelnyxValue(value));
+    }
+
     public boolean isByoPhoneNumber() {
         return value instanceof ByoPhoneNumberValue;
     }
@@ -60,6 +65,10 @@ public final class PhoneNumbersListResponseItem {
 
     public boolean isVapi() {
         return value instanceof VapiValue;
+    }
+
+    public boolean isTelnyx() {
+        return value instanceof TelnyxValue;
     }
 
     public boolean _isUnknown() {
@@ -94,6 +103,13 @@ public final class PhoneNumbersListResponseItem {
         return Optional.empty();
     }
 
+    public Optional<TelnyxPhoneNumber> getTelnyx() {
+        if (isTelnyx()) {
+            return Optional.of(((TelnyxValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -115,6 +131,8 @@ public final class PhoneNumbersListResponseItem {
 
         T visitVapi(VapiPhoneNumber vapi);
 
+        T visitTelnyx(TelnyxPhoneNumber telnyx);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -123,7 +141,8 @@ public final class PhoneNumbersListResponseItem {
         @JsonSubTypes.Type(ByoPhoneNumberValue.class),
         @JsonSubTypes.Type(TwilioValue.class),
         @JsonSubTypes.Type(VonageValue.class),
-        @JsonSubTypes.Type(VapiValue.class)
+        @JsonSubTypes.Type(VapiValue.class),
+        @JsonSubTypes.Type(TelnyxValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -272,6 +291,45 @@ public final class PhoneNumbersListResponseItem {
         }
 
         private boolean equalTo(VapiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "PhoneNumbersListResponseItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("telnyx")
+    @JsonIgnoreProperties("provider")
+    private static final class TelnyxValue implements Value {
+        @JsonUnwrapped
+        private TelnyxPhoneNumber value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TelnyxValue() {}
+
+        private TelnyxValue(TelnyxPhoneNumber value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTelnyx(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TelnyxValue && equalTo((TelnyxValue) other);
+        }
+
+        private boolean equalTo(TelnyxValue other) {
             return value.equals(other.value);
         }
 

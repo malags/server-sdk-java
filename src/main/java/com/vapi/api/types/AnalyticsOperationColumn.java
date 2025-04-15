@@ -26,7 +26,9 @@ public enum AnalyticsOperationColumn {
 
     DURATION("duration"),
 
-    CONCURRENCY("concurrency");
+    CONCURRENCY("concurrency"),
+
+    MINUTES_USED("minutesUsed");
 
     private final String value;
 

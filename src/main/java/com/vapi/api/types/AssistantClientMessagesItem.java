@@ -34,7 +34,9 @@ public enum AssistantClientMessagesItem {
 
     USER_INTERRUPTED("user-interrupted"),
 
-    VOICE_INPUT("voice-input");
+    VOICE_INPUT("voice-input"),
+
+    WORKFLOW_NODE_STARTED("workflow.node.started");
 
     private final String value;
 

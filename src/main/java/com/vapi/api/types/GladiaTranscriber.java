@@ -32,6 +32,10 @@ public final class GladiaTranscriber {
 
     private final Optional<Boolean> audioEnhancer;
 
+    private final Optional<Double> confidenceThreshold;
+
+    private final Optional<FallbackTranscriberPlan> fallbackPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private GladiaTranscriber(
@@ -41,6 +45,8 @@ public final class GladiaTranscriber {
             Optional<String> transcriptionHint,
             Optional<Boolean> prosody,
             Optional<Boolean> audioEnhancer,
+            Optional<Double> confidenceThreshold,
+            Optional<FallbackTranscriberPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
         this.model = model;
         this.languageBehaviour = languageBehaviour;
@@ -48,6 +54,8 @@ public final class GladiaTranscriber {
         this.transcriptionHint = transcriptionHint;
         this.prosody = prosody;
         this.audioEnhancer = audioEnhancer;
+        this.confidenceThreshold = confidenceThreshold;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -94,6 +102,23 @@ public final class GladiaTranscriber {
         return audioEnhancer;
     }
 
+    /**
+     * @return Transcripts below this confidence threshold will be discarded.
+     * <p>@default 0.4</p>
+     */
+    @JsonProperty("confidenceThreshold")
+    public Optional<Double> getConfidenceThreshold() {
+        return confidenceThreshold;
+    }
+
+    /**
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+     */
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackTranscriberPlan> getFallbackPlan() {
+        return fallbackPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -111,7 +136,9 @@ public final class GladiaTranscriber {
                 && language.equals(other.language)
                 && transcriptionHint.equals(other.transcriptionHint)
                 && prosody.equals(other.prosody)
-                && audioEnhancer.equals(other.audioEnhancer);
+                && audioEnhancer.equals(other.audioEnhancer)
+                && confidenceThreshold.equals(other.confidenceThreshold)
+                && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
@@ -122,7 +149,9 @@ public final class GladiaTranscriber {
                 this.language,
                 this.transcriptionHint,
                 this.prosody,
-                this.audioEnhancer);
+                this.audioEnhancer,
+                this.confidenceThreshold,
+                this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -148,6 +177,10 @@ public final class GladiaTranscriber {
 
         private Optional<Boolean> audioEnhancer = Optional.empty();
 
+        private Optional<Double> confidenceThreshold = Optional.empty();
+
+        private Optional<FallbackTranscriberPlan> fallbackPlan = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -160,6 +193,8 @@ public final class GladiaTranscriber {
             transcriptionHint(other.getTranscriptionHint());
             prosody(other.getProsody());
             audioEnhancer(other.getAudioEnhancer());
+            confidenceThreshold(other.getConfidenceThreshold());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -229,6 +264,28 @@ public final class GladiaTranscriber {
             return this;
         }
 
+        @JsonSetter(value = "confidenceThreshold", nulls = Nulls.SKIP)
+        public Builder confidenceThreshold(Optional<Double> confidenceThreshold) {
+            this.confidenceThreshold = confidenceThreshold;
+            return this;
+        }
+
+        public Builder confidenceThreshold(Double confidenceThreshold) {
+            this.confidenceThreshold = Optional.ofNullable(confidenceThreshold);
+            return this;
+        }
+
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public Builder fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
+            return this;
+        }
+
+        public Builder fallbackPlan(FallbackTranscriberPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
         public GladiaTranscriber build() {
             return new GladiaTranscriber(
                     model,
@@ -237,6 +294,8 @@ public final class GladiaTranscriber {
                     transcriptionHint,
                     prosody,
                     audioEnhancer,
+                    confidenceThreshold,
+                    fallbackPlan,
                     additionalProperties);
         }
     }

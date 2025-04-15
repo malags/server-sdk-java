@@ -31,7 +31,11 @@ public final class Assistant {
 
     private final Optional<String> firstMessage;
 
+    private final Optional<Boolean> firstMessageInterruptionsEnabled;
+
     private final Optional<AssistantFirstMessageMode> firstMessageMode;
+
+    private final Optional<AssistantVoicemailDetection> voicemailDetection;
 
     private final Optional<List<AssistantClientMessagesItem>> clientMessages;
 
@@ -49,11 +53,11 @@ public final class Assistant {
 
     private final Optional<List<TransportConfigurationTwilio>> transportConfigurations;
 
+    private final Optional<LangfuseObservabilityPlan> observabilityPlan;
+
     private final Optional<List<AssistantCredentialsItem>> credentials;
 
     private final Optional<String> name;
-
-    private final Optional<TwilioVoicemailDetection> voicemailDetection;
 
     private final Optional<String> voicemailMessage;
 
@@ -83,6 +87,8 @@ public final class Assistant {
 
     private final Optional<List<AssistantHooks>> hooks;
 
+    private final Optional<KeypadInputPlan> keypadInputPlan;
+
     private final String id;
 
     private final String orgId;
@@ -98,7 +104,9 @@ public final class Assistant {
             Optional<AssistantModel> model,
             Optional<AssistantVoice> voice,
             Optional<String> firstMessage,
+            Optional<Boolean> firstMessageInterruptionsEnabled,
             Optional<AssistantFirstMessageMode> firstMessageMode,
+            Optional<AssistantVoicemailDetection> voicemailDetection,
             Optional<List<AssistantClientMessagesItem>> clientMessages,
             Optional<List<AssistantServerMessagesItem>> serverMessages,
             Optional<Double> silenceTimeoutSeconds,
@@ -107,9 +115,9 @@ public final class Assistant {
             Optional<Boolean> backgroundDenoisingEnabled,
             Optional<Boolean> modelOutputInMessagesEnabled,
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
+            Optional<LangfuseObservabilityPlan> observabilityPlan,
             Optional<List<AssistantCredentialsItem>> credentials,
             Optional<String> name,
-            Optional<TwilioVoicemailDetection> voicemailDetection,
             Optional<String> voicemailMessage,
             Optional<String> endCallMessage,
             Optional<List<String>> endCallPhrases,
@@ -124,6 +132,7 @@ public final class Assistant {
             Optional<List<String>> credentialIds,
             Optional<Server> server,
             Optional<List<AssistantHooks>> hooks,
+            Optional<KeypadInputPlan> keypadInputPlan,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -133,7 +142,9 @@ public final class Assistant {
         this.model = model;
         this.voice = voice;
         this.firstMessage = firstMessage;
+        this.firstMessageInterruptionsEnabled = firstMessageInterruptionsEnabled;
         this.firstMessageMode = firstMessageMode;
+        this.voicemailDetection = voicemailDetection;
         this.clientMessages = clientMessages;
         this.serverMessages = serverMessages;
         this.silenceTimeoutSeconds = silenceTimeoutSeconds;
@@ -142,9 +153,9 @@ public final class Assistant {
         this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
         this.modelOutputInMessagesEnabled = modelOutputInMessagesEnabled;
         this.transportConfigurations = transportConfigurations;
+        this.observabilityPlan = observabilityPlan;
         this.credentials = credentials;
         this.name = name;
-        this.voicemailDetection = voicemailDetection;
         this.voicemailMessage = voicemailMessage;
         this.endCallMessage = endCallMessage;
         this.endCallPhrases = endCallPhrases;
@@ -159,6 +170,7 @@ public final class Assistant {
         this.credentialIds = credentialIds;
         this.server = server;
         this.hooks = hooks;
+        this.keypadInputPlan = keypadInputPlan;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -199,6 +211,11 @@ public final class Assistant {
         return firstMessage;
     }
 
+    @JsonProperty("firstMessageInterruptionsEnabled")
+    public Optional<Boolean> getFirstMessageInterruptionsEnabled() {
+        return firstMessageInterruptionsEnabled;
+    }
+
     /**
      * @return This is the mode for the first message. Default is 'assistant-speaks-first'.
      * <p>Use:</p>
@@ -215,7 +232,17 @@ public final class Assistant {
     }
 
     /**
-     * @return These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input. You can check the shape of the messages in ClientMessage schema.
+     * @return These are the settings to configure or disable voicemail detection. Alternatively, voicemail detection can be configured using the model.tools=[VoicemailTool].
+     * This uses Twilio's built-in detection while the VoicemailTool relies on the model to detect if a voicemail was reached.
+     * You can use neither of them, one of them, or both of them. By default, Twilio built-in detection is enabled while VoicemailTool is not.
+     */
+    @JsonProperty("voicemailDetection")
+    public Optional<AssistantVoicemailDetection> getVoicemailDetection() {
+        return voicemailDetection;
+    }
+
+    /**
+     * @return These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input,workflow.node.started. You can check the shape of the messages in ClientMessage schema.
      */
     @JsonProperty("clientMessages")
     public Optional<List<AssistantClientMessagesItem>> getClientMessages() {
@@ -250,6 +277,7 @@ public final class Assistant {
 
     /**
      * @return This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+     * You can also provide a custom sound by providing a URL to an audio file.
      */
     @JsonProperty("backgroundSound")
     public Optional<AssistantBackgroundSound> getBackgroundSound() {
@@ -285,6 +313,15 @@ public final class Assistant {
     }
 
     /**
+     * @return This is the plan for observability configuration of assistant's calls.
+     * Currently supports Langfuse for tracing and monitoring.
+     */
+    @JsonProperty("observabilityPlan")
+    public Optional<LangfuseObservabilityPlan> getObservabilityPlan() {
+        return observabilityPlan;
+    }
+
+    /**
      * @return These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.
      */
     @JsonProperty("credentials")
@@ -299,16 +336,6 @@ public final class Assistant {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
-    }
-
-    /**
-     * @return These are the settings to configure or disable voicemail detection. Alternatively, voicemail detection can be configured using the model.tools=[VoicemailTool].
-     * This uses Twilio's built-in detection while the VoicemailTool relies on the model to detect if a voicemail was reached.
-     * You can use neither of them, one of them, or both of them. By default, Twilio built-in detection is enabled while VoicemailTool is not.
-     */
-    @JsonProperty("voicemailDetection")
-    public Optional<TwilioVoicemailDetection> getVoicemailDetection() {
-        return voicemailDetection;
     }
 
     /**
@@ -450,6 +477,11 @@ public final class Assistant {
         return hooks;
     }
 
+    @JsonProperty("keypadInputPlan")
+    public Optional<KeypadInputPlan> getKeypadInputPlan() {
+        return keypadInputPlan;
+    }
+
     /**
      * @return This is the unique identifier for the assistant.
      */
@@ -498,7 +530,9 @@ public final class Assistant {
                 && model.equals(other.model)
                 && voice.equals(other.voice)
                 && firstMessage.equals(other.firstMessage)
+                && firstMessageInterruptionsEnabled.equals(other.firstMessageInterruptionsEnabled)
                 && firstMessageMode.equals(other.firstMessageMode)
+                && voicemailDetection.equals(other.voicemailDetection)
                 && clientMessages.equals(other.clientMessages)
                 && serverMessages.equals(other.serverMessages)
                 && silenceTimeoutSeconds.equals(other.silenceTimeoutSeconds)
@@ -507,9 +541,9 @@ public final class Assistant {
                 && backgroundDenoisingEnabled.equals(other.backgroundDenoisingEnabled)
                 && modelOutputInMessagesEnabled.equals(other.modelOutputInMessagesEnabled)
                 && transportConfigurations.equals(other.transportConfigurations)
+                && observabilityPlan.equals(other.observabilityPlan)
                 && credentials.equals(other.credentials)
                 && name.equals(other.name)
-                && voicemailDetection.equals(other.voicemailDetection)
                 && voicemailMessage.equals(other.voicemailMessage)
                 && endCallMessage.equals(other.endCallMessage)
                 && endCallPhrases.equals(other.endCallPhrases)
@@ -524,6 +558,7 @@ public final class Assistant {
                 && credentialIds.equals(other.credentialIds)
                 && server.equals(other.server)
                 && hooks.equals(other.hooks)
+                && keypadInputPlan.equals(other.keypadInputPlan)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
@@ -537,7 +572,9 @@ public final class Assistant {
                 this.model,
                 this.voice,
                 this.firstMessage,
+                this.firstMessageInterruptionsEnabled,
                 this.firstMessageMode,
+                this.voicemailDetection,
                 this.clientMessages,
                 this.serverMessages,
                 this.silenceTimeoutSeconds,
@@ -546,9 +583,9 @@ public final class Assistant {
                 this.backgroundDenoisingEnabled,
                 this.modelOutputInMessagesEnabled,
                 this.transportConfigurations,
+                this.observabilityPlan,
                 this.credentials,
                 this.name,
-                this.voicemailDetection,
                 this.voicemailMessage,
                 this.endCallMessage,
                 this.endCallPhrases,
@@ -563,6 +600,7 @@ public final class Assistant {
                 this.credentialIds,
                 this.server,
                 this.hooks,
+                this.keypadInputPlan,
                 this.id,
                 this.orgId,
                 this.createdAt,
@@ -615,9 +653,17 @@ public final class Assistant {
 
         _FinalStage firstMessage(String firstMessage);
 
+        _FinalStage firstMessageInterruptionsEnabled(Optional<Boolean> firstMessageInterruptionsEnabled);
+
+        _FinalStage firstMessageInterruptionsEnabled(Boolean firstMessageInterruptionsEnabled);
+
         _FinalStage firstMessageMode(Optional<AssistantFirstMessageMode> firstMessageMode);
 
         _FinalStage firstMessageMode(AssistantFirstMessageMode firstMessageMode);
+
+        _FinalStage voicemailDetection(Optional<AssistantVoicemailDetection> voicemailDetection);
+
+        _FinalStage voicemailDetection(AssistantVoicemailDetection voicemailDetection);
 
         _FinalStage clientMessages(Optional<List<AssistantClientMessagesItem>> clientMessages);
 
@@ -651,6 +697,10 @@ public final class Assistant {
 
         _FinalStage transportConfigurations(List<TransportConfigurationTwilio> transportConfigurations);
 
+        _FinalStage observabilityPlan(Optional<LangfuseObservabilityPlan> observabilityPlan);
+
+        _FinalStage observabilityPlan(LangfuseObservabilityPlan observabilityPlan);
+
         _FinalStage credentials(Optional<List<AssistantCredentialsItem>> credentials);
 
         _FinalStage credentials(List<AssistantCredentialsItem> credentials);
@@ -658,10 +708,6 @@ public final class Assistant {
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
-
-        _FinalStage voicemailDetection(Optional<TwilioVoicemailDetection> voicemailDetection);
-
-        _FinalStage voicemailDetection(TwilioVoicemailDetection voicemailDetection);
 
         _FinalStage voicemailMessage(Optional<String> voicemailMessage);
 
@@ -718,6 +764,10 @@ public final class Assistant {
         _FinalStage hooks(Optional<List<AssistantHooks>> hooks);
 
         _FinalStage hooks(List<AssistantHooks> hooks);
+
+        _FinalStage keypadInputPlan(Optional<KeypadInputPlan> keypadInputPlan);
+
+        _FinalStage keypadInputPlan(KeypadInputPlan keypadInputPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -729,6 +779,8 @@ public final class Assistant {
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<KeypadInputPlan> keypadInputPlan = Optional.empty();
 
         private Optional<List<AssistantHooks>> hooks = Optional.empty();
 
@@ -758,11 +810,11 @@ public final class Assistant {
 
         private Optional<String> voicemailMessage = Optional.empty();
 
-        private Optional<TwilioVoicemailDetection> voicemailDetection = Optional.empty();
-
         private Optional<String> name = Optional.empty();
 
         private Optional<List<AssistantCredentialsItem>> credentials = Optional.empty();
+
+        private Optional<LangfuseObservabilityPlan> observabilityPlan = Optional.empty();
 
         private Optional<List<TransportConfigurationTwilio>> transportConfigurations = Optional.empty();
 
@@ -780,7 +832,11 @@ public final class Assistant {
 
         private Optional<List<AssistantClientMessagesItem>> clientMessages = Optional.empty();
 
+        private Optional<AssistantVoicemailDetection> voicemailDetection = Optional.empty();
+
         private Optional<AssistantFirstMessageMode> firstMessageMode = Optional.empty();
+
+        private Optional<Boolean> firstMessageInterruptionsEnabled = Optional.empty();
 
         private Optional<String> firstMessage = Optional.empty();
 
@@ -801,7 +857,9 @@ public final class Assistant {
             model(other.getModel());
             voice(other.getVoice());
             firstMessage(other.getFirstMessage());
+            firstMessageInterruptionsEnabled(other.getFirstMessageInterruptionsEnabled());
             firstMessageMode(other.getFirstMessageMode());
+            voicemailDetection(other.getVoicemailDetection());
             clientMessages(other.getClientMessages());
             serverMessages(other.getServerMessages());
             silenceTimeoutSeconds(other.getSilenceTimeoutSeconds());
@@ -810,9 +868,9 @@ public final class Assistant {
             backgroundDenoisingEnabled(other.getBackgroundDenoisingEnabled());
             modelOutputInMessagesEnabled(other.getModelOutputInMessagesEnabled());
             transportConfigurations(other.getTransportConfigurations());
+            observabilityPlan(other.getObservabilityPlan());
             credentials(other.getCredentials());
             name(other.getName());
-            voicemailDetection(other.getVoicemailDetection());
             voicemailMessage(other.getVoicemailMessage());
             endCallMessage(other.getEndCallMessage());
             endCallPhrases(other.getEndCallPhrases());
@@ -827,6 +885,7 @@ public final class Assistant {
             credentialIds(other.getCredentialIds());
             server(other.getServer());
             hooks(other.getHooks());
+            keypadInputPlan(other.getKeypadInputPlan());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -875,6 +934,19 @@ public final class Assistant {
         @JsonSetter("updatedAt")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage keypadInputPlan(KeypadInputPlan keypadInputPlan) {
+            this.keypadInputPlan = Optional.ofNullable(keypadInputPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "keypadInputPlan", nulls = Nulls.SKIP)
+        public _FinalStage keypadInputPlan(Optional<KeypadInputPlan> keypadInputPlan) {
+            this.keypadInputPlan = keypadInputPlan;
             return this;
         }
 
@@ -1143,25 +1215,6 @@ public final class Assistant {
         }
 
         /**
-         * <p>These are the settings to configure or disable voicemail detection. Alternatively, voicemail detection can be configured using the model.tools=[VoicemailTool].
-         * This uses Twilio's built-in detection while the VoicemailTool relies on the model to detect if a voicemail was reached.
-         * You can use neither of them, one of them, or both of them. By default, Twilio built-in detection is enabled while VoicemailTool is not.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage voicemailDetection(TwilioVoicemailDetection voicemailDetection) {
-            this.voicemailDetection = Optional.ofNullable(voicemailDetection);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "voicemailDetection", nulls = Nulls.SKIP)
-        public _FinalStage voicemailDetection(Optional<TwilioVoicemailDetection> voicemailDetection) {
-            this.voicemailDetection = voicemailDetection;
-            return this;
-        }
-
-        /**
          * <p>This is the name of the assistant.</p>
          * <p>This is required when you want to transfer between assistants in a call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -1193,6 +1246,24 @@ public final class Assistant {
         @JsonSetter(value = "credentials", nulls = Nulls.SKIP)
         public _FinalStage credentials(Optional<List<AssistantCredentialsItem>> credentials) {
             this.credentials = credentials;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for observability configuration of assistant's calls.
+         * Currently supports Langfuse for tracing and monitoring.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage observabilityPlan(LangfuseObservabilityPlan observabilityPlan) {
+            this.observabilityPlan = Optional.ofNullable(observabilityPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "observabilityPlan", nulls = Nulls.SKIP)
+        public _FinalStage observabilityPlan(Optional<LangfuseObservabilityPlan> observabilityPlan) {
+            this.observabilityPlan = observabilityPlan;
             return this;
         }
 
@@ -1253,7 +1324,8 @@ public final class Assistant {
         }
 
         /**
-         * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.</p>
+         * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+         * You can also provide a custom sound by providing a URL to an audio file.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1323,7 +1395,7 @@ public final class Assistant {
         }
 
         /**
-         * <p>These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input. You can check the shape of the messages in ClientMessage schema.</p>
+         * <p>These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input,workflow.node.started. You can check the shape of the messages in ClientMessage schema.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1336,6 +1408,25 @@ public final class Assistant {
         @JsonSetter(value = "clientMessages", nulls = Nulls.SKIP)
         public _FinalStage clientMessages(Optional<List<AssistantClientMessagesItem>> clientMessages) {
             this.clientMessages = clientMessages;
+            return this;
+        }
+
+        /**
+         * <p>These are the settings to configure or disable voicemail detection. Alternatively, voicemail detection can be configured using the model.tools=[VoicemailTool].
+         * This uses Twilio's built-in detection while the VoicemailTool relies on the model to detect if a voicemail was reached.
+         * You can use neither of them, one of them, or both of them. By default, Twilio built-in detection is enabled while VoicemailTool is not.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage voicemailDetection(AssistantVoicemailDetection voicemailDetection) {
+            this.voicemailDetection = Optional.ofNullable(voicemailDetection);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "voicemailDetection", nulls = Nulls.SKIP)
+        public _FinalStage voicemailDetection(Optional<AssistantVoicemailDetection> voicemailDetection) {
+            this.voicemailDetection = voicemailDetection;
             return this;
         }
 
@@ -1360,6 +1451,19 @@ public final class Assistant {
         @JsonSetter(value = "firstMessageMode", nulls = Nulls.SKIP)
         public _FinalStage firstMessageMode(Optional<AssistantFirstMessageMode> firstMessageMode) {
             this.firstMessageMode = firstMessageMode;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage firstMessageInterruptionsEnabled(Boolean firstMessageInterruptionsEnabled) {
+            this.firstMessageInterruptionsEnabled = Optional.ofNullable(firstMessageInterruptionsEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "firstMessageInterruptionsEnabled", nulls = Nulls.SKIP)
+        public _FinalStage firstMessageInterruptionsEnabled(Optional<Boolean> firstMessageInterruptionsEnabled) {
+            this.firstMessageInterruptionsEnabled = firstMessageInterruptionsEnabled;
             return this;
         }
 
@@ -1439,7 +1543,9 @@ public final class Assistant {
                     model,
                     voice,
                     firstMessage,
+                    firstMessageInterruptionsEnabled,
                     firstMessageMode,
+                    voicemailDetection,
                     clientMessages,
                     serverMessages,
                     silenceTimeoutSeconds,
@@ -1448,9 +1554,9 @@ public final class Assistant {
                     backgroundDenoisingEnabled,
                     modelOutputInMessagesEnabled,
                     transportConfigurations,
+                    observabilityPlan,
                     credentials,
                     name,
-                    voicemailDetection,
                     voicemailMessage,
                     endCallMessage,
                     endCallPhrases,
@@ -1465,6 +1571,7 @@ public final class Assistant {
                     credentialIds,
                     server,
                     hooks,
+                    keypadInputPlan,
                     id,
                     orgId,
                     createdAt,

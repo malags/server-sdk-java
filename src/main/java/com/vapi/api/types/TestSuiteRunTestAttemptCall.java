@@ -29,7 +29,7 @@ public final class TestSuiteRunTestAttemptCall {
     }
 
     /**
-     * @return This is the artifact associated with the call.
+     * @return This is the artifact of the call.
      */
     @JsonProperty("artifact")
     public Artifact getArtifact() {
@@ -91,7 +91,7 @@ public final class TestSuiteRunTestAttemptCall {
         }
 
         /**
-         * <p>This is the artifact associated with the call.</p>
+         * <p>This is the artifact of the call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

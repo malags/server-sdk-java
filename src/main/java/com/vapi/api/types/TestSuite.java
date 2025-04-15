@@ -34,6 +34,10 @@ public final class TestSuite {
 
     private final Optional<String> phoneNumberId;
 
+    private final Optional<TesterPlan> testerPlan;
+
+    private final Optional<TargetPlan> targetPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private TestSuite(
@@ -43,6 +47,8 @@ public final class TestSuite {
             OffsetDateTime updatedAt,
             Optional<String> name,
             Optional<String> phoneNumberId,
+            Optional<TesterPlan> testerPlan,
+            Optional<TargetPlan> targetPlan,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.orgId = orgId;
@@ -50,6 +56,8 @@ public final class TestSuite {
         this.updatedAt = updatedAt;
         this.name = name;
         this.phoneNumberId = phoneNumberId;
+        this.testerPlan = testerPlan;
+        this.targetPlan = targetPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -101,6 +109,23 @@ public final class TestSuite {
         return phoneNumberId;
     }
 
+    /**
+     * @return Override the default tester plan by providing custom assistant configuration for the test agent.
+     * <p>We recommend only using this if you are confident, as we have already set sensible defaults on the tester plan.</p>
+     */
+    @JsonProperty("testerPlan")
+    public Optional<TesterPlan> getTesterPlan() {
+        return testerPlan;
+    }
+
+    /**
+     * @return These are the configuration for the assistant / phone number that is being tested.
+     */
+    @JsonProperty("targetPlan")
+    public Optional<TargetPlan> getTargetPlan() {
+        return targetPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -118,12 +143,22 @@ public final class TestSuite {
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && name.equals(other.name)
-                && phoneNumberId.equals(other.phoneNumberId);
+                && phoneNumberId.equals(other.phoneNumberId)
+                && testerPlan.equals(other.testerPlan)
+                && targetPlan.equals(other.targetPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.phoneNumberId);
+        return Objects.hash(
+                this.id,
+                this.orgId,
+                this.createdAt,
+                this.updatedAt,
+                this.name,
+                this.phoneNumberId,
+                this.testerPlan,
+                this.targetPlan);
     }
 
     @java.lang.Override
@@ -163,6 +198,14 @@ public final class TestSuite {
         _FinalStage phoneNumberId(Optional<String> phoneNumberId);
 
         _FinalStage phoneNumberId(String phoneNumberId);
+
+        _FinalStage testerPlan(Optional<TesterPlan> testerPlan);
+
+        _FinalStage testerPlan(TesterPlan testerPlan);
+
+        _FinalStage targetPlan(Optional<TargetPlan> targetPlan);
+
+        _FinalStage targetPlan(TargetPlan targetPlan);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -174,6 +217,10 @@ public final class TestSuite {
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<TargetPlan> targetPlan = Optional.empty();
+
+        private Optional<TesterPlan> testerPlan = Optional.empty();
 
         private Optional<String> phoneNumberId = Optional.empty();
 
@@ -192,6 +239,8 @@ public final class TestSuite {
             updatedAt(other.getUpdatedAt());
             name(other.getName());
             phoneNumberId(other.getPhoneNumberId());
+            testerPlan(other.getTesterPlan());
+            targetPlan(other.getTargetPlan());
             return this;
         }
 
@@ -240,6 +289,41 @@ public final class TestSuite {
         }
 
         /**
+         * <p>These are the configuration for the assistant / phone number that is being tested.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage targetPlan(TargetPlan targetPlan) {
+            this.targetPlan = Optional.ofNullable(targetPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "targetPlan", nulls = Nulls.SKIP)
+        public _FinalStage targetPlan(Optional<TargetPlan> targetPlan) {
+            this.targetPlan = targetPlan;
+            return this;
+        }
+
+        /**
+         * <p>Override the default tester plan by providing custom assistant configuration for the test agent.</p>
+         * <p>We recommend only using this if you are confident, as we have already set sensible defaults on the tester plan.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage testerPlan(TesterPlan testerPlan) {
+            this.testerPlan = Optional.ofNullable(testerPlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "testerPlan", nulls = Nulls.SKIP)
+        public _FinalStage testerPlan(Optional<TesterPlan> testerPlan) {
+            this.testerPlan = testerPlan;
+            return this;
+        }
+
+        /**
          * <p>This is the phone number ID associated with this test suite.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -275,7 +359,8 @@ public final class TestSuite {
 
         @java.lang.Override
         public TestSuite build() {
-            return new TestSuite(id, orgId, createdAt, updatedAt, name, phoneNumberId, additionalProperties);
+            return new TestSuite(
+                    id, orgId, createdAt, updatedAt, name, phoneNumberId, testerPlan, targetPlan, additionalProperties);
         }
     }
 }

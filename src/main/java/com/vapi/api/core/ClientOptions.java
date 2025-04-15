@@ -31,10 +31,10 @@ public final class ClientOptions {
         this.headers.putAll(headers);
         this.headers.putAll(new HashMap<String, String>() {
             {
-                put("User-Agent", "dev.vapi:server-sdk/0.5.0");
+                put("User-Agent", "dev.vapi:server-sdk/v0.5.1");
                 put("X-Fern-Language", "JAVA");
                 put("X-Fern-SDK-Name", "com.vapi.fern:api-sdk");
-                put("X-Fern-SDK-Version", "0.5.0");
+                put("X-Fern-SDK-Version", "v0.5.1");
             }
         });
         this.headerSuppliers = headerSuppliers;

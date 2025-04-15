@@ -12,9 +12,11 @@ import com.vapi.api.core.VapiApiException;
 import com.vapi.api.core.VapiException;
 import com.vapi.api.resources.testsuitetests.requests.TestSuiteTestControllerFindAllPaginatedRequest;
 import com.vapi.api.resources.testsuitetests.types.TestSuiteTestControllerCreateRequest;
+import com.vapi.api.resources.testsuitetests.types.TestSuiteTestControllerCreateResponse;
+import com.vapi.api.resources.testsuitetests.types.TestSuiteTestControllerFindOneResponse;
 import com.vapi.api.resources.testsuitetests.types.TestSuiteTestControllerRemoveResponse;
 import com.vapi.api.resources.testsuitetests.types.TestSuiteTestControllerUpdateRequest;
-import com.vapi.api.types.TestSuiteTestVoice;
+import com.vapi.api.resources.testsuitetests.types.TestSuiteTestControllerUpdateResponse;
 import com.vapi.api.types.TestSuiteTestsPaginatedResponse;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -118,12 +120,12 @@ public class TestSuiteTestsClient {
         }
     }
 
-    public TestSuiteTestVoice testSuiteTestControllerCreate(
+    public TestSuiteTestControllerCreateResponse testSuiteTestControllerCreate(
             String testSuiteId, TestSuiteTestControllerCreateRequest request) {
         return testSuiteTestControllerCreate(testSuiteId, request, null);
     }
 
-    public TestSuiteTestVoice testSuiteTestControllerCreate(
+    public TestSuiteTestControllerCreateResponse testSuiteTestControllerCreate(
             String testSuiteId, TestSuiteTestControllerCreateRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -152,7 +154,8 @@ public class TestSuiteTestsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TestSuiteTestVoice.class);
+                return ObjectMappers.JSON_MAPPER.readValue(
+                        responseBody.string(), TestSuiteTestControllerCreateResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new VapiApiException(
@@ -164,11 +167,11 @@ public class TestSuiteTestsClient {
         }
     }
 
-    public TestSuiteTestVoice testSuiteTestControllerFindOne(String testSuiteId, String id) {
+    public TestSuiteTestControllerFindOneResponse testSuiteTestControllerFindOne(String testSuiteId, String id) {
         return testSuiteTestControllerFindOne(testSuiteId, id, null);
     }
 
-    public TestSuiteTestVoice testSuiteTestControllerFindOne(
+    public TestSuiteTestControllerFindOneResponse testSuiteTestControllerFindOne(
             String testSuiteId, String id, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -191,7 +194,8 @@ public class TestSuiteTestsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TestSuiteTestVoice.class);
+                return ObjectMappers.JSON_MAPPER.readValue(
+                        responseBody.string(), TestSuiteTestControllerFindOneResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new VapiApiException(
@@ -243,12 +247,12 @@ public class TestSuiteTestsClient {
         }
     }
 
-    public TestSuiteTestVoice testSuiteTestControllerUpdate(
+    public TestSuiteTestControllerUpdateResponse testSuiteTestControllerUpdate(
             String testSuiteId, String id, TestSuiteTestControllerUpdateRequest request) {
         return testSuiteTestControllerUpdate(testSuiteId, id, request, null);
     }
 
-    public TestSuiteTestVoice testSuiteTestControllerUpdate(
+    public TestSuiteTestControllerUpdateResponse testSuiteTestControllerUpdate(
             String testSuiteId,
             String id,
             TestSuiteTestControllerUpdateRequest request,
@@ -281,7 +285,8 @@ public class TestSuiteTestsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TestSuiteTestVoice.class);
+                return ObjectMappers.JSON_MAPPER.readValue(
+                        responseBody.string(), TestSuiteTestControllerUpdateResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new VapiApiException(

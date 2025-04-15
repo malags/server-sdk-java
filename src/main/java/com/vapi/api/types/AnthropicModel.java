@@ -34,6 +34,8 @@ public final class AnthropicModel {
 
     private final AnthropicModelModel model;
 
+    private final Optional<AnthropicThinkingConfig> thinking;
+
     private final Optional<Double> temperature;
 
     private final Optional<Double> maxTokens;
@@ -51,6 +53,7 @@ public final class AnthropicModel {
             Optional<CreateCustomKnowledgeBaseDto> knowledgeBase,
             Optional<String> knowledgeBaseId,
             AnthropicModelModel model,
+            Optional<AnthropicThinkingConfig> thinking,
             Optional<Double> temperature,
             Optional<Double> maxTokens,
             Optional<Boolean> emotionRecognitionEnabled,
@@ -62,6 +65,7 @@ public final class AnthropicModel {
         this.knowledgeBase = knowledgeBase;
         this.knowledgeBaseId = knowledgeBaseId;
         this.model = model;
+        this.thinking = thinking;
         this.temperature = temperature;
         this.maxTokens = maxTokens;
         this.emotionRecognitionEnabled = emotionRecognitionEnabled;
@@ -112,11 +116,21 @@ public final class AnthropicModel {
     }
 
     /**
-     * @return This is the Anthropic/Claude models that will be used.
+     * @return The specific Anthropic/Claude model that will be used.
      */
     @JsonProperty("model")
     public AnthropicModelModel getModel() {
         return model;
+    }
+
+    /**
+     * @return Optional configuration for Anthropic's thinking feature.
+     * Only applicable for claude-3-7-sonnet-20250219 model.
+     * If provided, maxTokens must be greater than thinking.budgetTokens.
+     */
+    @JsonProperty("thinking")
+    public Optional<AnthropicThinkingConfig> getThinking() {
+        return thinking;
     }
 
     /**
@@ -173,6 +187,7 @@ public final class AnthropicModel {
                 && knowledgeBase.equals(other.knowledgeBase)
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && model.equals(other.model)
+                && thinking.equals(other.thinking)
                 && temperature.equals(other.temperature)
                 && maxTokens.equals(other.maxTokens)
                 && emotionRecognitionEnabled.equals(other.emotionRecognitionEnabled)
@@ -188,6 +203,7 @@ public final class AnthropicModel {
                 this.knowledgeBase,
                 this.knowledgeBaseId,
                 this.model,
+                this.thinking,
                 this.temperature,
                 this.maxTokens,
                 this.emotionRecognitionEnabled,
@@ -232,6 +248,10 @@ public final class AnthropicModel {
 
         _FinalStage knowledgeBaseId(String knowledgeBaseId);
 
+        _FinalStage thinking(Optional<AnthropicThinkingConfig> thinking);
+
+        _FinalStage thinking(AnthropicThinkingConfig thinking);
+
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
@@ -261,6 +281,8 @@ public final class AnthropicModel {
 
         private Optional<Double> temperature = Optional.empty();
 
+        private Optional<AnthropicThinkingConfig> thinking = Optional.empty();
+
         private Optional<String> knowledgeBaseId = Optional.empty();
 
         private Optional<CreateCustomKnowledgeBaseDto> knowledgeBase = Optional.empty();
@@ -284,6 +306,7 @@ public final class AnthropicModel {
             knowledgeBase(other.getKnowledgeBase());
             knowledgeBaseId(other.getKnowledgeBaseId());
             model(other.getModel());
+            thinking(other.getThinking());
             temperature(other.getTemperature());
             maxTokens(other.getMaxTokens());
             emotionRecognitionEnabled(other.getEmotionRecognitionEnabled());
@@ -292,7 +315,7 @@ public final class AnthropicModel {
         }
 
         /**
-         * <p>This is the Anthropic/Claude models that will be used.</p>
+         * <p>The specific Anthropic/Claude model that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -371,6 +394,25 @@ public final class AnthropicModel {
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
             this.temperature = temperature;
+            return this;
+        }
+
+        /**
+         * <p>Optional configuration for Anthropic's thinking feature.
+         * Only applicable for claude-3-7-sonnet-20250219 model.
+         * If provided, maxTokens must be greater than thinking.budgetTokens.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage thinking(AnthropicThinkingConfig thinking) {
+            this.thinking = Optional.ofNullable(thinking);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "thinking", nulls = Nulls.SKIP)
+        public _FinalStage thinking(Optional<AnthropicThinkingConfig> thinking) {
+            this.thinking = thinking;
             return this;
         }
 
@@ -470,6 +512,7 @@ public final class AnthropicModel {
                     knowledgeBase,
                     knowledgeBaseId,
                     model,
+                    thinking,
                     temperature,
                     maxTokens,
                     emotionRecognitionEnabled,

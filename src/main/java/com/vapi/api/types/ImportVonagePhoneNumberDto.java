@@ -79,8 +79,7 @@ public final class ImportVonagePhoneNumberDto {
     }
 
     /**
-     * @return This is the credential that is used to make outgoing calls, and do operations like call transfer and hang up.
-     * <p>You can add the Vonage Credential in the Provider Credentials page on the dashboard to get the credentialId.</p>
+     * @return This is the credential you added in dashboard.vapi.ai/keys. This is used to configure the number to send inbound calls to Vapi, make outbound calls and do live call updates like transfers and hangups.
      */
     @JsonProperty("credentialId")
     public String getCredentialId() {
@@ -248,8 +247,7 @@ public final class ImportVonagePhoneNumberDto {
         }
 
         /**
-         * <p>This is the credential that is used to make outgoing calls, and do operations like call transfer and hang up.</p>
-         * <p>You can add the Vonage Credential in the Provider Credentials page on the dashboard to get the credentialId.</p>
+         * <p>This is the credential you added in dashboard.vapi.ai/keys. This is used to configure the number to send inbound calls to Vapi, make outbound calls and do live call updates like transfers and hangups.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

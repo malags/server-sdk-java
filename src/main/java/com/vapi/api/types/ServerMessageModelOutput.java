@@ -23,7 +23,7 @@ import java.util.Optional;
 public final class ServerMessageModelOutput {
     private final Optional<ServerMessageModelOutputPhoneNumber> phoneNumber;
 
-    private final Optional<String> timestamp;
+    private final Optional<Double> timestamp;
 
     private final Optional<Artifact> artifact;
 
@@ -39,7 +39,7 @@ public final class ServerMessageModelOutput {
 
     private ServerMessageModelOutput(
             Optional<ServerMessageModelOutputPhoneNumber> phoneNumber,
-            Optional<String> timestamp,
+            Optional<Double> timestamp,
             Optional<Artifact> artifact,
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
@@ -78,10 +78,10 @@ public final class ServerMessageModelOutput {
     }
 
     /**
-     * @return This is the ISO-8601 formatted timestamp of when the message was sent.
+     * @return This is the timestamp of when the message was sent in milliseconds since Unix Epoch.
      */
     @JsonProperty("timestamp")
-    public Optional<String> getTimestamp() {
+    public Optional<Double> getTimestamp() {
         return timestamp;
     }
 
@@ -182,7 +182,7 @@ public final class ServerMessageModelOutput {
     public static final class Builder {
         private Optional<ServerMessageModelOutputPhoneNumber> phoneNumber = Optional.empty();
 
-        private Optional<String> timestamp = Optional.empty();
+        private Optional<Double> timestamp = Optional.empty();
 
         private Optional<Artifact> artifact = Optional.empty();
 
@@ -222,12 +222,12 @@ public final class ServerMessageModelOutput {
         }
 
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
-        public Builder timestamp(Optional<String> timestamp) {
+        public Builder timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
             return this;
         }
 
-        public Builder timestamp(String timestamp) {
+        public Builder timestamp(Double timestamp) {
             this.timestamp = Optional.ofNullable(timestamp);
             return this;
         }

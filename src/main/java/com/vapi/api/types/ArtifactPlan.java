@@ -22,6 +22,8 @@ import java.util.Optional;
 public final class ArtifactPlan {
     private final Optional<Boolean> recordingEnabled;
 
+    private final Optional<ArtifactPlanRecordingFormat> recordingFormat;
+
     private final Optional<Boolean> videoRecordingEnabled;
 
     private final Optional<Boolean> pcapEnabled;
@@ -36,6 +38,7 @@ public final class ArtifactPlan {
 
     private ArtifactPlan(
             Optional<Boolean> recordingEnabled,
+            Optional<ArtifactPlanRecordingFormat> recordingFormat,
             Optional<Boolean> videoRecordingEnabled,
             Optional<Boolean> pcapEnabled,
             Optional<String> pcapS3PathPrefix,
@@ -43,6 +46,7 @@ public final class ArtifactPlan {
             Optional<String> recordingPath,
             Map<String, Object> additionalProperties) {
         this.recordingEnabled = recordingEnabled;
+        this.recordingFormat = recordingFormat;
         this.videoRecordingEnabled = videoRecordingEnabled;
         this.pcapEnabled = pcapEnabled;
         this.pcapS3PathPrefix = pcapS3PathPrefix;
@@ -64,6 +68,15 @@ public final class ArtifactPlan {
     @JsonProperty("recordingEnabled")
     public Optional<Boolean> getRecordingEnabled() {
         return recordingEnabled;
+    }
+
+    /**
+     * @return This determines the format of the recording. Defaults to <code>wav;l16</code>.
+     * <p>@default 'wav;l16'</p>
+     */
+    @JsonProperty("recordingFormat")
+    public Optional<ArtifactPlanRecordingFormat> getRecordingFormat() {
+        return recordingFormat;
     }
 
     /**
@@ -137,6 +150,7 @@ public final class ArtifactPlan {
 
     private boolean equalTo(ArtifactPlan other) {
         return recordingEnabled.equals(other.recordingEnabled)
+                && recordingFormat.equals(other.recordingFormat)
                 && videoRecordingEnabled.equals(other.videoRecordingEnabled)
                 && pcapEnabled.equals(other.pcapEnabled)
                 && pcapS3PathPrefix.equals(other.pcapS3PathPrefix)
@@ -148,6 +162,7 @@ public final class ArtifactPlan {
     public int hashCode() {
         return Objects.hash(
                 this.recordingEnabled,
+                this.recordingFormat,
                 this.videoRecordingEnabled,
                 this.pcapEnabled,
                 this.pcapS3PathPrefix,
@@ -168,6 +183,8 @@ public final class ArtifactPlan {
     public static final class Builder {
         private Optional<Boolean> recordingEnabled = Optional.empty();
 
+        private Optional<ArtifactPlanRecordingFormat> recordingFormat = Optional.empty();
+
         private Optional<Boolean> videoRecordingEnabled = Optional.empty();
 
         private Optional<Boolean> pcapEnabled = Optional.empty();
@@ -185,6 +202,7 @@ public final class ArtifactPlan {
 
         public Builder from(ArtifactPlan other) {
             recordingEnabled(other.getRecordingEnabled());
+            recordingFormat(other.getRecordingFormat());
             videoRecordingEnabled(other.getVideoRecordingEnabled());
             pcapEnabled(other.getPcapEnabled());
             pcapS3PathPrefix(other.getPcapS3PathPrefix());
@@ -201,6 +219,17 @@ public final class ArtifactPlan {
 
         public Builder recordingEnabled(Boolean recordingEnabled) {
             this.recordingEnabled = Optional.ofNullable(recordingEnabled);
+            return this;
+        }
+
+        @JsonSetter(value = "recordingFormat", nulls = Nulls.SKIP)
+        public Builder recordingFormat(Optional<ArtifactPlanRecordingFormat> recordingFormat) {
+            this.recordingFormat = recordingFormat;
+            return this;
+        }
+
+        public Builder recordingFormat(ArtifactPlanRecordingFormat recordingFormat) {
+            this.recordingFormat = Optional.ofNullable(recordingFormat);
             return this;
         }
 
@@ -262,6 +291,7 @@ public final class ArtifactPlan {
         public ArtifactPlan build() {
             return new ArtifactPlan(
                     recordingEnabled,
+                    recordingFormat,
                     videoRecordingEnabled,
                     pcapEnabled,
                     pcapS3PathPrefix,

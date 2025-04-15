@@ -4,39 +4,91 @@
 package com.vapi.api.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.vapi.api.core.ObjectMappers;
+import java.io.IOException;
+import java.util.Objects;
 
-public enum FallbackOpenAiVoiceId {
-    ALLOY("alloy"),
+@JsonDeserialize(using = FallbackOpenAiVoiceId.Deserializer.class)
+public final class FallbackOpenAiVoiceId {
+    private final Object value;
 
-    ECHO("echo"),
+    private final int type;
 
-    FABLE("fable"),
-
-    ONYX("onyx"),
-
-    NOVA("nova"),
-
-    SHIMMER("shimmer"),
-
-    ASH("ash"),
-
-    BALLAD("ballad"),
-
-    CORAL("coral"),
-
-    SAGE("sage"),
-
-    VERSE("verse");
-
-    private final String value;
-
-    FallbackOpenAiVoiceId(String value) {
+    private FallbackOpenAiVoiceId(Object value, int type) {
         this.value = value;
+        this.type = type;
     }
 
     @JsonValue
+    public Object get() {
+        return this.value;
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        if (this.type == 0) {
+            return visitor.visit((FallbackOpenAiVoiceIdEnum) this.value);
+        } else if (this.type == 1) {
+            return visitor.visit((String) this.value);
+        }
+        throw new IllegalStateException("Failed to visit value. This should never happen.");
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        return other instanceof FallbackOpenAiVoiceId && equalTo((FallbackOpenAiVoiceId) other);
+    }
+
+    private boolean equalTo(FallbackOpenAiVoiceId other) {
+        return value.equals(other.value);
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return Objects.hash(this.value);
+    }
+
     @java.lang.Override
     public String toString() {
-        return this.value;
+        return this.value.toString();
+    }
+
+    public static FallbackOpenAiVoiceId of(FallbackOpenAiVoiceIdEnum value) {
+        return new FallbackOpenAiVoiceId(value, 0);
+    }
+
+    public static FallbackOpenAiVoiceId of(String value) {
+        return new FallbackOpenAiVoiceId(value, 1);
+    }
+
+    public interface Visitor<T> {
+        T visit(FallbackOpenAiVoiceIdEnum value);
+
+        T visit(String value);
+    }
+
+    static final class Deserializer extends StdDeserializer<FallbackOpenAiVoiceId> {
+        Deserializer() {
+            super(FallbackOpenAiVoiceId.class);
+        }
+
+        @java.lang.Override
+        public FallbackOpenAiVoiceId deserialize(JsonParser p, DeserializationContext context) throws IOException {
+            Object value = p.readValueAs(Object.class);
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, FallbackOpenAiVoiceIdEnum.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, String.class));
+            } catch (IllegalArgumentException e) {
+            }
+            throw new JsonParseException(p, "Failed to deserialize");
+        }
     }
 }

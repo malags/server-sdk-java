@@ -63,8 +63,6 @@ public final class Call {
 
     private final Optional<Artifact> artifact;
 
-    private final Optional<Transport> transport;
-
     private final Optional<String> phoneCallProviderId;
 
     private final Optional<String> assistantId;
@@ -86,6 +84,10 @@ public final class Call {
     private final Optional<CreateCustomerDto> customer;
 
     private final Optional<String> name;
+
+    private final Optional<SchedulePlan> schedulePlan;
+
+    private final Optional<Map<String, Object>> transport;
 
     private final Map<String, Object> additionalProperties;
 
@@ -110,7 +112,6 @@ public final class Call {
             Optional<Analysis> analysis,
             Optional<Monitor> monitor,
             Optional<Artifact> artifact,
-            Optional<Transport> transport,
             Optional<String> phoneCallProviderId,
             Optional<String> assistantId,
             Optional<CreateAssistantDto> assistant,
@@ -122,6 +123,8 @@ public final class Call {
             Optional<String> customerId,
             Optional<CreateCustomerDto> customer,
             Optional<String> name,
+            Optional<SchedulePlan> schedulePlan,
+            Optional<Map<String, Object>> transport,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.costs = costs;
@@ -143,7 +146,6 @@ public final class Call {
         this.analysis = analysis;
         this.monitor = monitor;
         this.artifact = artifact;
-        this.transport = transport;
         this.phoneCallProviderId = phoneCallProviderId;
         this.assistantId = assistantId;
         this.assistant = assistant;
@@ -155,6 +157,8 @@ public final class Call {
         this.customerId = customerId;
         this.customer = customer;
         this.name = name;
+        this.schedulePlan = schedulePlan;
+        this.transport = transport;
         this.additionalProperties = additionalProperties;
     }
 
@@ -318,15 +322,7 @@ public final class Call {
     }
 
     /**
-     * @return This is the transport used for the call.
-     */
-    @JsonProperty("transport")
-    public Optional<Transport> getTransport() {
-        return transport;
-    }
-
-    /**
-     * @return The ID of the call as provided by the phone number service. callSid in Twilio. conversationUuid in Vonage.
+     * @return The ID of the call as provided by the phone number service. callSid in Twilio. conversationUuid in Vonage. callControlId in Telnyx.
      * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
      */
     @JsonProperty("phoneCallProviderId")
@@ -418,6 +414,22 @@ public final class Call {
         return name;
     }
 
+    /**
+     * @return This is the schedule plan of the call.
+     */
+    @JsonProperty("schedulePlan")
+    public Optional<SchedulePlan> getSchedulePlan() {
+        return schedulePlan;
+    }
+
+    /**
+     * @return This is the transport of the call.
+     */
+    @JsonProperty("transport")
+    public Optional<Map<String, Object>> getTransport() {
+        return transport;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -450,7 +462,6 @@ public final class Call {
                 && analysis.equals(other.analysis)
                 && monitor.equals(other.monitor)
                 && artifact.equals(other.artifact)
-                && transport.equals(other.transport)
                 && phoneCallProviderId.equals(other.phoneCallProviderId)
                 && assistantId.equals(other.assistantId)
                 && assistant.equals(other.assistant)
@@ -461,7 +472,9 @@ public final class Call {
                 && phoneNumber.equals(other.phoneNumber)
                 && customerId.equals(other.customerId)
                 && customer.equals(other.customer)
-                && name.equals(other.name);
+                && name.equals(other.name)
+                && schedulePlan.equals(other.schedulePlan)
+                && transport.equals(other.transport);
     }
 
     @java.lang.Override
@@ -487,7 +500,6 @@ public final class Call {
                 this.analysis,
                 this.monitor,
                 this.artifact,
-                this.transport,
                 this.phoneCallProviderId,
                 this.assistantId,
                 this.assistant,
@@ -498,7 +510,9 @@ public final class Call {
                 this.phoneNumber,
                 this.customerId,
                 this.customer,
-                this.name);
+                this.name,
+                this.schedulePlan,
+                this.transport);
     }
 
     @java.lang.Override
@@ -595,10 +609,6 @@ public final class Call {
 
         _FinalStage artifact(Artifact artifact);
 
-        _FinalStage transport(Optional<Transport> transport);
-
-        _FinalStage transport(Transport transport);
-
         _FinalStage phoneCallProviderId(Optional<String> phoneCallProviderId);
 
         _FinalStage phoneCallProviderId(String phoneCallProviderId);
@@ -642,6 +652,14 @@ public final class Call {
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
+
+        _FinalStage schedulePlan(Optional<SchedulePlan> schedulePlan);
+
+        _FinalStage schedulePlan(SchedulePlan schedulePlan);
+
+        _FinalStage transport(Optional<Map<String, Object>> transport);
+
+        _FinalStage transport(Map<String, Object> transport);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -653,6 +671,10 @@ public final class Call {
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<Map<String, Object>> transport = Optional.empty();
+
+        private Optional<SchedulePlan> schedulePlan = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -675,8 +697,6 @@ public final class Call {
         private Optional<String> assistantId = Optional.empty();
 
         private Optional<String> phoneCallProviderId = Optional.empty();
-
-        private Optional<Transport> transport = Optional.empty();
 
         private Optional<Artifact> artifact = Optional.empty();
 
@@ -737,7 +757,6 @@ public final class Call {
             analysis(other.getAnalysis());
             monitor(other.getMonitor());
             artifact(other.getArtifact());
-            transport(other.getTransport());
             phoneCallProviderId(other.getPhoneCallProviderId());
             assistantId(other.getAssistantId());
             assistant(other.getAssistant());
@@ -749,6 +768,8 @@ public final class Call {
             customerId(other.getCustomerId());
             customer(other.getCustomer());
             name(other.getName());
+            schedulePlan(other.getSchedulePlan());
+            transport(other.getTransport());
             return this;
         }
 
@@ -793,6 +814,40 @@ public final class Call {
         @JsonSetter("updatedAt")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the transport of the call.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage transport(Map<String, Object> transport) {
+            this.transport = Optional.ofNullable(transport);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "transport", nulls = Nulls.SKIP)
+        public _FinalStage transport(Optional<Map<String, Object>> transport) {
+            this.transport = transport;
+            return this;
+        }
+
+        /**
+         * <p>This is the schedule plan of the call.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage schedulePlan(SchedulePlan schedulePlan) {
+            this.schedulePlan = Optional.ofNullable(schedulePlan);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "schedulePlan", nulls = Nulls.SKIP)
+        public _FinalStage schedulePlan(Optional<SchedulePlan> schedulePlan) {
+            this.schedulePlan = schedulePlan;
             return this;
         }
 
@@ -971,7 +1026,7 @@ public final class Call {
         }
 
         /**
-         * <p>The ID of the call as provided by the phone number service. callSid in Twilio. conversationUuid in Vonage.</p>
+         * <p>The ID of the call as provided by the phone number service. callSid in Twilio. conversationUuid in Vonage. callControlId in Telnyx.</p>
          * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -985,23 +1040,6 @@ public final class Call {
         @JsonSetter(value = "phoneCallProviderId", nulls = Nulls.SKIP)
         public _FinalStage phoneCallProviderId(Optional<String> phoneCallProviderId) {
             this.phoneCallProviderId = phoneCallProviderId;
-            return this;
-        }
-
-        /**
-         * <p>This is the transport used for the call.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage transport(Transport transport) {
-            this.transport = Optional.ofNullable(transport);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "transport", nulls = Nulls.SKIP)
-        public _FinalStage transport(Optional<Transport> transport) {
-            this.transport = transport;
             return this;
         }
 
@@ -1298,7 +1336,6 @@ public final class Call {
                     analysis,
                     monitor,
                     artifact,
-                    transport,
                     phoneCallProviderId,
                     assistantId,
                     assistant,
@@ -1310,6 +1347,8 @@ public final class Call {
                     customerId,
                     customer,
                     name,
+                    schedulePlan,
+                    transport,
                     additionalProperties);
         }
     }

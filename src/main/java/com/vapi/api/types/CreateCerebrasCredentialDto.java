@@ -34,11 +34,6 @@ public final class CreateCerebrasCredentialDto {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "cerebras";
-    }
-
     /**
      * @return This is not returned in the API.
      */

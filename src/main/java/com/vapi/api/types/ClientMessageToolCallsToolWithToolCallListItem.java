@@ -50,6 +50,11 @@ public final class ClientMessageToolCallsToolWithToolCallListItem {
         return new ClientMessageToolCallsToolWithToolCallListItem(new TextEditorValue(value));
     }
 
+    public static ClientMessageToolCallsToolWithToolCallListItem googleCalendarEventCreate(
+            GoogleCalendarCreateEventToolWithToolCall value) {
+        return new ClientMessageToolCallsToolWithToolCallListItem(new GoogleCalendarEventCreateValue(value));
+    }
+
     public boolean isFunction() {
         return value instanceof FunctionValue;
     }
@@ -72,6 +77,10 @@ public final class ClientMessageToolCallsToolWithToolCallListItem {
 
     public boolean isTextEditor() {
         return value instanceof TextEditorValue;
+    }
+
+    public boolean isGoogleCalendarEventCreate() {
+        return value instanceof GoogleCalendarEventCreateValue;
     }
 
     public boolean _isUnknown() {
@@ -120,6 +129,13 @@ public final class ClientMessageToolCallsToolWithToolCallListItem {
         return Optional.empty();
     }
 
+    public Optional<GoogleCalendarCreateEventToolWithToolCall> getGoogleCalendarEventCreate() {
+        if (isGoogleCalendarEventCreate()) {
+            return Optional.of(((GoogleCalendarEventCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -145,6 +161,8 @@ public final class ClientMessageToolCallsToolWithToolCallListItem {
 
         T visitTextEditor(TextEditorToolWithToolCall textEditor);
 
+        T visitGoogleCalendarEventCreate(GoogleCalendarCreateEventToolWithToolCall googleCalendarEventCreate);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -155,7 +173,8 @@ public final class ClientMessageToolCallsToolWithToolCallListItem {
         @JsonSubTypes.Type(MakeValue.class),
         @JsonSubTypes.Type(BashValue.class),
         @JsonSubTypes.Type(ComputerValue.class),
-        @JsonSubTypes.Type(TextEditorValue.class)
+        @JsonSubTypes.Type(TextEditorValue.class),
+        @JsonSubTypes.Type(GoogleCalendarEventCreateValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -382,6 +401,45 @@ public final class ClientMessageToolCallsToolWithToolCallListItem {
         }
 
         private boolean equalTo(TextEditorValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ClientMessageToolCallsToolWithToolCallListItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.event.create")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleCalendarEventCreateValue implements Value {
+        @JsonUnwrapped
+        private GoogleCalendarCreateEventToolWithToolCall value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarEventCreateValue() {}
+
+        private GoogleCalendarEventCreateValue(GoogleCalendarCreateEventToolWithToolCall value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarEventCreate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarEventCreateValue && equalTo((GoogleCalendarEventCreateValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarEventCreateValue other) {
             return value.equals(other.value);
         }
 

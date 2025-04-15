@@ -17,8 +17,15 @@ import com.vapi.api.types.DtmfTool;
 import com.vapi.api.types.EndCallTool;
 import com.vapi.api.types.FunctionTool;
 import com.vapi.api.types.GhlTool;
+import com.vapi.api.types.GoogleCalendarCheckAvailabilityTool;
+import com.vapi.api.types.GoogleCalendarCreateEventTool;
+import com.vapi.api.types.GoogleSheetsRowAppendTool;
 import com.vapi.api.types.MakeTool;
+import com.vapi.api.types.McpTool;
 import com.vapi.api.types.OutputTool;
+import com.vapi.api.types.QueryTool;
+import com.vapi.api.types.SlackSendMessageTool;
+import com.vapi.api.types.SmsSendTool;
 import com.vapi.api.types.TextEditorTool;
 import com.vapi.api.types.TransferCallTool;
 import java.util.Objects;
@@ -76,6 +83,34 @@ public final class ToolsListResponseItem {
         return new ToolsListResponseItem(new TextEditorValue(value));
     }
 
+    public static ToolsListResponseItem query(QueryTool value) {
+        return new ToolsListResponseItem(new QueryValue(value));
+    }
+
+    public static ToolsListResponseItem googleCalendarEventCreate(GoogleCalendarCreateEventTool value) {
+        return new ToolsListResponseItem(new GoogleCalendarEventCreateValue(value));
+    }
+
+    public static ToolsListResponseItem googleSheetsRowAppend(GoogleSheetsRowAppendTool value) {
+        return new ToolsListResponseItem(new GoogleSheetsRowAppendValue(value));
+    }
+
+    public static ToolsListResponseItem googleCalendarAvailabilityCheck(GoogleCalendarCheckAvailabilityTool value) {
+        return new ToolsListResponseItem(new GoogleCalendarAvailabilityCheckValue(value));
+    }
+
+    public static ToolsListResponseItem slackMessageSend(SlackSendMessageTool value) {
+        return new ToolsListResponseItem(new SlackMessageSendValue(value));
+    }
+
+    public static ToolsListResponseItem sms(SmsSendTool value) {
+        return new ToolsListResponseItem(new SmsValue(value));
+    }
+
+    public static ToolsListResponseItem mcp(McpTool value) {
+        return new ToolsListResponseItem(new McpValue(value));
+    }
+
     public boolean isDtmf() {
         return value instanceof DtmfValue;
     }
@@ -114,6 +149,34 @@ public final class ToolsListResponseItem {
 
     public boolean isTextEditor() {
         return value instanceof TextEditorValue;
+    }
+
+    public boolean isQuery() {
+        return value instanceof QueryValue;
+    }
+
+    public boolean isGoogleCalendarEventCreate() {
+        return value instanceof GoogleCalendarEventCreateValue;
+    }
+
+    public boolean isGoogleSheetsRowAppend() {
+        return value instanceof GoogleSheetsRowAppendValue;
+    }
+
+    public boolean isGoogleCalendarAvailabilityCheck() {
+        return value instanceof GoogleCalendarAvailabilityCheckValue;
+    }
+
+    public boolean isSlackMessageSend() {
+        return value instanceof SlackMessageSendValue;
+    }
+
+    public boolean isSms() {
+        return value instanceof SmsValue;
+    }
+
+    public boolean isMcp() {
+        return value instanceof McpValue;
     }
 
     public boolean _isUnknown() {
@@ -190,6 +253,55 @@ public final class ToolsListResponseItem {
         return Optional.empty();
     }
 
+    public Optional<QueryTool> getQuery() {
+        if (isQuery()) {
+            return Optional.of(((QueryValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<GoogleCalendarCreateEventTool> getGoogleCalendarEventCreate() {
+        if (isGoogleCalendarEventCreate()) {
+            return Optional.of(((GoogleCalendarEventCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<GoogleSheetsRowAppendTool> getGoogleSheetsRowAppend() {
+        if (isGoogleSheetsRowAppend()) {
+            return Optional.of(((GoogleSheetsRowAppendValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<GoogleCalendarCheckAvailabilityTool> getGoogleCalendarAvailabilityCheck() {
+        if (isGoogleCalendarAvailabilityCheck()) {
+            return Optional.of(((GoogleCalendarAvailabilityCheckValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<SlackSendMessageTool> getSlackMessageSend() {
+        if (isSlackMessageSend()) {
+            return Optional.of(((SlackMessageSendValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<SmsSendTool> getSms() {
+        if (isSms()) {
+            return Optional.of(((SmsValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<McpTool> getMcp() {
+        if (isMcp()) {
+            return Optional.of(((McpValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -223,6 +335,20 @@ public final class ToolsListResponseItem {
 
         T visitTextEditor(TextEditorTool textEditor);
 
+        T visitQuery(QueryTool query);
+
+        T visitGoogleCalendarEventCreate(GoogleCalendarCreateEventTool googleCalendarEventCreate);
+
+        T visitGoogleSheetsRowAppend(GoogleSheetsRowAppendTool googleSheetsRowAppend);
+
+        T visitGoogleCalendarAvailabilityCheck(GoogleCalendarCheckAvailabilityTool googleCalendarAvailabilityCheck);
+
+        T visitSlackMessageSend(SlackSendMessageTool slackMessageSend);
+
+        T visitSms(SmsSendTool sms);
+
+        T visitMcp(McpTool mcp);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -237,7 +363,14 @@ public final class ToolsListResponseItem {
         @JsonSubTypes.Type(OutputValue.class),
         @JsonSubTypes.Type(BashValue.class),
         @JsonSubTypes.Type(ComputerValue.class),
-        @JsonSubTypes.Type(TextEditorValue.class)
+        @JsonSubTypes.Type(TextEditorValue.class),
+        @JsonSubTypes.Type(QueryValue.class),
+        @JsonSubTypes.Type(GoogleCalendarEventCreateValue.class),
+        @JsonSubTypes.Type(GoogleSheetsRowAppendValue.class),
+        @JsonSubTypes.Type(GoogleCalendarAvailabilityCheckValue.class),
+        @JsonSubTypes.Type(SlackMessageSendValue.class),
+        @JsonSubTypes.Type(SmsValue.class),
+        @JsonSubTypes.Type(McpValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -620,6 +753,280 @@ public final class ToolsListResponseItem {
         }
 
         private boolean equalTo(TextEditorValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsListResponseItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("query")
+    @JsonIgnoreProperties("type")
+    private static final class QueryValue implements Value {
+        @JsonUnwrapped
+        private QueryTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private QueryValue() {}
+
+        private QueryValue(QueryTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitQuery(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof QueryValue && equalTo((QueryValue) other);
+        }
+
+        private boolean equalTo(QueryValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsListResponseItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.event.create")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleCalendarEventCreateValue implements Value {
+        @JsonUnwrapped
+        private GoogleCalendarCreateEventTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarEventCreateValue() {}
+
+        private GoogleCalendarEventCreateValue(GoogleCalendarCreateEventTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarEventCreate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarEventCreateValue && equalTo((GoogleCalendarEventCreateValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarEventCreateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsListResponseItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.sheets.row.append")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleSheetsRowAppendValue implements Value {
+        @JsonUnwrapped
+        private GoogleSheetsRowAppendTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleSheetsRowAppendValue() {}
+
+        private GoogleSheetsRowAppendValue(GoogleSheetsRowAppendTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleSheetsRowAppend(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleSheetsRowAppendValue && equalTo((GoogleSheetsRowAppendValue) other);
+        }
+
+        private boolean equalTo(GoogleSheetsRowAppendValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsListResponseItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.availability.check")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleCalendarAvailabilityCheckValue implements Value {
+        @JsonUnwrapped
+        private GoogleCalendarCheckAvailabilityTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarAvailabilityCheckValue() {}
+
+        private GoogleCalendarAvailabilityCheckValue(GoogleCalendarCheckAvailabilityTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarAvailabilityCheck(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarAvailabilityCheckValue
+                    && equalTo((GoogleCalendarAvailabilityCheckValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarAvailabilityCheckValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsListResponseItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("slack.message.send")
+    @JsonIgnoreProperties("type")
+    private static final class SlackMessageSendValue implements Value {
+        @JsonUnwrapped
+        private SlackSendMessageTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SlackMessageSendValue() {}
+
+        private SlackMessageSendValue(SlackSendMessageTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSlackMessageSend(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SlackMessageSendValue && equalTo((SlackMessageSendValue) other);
+        }
+
+        private boolean equalTo(SlackMessageSendValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsListResponseItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("sms")
+    @JsonIgnoreProperties("type")
+    private static final class SmsValue implements Value {
+        @JsonUnwrapped
+        private SmsSendTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SmsValue() {}
+
+        private SmsValue(SmsSendTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSms(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SmsValue && equalTo((SmsValue) other);
+        }
+
+        private boolean equalTo(SmsValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsListResponseItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("mcp")
+    @JsonIgnoreProperties("type")
+    private static final class McpValue implements Value {
+        @JsonUnwrapped
+        private McpTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private McpValue() {}
+
+        private McpValue(McpTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitMcp(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof McpValue && equalTo((McpValue) other);
+        }
+
+        private boolean equalTo(McpValue other) {
             return value.equals(other.value);
         }
 

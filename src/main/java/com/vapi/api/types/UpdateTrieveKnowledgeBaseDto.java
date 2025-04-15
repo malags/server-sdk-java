@@ -24,14 +24,14 @@ public final class UpdateTrieveKnowledgeBaseDto {
 
     private final Optional<TrieveKnowledgeBaseSearchPlan> searchPlan;
 
-    private final Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> createPlan;
+    private final Optional<TrieveKnowledgeBaseImport> createPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateTrieveKnowledgeBaseDto(
             Optional<String> name,
             Optional<TrieveKnowledgeBaseSearchPlan> searchPlan,
-            Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> createPlan,
+            Optional<TrieveKnowledgeBaseImport> createPlan,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.searchPlan = searchPlan;
@@ -64,7 +64,7 @@ public final class UpdateTrieveKnowledgeBaseDto {
      * @return This is the plan if you want us to create/import a new vector store using Trieve.
      */
     @JsonProperty("createPlan")
-    public Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> getCreatePlan() {
+    public Optional<TrieveKnowledgeBaseImport> getCreatePlan() {
         return createPlan;
     }
 
@@ -103,7 +103,7 @@ public final class UpdateTrieveKnowledgeBaseDto {
 
         private Optional<TrieveKnowledgeBaseSearchPlan> searchPlan = Optional.empty();
 
-        private Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> createPlan = Optional.empty();
+        private Optional<TrieveKnowledgeBaseImport> createPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -140,12 +140,12 @@ public final class UpdateTrieveKnowledgeBaseDto {
         }
 
         @JsonSetter(value = "createPlan", nulls = Nulls.SKIP)
-        public Builder createPlan(Optional<UpdateTrieveKnowledgeBaseDtoCreatePlan> createPlan) {
+        public Builder createPlan(Optional<TrieveKnowledgeBaseImport> createPlan) {
             this.createPlan = createPlan;
             return this;
         }
 
-        public Builder createPlan(UpdateTrieveKnowledgeBaseDtoCreatePlan createPlan) {
+        public Builder createPlan(TrieveKnowledgeBaseImport createPlan) {
             this.createPlan = Optional.ofNullable(createPlan);
             return this;
         }

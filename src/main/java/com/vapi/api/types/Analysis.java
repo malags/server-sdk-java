@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,6 +25,8 @@ public final class Analysis {
 
     private final Optional<Map<String, Object>> structuredData;
 
+    private final Optional<List<Map<String, Object>>> structuredDataMulti;
+
     private final Optional<String> successEvaluation;
 
     private final Map<String, Object> additionalProperties;
@@ -31,10 +34,12 @@ public final class Analysis {
     private Analysis(
             Optional<String> summary,
             Optional<Map<String, Object>> structuredData,
+            Optional<List<Map<String, Object>>> structuredDataMulti,
             Optional<String> successEvaluation,
             Map<String, Object> additionalProperties) {
         this.summary = summary;
         this.structuredData = structuredData;
+        this.structuredDataMulti = structuredDataMulti;
         this.successEvaluation = successEvaluation;
         this.additionalProperties = additionalProperties;
     }
@@ -53,6 +58,14 @@ public final class Analysis {
     @JsonProperty("structuredData")
     public Optional<Map<String, Object>> getStructuredData() {
         return structuredData;
+    }
+
+    /**
+     * @return This is the structured data catalog of the call. Customize by setting <code>assistant.analysisPlan.structuredDataMultiPlan</code>.
+     */
+    @JsonProperty("structuredDataMulti")
+    public Optional<List<Map<String, Object>>> getStructuredDataMulti() {
+        return structuredDataMulti;
     }
 
     /**
@@ -77,12 +90,13 @@ public final class Analysis {
     private boolean equalTo(Analysis other) {
         return summary.equals(other.summary)
                 && structuredData.equals(other.structuredData)
+                && structuredDataMulti.equals(other.structuredDataMulti)
                 && successEvaluation.equals(other.successEvaluation);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.summary, this.structuredData, this.successEvaluation);
+        return Objects.hash(this.summary, this.structuredData, this.structuredDataMulti, this.successEvaluation);
     }
 
     @java.lang.Override
@@ -100,6 +114,8 @@ public final class Analysis {
 
         private Optional<Map<String, Object>> structuredData = Optional.empty();
 
+        private Optional<List<Map<String, Object>>> structuredDataMulti = Optional.empty();
+
         private Optional<String> successEvaluation = Optional.empty();
 
         @JsonAnySetter
@@ -110,6 +126,7 @@ public final class Analysis {
         public Builder from(Analysis other) {
             summary(other.getSummary());
             structuredData(other.getStructuredData());
+            structuredDataMulti(other.getStructuredDataMulti());
             successEvaluation(other.getSuccessEvaluation());
             return this;
         }
@@ -136,6 +153,17 @@ public final class Analysis {
             return this;
         }
 
+        @JsonSetter(value = "structuredDataMulti", nulls = Nulls.SKIP)
+        public Builder structuredDataMulti(Optional<List<Map<String, Object>>> structuredDataMulti) {
+            this.structuredDataMulti = structuredDataMulti;
+            return this;
+        }
+
+        public Builder structuredDataMulti(List<Map<String, Object>> structuredDataMulti) {
+            this.structuredDataMulti = Optional.ofNullable(structuredDataMulti);
+            return this;
+        }
+
         @JsonSetter(value = "successEvaluation", nulls = Nulls.SKIP)
         public Builder successEvaluation(Optional<String> successEvaluation) {
             this.successEvaluation = successEvaluation;
@@ -148,7 +176,7 @@ public final class Analysis {
         }
 
         public Analysis build() {
-            return new Analysis(summary, structuredData, successEvaluation, additionalProperties);
+            return new Analysis(summary, structuredData, structuredDataMulti, successEvaluation, additionalProperties);
         }
     }
 }

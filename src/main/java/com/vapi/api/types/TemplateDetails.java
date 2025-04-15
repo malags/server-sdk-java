@@ -54,6 +54,14 @@ public final class TemplateDetails {
         return new TemplateDetails(new TransferCallValue(value));
     }
 
+    public static TemplateDetails googleCalendarEventCreate(CreateGoogleCalendarCreateEventToolDto value) {
+        return new TemplateDetails(new GoogleCalendarEventCreateValue(value));
+    }
+
+    public static TemplateDetails googleSheetsRowAppend(CreateGoogleSheetsRowAppendToolDto value) {
+        return new TemplateDetails(new GoogleSheetsRowAppendValue(value));
+    }
+
     public boolean isDtmf() {
         return value instanceof DtmfValue;
     }
@@ -80,6 +88,14 @@ public final class TemplateDetails {
 
     public boolean isTransferCall() {
         return value instanceof TransferCallValue;
+    }
+
+    public boolean isGoogleCalendarEventCreate() {
+        return value instanceof GoogleCalendarEventCreateValue;
+    }
+
+    public boolean isGoogleSheetsRowAppend() {
+        return value instanceof GoogleSheetsRowAppendValue;
     }
 
     public boolean _isUnknown() {
@@ -135,6 +151,20 @@ public final class TemplateDetails {
         return Optional.empty();
     }
 
+    public Optional<CreateGoogleCalendarCreateEventToolDto> getGoogleCalendarEventCreate() {
+        if (isGoogleCalendarEventCreate()) {
+            return Optional.of(((GoogleCalendarEventCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoogleSheetsRowAppendToolDto> getGoogleSheetsRowAppend() {
+        if (isGoogleSheetsRowAppend()) {
+            return Optional.of(((GoogleSheetsRowAppendValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -162,6 +192,10 @@ public final class TemplateDetails {
 
         T visitTransferCall(CreateTransferCallToolDto transferCall);
 
+        T visitGoogleCalendarEventCreate(CreateGoogleCalendarCreateEventToolDto googleCalendarEventCreate);
+
+        T visitGoogleSheetsRowAppend(CreateGoogleSheetsRowAppendToolDto googleSheetsRowAppend);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -173,7 +207,9 @@ public final class TemplateDetails {
         @JsonSubTypes.Type(FunctionValue.class),
         @JsonSubTypes.Type(GhlValue.class),
         @JsonSubTypes.Type(MakeValue.class),
-        @JsonSubTypes.Type(TransferCallValue.class)
+        @JsonSubTypes.Type(TransferCallValue.class),
+        @JsonSubTypes.Type(GoogleCalendarEventCreateValue.class),
+        @JsonSubTypes.Type(GoogleSheetsRowAppendValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -439,6 +475,84 @@ public final class TemplateDetails {
         }
 
         private boolean equalTo(TransferCallValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "TemplateDetails{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.event.create")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleCalendarEventCreateValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleCalendarCreateEventToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarEventCreateValue() {}
+
+        private GoogleCalendarEventCreateValue(CreateGoogleCalendarCreateEventToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarEventCreate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarEventCreateValue && equalTo((GoogleCalendarEventCreateValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarEventCreateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "TemplateDetails{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.sheets.row.append")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleSheetsRowAppendValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleSheetsRowAppendToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleSheetsRowAppendValue() {}
+
+        private GoogleSheetsRowAppendValue(CreateGoogleSheetsRowAppendToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleSheetsRowAppend(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleSheetsRowAppendValue && equalTo((GoogleSheetsRowAppendValue) other);
+        }
+
+        private boolean equalTo(GoogleSheetsRowAppendValue other) {
             return value.equals(other.value);
         }
 

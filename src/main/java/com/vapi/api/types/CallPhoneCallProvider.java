@@ -10,7 +10,9 @@ public enum CallPhoneCallProvider {
 
     VONAGE("vonage"),
 
-    VAPI("vapi");
+    VAPI("vapi"),
+
+    TELNYX("telnyx");
 
     private final String value;
 

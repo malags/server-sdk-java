@@ -27,6 +27,14 @@ public final class RimeAiVoice {
 
     private final Optional<Double> speed;
 
+    private final Optional<Boolean> pauseBetweenBrackets;
+
+    private final Optional<Boolean> phonemizeBetweenBrackets;
+
+    private final Optional<Boolean> reduceLatency;
+
+    private final Optional<String> inlineSpeedAlpha;
+
     private final Optional<ChunkPlan> chunkPlan;
 
     private final Optional<FallbackPlan> fallbackPlan;
@@ -37,12 +45,20 @@ public final class RimeAiVoice {
             RimeAiVoiceId voiceId,
             Optional<RimeAiVoiceModel> model,
             Optional<Double> speed,
+            Optional<Boolean> pauseBetweenBrackets,
+            Optional<Boolean> phonemizeBetweenBrackets,
+            Optional<Boolean> reduceLatency,
+            Optional<String> inlineSpeedAlpha,
             Optional<ChunkPlan> chunkPlan,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
         this.voiceId = voiceId;
         this.model = model;
         this.speed = speed;
+        this.pauseBetweenBrackets = pauseBetweenBrackets;
+        this.phonemizeBetweenBrackets = phonemizeBetweenBrackets;
+        this.reduceLatency = reduceLatency;
+        this.inlineSpeedAlpha = inlineSpeedAlpha;
         this.chunkPlan = chunkPlan;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
@@ -70,6 +86,38 @@ public final class RimeAiVoice {
     @JsonProperty("speed")
     public Optional<Double> getSpeed() {
         return speed;
+    }
+
+    /**
+     * @return This is a flag that controls whether to add slight pauses using angle brackets. Example: “Hi. &lt;200&gt; I’d love to have a conversation with you.” adds a 200ms pause between the first and second sentences.
+     */
+    @JsonProperty("pauseBetweenBrackets")
+    public Optional<Boolean> getPauseBetweenBrackets() {
+        return pauseBetweenBrackets;
+    }
+
+    /**
+     * @return This is a flag that controls whether text inside brackets should be phonemized (converted to phonetic pronunciation) - Example: &quot;{h'El.o} World&quot; will pronounce &quot;Hello&quot; as expected.
+     */
+    @JsonProperty("phonemizeBetweenBrackets")
+    public Optional<Boolean> getPhonemizeBetweenBrackets() {
+        return phonemizeBetweenBrackets;
+    }
+
+    /**
+     * @return This is a flag that controls whether to optimize for reduced latency in streaming. https://docs.rime.ai/api-reference/endpoint/websockets#param-reduce-latency
+     */
+    @JsonProperty("reduceLatency")
+    public Optional<Boolean> getReduceLatency() {
+        return reduceLatency;
+    }
+
+    /**
+     * @return This is a string that allows inline speed control using alpha notation. https://docs.rime.ai/api-reference/endpoint/websockets#param-inline-speed-alpha
+     */
+    @JsonProperty("inlineSpeedAlpha")
+    public Optional<String> getInlineSpeedAlpha() {
+        return inlineSpeedAlpha;
     }
 
     /**
@@ -103,13 +151,26 @@ public final class RimeAiVoice {
         return voiceId.equals(other.voiceId)
                 && model.equals(other.model)
                 && speed.equals(other.speed)
+                && pauseBetweenBrackets.equals(other.pauseBetweenBrackets)
+                && phonemizeBetweenBrackets.equals(other.phonemizeBetweenBrackets)
+                && reduceLatency.equals(other.reduceLatency)
+                && inlineSpeedAlpha.equals(other.inlineSpeedAlpha)
                 && chunkPlan.equals(other.chunkPlan)
                 && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.model, this.speed, this.chunkPlan, this.fallbackPlan);
+        return Objects.hash(
+                this.voiceId,
+                this.model,
+                this.speed,
+                this.pauseBetweenBrackets,
+                this.phonemizeBetweenBrackets,
+                this.reduceLatency,
+                this.inlineSpeedAlpha,
+                this.chunkPlan,
+                this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -138,6 +199,22 @@ public final class RimeAiVoice {
 
         _FinalStage speed(Double speed);
 
+        _FinalStage pauseBetweenBrackets(Optional<Boolean> pauseBetweenBrackets);
+
+        _FinalStage pauseBetweenBrackets(Boolean pauseBetweenBrackets);
+
+        _FinalStage phonemizeBetweenBrackets(Optional<Boolean> phonemizeBetweenBrackets);
+
+        _FinalStage phonemizeBetweenBrackets(Boolean phonemizeBetweenBrackets);
+
+        _FinalStage reduceLatency(Optional<Boolean> reduceLatency);
+
+        _FinalStage reduceLatency(Boolean reduceLatency);
+
+        _FinalStage inlineSpeedAlpha(Optional<String> inlineSpeedAlpha);
+
+        _FinalStage inlineSpeedAlpha(String inlineSpeedAlpha);
+
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -155,6 +232,14 @@ public final class RimeAiVoice {
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
+        private Optional<String> inlineSpeedAlpha = Optional.empty();
+
+        private Optional<Boolean> reduceLatency = Optional.empty();
+
+        private Optional<Boolean> phonemizeBetweenBrackets = Optional.empty();
+
+        private Optional<Boolean> pauseBetweenBrackets = Optional.empty();
+
         private Optional<Double> speed = Optional.empty();
 
         private Optional<RimeAiVoiceModel> model = Optional.empty();
@@ -169,6 +254,10 @@ public final class RimeAiVoice {
             voiceId(other.getVoiceId());
             model(other.getModel());
             speed(other.getSpeed());
+            pauseBetweenBrackets(other.getPauseBetweenBrackets());
+            phonemizeBetweenBrackets(other.getPhonemizeBetweenBrackets());
+            reduceLatency(other.getReduceLatency());
+            inlineSpeedAlpha(other.getInlineSpeedAlpha());
             chunkPlan(other.getChunkPlan());
             fallbackPlan(other.getFallbackPlan());
             return this;
@@ -220,6 +309,74 @@ public final class RimeAiVoice {
         }
 
         /**
+         * <p>This is a string that allows inline speed control using alpha notation. https://docs.rime.ai/api-reference/endpoint/websockets#param-inline-speed-alpha</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage inlineSpeedAlpha(String inlineSpeedAlpha) {
+            this.inlineSpeedAlpha = Optional.ofNullable(inlineSpeedAlpha);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "inlineSpeedAlpha", nulls = Nulls.SKIP)
+        public _FinalStage inlineSpeedAlpha(Optional<String> inlineSpeedAlpha) {
+            this.inlineSpeedAlpha = inlineSpeedAlpha;
+            return this;
+        }
+
+        /**
+         * <p>This is a flag that controls whether to optimize for reduced latency in streaming. https://docs.rime.ai/api-reference/endpoint/websockets#param-reduce-latency</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage reduceLatency(Boolean reduceLatency) {
+            this.reduceLatency = Optional.ofNullable(reduceLatency);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "reduceLatency", nulls = Nulls.SKIP)
+        public _FinalStage reduceLatency(Optional<Boolean> reduceLatency) {
+            this.reduceLatency = reduceLatency;
+            return this;
+        }
+
+        /**
+         * <p>This is a flag that controls whether text inside brackets should be phonemized (converted to phonetic pronunciation) - Example: &quot;{h'El.o} World&quot; will pronounce &quot;Hello&quot; as expected.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage phonemizeBetweenBrackets(Boolean phonemizeBetweenBrackets) {
+            this.phonemizeBetweenBrackets = Optional.ofNullable(phonemizeBetweenBrackets);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "phonemizeBetweenBrackets", nulls = Nulls.SKIP)
+        public _FinalStage phonemizeBetweenBrackets(Optional<Boolean> phonemizeBetweenBrackets) {
+            this.phonemizeBetweenBrackets = phonemizeBetweenBrackets;
+            return this;
+        }
+
+        /**
+         * <p>This is a flag that controls whether to add slight pauses using angle brackets. Example: “Hi. &lt;200&gt; I’d love to have a conversation with you.” adds a 200ms pause between the first and second sentences.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage pauseBetweenBrackets(Boolean pauseBetweenBrackets) {
+            this.pauseBetweenBrackets = Optional.ofNullable(pauseBetweenBrackets);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "pauseBetweenBrackets", nulls = Nulls.SKIP)
+        public _FinalStage pauseBetweenBrackets(Optional<Boolean> pauseBetweenBrackets) {
+            this.pauseBetweenBrackets = pauseBetweenBrackets;
+            return this;
+        }
+
+        /**
          * <p>This is the speed multiplier that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -255,7 +412,17 @@ public final class RimeAiVoice {
 
         @java.lang.Override
         public RimeAiVoice build() {
-            return new RimeAiVoice(voiceId, model, speed, chunkPlan, fallbackPlan, additionalProperties);
+            return new RimeAiVoice(
+                    voiceId,
+                    model,
+                    speed,
+                    pauseBetweenBrackets,
+                    phonemizeBetweenBrackets,
+                    reduceLatency,
+                    inlineSpeedAlpha,
+                    chunkPlan,
+                    fallbackPlan,
+                    additionalProperties);
         }
     }
 }

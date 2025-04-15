@@ -7,7 +7,6 @@ import com.vapi.api.core.ClientOptions;
 import com.vapi.api.core.Suppliers;
 import com.vapi.api.resources.analytics.AnalyticsClient;
 import com.vapi.api.resources.assistants.AssistantsClient;
-import com.vapi.api.resources.blocks.BlocksClient;
 import com.vapi.api.resources.calls.CallsClient;
 import com.vapi.api.resources.files.FilesClient;
 import com.vapi.api.resources.knowledgebases.KnowledgeBasesClient;
@@ -18,6 +17,7 @@ import com.vapi.api.resources.testsuiteruns.TestSuiteRunsClient;
 import com.vapi.api.resources.testsuites.TestSuitesClient;
 import com.vapi.api.resources.testsuitetests.TestSuiteTestsClient;
 import com.vapi.api.resources.tools.ToolsClient;
+import com.vapi.api.resources.workflow.WorkflowClient;
 import java.util.function.Supplier;
 
 public class Vapi {
@@ -29,19 +29,15 @@ public class Vapi {
 
     protected final Supplier<PhoneNumbersClient> phoneNumbersClient;
 
-    protected final Supplier<SquadsClient> squadsClient;
-
-    protected final Supplier<KnowledgeBasesClient> knowledgeBasesClient;
-
-    protected final Supplier<BlocksClient> blocksClient;
-
     protected final Supplier<ToolsClient> toolsClient;
 
     protected final Supplier<FilesClient> filesClient;
 
-    protected final Supplier<AnalyticsClient> analyticsClient;
+    protected final Supplier<KnowledgeBasesClient> knowledgeBasesClient;
 
-    protected final Supplier<LogsClient> logsClient;
+    protected final Supplier<WorkflowClient> workflowClient;
+
+    protected final Supplier<SquadsClient> squadsClient;
 
     protected final Supplier<TestSuitesClient> testSuitesClient;
 
@@ -49,21 +45,25 @@ public class Vapi {
 
     protected final Supplier<TestSuiteRunsClient> testSuiteRunsClient;
 
+    protected final Supplier<AnalyticsClient> analyticsClient;
+
+    protected final Supplier<LogsClient> logsClient;
+
     public Vapi(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.callsClient = Suppliers.memoize(() -> new CallsClient(clientOptions));
         this.assistantsClient = Suppliers.memoize(() -> new AssistantsClient(clientOptions));
         this.phoneNumbersClient = Suppliers.memoize(() -> new PhoneNumbersClient(clientOptions));
-        this.squadsClient = Suppliers.memoize(() -> new SquadsClient(clientOptions));
-        this.knowledgeBasesClient = Suppliers.memoize(() -> new KnowledgeBasesClient(clientOptions));
-        this.blocksClient = Suppliers.memoize(() -> new BlocksClient(clientOptions));
         this.toolsClient = Suppliers.memoize(() -> new ToolsClient(clientOptions));
         this.filesClient = Suppliers.memoize(() -> new FilesClient(clientOptions));
-        this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
-        this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
+        this.knowledgeBasesClient = Suppliers.memoize(() -> new KnowledgeBasesClient(clientOptions));
+        this.workflowClient = Suppliers.memoize(() -> new WorkflowClient(clientOptions));
+        this.squadsClient = Suppliers.memoize(() -> new SquadsClient(clientOptions));
         this.testSuitesClient = Suppliers.memoize(() -> new TestSuitesClient(clientOptions));
         this.testSuiteTestsClient = Suppliers.memoize(() -> new TestSuiteTestsClient(clientOptions));
         this.testSuiteRunsClient = Suppliers.memoize(() -> new TestSuiteRunsClient(clientOptions));
+        this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
+        this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
     }
 
     public CallsClient calls() {
@@ -78,18 +78,6 @@ public class Vapi {
         return this.phoneNumbersClient.get();
     }
 
-    public SquadsClient squads() {
-        return this.squadsClient.get();
-    }
-
-    public KnowledgeBasesClient knowledgeBases() {
-        return this.knowledgeBasesClient.get();
-    }
-
-    public BlocksClient blocks() {
-        return this.blocksClient.get();
-    }
-
     public ToolsClient tools() {
         return this.toolsClient.get();
     }
@@ -98,12 +86,16 @@ public class Vapi {
         return this.filesClient.get();
     }
 
-    public AnalyticsClient analytics() {
-        return this.analyticsClient.get();
+    public KnowledgeBasesClient knowledgeBases() {
+        return this.knowledgeBasesClient.get();
     }
 
-    public LogsClient logs() {
-        return this.logsClient.get();
+    public WorkflowClient workflow() {
+        return this.workflowClient.get();
+    }
+
+    public SquadsClient squads() {
+        return this.squadsClient.get();
     }
 
     public TestSuitesClient testSuites() {
@@ -116,6 +108,14 @@ public class Vapi {
 
     public TestSuiteRunsClient testSuiteRuns() {
         return this.testSuiteRunsClient.get();
+    }
+
+    public AnalyticsClient analytics() {
+        return this.analyticsClient.get();
+    }
+
+    public LogsClient logs() {
+        return this.logsClient.get();
     }
 
     public static VapiBuilder builder() {

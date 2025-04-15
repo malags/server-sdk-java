@@ -44,6 +44,10 @@ public final class File {
 
     private final Optional<String> url;
 
+    private final Optional<String> parsedTextUrl;
+
+    private final Optional<Double> parsedTextBytes;
+
     private final Optional<Map<String, Object>> metadata;
 
     private final String id;
@@ -68,6 +72,8 @@ public final class File {
             Optional<String> path,
             Optional<String> bucket,
             Optional<String> url,
+            Optional<String> parsedTextUrl,
+            Optional<Double> parsedTextBytes,
             Optional<Map<String, Object>> metadata,
             String id,
             String orgId,
@@ -85,6 +91,8 @@ public final class File {
         this.path = path;
         this.bucket = bucket;
         this.url = url;
+        this.parsedTextUrl = parsedTextUrl;
+        this.parsedTextBytes = parsedTextBytes;
         this.metadata = metadata;
         this.id = id;
         this.orgId = orgId;
@@ -151,6 +159,16 @@ public final class File {
         return url;
     }
 
+    @JsonProperty("parsedTextUrl")
+    public Optional<String> getParsedTextUrl() {
+        return parsedTextUrl;
+    }
+
+    @JsonProperty("parsedTextBytes")
+    public Optional<Double> getParsedTextBytes() {
+        return parsedTextBytes;
+    }
+
     @JsonProperty("metadata")
     public Optional<Map<String, Object>> getMetadata() {
         return metadata;
@@ -211,6 +229,8 @@ public final class File {
                 && path.equals(other.path)
                 && bucket.equals(other.bucket)
                 && url.equals(other.url)
+                && parsedTextUrl.equals(other.parsedTextUrl)
+                && parsedTextBytes.equals(other.parsedTextBytes)
                 && metadata.equals(other.metadata)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
@@ -232,6 +252,8 @@ public final class File {
                 this.path,
                 this.bucket,
                 this.url,
+                this.parsedTextUrl,
+                this.parsedTextBytes,
                 this.metadata,
                 this.id,
                 this.orgId,
@@ -313,6 +335,14 @@ public final class File {
 
         _FinalStage url(String url);
 
+        _FinalStage parsedTextUrl(Optional<String> parsedTextUrl);
+
+        _FinalStage parsedTextUrl(String parsedTextUrl);
+
+        _FinalStage parsedTextBytes(Optional<Double> parsedTextBytes);
+
+        _FinalStage parsedTextBytes(Double parsedTextBytes);
+
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
         _FinalStage metadata(Map<String, Object> metadata);
@@ -329,6 +359,10 @@ public final class File {
         private OffsetDateTime updatedAt;
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
+
+        private Optional<Double> parsedTextBytes = Optional.empty();
+
+        private Optional<String> parsedTextUrl = Optional.empty();
 
         private Optional<String> url = Optional.empty();
 
@@ -370,6 +404,8 @@ public final class File {
             path(other.getPath());
             bucket(other.getBucket());
             url(other.getUrl());
+            parsedTextUrl(other.getParsedTextUrl());
+            parsedTextBytes(other.getParsedTextBytes());
             metadata(other.getMetadata());
             id(other.getId());
             orgId(other.getOrgId());
@@ -432,6 +468,32 @@ public final class File {
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
             this.metadata = metadata;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage parsedTextBytes(Double parsedTextBytes) {
+            this.parsedTextBytes = Optional.ofNullable(parsedTextBytes);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "parsedTextBytes", nulls = Nulls.SKIP)
+        public _FinalStage parsedTextBytes(Optional<Double> parsedTextBytes) {
+            this.parsedTextBytes = parsedTextBytes;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage parsedTextUrl(String parsedTextUrl) {
+            this.parsedTextUrl = Optional.ofNullable(parsedTextUrl);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "parsedTextUrl", nulls = Nulls.SKIP)
+        public _FinalStage parsedTextUrl(Optional<String> parsedTextUrl) {
+            this.parsedTextUrl = parsedTextUrl;
             return this;
         }
 
@@ -596,6 +658,8 @@ public final class File {
                     path,
                     bucket,
                     url,
+                    parsedTextUrl,
+                    parsedTextBytes,
                     metadata,
                     id,
                     orgId,

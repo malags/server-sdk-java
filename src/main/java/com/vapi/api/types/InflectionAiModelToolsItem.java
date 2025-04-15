@@ -54,6 +54,27 @@ public final class InflectionAiModelToolsItem {
         return new InflectionAiModelToolsItem(new TransferCallValue(value));
     }
 
+    public static InflectionAiModelToolsItem query(CreateQueryToolDto value) {
+        return new InflectionAiModelToolsItem(new QueryValue(value));
+    }
+
+    public static InflectionAiModelToolsItem googleCalendarEventCreate(CreateGoogleCalendarCreateEventToolDto value) {
+        return new InflectionAiModelToolsItem(new GoogleCalendarEventCreateValue(value));
+    }
+
+    public static InflectionAiModelToolsItem googleSheetsRowAppend(CreateGoogleSheetsRowAppendToolDto value) {
+        return new InflectionAiModelToolsItem(new GoogleSheetsRowAppendValue(value));
+    }
+
+    public static InflectionAiModelToolsItem googleCalendarAvailabilityCheck(
+            CreateGoogleCalendarCheckAvailabilityToolDto value) {
+        return new InflectionAiModelToolsItem(new GoogleCalendarAvailabilityCheckValue(value));
+    }
+
+    public static InflectionAiModelToolsItem slackMessageSend(CreateSlackSendMessageToolDto value) {
+        return new InflectionAiModelToolsItem(new SlackMessageSendValue(value));
+    }
+
     public boolean isDtmf() {
         return value instanceof DtmfValue;
     }
@@ -80,6 +101,26 @@ public final class InflectionAiModelToolsItem {
 
     public boolean isTransferCall() {
         return value instanceof TransferCallValue;
+    }
+
+    public boolean isQuery() {
+        return value instanceof QueryValue;
+    }
+
+    public boolean isGoogleCalendarEventCreate() {
+        return value instanceof GoogleCalendarEventCreateValue;
+    }
+
+    public boolean isGoogleSheetsRowAppend() {
+        return value instanceof GoogleSheetsRowAppendValue;
+    }
+
+    public boolean isGoogleCalendarAvailabilityCheck() {
+        return value instanceof GoogleCalendarAvailabilityCheckValue;
+    }
+
+    public boolean isSlackMessageSend() {
+        return value instanceof SlackMessageSendValue;
     }
 
     public boolean _isUnknown() {
@@ -135,6 +176,41 @@ public final class InflectionAiModelToolsItem {
         return Optional.empty();
     }
 
+    public Optional<CreateQueryToolDto> getQuery() {
+        if (isQuery()) {
+            return Optional.of(((QueryValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoogleCalendarCreateEventToolDto> getGoogleCalendarEventCreate() {
+        if (isGoogleCalendarEventCreate()) {
+            return Optional.of(((GoogleCalendarEventCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoogleSheetsRowAppendToolDto> getGoogleSheetsRowAppend() {
+        if (isGoogleSheetsRowAppend()) {
+            return Optional.of(((GoogleSheetsRowAppendValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoogleCalendarCheckAvailabilityToolDto> getGoogleCalendarAvailabilityCheck() {
+        if (isGoogleCalendarAvailabilityCheck()) {
+            return Optional.of(((GoogleCalendarAvailabilityCheckValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateSlackSendMessageToolDto> getSlackMessageSend() {
+        if (isSlackMessageSend()) {
+            return Optional.of(((SlackMessageSendValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -162,6 +238,17 @@ public final class InflectionAiModelToolsItem {
 
         T visitTransferCall(CreateTransferCallToolDto transferCall);
 
+        T visitQuery(CreateQueryToolDto query);
+
+        T visitGoogleCalendarEventCreate(CreateGoogleCalendarCreateEventToolDto googleCalendarEventCreate);
+
+        T visitGoogleSheetsRowAppend(CreateGoogleSheetsRowAppendToolDto googleSheetsRowAppend);
+
+        T visitGoogleCalendarAvailabilityCheck(
+                CreateGoogleCalendarCheckAvailabilityToolDto googleCalendarAvailabilityCheck);
+
+        T visitSlackMessageSend(CreateSlackSendMessageToolDto slackMessageSend);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -173,7 +260,12 @@ public final class InflectionAiModelToolsItem {
         @JsonSubTypes.Type(FunctionValue.class),
         @JsonSubTypes.Type(GhlValue.class),
         @JsonSubTypes.Type(MakeValue.class),
-        @JsonSubTypes.Type(TransferCallValue.class)
+        @JsonSubTypes.Type(TransferCallValue.class),
+        @JsonSubTypes.Type(QueryValue.class),
+        @JsonSubTypes.Type(GoogleCalendarEventCreateValue.class),
+        @JsonSubTypes.Type(GoogleSheetsRowAppendValue.class),
+        @JsonSubTypes.Type(GoogleCalendarAvailabilityCheckValue.class),
+        @JsonSubTypes.Type(SlackMessageSendValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -439,6 +531,202 @@ public final class InflectionAiModelToolsItem {
         }
 
         private boolean equalTo(TransferCallValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "InflectionAiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("query")
+    @JsonIgnoreProperties("type")
+    private static final class QueryValue implements Value {
+        @JsonUnwrapped
+        private CreateQueryToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private QueryValue() {}
+
+        private QueryValue(CreateQueryToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitQuery(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof QueryValue && equalTo((QueryValue) other);
+        }
+
+        private boolean equalTo(QueryValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "InflectionAiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.event.create")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleCalendarEventCreateValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleCalendarCreateEventToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarEventCreateValue() {}
+
+        private GoogleCalendarEventCreateValue(CreateGoogleCalendarCreateEventToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarEventCreate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarEventCreateValue && equalTo((GoogleCalendarEventCreateValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarEventCreateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "InflectionAiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.sheets.row.append")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleSheetsRowAppendValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleSheetsRowAppendToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleSheetsRowAppendValue() {}
+
+        private GoogleSheetsRowAppendValue(CreateGoogleSheetsRowAppendToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleSheetsRowAppend(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleSheetsRowAppendValue && equalTo((GoogleSheetsRowAppendValue) other);
+        }
+
+        private boolean equalTo(GoogleSheetsRowAppendValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "InflectionAiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.availability.check")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleCalendarAvailabilityCheckValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleCalendarCheckAvailabilityToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarAvailabilityCheckValue() {}
+
+        private GoogleCalendarAvailabilityCheckValue(CreateGoogleCalendarCheckAvailabilityToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarAvailabilityCheck(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarAvailabilityCheckValue
+                    && equalTo((GoogleCalendarAvailabilityCheckValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarAvailabilityCheckValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "InflectionAiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("slack.message.send")
+    @JsonIgnoreProperties("type")
+    private static final class SlackMessageSendValue implements Value {
+        @JsonUnwrapped
+        private CreateSlackSendMessageToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SlackMessageSendValue() {}
+
+        private SlackMessageSendValue(CreateSlackSendMessageToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSlackMessageSend(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SlackMessageSendValue && equalTo((SlackMessageSendValue) other);
+        }
+
+        private boolean equalTo(SlackMessageSendValue other) {
             return value.equals(other.value);
         }
 

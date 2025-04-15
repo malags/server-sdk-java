@@ -12,6 +12,8 @@ public enum GoogleModelModel {
 
     GEMINI_20_FLASH("gemini-2.0-flash"),
 
+    GEMINI_20_FLASH_LITE("gemini-2.0-flash-lite"),
+
     GEMINI_20_FLASH_LITE_PREVIEW_0205("gemini-2.0-flash-lite-preview-02-05"),
 
     GEMINI_20_FLASH_EXP("gemini-2.0-flash-exp"),

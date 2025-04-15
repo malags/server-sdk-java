@@ -22,11 +22,16 @@ import java.util.Optional;
 public final class AzureSpeechTranscriber {
     private final Optional<AzureSpeechTranscriberLanguage> language;
 
+    private final Optional<FallbackTranscriberPlan> fallbackPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private AzureSpeechTranscriber(
-            Optional<AzureSpeechTranscriberLanguage> language, Map<String, Object> additionalProperties) {
+            Optional<AzureSpeechTranscriberLanguage> language,
+            Optional<FallbackTranscriberPlan> fallbackPlan,
+            Map<String, Object> additionalProperties) {
         this.language = language;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -36,6 +41,14 @@ public final class AzureSpeechTranscriber {
     @JsonProperty("language")
     public Optional<AzureSpeechTranscriberLanguage> getLanguage() {
         return language;
+    }
+
+    /**
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+     */
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackTranscriberPlan> getFallbackPlan() {
+        return fallbackPlan;
     }
 
     @java.lang.Override
@@ -50,12 +63,12 @@ public final class AzureSpeechTranscriber {
     }
 
     private boolean equalTo(AzureSpeechTranscriber other) {
-        return language.equals(other.language);
+        return language.equals(other.language) && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.language);
+        return Objects.hash(this.language, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -71,6 +84,8 @@ public final class AzureSpeechTranscriber {
     public static final class Builder {
         private Optional<AzureSpeechTranscriberLanguage> language = Optional.empty();
 
+        private Optional<FallbackTranscriberPlan> fallbackPlan = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -78,6 +93,7 @@ public final class AzureSpeechTranscriber {
 
         public Builder from(AzureSpeechTranscriber other) {
             language(other.getLanguage());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -92,8 +108,19 @@ public final class AzureSpeechTranscriber {
             return this;
         }
 
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public Builder fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
+            return this;
+        }
+
+        public Builder fallbackPlan(FallbackTranscriberPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
         public AzureSpeechTranscriber build() {
-            return new AzureSpeechTranscriber(language, additionalProperties);
+            return new AzureSpeechTranscriber(language, fallbackPlan, additionalProperties);
         }
     }
 }

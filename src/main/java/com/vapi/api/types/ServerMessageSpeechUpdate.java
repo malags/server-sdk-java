@@ -27,7 +27,9 @@ public final class ServerMessageSpeechUpdate {
 
     private final ServerMessageSpeechUpdateRole role;
 
-    private final Optional<String> timestamp;
+    private final Optional<Double> turn;
+
+    private final Optional<Double> timestamp;
 
     private final Optional<Artifact> artifact;
 
@@ -43,7 +45,8 @@ public final class ServerMessageSpeechUpdate {
             Optional<ServerMessageSpeechUpdatePhoneNumber> phoneNumber,
             ServerMessageSpeechUpdateStatus status,
             ServerMessageSpeechUpdateRole role,
-            Optional<String> timestamp,
+            Optional<Double> turn,
+            Optional<Double> timestamp,
             Optional<Artifact> artifact,
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
@@ -52,6 +55,7 @@ public final class ServerMessageSpeechUpdate {
         this.phoneNumber = phoneNumber;
         this.status = status;
         this.role = role;
+        this.turn = turn;
         this.timestamp = timestamp;
         this.artifact = artifact;
         this.assistant = assistant;
@@ -98,10 +102,18 @@ public final class ServerMessageSpeechUpdate {
     }
 
     /**
-     * @return This is the ISO-8601 formatted timestamp of when the message was sent.
+     * @return This is the turn number of the speech update (0-indexed).
+     */
+    @JsonProperty("turn")
+    public Optional<Double> getTurn() {
+        return turn;
+    }
+
+    /**
+     * @return This is the timestamp of when the message was sent in milliseconds since Unix Epoch.
      */
     @JsonProperty("timestamp")
-    public Optional<String> getTimestamp() {
+    public Optional<Double> getTimestamp() {
         return timestamp;
     }
 
@@ -169,6 +181,7 @@ public final class ServerMessageSpeechUpdate {
         return phoneNumber.equals(other.phoneNumber)
                 && status.equals(other.status)
                 && role.equals(other.role)
+                && turn.equals(other.turn)
                 && timestamp.equals(other.timestamp)
                 && artifact.equals(other.artifact)
                 && assistant.equals(other.assistant)
@@ -182,6 +195,7 @@ public final class ServerMessageSpeechUpdate {
                 this.phoneNumber,
                 this.status,
                 this.role,
+                this.turn,
                 this.timestamp,
                 this.artifact,
                 this.assistant,
@@ -215,9 +229,13 @@ public final class ServerMessageSpeechUpdate {
 
         _FinalStage phoneNumber(ServerMessageSpeechUpdatePhoneNumber phoneNumber);
 
-        _FinalStage timestamp(Optional<String> timestamp);
+        _FinalStage turn(Optional<Double> turn);
 
-        _FinalStage timestamp(String timestamp);
+        _FinalStage turn(Double turn);
+
+        _FinalStage timestamp(Optional<Double> timestamp);
+
+        _FinalStage timestamp(Double timestamp);
 
         _FinalStage artifact(Optional<Artifact> artifact);
 
@@ -250,7 +268,9 @@ public final class ServerMessageSpeechUpdate {
 
         private Optional<Artifact> artifact = Optional.empty();
 
-        private Optional<String> timestamp = Optional.empty();
+        private Optional<Double> timestamp = Optional.empty();
+
+        private Optional<Double> turn = Optional.empty();
 
         private Optional<ServerMessageSpeechUpdatePhoneNumber> phoneNumber = Optional.empty();
 
@@ -264,6 +284,7 @@ public final class ServerMessageSpeechUpdate {
             phoneNumber(other.getPhoneNumber());
             status(other.getStatus());
             role(other.getRole());
+            turn(other.getTurn());
             timestamp(other.getTimestamp());
             artifact(other.getArtifact());
             assistant(other.getAssistant());
@@ -380,19 +401,36 @@ public final class ServerMessageSpeechUpdate {
         }
 
         /**
-         * <p>This is the ISO-8601 formatted timestamp of when the message was sent.</p>
+         * <p>This is the timestamp of when the message was sent in milliseconds since Unix Epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage timestamp(String timestamp) {
+        public _FinalStage timestamp(Double timestamp) {
             this.timestamp = Optional.ofNullable(timestamp);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
-        public _FinalStage timestamp(Optional<String> timestamp) {
+        public _FinalStage timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
+            return this;
+        }
+
+        /**
+         * <p>This is the turn number of the speech update (0-indexed).</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage turn(Double turn) {
+            this.turn = Optional.ofNullable(turn);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "turn", nulls = Nulls.SKIP)
+        public _FinalStage turn(Optional<Double> turn) {
+            this.turn = turn;
             return this;
         }
 
@@ -421,7 +459,16 @@ public final class ServerMessageSpeechUpdate {
         @java.lang.Override
         public ServerMessageSpeechUpdate build() {
             return new ServerMessageSpeechUpdate(
-                    phoneNumber, status, role, timestamp, artifact, assistant, customer, call, additionalProperties);
+                    phoneNumber,
+                    status,
+                    role,
+                    turn,
+                    timestamp,
+                    artifact,
+                    assistant,
+                    customer,
+                    call,
+                    additionalProperties);
         }
     }
 }

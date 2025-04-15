@@ -36,6 +36,8 @@ public final class CustomLlmModel {
 
     private final String url;
 
+    private final Optional<Double> timeoutSeconds;
+
     private final String model;
 
     private final Optional<Double> temperature;
@@ -56,6 +58,7 @@ public final class CustomLlmModel {
             Optional<String> knowledgeBaseId,
             Optional<CustomLlmModelMetadataSendMode> metadataSendMode,
             String url,
+            Optional<Double> timeoutSeconds,
             String model,
             Optional<Double> temperature,
             Optional<Double> maxTokens,
@@ -69,6 +72,7 @@ public final class CustomLlmModel {
         this.knowledgeBaseId = knowledgeBaseId;
         this.metadataSendMode = metadataSendMode;
         this.url = url;
+        this.timeoutSeconds = timeoutSeconds;
         this.model = model;
         this.temperature = temperature;
         this.maxTokens = maxTokens;
@@ -143,6 +147,14 @@ public final class CustomLlmModel {
     }
 
     /**
+     * @return This sets the timeout for the connection to the custom provider without needing to stream any tokens back. Default is 20 seconds.
+     */
+    @JsonProperty("timeoutSeconds")
+    public Optional<Double> getTimeoutSeconds() {
+        return timeoutSeconds;
+    }
+
+    /**
      * @return This is the name of the model. Ex. cognitivecomputations/dolphin-mixtral-8x7b
      */
     @JsonProperty("model")
@@ -205,6 +217,7 @@ public final class CustomLlmModel {
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && metadataSendMode.equals(other.metadataSendMode)
                 && url.equals(other.url)
+                && timeoutSeconds.equals(other.timeoutSeconds)
                 && model.equals(other.model)
                 && temperature.equals(other.temperature)
                 && maxTokens.equals(other.maxTokens)
@@ -222,6 +235,7 @@ public final class CustomLlmModel {
                 this.knowledgeBaseId,
                 this.metadataSendMode,
                 this.url,
+                this.timeoutSeconds,
                 this.model,
                 this.temperature,
                 this.maxTokens,
@@ -275,6 +289,10 @@ public final class CustomLlmModel {
 
         _FinalStage metadataSendMode(CustomLlmModelMetadataSendMode metadataSendMode);
 
+        _FinalStage timeoutSeconds(Optional<Double> timeoutSeconds);
+
+        _FinalStage timeoutSeconds(Double timeoutSeconds);
+
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
@@ -306,6 +324,8 @@ public final class CustomLlmModel {
 
         private Optional<Double> temperature = Optional.empty();
 
+        private Optional<Double> timeoutSeconds = Optional.empty();
+
         private Optional<CustomLlmModelMetadataSendMode> metadataSendMode = Optional.empty();
 
         private Optional<String> knowledgeBaseId = Optional.empty();
@@ -332,6 +352,7 @@ public final class CustomLlmModel {
             knowledgeBaseId(other.getKnowledgeBaseId());
             metadataSendMode(other.getMetadataSendMode());
             url(other.getUrl());
+            timeoutSeconds(other.getTimeoutSeconds());
             model(other.getModel());
             temperature(other.getTemperature());
             maxTokens(other.getMaxTokens());
@@ -431,6 +452,23 @@ public final class CustomLlmModel {
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
             this.temperature = temperature;
+            return this;
+        }
+
+        /**
+         * <p>This sets the timeout for the connection to the custom provider without needing to stream any tokens back. Default is 20 seconds.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timeoutSeconds(Double timeoutSeconds) {
+            this.timeoutSeconds = Optional.ofNullable(timeoutSeconds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
+        public _FinalStage timeoutSeconds(Optional<Double> timeoutSeconds) {
+            this.timeoutSeconds = timeoutSeconds;
             return this;
         }
 
@@ -555,6 +593,7 @@ public final class CustomLlmModel {
                     knowledgeBaseId,
                     metadataSendMode,
                     url,
+                    timeoutSeconds,
                     model,
                     temperature,
                     maxTokens,

@@ -84,6 +84,7 @@ public final class TransferPlan {
      * <ul>
      * <li>'refer': Uses SIP REFER to transfer the call (default)</li>
      * <li>'bye': Ends current call with SIP BYE</li>
+     * <li>'dial': Uses SIP DIAL to transfer the call</li>
      * </ul>
      */
     @JsonProperty("sipVerb")
@@ -284,6 +285,7 @@ public final class TransferPlan {
          * <ul>
          * <li>'refer': Uses SIP REFER to transfer the call (default)</li>
          * <li>'bye': Ends current call with SIP BYE</li>
+         * <li>'dial': Uses SIP DIAL to transfer the call</li>
          * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

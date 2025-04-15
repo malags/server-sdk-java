@@ -16,52 +16,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NeetsVoice.Builder.class)
 public final class NeetsVoice {
-    private final NeetsVoiceId voiceId;
-
-    private final Optional<ChunkPlan> chunkPlan;
-
-    private final Optional<FallbackPlan> fallbackPlan;
+    private final Optional<Object> voiceId;
 
     private final Map<String, Object> additionalProperties;
 
-    private NeetsVoice(
-            NeetsVoiceId voiceId,
-            Optional<ChunkPlan> chunkPlan,
-            Optional<FallbackPlan> fallbackPlan,
-            Map<String, Object> additionalProperties) {
+    private NeetsVoice(Optional<Object> voiceId, Map<String, Object> additionalProperties) {
         this.voiceId = voiceId;
-        this.chunkPlan = chunkPlan;
-        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return This is the provider-specific ID that will be used.
-     */
     @JsonProperty("voiceId")
-    public NeetsVoiceId getVoiceId() {
+    public Optional<Object> getVoiceId() {
         return voiceId;
-    }
-
-    /**
-     * @return This is the plan for chunking the model output before it is sent to the voice provider.
-     */
-    @JsonProperty("chunkPlan")
-    public Optional<ChunkPlan> getChunkPlan() {
-        return chunkPlan;
-    }
-
-    /**
-     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
-     */
-    @JsonProperty("fallbackPlan")
-    public Optional<FallbackPlan> getFallbackPlan() {
-        return fallbackPlan;
     }
 
     @java.lang.Override
@@ -76,14 +46,12 @@ public final class NeetsVoice {
     }
 
     private boolean equalTo(NeetsVoice other) {
-        return voiceId.equals(other.voiceId)
-                && chunkPlan.equals(other.chunkPlan)
-                && fallbackPlan.equals(other.fallbackPlan);
+        return voiceId.equals(other.voiceId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.chunkPlan, this.fallbackPlan);
+        return Objects.hash(this.voiceId);
     }
 
     @java.lang.Override
@@ -91,97 +59,37 @@ public final class NeetsVoice {
         return ObjectMappers.stringify(this);
     }
 
-    public static VoiceIdStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface VoiceIdStage {
-        _FinalStage voiceId(@NotNull NeetsVoiceId voiceId);
-
-        Builder from(NeetsVoice other);
-    }
-
-    public interface _FinalStage {
-        NeetsVoice build();
-
-        _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
-
-        _FinalStage chunkPlan(ChunkPlan chunkPlan);
-
-        _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
-
-        _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements VoiceIdStage, _FinalStage {
-        private NeetsVoiceId voiceId;
-
-        private Optional<FallbackPlan> fallbackPlan = Optional.empty();
-
-        private Optional<ChunkPlan> chunkPlan = Optional.empty();
+    public static final class Builder {
+        private Optional<Object> voiceId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(NeetsVoice other) {
             voiceId(other.getVoiceId());
-            chunkPlan(other.getChunkPlan());
-            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
-        /**
-         * <p>This is the provider-specific ID that will be used.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("voiceId")
-        public _FinalStage voiceId(@NotNull NeetsVoiceId voiceId) {
-            this.voiceId = Objects.requireNonNull(voiceId, "voiceId must not be null");
+        @JsonSetter(value = "voiceId", nulls = Nulls.SKIP)
+        public Builder voiceId(Optional<Object> voiceId) {
+            this.voiceId = voiceId;
             return this;
         }
 
-        /**
-         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage fallbackPlan(FallbackPlan fallbackPlan) {
-            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+        public Builder voiceId(Object voiceId) {
+            this.voiceId = Optional.ofNullable(voiceId);
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
-        public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
-            this.fallbackPlan = fallbackPlan;
-            return this;
-        }
-
-        /**
-         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage chunkPlan(ChunkPlan chunkPlan) {
-            this.chunkPlan = Optional.ofNullable(chunkPlan);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
-        public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
-            this.chunkPlan = chunkPlan;
-            return this;
-        }
-
-        @java.lang.Override
         public NeetsVoice build() {
-            return new NeetsVoice(voiceId, chunkPlan, fallbackPlan, additionalProperties);
+            return new NeetsVoice(voiceId, additionalProperties);
         }
     }
 }

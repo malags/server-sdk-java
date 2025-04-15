@@ -23,6 +23,8 @@ import java.util.Optional;
 public final class AssemblyAiTranscriber {
     private final Optional<String> language;
 
+    private final Optional<Double> confidenceThreshold;
+
     private final Optional<String> realtimeUrl;
 
     private final Optional<List<String>> wordBoost;
@@ -31,20 +33,26 @@ public final class AssemblyAiTranscriber {
 
     private final Optional<Boolean> disablePartialTranscripts;
 
+    private final Optional<FallbackTranscriberPlan> fallbackPlan;
+
     private final Map<String, Object> additionalProperties;
 
     private AssemblyAiTranscriber(
             Optional<String> language,
+            Optional<Double> confidenceThreshold,
             Optional<String> realtimeUrl,
             Optional<List<String>> wordBoost,
             Optional<Double> endUtteranceSilenceThreshold,
             Optional<Boolean> disablePartialTranscripts,
+            Optional<FallbackTranscriberPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
         this.language = language;
+        this.confidenceThreshold = confidenceThreshold;
         this.realtimeUrl = realtimeUrl;
         this.wordBoost = wordBoost;
         this.endUtteranceSilenceThreshold = endUtteranceSilenceThreshold;
         this.disablePartialTranscripts = disablePartialTranscripts;
+        this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
     }
 
@@ -54,6 +62,15 @@ public final class AssemblyAiTranscriber {
     @JsonProperty("language")
     public Optional<String> getLanguage() {
         return language;
+    }
+
+    /**
+     * @return Transcripts below this confidence threshold will be discarded.
+     * <p>@default 0.4</p>
+     */
+    @JsonProperty("confidenceThreshold")
+    public Optional<Double> getConfidenceThreshold() {
+        return confidenceThreshold;
     }
 
     /**
@@ -89,6 +106,14 @@ public final class AssemblyAiTranscriber {
         return disablePartialTranscripts;
     }
 
+    /**
+     * @return This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+     */
+    @JsonProperty("fallbackPlan")
+    public Optional<FallbackTranscriberPlan> getFallbackPlan() {
+        return fallbackPlan;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -102,20 +127,24 @@ public final class AssemblyAiTranscriber {
 
     private boolean equalTo(AssemblyAiTranscriber other) {
         return language.equals(other.language)
+                && confidenceThreshold.equals(other.confidenceThreshold)
                 && realtimeUrl.equals(other.realtimeUrl)
                 && wordBoost.equals(other.wordBoost)
                 && endUtteranceSilenceThreshold.equals(other.endUtteranceSilenceThreshold)
-                && disablePartialTranscripts.equals(other.disablePartialTranscripts);
+                && disablePartialTranscripts.equals(other.disablePartialTranscripts)
+                && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
                 this.language,
+                this.confidenceThreshold,
                 this.realtimeUrl,
                 this.wordBoost,
                 this.endUtteranceSilenceThreshold,
-                this.disablePartialTranscripts);
+                this.disablePartialTranscripts,
+                this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -131,6 +160,8 @@ public final class AssemblyAiTranscriber {
     public static final class Builder {
         private Optional<String> language = Optional.empty();
 
+        private Optional<Double> confidenceThreshold = Optional.empty();
+
         private Optional<String> realtimeUrl = Optional.empty();
 
         private Optional<List<String>> wordBoost = Optional.empty();
@@ -139,6 +170,8 @@ public final class AssemblyAiTranscriber {
 
         private Optional<Boolean> disablePartialTranscripts = Optional.empty();
 
+        private Optional<FallbackTranscriberPlan> fallbackPlan = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -146,10 +179,12 @@ public final class AssemblyAiTranscriber {
 
         public Builder from(AssemblyAiTranscriber other) {
             language(other.getLanguage());
+            confidenceThreshold(other.getConfidenceThreshold());
             realtimeUrl(other.getRealtimeUrl());
             wordBoost(other.getWordBoost());
             endUtteranceSilenceThreshold(other.getEndUtteranceSilenceThreshold());
             disablePartialTranscripts(other.getDisablePartialTranscripts());
+            fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
@@ -161,6 +196,17 @@ public final class AssemblyAiTranscriber {
 
         public Builder language(String language) {
             this.language = Optional.ofNullable(language);
+            return this;
+        }
+
+        @JsonSetter(value = "confidenceThreshold", nulls = Nulls.SKIP)
+        public Builder confidenceThreshold(Optional<Double> confidenceThreshold) {
+            this.confidenceThreshold = confidenceThreshold;
+            return this;
+        }
+
+        public Builder confidenceThreshold(Double confidenceThreshold) {
+            this.confidenceThreshold = Optional.ofNullable(confidenceThreshold);
             return this;
         }
 
@@ -208,13 +254,26 @@ public final class AssemblyAiTranscriber {
             return this;
         }
 
+        @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
+        public Builder fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
+            this.fallbackPlan = fallbackPlan;
+            return this;
+        }
+
+        public Builder fallbackPlan(FallbackTranscriberPlan fallbackPlan) {
+            this.fallbackPlan = Optional.ofNullable(fallbackPlan);
+            return this;
+        }
+
         public AssemblyAiTranscriber build() {
             return new AssemblyAiTranscriber(
                     language,
+                    confidenceThreshold,
                     realtimeUrl,
                     wordBoost,
                     endUtteranceSilenceThreshold,
                     disablePartialTranscripts,
+                    fallbackPlan,
                     additionalProperties);
         }
     }

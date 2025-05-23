@@ -9,17 +9,29 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageTranscript.Builder.class)
 public final class ClientMessageTranscript {
+    private final Optional<ClientMessageTranscriptPhoneNumber> phoneNumber;
+
     private final ClientMessageTranscriptType type;
+
+    private final Optional<Double> timestamp;
+
+    private final Optional<Call> call;
+
+    private final Optional<CreateCustomerDto> customer;
+
+    private final Optional<CreateAssistantDto> assistant;
 
     private final ClientMessageTranscriptRole role;
 
@@ -30,16 +42,34 @@ public final class ClientMessageTranscript {
     private final Map<String, Object> additionalProperties;
 
     private ClientMessageTranscript(
+            Optional<ClientMessageTranscriptPhoneNumber> phoneNumber,
             ClientMessageTranscriptType type,
+            Optional<Double> timestamp,
+            Optional<Call> call,
+            Optional<CreateCustomerDto> customer,
+            Optional<CreateAssistantDto> assistant,
             ClientMessageTranscriptRole role,
             ClientMessageTranscriptTranscriptType transcriptType,
             String transcript,
             Map<String, Object> additionalProperties) {
+        this.phoneNumber = phoneNumber;
         this.type = type;
+        this.timestamp = timestamp;
+        this.call = call;
+        this.customer = customer;
+        this.assistant = assistant;
         this.role = role;
         this.transcriptType = transcriptType;
         this.transcript = transcript;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the phone number that the message is associated with.
+     */
+    @JsonProperty("phoneNumber")
+    public Optional<ClientMessageTranscriptPhoneNumber> getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
@@ -48,6 +78,38 @@ public final class ClientMessageTranscript {
     @JsonProperty("type")
     public ClientMessageTranscriptType getType() {
         return type;
+    }
+
+    /**
+     * @return This is the timestamp of the message.
+     */
+    @JsonProperty("timestamp")
+    public Optional<Double> getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * @return This is the call that the message is associated with.
+     */
+    @JsonProperty("call")
+    public Optional<Call> getCall() {
+        return call;
+    }
+
+    /**
+     * @return This is the customer that the message is associated with.
+     */
+    @JsonProperty("customer")
+    public Optional<CreateCustomerDto> getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @return This is the assistant that the message is associated with.
+     */
+    @JsonProperty("assistant")
+    public Optional<CreateAssistantDto> getAssistant() {
+        return assistant;
     }
 
     /**
@@ -86,7 +148,12 @@ public final class ClientMessageTranscript {
     }
 
     private boolean equalTo(ClientMessageTranscript other) {
-        return type.equals(other.type)
+        return phoneNumber.equals(other.phoneNumber)
+                && type.equals(other.type)
+                && timestamp.equals(other.timestamp)
+                && call.equals(other.call)
+                && customer.equals(other.customer)
+                && assistant.equals(other.assistant)
                 && role.equals(other.role)
                 && transcriptType.equals(other.transcriptType)
                 && transcript.equals(other.transcript);
@@ -94,7 +161,16 @@ public final class ClientMessageTranscript {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.role, this.transcriptType, this.transcript);
+        return Objects.hash(
+                this.phoneNumber,
+                this.type,
+                this.timestamp,
+                this.call,
+                this.customer,
+                this.assistant,
+                this.role,
+                this.transcriptType,
+                this.transcript);
     }
 
     @java.lang.Override
@@ -126,6 +202,26 @@ public final class ClientMessageTranscript {
 
     public interface _FinalStage {
         ClientMessageTranscript build();
+
+        _FinalStage phoneNumber(Optional<ClientMessageTranscriptPhoneNumber> phoneNumber);
+
+        _FinalStage phoneNumber(ClientMessageTranscriptPhoneNumber phoneNumber);
+
+        _FinalStage timestamp(Optional<Double> timestamp);
+
+        _FinalStage timestamp(Double timestamp);
+
+        _FinalStage call(Optional<Call> call);
+
+        _FinalStage call(Call call);
+
+        _FinalStage customer(Optional<CreateCustomerDto> customer);
+
+        _FinalStage customer(CreateCustomerDto customer);
+
+        _FinalStage assistant(Optional<CreateAssistantDto> assistant);
+
+        _FinalStage assistant(CreateAssistantDto assistant);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -139,6 +235,16 @@ public final class ClientMessageTranscript {
 
         private String transcript;
 
+        private Optional<CreateAssistantDto> assistant = Optional.empty();
+
+        private Optional<CreateCustomerDto> customer = Optional.empty();
+
+        private Optional<Call> call = Optional.empty();
+
+        private Optional<Double> timestamp = Optional.empty();
+
+        private Optional<ClientMessageTranscriptPhoneNumber> phoneNumber = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -146,7 +252,12 @@ public final class ClientMessageTranscript {
 
         @java.lang.Override
         public Builder from(ClientMessageTranscript other) {
+            phoneNumber(other.getPhoneNumber());
             type(other.getType());
+            timestamp(other.getTimestamp());
+            call(other.getCall());
+            customer(other.getCustomer());
+            assistant(other.getAssistant());
             role(other.getRole());
             transcriptType(other.getTranscriptType());
             transcript(other.getTranscript());
@@ -197,9 +308,104 @@ public final class ClientMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage assistant(CreateAssistantDto assistant) {
+            this.assistant = Optional.ofNullable(assistant);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
+        public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
+            this.assistant = assistant;
+            return this;
+        }
+
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage customer(CreateCustomerDto customer) {
+            this.customer = Optional.ofNullable(customer);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "customer", nulls = Nulls.SKIP)
+        public _FinalStage customer(Optional<CreateCustomerDto> customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage call(Call call) {
+            this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "call", nulls = Nulls.SKIP)
+        public _FinalStage call(Optional<Call> call) {
+            this.call = call;
+            return this;
+        }
+
+        /**
+         * <p>This is the timestamp of the message.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timestamp(Double timestamp) {
+            this.timestamp = Optional.ofNullable(timestamp);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
+        public _FinalStage timestamp(Optional<Double> timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage phoneNumber(ClientMessageTranscriptPhoneNumber phoneNumber) {
+            this.phoneNumber = Optional.ofNullable(phoneNumber);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
+        public _FinalStage phoneNumber(Optional<ClientMessageTranscriptPhoneNumber> phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
         @java.lang.Override
         public ClientMessageTranscript build() {
-            return new ClientMessageTranscript(type, role, transcriptType, transcript, additionalProperties);
+            return new ClientMessageTranscript(
+                    phoneNumber,
+                    type,
+                    timestamp,
+                    call,
+                    customer,
+                    assistant,
+                    role,
+                    transcriptType,
+                    transcript,
+                    additionalProperties);
         }
     }
 }

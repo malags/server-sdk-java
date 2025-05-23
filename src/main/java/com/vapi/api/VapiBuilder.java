@@ -33,10 +33,18 @@ public final class VapiBuilder {
     }
 
     /**
-     * Sets the timeout (in seconds) for the client
+     * Sets the timeout (in seconds) for the client. Defaults to 60 seconds.
      */
     public VapiBuilder timeout(int timeout) {
         this.clientOptionsBuilder.timeout(timeout);
+        return this;
+    }
+
+    /**
+     * Sets the maximum number of retries for the client. Defaults to 2 retries.
+     */
+    public VapiBuilder maxRetries(int maxRetries) {
+        this.clientOptionsBuilder.maxRetries(maxRetries);
         return this;
     }
 
@@ -49,9 +57,6 @@ public final class VapiBuilder {
     }
 
     public Vapi build() {
-        if (token == null) {
-            throw new RuntimeException("Please provide token");
-        }
         this.clientOptionsBuilder.addHeader("Authorization", "Bearer " + this.token);
         clientOptionsBuilder.environment(this.environment);
         return new Vapi(clientOptionsBuilder.build());

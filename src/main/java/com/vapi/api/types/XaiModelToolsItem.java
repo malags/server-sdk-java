@@ -26,6 +26,18 @@ public final class XaiModelToolsItem {
         return value.visit(visitor);
     }
 
+    public static XaiModelToolsItem apiRequest(CreateApiRequestToolDto value) {
+        return new XaiModelToolsItem(new ApiRequestValue(value));
+    }
+
+    public static XaiModelToolsItem bash(CreateBashToolDto value) {
+        return new XaiModelToolsItem(new BashValue(value));
+    }
+
+    public static XaiModelToolsItem computer(CreateComputerToolDto value) {
+        return new XaiModelToolsItem(new ComputerValue(value));
+    }
+
     public static XaiModelToolsItem dtmf(CreateDtmfToolDto value) {
         return new XaiModelToolsItem(new DtmfValue(value));
     }
@@ -34,28 +46,30 @@ public final class XaiModelToolsItem {
         return new XaiModelToolsItem(new EndCallValue(value));
     }
 
-    public static XaiModelToolsItem voicemail(CreateVoicemailToolDto value) {
-        return new XaiModelToolsItem(new VoicemailValue(value));
-    }
-
     public static XaiModelToolsItem function(CreateFunctionToolDto value) {
         return new XaiModelToolsItem(new FunctionValue(value));
     }
 
-    public static XaiModelToolsItem ghl(CreateGhlToolDto value) {
-        return new XaiModelToolsItem(new GhlValue(value));
+    public static XaiModelToolsItem gohighlevelCalendarAvailabilityCheck(
+            CreateGoHighLevelCalendarAvailabilityToolDto value) {
+        return new XaiModelToolsItem(new GohighlevelCalendarAvailabilityCheckValue(value));
     }
 
-    public static XaiModelToolsItem make(CreateMakeToolDto value) {
-        return new XaiModelToolsItem(new MakeValue(value));
+    public static XaiModelToolsItem gohighlevelCalendarEventCreate(CreateGoHighLevelCalendarEventCreateToolDto value) {
+        return new XaiModelToolsItem(new GohighlevelCalendarEventCreateValue(value));
     }
 
-    public static XaiModelToolsItem transferCall(CreateTransferCallToolDto value) {
-        return new XaiModelToolsItem(new TransferCallValue(value));
+    public static XaiModelToolsItem gohighlevelContactCreate(CreateGoHighLevelContactCreateToolDto value) {
+        return new XaiModelToolsItem(new GohighlevelContactCreateValue(value));
     }
 
-    public static XaiModelToolsItem query(CreateQueryToolDto value) {
-        return new XaiModelToolsItem(new QueryValue(value));
+    public static XaiModelToolsItem gohighlevelContactGet(CreateGoHighLevelContactGetToolDto value) {
+        return new XaiModelToolsItem(new GohighlevelContactGetValue(value));
+    }
+
+    public static XaiModelToolsItem googleCalendarAvailabilityCheck(
+            CreateGoogleCalendarCheckAvailabilityToolDto value) {
+        return new XaiModelToolsItem(new GoogleCalendarAvailabilityCheckValue(value));
     }
 
     public static XaiModelToolsItem googleCalendarEventCreate(CreateGoogleCalendarCreateEventToolDto value) {
@@ -66,13 +80,40 @@ public final class XaiModelToolsItem {
         return new XaiModelToolsItem(new GoogleSheetsRowAppendValue(value));
     }
 
-    public static XaiModelToolsItem googleCalendarAvailabilityCheck(
-            CreateGoogleCalendarCheckAvailabilityToolDto value) {
-        return new XaiModelToolsItem(new GoogleCalendarAvailabilityCheckValue(value));
+    public static XaiModelToolsItem mcp(CreateMcpToolDto value) {
+        return new XaiModelToolsItem(new McpValue(value));
+    }
+
+    public static XaiModelToolsItem query(CreateQueryToolDto value) {
+        return new XaiModelToolsItem(new QueryValue(value));
     }
 
     public static XaiModelToolsItem slackMessageSend(CreateSlackSendMessageToolDto value) {
         return new XaiModelToolsItem(new SlackMessageSendValue(value));
+    }
+
+    public static XaiModelToolsItem sms(CreateSmsToolDto value) {
+        return new XaiModelToolsItem(new SmsValue(value));
+    }
+
+    public static XaiModelToolsItem textEditor(CreateTextEditorToolDto value) {
+        return new XaiModelToolsItem(new TextEditorValue(value));
+    }
+
+    public static XaiModelToolsItem transferCall(CreateTransferCallToolDto value) {
+        return new XaiModelToolsItem(new TransferCallValue(value));
+    }
+
+    public boolean isApiRequest() {
+        return value instanceof ApiRequestValue;
+    }
+
+    public boolean isBash() {
+        return value instanceof BashValue;
+    }
+
+    public boolean isComputer() {
+        return value instanceof ComputerValue;
     }
 
     public boolean isDtmf() {
@@ -83,28 +124,28 @@ public final class XaiModelToolsItem {
         return value instanceof EndCallValue;
     }
 
-    public boolean isVoicemail() {
-        return value instanceof VoicemailValue;
-    }
-
     public boolean isFunction() {
         return value instanceof FunctionValue;
     }
 
-    public boolean isGhl() {
-        return value instanceof GhlValue;
+    public boolean isGohighlevelCalendarAvailabilityCheck() {
+        return value instanceof GohighlevelCalendarAvailabilityCheckValue;
     }
 
-    public boolean isMake() {
-        return value instanceof MakeValue;
+    public boolean isGohighlevelCalendarEventCreate() {
+        return value instanceof GohighlevelCalendarEventCreateValue;
     }
 
-    public boolean isTransferCall() {
-        return value instanceof TransferCallValue;
+    public boolean isGohighlevelContactCreate() {
+        return value instanceof GohighlevelContactCreateValue;
     }
 
-    public boolean isQuery() {
-        return value instanceof QueryValue;
+    public boolean isGohighlevelContactGet() {
+        return value instanceof GohighlevelContactGetValue;
+    }
+
+    public boolean isGoogleCalendarAvailabilityCheck() {
+        return value instanceof GoogleCalendarAvailabilityCheckValue;
     }
 
     public boolean isGoogleCalendarEventCreate() {
@@ -115,16 +156,53 @@ public final class XaiModelToolsItem {
         return value instanceof GoogleSheetsRowAppendValue;
     }
 
-    public boolean isGoogleCalendarAvailabilityCheck() {
-        return value instanceof GoogleCalendarAvailabilityCheckValue;
+    public boolean isMcp() {
+        return value instanceof McpValue;
+    }
+
+    public boolean isQuery() {
+        return value instanceof QueryValue;
     }
 
     public boolean isSlackMessageSend() {
         return value instanceof SlackMessageSendValue;
     }
 
+    public boolean isSms() {
+        return value instanceof SmsValue;
+    }
+
+    public boolean isTextEditor() {
+        return value instanceof TextEditorValue;
+    }
+
+    public boolean isTransferCall() {
+        return value instanceof TransferCallValue;
+    }
+
     public boolean _isUnknown() {
         return value instanceof _UnknownValue;
+    }
+
+    public Optional<CreateApiRequestToolDto> getApiRequest() {
+        if (isApiRequest()) {
+            return Optional.of(((ApiRequestValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateBashToolDto> getBash() {
+        if (isBash()) {
+            return Optional.of(((BashValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateComputerToolDto> getComputer() {
+        if (isComputer()) {
+            return Optional.of(((ComputerValue) value).value);
+        }
+        return Optional.empty();
     }
 
     public Optional<CreateDtmfToolDto> getDtmf() {
@@ -141,13 +219,6 @@ public final class XaiModelToolsItem {
         return Optional.empty();
     }
 
-    public Optional<CreateVoicemailToolDto> getVoicemail() {
-        if (isVoicemail()) {
-            return Optional.of(((VoicemailValue) value).value);
-        }
-        return Optional.empty();
-    }
-
     public Optional<CreateFunctionToolDto> getFunction() {
         if (isFunction()) {
             return Optional.of(((FunctionValue) value).value);
@@ -155,30 +226,37 @@ public final class XaiModelToolsItem {
         return Optional.empty();
     }
 
-    public Optional<CreateGhlToolDto> getGhl() {
-        if (isGhl()) {
-            return Optional.of(((GhlValue) value).value);
+    public Optional<CreateGoHighLevelCalendarAvailabilityToolDto> getGohighlevelCalendarAvailabilityCheck() {
+        if (isGohighlevelCalendarAvailabilityCheck()) {
+            return Optional.of(((GohighlevelCalendarAvailabilityCheckValue) value).value);
         }
         return Optional.empty();
     }
 
-    public Optional<CreateMakeToolDto> getMake() {
-        if (isMake()) {
-            return Optional.of(((MakeValue) value).value);
+    public Optional<CreateGoHighLevelCalendarEventCreateToolDto> getGohighlevelCalendarEventCreate() {
+        if (isGohighlevelCalendarEventCreate()) {
+            return Optional.of(((GohighlevelCalendarEventCreateValue) value).value);
         }
         return Optional.empty();
     }
 
-    public Optional<CreateTransferCallToolDto> getTransferCall() {
-        if (isTransferCall()) {
-            return Optional.of(((TransferCallValue) value).value);
+    public Optional<CreateGoHighLevelContactCreateToolDto> getGohighlevelContactCreate() {
+        if (isGohighlevelContactCreate()) {
+            return Optional.of(((GohighlevelContactCreateValue) value).value);
         }
         return Optional.empty();
     }
 
-    public Optional<CreateQueryToolDto> getQuery() {
-        if (isQuery()) {
-            return Optional.of(((QueryValue) value).value);
+    public Optional<CreateGoHighLevelContactGetToolDto> getGohighlevelContactGet() {
+        if (isGohighlevelContactGet()) {
+            return Optional.of(((GohighlevelContactGetValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoogleCalendarCheckAvailabilityToolDto> getGoogleCalendarAvailabilityCheck() {
+        if (isGoogleCalendarAvailabilityCheck()) {
+            return Optional.of(((GoogleCalendarAvailabilityCheckValue) value).value);
         }
         return Optional.empty();
     }
@@ -197,9 +275,16 @@ public final class XaiModelToolsItem {
         return Optional.empty();
     }
 
-    public Optional<CreateGoogleCalendarCheckAvailabilityToolDto> getGoogleCalendarAvailabilityCheck() {
-        if (isGoogleCalendarAvailabilityCheck()) {
-            return Optional.of(((GoogleCalendarAvailabilityCheckValue) value).value);
+    public Optional<CreateMcpToolDto> getMcp() {
+        if (isMcp()) {
+            return Optional.of(((McpValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateQueryToolDto> getQuery() {
+        if (isQuery()) {
+            return Optional.of(((QueryValue) value).value);
         }
         return Optional.empty();
     }
@@ -207,6 +292,27 @@ public final class XaiModelToolsItem {
     public Optional<CreateSlackSendMessageToolDto> getSlackMessageSend() {
         if (isSlackMessageSend()) {
             return Optional.of(((SlackMessageSendValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateSmsToolDto> getSms() {
+        if (isSms()) {
+            return Optional.of(((SmsValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateTextEditorToolDto> getTextEditor() {
+        if (isTextEditor()) {
+            return Optional.of(((TextEditorValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateTransferCallToolDto> getTransferCall() {
+        if (isTransferCall()) {
+            return Optional.of(((TransferCallValue) value).value);
         }
         return Optional.empty();
     }
@@ -224,52 +330,192 @@ public final class XaiModelToolsItem {
     }
 
     public interface Visitor<T> {
+        T visitApiRequest(CreateApiRequestToolDto apiRequest);
+
+        T visitBash(CreateBashToolDto bash);
+
+        T visitComputer(CreateComputerToolDto computer);
+
         T visitDtmf(CreateDtmfToolDto dtmf);
 
         T visitEndCall(CreateEndCallToolDto endCall);
 
-        T visitVoicemail(CreateVoicemailToolDto voicemail);
-
         T visitFunction(CreateFunctionToolDto function);
 
-        T visitGhl(CreateGhlToolDto ghl);
+        T visitGohighlevelCalendarAvailabilityCheck(
+                CreateGoHighLevelCalendarAvailabilityToolDto gohighlevelCalendarAvailabilityCheck);
 
-        T visitMake(CreateMakeToolDto make);
+        T visitGohighlevelCalendarEventCreate(
+                CreateGoHighLevelCalendarEventCreateToolDto gohighlevelCalendarEventCreate);
 
-        T visitTransferCall(CreateTransferCallToolDto transferCall);
+        T visitGohighlevelContactCreate(CreateGoHighLevelContactCreateToolDto gohighlevelContactCreate);
 
-        T visitQuery(CreateQueryToolDto query);
+        T visitGohighlevelContactGet(CreateGoHighLevelContactGetToolDto gohighlevelContactGet);
+
+        T visitGoogleCalendarAvailabilityCheck(
+                CreateGoogleCalendarCheckAvailabilityToolDto googleCalendarAvailabilityCheck);
 
         T visitGoogleCalendarEventCreate(CreateGoogleCalendarCreateEventToolDto googleCalendarEventCreate);
 
         T visitGoogleSheetsRowAppend(CreateGoogleSheetsRowAppendToolDto googleSheetsRowAppend);
 
-        T visitGoogleCalendarAvailabilityCheck(
-                CreateGoogleCalendarCheckAvailabilityToolDto googleCalendarAvailabilityCheck);
+        T visitMcp(CreateMcpToolDto mcp);
+
+        T visitQuery(CreateQueryToolDto query);
 
         T visitSlackMessageSend(CreateSlackSendMessageToolDto slackMessageSend);
+
+        T visitSms(CreateSmsToolDto sms);
+
+        T visitTextEditor(CreateTextEditorToolDto textEditor);
+
+        T visitTransferCall(CreateTransferCallToolDto transferCall);
 
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
+        @JsonSubTypes.Type(ApiRequestValue.class),
+        @JsonSubTypes.Type(BashValue.class),
+        @JsonSubTypes.Type(ComputerValue.class),
         @JsonSubTypes.Type(DtmfValue.class),
         @JsonSubTypes.Type(EndCallValue.class),
-        @JsonSubTypes.Type(VoicemailValue.class),
         @JsonSubTypes.Type(FunctionValue.class),
-        @JsonSubTypes.Type(GhlValue.class),
-        @JsonSubTypes.Type(MakeValue.class),
-        @JsonSubTypes.Type(TransferCallValue.class),
-        @JsonSubTypes.Type(QueryValue.class),
+        @JsonSubTypes.Type(GohighlevelCalendarAvailabilityCheckValue.class),
+        @JsonSubTypes.Type(GohighlevelCalendarEventCreateValue.class),
+        @JsonSubTypes.Type(GohighlevelContactCreateValue.class),
+        @JsonSubTypes.Type(GohighlevelContactGetValue.class),
+        @JsonSubTypes.Type(GoogleCalendarAvailabilityCheckValue.class),
         @JsonSubTypes.Type(GoogleCalendarEventCreateValue.class),
         @JsonSubTypes.Type(GoogleSheetsRowAppendValue.class),
-        @JsonSubTypes.Type(GoogleCalendarAvailabilityCheckValue.class),
-        @JsonSubTypes.Type(SlackMessageSendValue.class)
+        @JsonSubTypes.Type(McpValue.class),
+        @JsonSubTypes.Type(QueryValue.class),
+        @JsonSubTypes.Type(SlackMessageSendValue.class),
+        @JsonSubTypes.Type(SmsValue.class),
+        @JsonSubTypes.Type(TextEditorValue.class),
+        @JsonSubTypes.Type(TransferCallValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
+    }
+
+    @JsonTypeName("apiRequest")
+    @JsonIgnoreProperties("type")
+    private static final class ApiRequestValue implements Value {
+        @JsonUnwrapped
+        private CreateApiRequestToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ApiRequestValue() {}
+
+        private ApiRequestValue(CreateApiRequestToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitApiRequest(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ApiRequestValue && equalTo((ApiRequestValue) other);
+        }
+
+        private boolean equalTo(ApiRequestValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "XaiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("bash")
+    @JsonIgnoreProperties("type")
+    private static final class BashValue implements Value {
+        @JsonUnwrapped
+        private CreateBashToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private BashValue() {}
+
+        private BashValue(CreateBashToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitBash(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof BashValue && equalTo((BashValue) other);
+        }
+
+        private boolean equalTo(BashValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "XaiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("computer")
+    @JsonIgnoreProperties("type")
+    private static final class ComputerValue implements Value {
+        @JsonUnwrapped
+        private CreateComputerToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ComputerValue() {}
+
+        private ComputerValue(CreateComputerToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitComputer(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ComputerValue && equalTo((ComputerValue) other);
+        }
+
+        private boolean equalTo(ComputerValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "XaiModelToolsItem{" + "value: " + value + "}";
+        }
     }
 
     @JsonTypeName("dtmf")
@@ -350,45 +596,6 @@ public final class XaiModelToolsItem {
         }
     }
 
-    @JsonTypeName("voicemail")
-    @JsonIgnoreProperties("type")
-    private static final class VoicemailValue implements Value {
-        @JsonUnwrapped
-        private CreateVoicemailToolDto value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private VoicemailValue() {}
-
-        private VoicemailValue(CreateVoicemailToolDto value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitVoicemail(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof VoicemailValue && equalTo((VoicemailValue) other);
-        }
-
-        private boolean equalTo(VoicemailValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "XaiModelToolsItem{" + "value: " + value + "}";
-        }
-    }
-
     @JsonTypeName("function")
     @JsonIgnoreProperties("type")
     private static final class FunctionValue implements Value {
@@ -428,31 +635,32 @@ public final class XaiModelToolsItem {
         }
     }
 
-    @JsonTypeName("ghl")
+    @JsonTypeName("gohighlevel.calendar.availability.check")
     @JsonIgnoreProperties("type")
-    private static final class GhlValue implements Value {
+    private static final class GohighlevelCalendarAvailabilityCheckValue implements Value {
         @JsonUnwrapped
-        private CreateGhlToolDto value;
+        private CreateGoHighLevelCalendarAvailabilityToolDto value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private GhlValue() {}
+        private GohighlevelCalendarAvailabilityCheckValue() {}
 
-        private GhlValue(CreateGhlToolDto value) {
+        private GohighlevelCalendarAvailabilityCheckValue(CreateGoHighLevelCalendarAvailabilityToolDto value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitGhl(value);
+            return visitor.visitGohighlevelCalendarAvailabilityCheck(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof GhlValue && equalTo((GhlValue) other);
+            return other instanceof GohighlevelCalendarAvailabilityCheckValue
+                    && equalTo((GohighlevelCalendarAvailabilityCheckValue) other);
         }
 
-        private boolean equalTo(GhlValue other) {
+        private boolean equalTo(GohighlevelCalendarAvailabilityCheckValue other) {
             return value.equals(other.value);
         }
 
@@ -467,31 +675,32 @@ public final class XaiModelToolsItem {
         }
     }
 
-    @JsonTypeName("make")
+    @JsonTypeName("gohighlevel.calendar.event.create")
     @JsonIgnoreProperties("type")
-    private static final class MakeValue implements Value {
+    private static final class GohighlevelCalendarEventCreateValue implements Value {
         @JsonUnwrapped
-        private CreateMakeToolDto value;
+        private CreateGoHighLevelCalendarEventCreateToolDto value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private MakeValue() {}
+        private GohighlevelCalendarEventCreateValue() {}
 
-        private MakeValue(CreateMakeToolDto value) {
+        private GohighlevelCalendarEventCreateValue(CreateGoHighLevelCalendarEventCreateToolDto value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitMake(value);
+            return visitor.visitGohighlevelCalendarEventCreate(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof MakeValue && equalTo((MakeValue) other);
+            return other instanceof GohighlevelCalendarEventCreateValue
+                    && equalTo((GohighlevelCalendarEventCreateValue) other);
         }
 
-        private boolean equalTo(MakeValue other) {
+        private boolean equalTo(GohighlevelCalendarEventCreateValue other) {
             return value.equals(other.value);
         }
 
@@ -506,31 +715,31 @@ public final class XaiModelToolsItem {
         }
     }
 
-    @JsonTypeName("transferCall")
+    @JsonTypeName("gohighlevel.contact.create")
     @JsonIgnoreProperties("type")
-    private static final class TransferCallValue implements Value {
+    private static final class GohighlevelContactCreateValue implements Value {
         @JsonUnwrapped
-        private CreateTransferCallToolDto value;
+        private CreateGoHighLevelContactCreateToolDto value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private TransferCallValue() {}
+        private GohighlevelContactCreateValue() {}
 
-        private TransferCallValue(CreateTransferCallToolDto value) {
+        private GohighlevelContactCreateValue(CreateGoHighLevelContactCreateToolDto value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitTransferCall(value);
+            return visitor.visitGohighlevelContactCreate(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof TransferCallValue && equalTo((TransferCallValue) other);
+            return other instanceof GohighlevelContactCreateValue && equalTo((GohighlevelContactCreateValue) other);
         }
 
-        private boolean equalTo(TransferCallValue other) {
+        private boolean equalTo(GohighlevelContactCreateValue other) {
             return value.equals(other.value);
         }
 
@@ -545,31 +754,71 @@ public final class XaiModelToolsItem {
         }
     }
 
-    @JsonTypeName("query")
+    @JsonTypeName("gohighlevel.contact.get")
     @JsonIgnoreProperties("type")
-    private static final class QueryValue implements Value {
+    private static final class GohighlevelContactGetValue implements Value {
         @JsonUnwrapped
-        private CreateQueryToolDto value;
+        private CreateGoHighLevelContactGetToolDto value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private QueryValue() {}
+        private GohighlevelContactGetValue() {}
 
-        private QueryValue(CreateQueryToolDto value) {
+        private GohighlevelContactGetValue(CreateGoHighLevelContactGetToolDto value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitQuery(value);
+            return visitor.visitGohighlevelContactGet(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof QueryValue && equalTo((QueryValue) other);
+            return other instanceof GohighlevelContactGetValue && equalTo((GohighlevelContactGetValue) other);
         }
 
-        private boolean equalTo(QueryValue other) {
+        private boolean equalTo(GohighlevelContactGetValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "XaiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google.calendar.availability.check")
+    @JsonIgnoreProperties("type")
+    private static final class GoogleCalendarAvailabilityCheckValue implements Value {
+        @JsonUnwrapped
+        private CreateGoogleCalendarCheckAvailabilityToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleCalendarAvailabilityCheckValue() {}
+
+        private GoogleCalendarAvailabilityCheckValue(CreateGoogleCalendarCheckAvailabilityToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogleCalendarAvailabilityCheck(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleCalendarAvailabilityCheckValue
+                    && equalTo((GoogleCalendarAvailabilityCheckValue) other);
+        }
+
+        private boolean equalTo(GoogleCalendarAvailabilityCheckValue other) {
             return value.equals(other.value);
         }
 
@@ -662,32 +911,70 @@ public final class XaiModelToolsItem {
         }
     }
 
-    @JsonTypeName("google.calendar.availability.check")
+    @JsonTypeName("mcp")
     @JsonIgnoreProperties("type")
-    private static final class GoogleCalendarAvailabilityCheckValue implements Value {
+    private static final class McpValue implements Value {
         @JsonUnwrapped
-        private CreateGoogleCalendarCheckAvailabilityToolDto value;
+        private CreateMcpToolDto value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private GoogleCalendarAvailabilityCheckValue() {}
+        private McpValue() {}
 
-        private GoogleCalendarAvailabilityCheckValue(CreateGoogleCalendarCheckAvailabilityToolDto value) {
+        private McpValue(CreateMcpToolDto value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitGoogleCalendarAvailabilityCheck(value);
+            return visitor.visitMcp(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof GoogleCalendarAvailabilityCheckValue
-                    && equalTo((GoogleCalendarAvailabilityCheckValue) other);
+            return other instanceof McpValue && equalTo((McpValue) other);
         }
 
-        private boolean equalTo(GoogleCalendarAvailabilityCheckValue other) {
+        private boolean equalTo(McpValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "XaiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("query")
+    @JsonIgnoreProperties("type")
+    private static final class QueryValue implements Value {
+        @JsonUnwrapped
+        private CreateQueryToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private QueryValue() {}
+
+        private QueryValue(CreateQueryToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitQuery(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof QueryValue && equalTo((QueryValue) other);
+        }
+
+        private boolean equalTo(QueryValue other) {
             return value.equals(other.value);
         }
 
@@ -727,6 +1014,123 @@ public final class XaiModelToolsItem {
         }
 
         private boolean equalTo(SlackMessageSendValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "XaiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("sms")
+    @JsonIgnoreProperties("type")
+    private static final class SmsValue implements Value {
+        @JsonUnwrapped
+        private CreateSmsToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SmsValue() {}
+
+        private SmsValue(CreateSmsToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSms(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SmsValue && equalTo((SmsValue) other);
+        }
+
+        private boolean equalTo(SmsValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "XaiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("textEditor")
+    @JsonIgnoreProperties("type")
+    private static final class TextEditorValue implements Value {
+        @JsonUnwrapped
+        private CreateTextEditorToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TextEditorValue() {}
+
+        private TextEditorValue(CreateTextEditorToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTextEditor(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TextEditorValue && equalTo((TextEditorValue) other);
+        }
+
+        private boolean equalTo(TextEditorValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "XaiModelToolsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("transferCall")
+    @JsonIgnoreProperties("type")
+    private static final class TransferCallValue implements Value {
+        @JsonUnwrapped
+        private CreateTransferCallToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TransferCallValue() {}
+
+        private TransferCallValue(CreateTransferCallToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTransferCall(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TransferCallValue && equalTo((TransferCallValue) other);
+        }
+
+        private boolean equalTo(TransferCallValue other) {
             return value.equals(other.value);
         }
 

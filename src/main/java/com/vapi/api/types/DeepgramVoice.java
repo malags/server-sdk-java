@@ -21,7 +21,11 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DeepgramVoice.Builder.class)
 public final class DeepgramVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final DeepgramVoiceId voiceId;
+
+    private final Optional<DeepgramVoiceModel> model;
 
     private final Optional<Boolean> mipOptOut;
 
@@ -32,16 +36,28 @@ public final class DeepgramVoice {
     private final Map<String, Object> additionalProperties;
 
     private DeepgramVoice(
+            Optional<Boolean> cachingEnabled,
             DeepgramVoiceId voiceId,
+            Optional<DeepgramVoiceModel> model,
             Optional<Boolean> mipOptOut,
             Optional<ChunkPlan> chunkPlan,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
+        this.model = model;
         this.mipOptOut = mipOptOut;
         this.chunkPlan = chunkPlan;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -50,6 +66,14 @@ public final class DeepgramVoice {
     @JsonProperty("voiceId")
     public DeepgramVoiceId getVoiceId() {
         return voiceId;
+    }
+
+    /**
+     * @return This is the model that will be used. Defaults to 'aura-2' when not specified.
+     */
+    @JsonProperty("model")
+    public Optional<DeepgramVoiceModel> getModel() {
+        return model;
     }
 
     /**
@@ -90,7 +114,9 @@ public final class DeepgramVoice {
     }
 
     private boolean equalTo(DeepgramVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
+                && model.equals(other.model)
                 && mipOptOut.equals(other.mipOptOut)
                 && chunkPlan.equals(other.chunkPlan)
                 && fallbackPlan.equals(other.fallbackPlan);
@@ -98,7 +124,8 @@ public final class DeepgramVoice {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.mipOptOut, this.chunkPlan, this.fallbackPlan);
+        return Objects.hash(
+                this.cachingEnabled, this.voiceId, this.model, this.mipOptOut, this.chunkPlan, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -118,6 +145,14 @@ public final class DeepgramVoice {
 
     public interface _FinalStage {
         DeepgramVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
+
+        _FinalStage model(Optional<DeepgramVoiceModel> model);
+
+        _FinalStage model(DeepgramVoiceModel model);
 
         _FinalStage mipOptOut(Optional<Boolean> mipOptOut);
 
@@ -142,6 +177,10 @@ public final class DeepgramVoice {
 
         private Optional<Boolean> mipOptOut = Optional.empty();
 
+        private Optional<DeepgramVoiceModel> model = Optional.empty();
+
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -149,7 +188,9 @@ public final class DeepgramVoice {
 
         @java.lang.Override
         public Builder from(DeepgramVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
+            model(other.getModel());
             mipOptOut(other.getMipOptOut());
             chunkPlan(other.getChunkPlan());
             fallbackPlan(other.getFallbackPlan());
@@ -220,9 +261,44 @@ public final class DeepgramVoice {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used. Defaults to 'aura-2' when not specified.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage model(DeepgramVoiceModel model) {
+            this.model = Optional.ofNullable(model);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "model", nulls = Nulls.SKIP)
+        public _FinalStage model(Optional<DeepgramVoiceModel> model) {
+            this.model = model;
+            return this;
+        }
+
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public DeepgramVoice build() {
-            return new DeepgramVoice(voiceId, mipOptOut, chunkPlan, fallbackPlan, additionalProperties);
+            return new DeepgramVoice(
+                    cachingEnabled, voiceId, model, mipOptOut, chunkPlan, fallbackPlan, additionalProperties);
         }
     }
 }

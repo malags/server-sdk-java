@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FallbackTavusVoice.Builder.class)
 public final class FallbackTavusVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final FallbackTavusVoiceVoiceId voiceId;
 
     private final Optional<String> personaId;
@@ -40,6 +42,7 @@ public final class FallbackTavusVoice {
     private final Map<String, Object> additionalProperties;
 
     private FallbackTavusVoice(
+            Optional<Boolean> cachingEnabled,
             FallbackTavusVoiceVoiceId voiceId,
             Optional<String> personaId,
             Optional<String> callbackUrl,
@@ -49,6 +52,7 @@ public final class FallbackTavusVoice {
             Optional<TavusConversationProperties> properties,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.personaId = personaId;
         this.callbackUrl = callbackUrl;
@@ -58,6 +62,14 @@ public final class FallbackTavusVoice {
         this.properties = properties;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -136,7 +148,8 @@ public final class FallbackTavusVoice {
     }
 
     private boolean equalTo(FallbackTavusVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && personaId.equals(other.personaId)
                 && callbackUrl.equals(other.callbackUrl)
                 && conversationName.equals(other.conversationName)
@@ -149,6 +162,7 @@ public final class FallbackTavusVoice {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cachingEnabled,
                 this.voiceId,
                 this.personaId,
                 this.callbackUrl,
@@ -176,6 +190,10 @@ public final class FallbackTavusVoice {
 
     public interface _FinalStage {
         FallbackTavusVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage personaId(Optional<String> personaId);
 
@@ -224,6 +242,8 @@ public final class FallbackTavusVoice {
 
         private Optional<String> personaId = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -231,6 +251,7 @@ public final class FallbackTavusVoice {
 
         @java.lang.Override
         public Builder from(FallbackTavusVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             personaId(other.getPersonaId());
             callbackUrl(other.getCallbackUrl());
@@ -372,9 +393,27 @@ public final class FallbackTavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public FallbackTavusVoice build() {
             return new FallbackTavusVoice(
+                    cachingEnabled,
                     voiceId,
                     personaId,
                     callbackUrl,

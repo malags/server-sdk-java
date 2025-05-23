@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = File.Builder.class)
 public final class File {
-    private final Optional<String> _object;
+    private final Optional<String> object;
 
     private final Optional<FileStatus> status;
 
@@ -61,7 +61,7 @@ public final class File {
     private final Map<String, Object> additionalProperties;
 
     private File(
-            Optional<String> _object,
+            Optional<String> object,
             Optional<FileStatus> status,
             Optional<String> name,
             Optional<String> originalName,
@@ -80,7 +80,7 @@ public final class File {
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
-        this._object = _object;
+        this.object = object;
         this.status = status;
         this.name = name;
         this.originalName = originalName;
@@ -103,7 +103,7 @@ public final class File {
 
     @JsonProperty("object")
     public Optional<String> getObject() {
-        return _object;
+        return object;
     }
 
     @JsonProperty("status")
@@ -218,7 +218,7 @@ public final class File {
     }
 
     private boolean equalTo(File other) {
-        return _object.equals(other._object)
+        return object.equals(other.object)
                 && status.equals(other.status)
                 && name.equals(other.name)
                 && originalName.equals(other.originalName)
@@ -241,7 +241,7 @@ public final class File {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this._object,
+                this.object,
                 this.status,
                 this.name,
                 this.originalName,
@@ -291,9 +291,9 @@ public final class File {
     public interface _FinalStage {
         File build();
 
-        _FinalStage _object(Optional<String> _object);
+        _FinalStage object(Optional<String> object);
 
-        _FinalStage _object(String _object);
+        _FinalStage object(String object);
 
         _FinalStage status(Optional<FileStatus> status);
 
@@ -384,7 +384,7 @@ public final class File {
 
         private Optional<FileStatus> status = Optional.empty();
 
-        private Optional<String> _object = Optional.empty();
+        private Optional<String> object = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -393,7 +393,7 @@ public final class File {
 
         @java.lang.Override
         public Builder from(File other) {
-            _object(other.getObject());
+            object(other.getObject());
             status(other.getStatus());
             name(other.getName());
             originalName(other.getOriginalName());
@@ -632,22 +632,22 @@ public final class File {
         }
 
         @java.lang.Override
-        public _FinalStage _object(String _object) {
-            this._object = Optional.ofNullable(_object);
+        public _FinalStage object(String object) {
+            this.object = Optional.ofNullable(object);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "object", nulls = Nulls.SKIP)
-        public _FinalStage _object(Optional<String> _object) {
-            this._object = _object;
+        public _FinalStage object(Optional<String> object) {
+            this.object = object;
             return this;
         }
 
         @java.lang.Override
         public File build() {
             return new File(
-                    _object,
+                    object,
                     status,
                     name,
                     originalName,

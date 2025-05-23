@@ -5,12 +5,15 @@ package com.vapi.api.types;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.vapi.api.core.Nullable;
+import com.vapi.api.core.NullableNonemptyFilter;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,14 +36,23 @@ public final class OpenAiMessage {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("content")
+    @JsonIgnore
     public Optional<String> getContent() {
+        if (content == null) {
+            return Optional.empty();
+        }
         return content;
     }
 
     @JsonProperty("role")
     public OpenAiMessageRole getRole() {
         return role;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("content")
+    private Optional<String> _getContent() {
+        return content;
     }
 
     @java.lang.Override
@@ -84,6 +96,8 @@ public final class OpenAiMessage {
         _FinalStage content(Optional<String> content);
 
         _FinalStage content(String content);
+
+        _FinalStage content(Nullable<String> content);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -108,6 +122,18 @@ public final class OpenAiMessage {
         @JsonSetter("role")
         public _FinalStage role(@NotNull OpenAiMessageRole role) {
             this.role = Objects.requireNonNull(role, "role must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage content(Nullable<String> content) {
+            if (content.isNull()) {
+                this.content = null;
+            } else if (content.isEmpty()) {
+                this.content = Optional.empty();
+            } else {
+                this.content = Optional.of(content.get());
+            }
             return this;
         }
 

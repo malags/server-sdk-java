@@ -34,7 +34,7 @@ public final class VapiModel {
 
     private final Optional<String> workflowId;
 
-    private final Optional<Workflow> workflow;
+    private final Optional<WorkflowUserEditable> workflow;
 
     private final String model;
 
@@ -55,7 +55,7 @@ public final class VapiModel {
             Optional<CreateCustomKnowledgeBaseDto> knowledgeBase,
             Optional<String> knowledgeBaseId,
             Optional<String> workflowId,
-            Optional<Workflow> workflow,
+            Optional<WorkflowUserEditable> workflow,
             String model,
             Optional<Double> temperature,
             Optional<Double> maxTokens,
@@ -119,6 +119,11 @@ public final class VapiModel {
         return knowledgeBaseId;
     }
 
+    @JsonProperty("provider")
+    public String getProvider() {
+        return "vapi";
+    }
+
     /**
      * @return This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.
      */
@@ -131,7 +136,7 @@ public final class VapiModel {
      * @return This is the workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.
      */
     @JsonProperty("workflow")
-    public Optional<Workflow> getWorkflow() {
+    public Optional<WorkflowUserEditable> getWorkflow() {
         return workflow;
     }
 
@@ -264,9 +269,9 @@ public final class VapiModel {
 
         _FinalStage workflowId(String workflowId);
 
-        _FinalStage workflow(Optional<Workflow> workflow);
+        _FinalStage workflow(Optional<WorkflowUserEditable> workflow);
 
-        _FinalStage workflow(Workflow workflow);
+        _FinalStage workflow(WorkflowUserEditable workflow);
 
         _FinalStage temperature(Optional<Double> temperature);
 
@@ -297,7 +302,7 @@ public final class VapiModel {
 
         private Optional<Double> temperature = Optional.empty();
 
-        private Optional<Workflow> workflow = Optional.empty();
+        private Optional<WorkflowUserEditable> workflow = Optional.empty();
 
         private Optional<String> workflowId = Optional.empty();
 
@@ -421,14 +426,14 @@ public final class VapiModel {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage workflow(Workflow workflow) {
+        public _FinalStage workflow(WorkflowUserEditable workflow) {
             this.workflow = Optional.ofNullable(workflow);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "workflow", nulls = Nulls.SKIP)
-        public _FinalStage workflow(Optional<Workflow> workflow) {
+        public _FinalStage workflow(Optional<WorkflowUserEditable> workflow) {
             this.workflow = workflow;
             return this;
         }

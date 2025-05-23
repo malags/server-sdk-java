@@ -21,7 +21,11 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateTwilioCredentialDto.Builder.class)
 public final class CreateTwilioCredentialDto {
-    private final String authToken;
+    private final Optional<String> authToken;
+
+    private final Optional<String> apiKey;
+
+    private final Optional<String> apiSecret;
 
     private final String accountSid;
 
@@ -30,8 +34,15 @@ public final class CreateTwilioCredentialDto {
     private final Map<String, Object> additionalProperties;
 
     private CreateTwilioCredentialDto(
-            String authToken, String accountSid, Optional<String> name, Map<String, Object> additionalProperties) {
+            Optional<String> authToken,
+            Optional<String> apiKey,
+            Optional<String> apiSecret,
+            String accountSid,
+            Optional<String> name,
+            Map<String, Object> additionalProperties) {
         this.authToken = authToken;
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
         this.accountSid = accountSid;
         this.name = name;
         this.additionalProperties = additionalProperties;
@@ -41,8 +52,24 @@ public final class CreateTwilioCredentialDto {
      * @return This is not returned in the API.
      */
     @JsonProperty("authToken")
-    public String getAuthToken() {
+    public Optional<String> getAuthToken() {
         return authToken;
+    }
+
+    /**
+     * @return This is not returned in the API.
+     */
+    @JsonProperty("apiKey")
+    public Optional<String> getApiKey() {
+        return apiKey;
+    }
+
+    /**
+     * @return This is not returned in the API.
+     */
+    @JsonProperty("apiSecret")
+    public Optional<String> getApiSecret() {
+        return apiSecret;
     }
 
     @JsonProperty("accountSid")
@@ -70,12 +97,16 @@ public final class CreateTwilioCredentialDto {
     }
 
     private boolean equalTo(CreateTwilioCredentialDto other) {
-        return authToken.equals(other.authToken) && accountSid.equals(other.accountSid) && name.equals(other.name);
+        return authToken.equals(other.authToken)
+                && apiKey.equals(other.apiKey)
+                && apiSecret.equals(other.apiSecret)
+                && accountSid.equals(other.accountSid)
+                && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.authToken, this.accountSid, this.name);
+        return Objects.hash(this.authToken, this.apiKey, this.apiSecret, this.accountSid, this.name);
     }
 
     @java.lang.Override
@@ -83,22 +114,30 @@ public final class CreateTwilioCredentialDto {
         return ObjectMappers.stringify(this);
     }
 
-    public static AuthTokenStage builder() {
+    public static AccountSidStage builder() {
         return new Builder();
-    }
-
-    public interface AuthTokenStage {
-        AccountSidStage authToken(@NotNull String authToken);
-
-        Builder from(CreateTwilioCredentialDto other);
     }
 
     public interface AccountSidStage {
         _FinalStage accountSid(@NotNull String accountSid);
+
+        Builder from(CreateTwilioCredentialDto other);
     }
 
     public interface _FinalStage {
         CreateTwilioCredentialDto build();
+
+        _FinalStage authToken(Optional<String> authToken);
+
+        _FinalStage authToken(String authToken);
+
+        _FinalStage apiKey(Optional<String> apiKey);
+
+        _FinalStage apiKey(String apiKey);
+
+        _FinalStage apiSecret(Optional<String> apiSecret);
+
+        _FinalStage apiSecret(String apiSecret);
 
         _FinalStage name(Optional<String> name);
 
@@ -106,12 +145,16 @@ public final class CreateTwilioCredentialDto {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements AuthTokenStage, AccountSidStage, _FinalStage {
-        private String authToken;
-
+    public static final class Builder implements AccountSidStage, _FinalStage {
         private String accountSid;
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<String> apiSecret = Optional.empty();
+
+        private Optional<String> apiKey = Optional.empty();
+
+        private Optional<String> authToken = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -121,19 +164,10 @@ public final class CreateTwilioCredentialDto {
         @java.lang.Override
         public Builder from(CreateTwilioCredentialDto other) {
             authToken(other.getAuthToken());
+            apiKey(other.getApiKey());
+            apiSecret(other.getApiSecret());
             accountSid(other.getAccountSid());
             name(other.getName());
-            return this;
-        }
-
-        /**
-         * <p>This is not returned in the API.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("authToken")
-        public AccountSidStage authToken(@NotNull String authToken) {
-            this.authToken = Objects.requireNonNull(authToken, "authToken must not be null");
             return this;
         }
 
@@ -161,9 +195,60 @@ public final class CreateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage apiSecret(String apiSecret) {
+            this.apiSecret = Optional.ofNullable(apiSecret);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "apiSecret", nulls = Nulls.SKIP)
+        public _FinalStage apiSecret(Optional<String> apiSecret) {
+            this.apiSecret = apiSecret;
+            return this;
+        }
+
+        /**
+         * <p>This is not returned in the API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public _FinalStage apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        /**
+         * <p>This is not returned in the API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage authToken(String authToken) {
+            this.authToken = Optional.ofNullable(authToken);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "authToken", nulls = Nulls.SKIP)
+        public _FinalStage authToken(Optional<String> authToken) {
+            this.authToken = authToken;
+            return this;
+        }
+
         @java.lang.Override
         public CreateTwilioCredentialDto build() {
-            return new CreateTwilioCredentialDto(authToken, accountSid, name, additionalProperties);
+            return new CreateTwilioCredentialDto(authToken, apiKey, apiSecret, accountSid, name, additionalProperties);
         }
     }
 }

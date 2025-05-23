@@ -9,23 +9,55 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageMetadata.Builder.class)
 public final class ClientMessageMetadata {
+    private final Optional<ClientMessageMetadataPhoneNumber> phoneNumber;
+
+    private final Optional<Double> timestamp;
+
+    private final Optional<Call> call;
+
+    private final Optional<CreateCustomerDto> customer;
+
+    private final Optional<CreateAssistantDto> assistant;
+
     private final String metadata;
 
     private final Map<String, Object> additionalProperties;
 
-    private ClientMessageMetadata(String metadata, Map<String, Object> additionalProperties) {
+    private ClientMessageMetadata(
+            Optional<ClientMessageMetadataPhoneNumber> phoneNumber,
+            Optional<Double> timestamp,
+            Optional<Call> call,
+            Optional<CreateCustomerDto> customer,
+            Optional<CreateAssistantDto> assistant,
+            String metadata,
+            Map<String, Object> additionalProperties) {
+        this.phoneNumber = phoneNumber;
+        this.timestamp = timestamp;
+        this.call = call;
+        this.customer = customer;
+        this.assistant = assistant;
         this.metadata = metadata;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the phone number that the message is associated with.
+     */
+    @JsonProperty("phoneNumber")
+    public Optional<ClientMessageMetadataPhoneNumber> getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
@@ -34,6 +66,38 @@ public final class ClientMessageMetadata {
     @JsonProperty("type")
     public String getType() {
         return "metadata";
+    }
+
+    /**
+     * @return This is the timestamp of the message.
+     */
+    @JsonProperty("timestamp")
+    public Optional<Double> getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * @return This is the call that the message is associated with.
+     */
+    @JsonProperty("call")
+    public Optional<Call> getCall() {
+        return call;
+    }
+
+    /**
+     * @return This is the customer that the message is associated with.
+     */
+    @JsonProperty("customer")
+    public Optional<CreateCustomerDto> getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @return This is the assistant that the message is associated with.
+     */
+    @JsonProperty("assistant")
+    public Optional<CreateAssistantDto> getAssistant() {
+        return assistant;
     }
 
     /**
@@ -56,12 +120,17 @@ public final class ClientMessageMetadata {
     }
 
     private boolean equalTo(ClientMessageMetadata other) {
-        return metadata.equals(other.metadata);
+        return phoneNumber.equals(other.phoneNumber)
+                && timestamp.equals(other.timestamp)
+                && call.equals(other.call)
+                && customer.equals(other.customer)
+                && assistant.equals(other.assistant)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.metadata);
+        return Objects.hash(this.phoneNumber, this.timestamp, this.call, this.customer, this.assistant, this.metadata);
     }
 
     @java.lang.Override
@@ -81,11 +150,41 @@ public final class ClientMessageMetadata {
 
     public interface _FinalStage {
         ClientMessageMetadata build();
+
+        _FinalStage phoneNumber(Optional<ClientMessageMetadataPhoneNumber> phoneNumber);
+
+        _FinalStage phoneNumber(ClientMessageMetadataPhoneNumber phoneNumber);
+
+        _FinalStage timestamp(Optional<Double> timestamp);
+
+        _FinalStage timestamp(Double timestamp);
+
+        _FinalStage call(Optional<Call> call);
+
+        _FinalStage call(Call call);
+
+        _FinalStage customer(Optional<CreateCustomerDto> customer);
+
+        _FinalStage customer(CreateCustomerDto customer);
+
+        _FinalStage assistant(Optional<CreateAssistantDto> assistant);
+
+        _FinalStage assistant(CreateAssistantDto assistant);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MetadataStage, _FinalStage {
         private String metadata;
+
+        private Optional<CreateAssistantDto> assistant = Optional.empty();
+
+        private Optional<CreateCustomerDto> customer = Optional.empty();
+
+        private Optional<Call> call = Optional.empty();
+
+        private Optional<Double> timestamp = Optional.empty();
+
+        private Optional<ClientMessageMetadataPhoneNumber> phoneNumber = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -94,6 +193,11 @@ public final class ClientMessageMetadata {
 
         @java.lang.Override
         public Builder from(ClientMessageMetadata other) {
+            phoneNumber(other.getPhoneNumber());
+            timestamp(other.getTimestamp());
+            call(other.getCall());
+            customer(other.getCustomer());
+            assistant(other.getAssistant());
             metadata(other.getMetadata());
             return this;
         }
@@ -109,9 +213,95 @@ public final class ClientMessageMetadata {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage assistant(CreateAssistantDto assistant) {
+            this.assistant = Optional.ofNullable(assistant);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
+        public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
+            this.assistant = assistant;
+            return this;
+        }
+
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage customer(CreateCustomerDto customer) {
+            this.customer = Optional.ofNullable(customer);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "customer", nulls = Nulls.SKIP)
+        public _FinalStage customer(Optional<CreateCustomerDto> customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage call(Call call) {
+            this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "call", nulls = Nulls.SKIP)
+        public _FinalStage call(Optional<Call> call) {
+            this.call = call;
+            return this;
+        }
+
+        /**
+         * <p>This is the timestamp of the message.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timestamp(Double timestamp) {
+            this.timestamp = Optional.ofNullable(timestamp);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
+        public _FinalStage timestamp(Optional<Double> timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage phoneNumber(ClientMessageMetadataPhoneNumber phoneNumber) {
+            this.phoneNumber = Optional.ofNullable(phoneNumber);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
+        public _FinalStage phoneNumber(Optional<ClientMessageMetadataPhoneNumber> phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
         @java.lang.Override
         public ClientMessageMetadata build() {
-            return new ClientMessageMetadata(metadata, additionalProperties);
+            return new ClientMessageMetadata(
+                    phoneNumber, timestamp, call, customer, assistant, metadata, additionalProperties);
         }
     }
 }

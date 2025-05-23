@@ -29,6 +29,7 @@ public final class ServerMessageResponseMessageResponse {
         return this.value;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T visit(Visitor<T> visitor) {
         if (this.type == 0) {
             return visitor.visit((ServerMessageResponseAssistantRequest) this.value);

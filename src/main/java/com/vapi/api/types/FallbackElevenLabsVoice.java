@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FallbackElevenLabsVoice.Builder.class)
 public final class FallbackElevenLabsVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final FallbackElevenLabsVoiceId voiceId;
 
     private final Optional<Double> stability;
@@ -48,6 +50,7 @@ public final class FallbackElevenLabsVoice {
     private final Map<String, Object> additionalProperties;
 
     private FallbackElevenLabsVoice(
+            Optional<Boolean> cachingEnabled,
             FallbackElevenLabsVoiceId voiceId,
             Optional<Double> stability,
             Optional<Double> similarityBoost,
@@ -61,6 +64,7 @@ public final class FallbackElevenLabsVoice {
             Optional<String> language,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.stability = stability;
         this.similarityBoost = similarityBoost;
@@ -74,6 +78,14 @@ public final class FallbackElevenLabsVoice {
         this.language = language;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -185,7 +197,8 @@ public final class FallbackElevenLabsVoice {
     }
 
     private boolean equalTo(FallbackElevenLabsVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && stability.equals(other.stability)
                 && similarityBoost.equals(other.similarityBoost)
                 && style.equals(other.style)
@@ -202,6 +215,7 @@ public final class FallbackElevenLabsVoice {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cachingEnabled,
                 this.voiceId,
                 this.stability,
                 this.similarityBoost,
@@ -233,6 +247,10 @@ public final class FallbackElevenLabsVoice {
 
     public interface _FinalStage {
         FallbackElevenLabsVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage stability(Optional<Double> stability);
 
@@ -305,6 +323,8 @@ public final class FallbackElevenLabsVoice {
 
         private Optional<Double> stability = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -312,6 +332,7 @@ public final class FallbackElevenLabsVoice {
 
         @java.lang.Override
         public Builder from(FallbackElevenLabsVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             stability(other.getStability());
             similarityBoost(other.getSimilarityBoost());
@@ -526,9 +547,27 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public FallbackElevenLabsVoice build() {
             return new FallbackElevenLabsVoice(
+                    cachingEnabled,
                     voiceId,
                     stability,
                     similarityBoost,

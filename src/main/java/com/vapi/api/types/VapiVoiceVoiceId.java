@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum VapiVoiceVoiceId {
     ELLIOT("Elliot"),
 
+    KYLIE("Kylie"),
+
     ROHAN("Rohan"),
 
     LILY("Lily"),

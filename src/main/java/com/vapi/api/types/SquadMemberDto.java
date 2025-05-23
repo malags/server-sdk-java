@@ -5,12 +5,15 @@ package com.vapi.api.types;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.vapi.api.core.Nullable;
+import com.vapi.api.core.NullableNonemptyFilter;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +50,11 @@ public final class SquadMemberDto {
     /**
      * @return This is the assistant that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.
      */
-    @JsonProperty("assistantId")
+    @JsonIgnore
     public Optional<String> getAssistantId() {
+        if (assistantId == null) {
+            return Optional.empty();
+        }
         return assistantId;
     }
 
@@ -75,6 +81,12 @@ public final class SquadMemberDto {
     @JsonProperty("assistantDestinations")
     public Optional<List<TransferDestinationAssistant>> getAssistantDestinations() {
         return assistantDestinations;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("assistantId")
+    private Optional<String> _getAssistantId() {
+        return assistantId;
     }
 
     @java.lang.Override
@@ -140,6 +152,17 @@ public final class SquadMemberDto {
 
         public Builder assistantId(String assistantId) {
             this.assistantId = Optional.ofNullable(assistantId);
+            return this;
+        }
+
+        public Builder assistantId(Nullable<String> assistantId) {
+            if (assistantId.isNull()) {
+                this.assistantId = null;
+            } else if (assistantId.isEmpty()) {
+                this.assistantId = Optional.empty();
+            } else {
+                this.assistantId = Optional.of(assistantId.get());
+            }
             return this;
         }
 

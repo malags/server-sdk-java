@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,9 +23,15 @@ import java.util.Optional;
 public final class UpdateTwilioPhoneNumberDto {
     private final Optional<UpdateTwilioPhoneNumberDtoFallbackDestination> fallbackDestination;
 
+    private final Optional<List<PhoneNumberHookCallRinging>> hooks;
+
+    private final Optional<Boolean> smsEnabled;
+
     private final Optional<String> name;
 
     private final Optional<String> assistantId;
+
+    private final Optional<String> workflowId;
 
     private final Optional<String> squadId;
 
@@ -36,26 +43,40 @@ public final class UpdateTwilioPhoneNumberDto {
 
     private final Optional<String> twilioAuthToken;
 
+    private final Optional<String> twilioApiKey;
+
+    private final Optional<String> twilioApiSecret;
+
     private final Map<String, Object> additionalProperties;
 
     private UpdateTwilioPhoneNumberDto(
             Optional<UpdateTwilioPhoneNumberDtoFallbackDestination> fallbackDestination,
+            Optional<List<PhoneNumberHookCallRinging>> hooks,
+            Optional<Boolean> smsEnabled,
             Optional<String> name,
             Optional<String> assistantId,
+            Optional<String> workflowId,
             Optional<String> squadId,
             Optional<Server> server,
             Optional<String> number,
             Optional<String> twilioAccountSid,
             Optional<String> twilioAuthToken,
+            Optional<String> twilioApiKey,
+            Optional<String> twilioApiSecret,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
+        this.hooks = hooks;
+        this.smsEnabled = smsEnabled;
         this.name = name;
         this.assistantId = assistantId;
+        this.workflowId = workflowId;
         this.squadId = squadId;
         this.server = server;
         this.number = number;
         this.twilioAccountSid = twilioAccountSid;
         this.twilioAuthToken = twilioAuthToken;
+        this.twilioApiKey = twilioApiKey;
+        this.twilioApiSecret = twilioApiSecret;
         this.additionalProperties = additionalProperties;
     }
 
@@ -74,6 +95,25 @@ public final class UpdateTwilioPhoneNumberDto {
     }
 
     /**
+     * @return This is the hooks that will be used for incoming calls to this phone number.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<PhoneNumberHookCallRinging>> getHooks() {
+        return hooks;
+    }
+
+    /**
+     * @return Controls whether Vapi sets the messaging webhook URL on the Twilio number during import.
+     * <p>If set to <code>false</code>, Vapi will not update the Twilio messaging URL, leaving it as is.
+     * If <code>true</code> or omitted (default), Vapi will configure both the voice and messaging URLs.</p>
+     * <p>@default true</p>
+     */
+    @JsonProperty("smsEnabled")
+    public Optional<Boolean> getSmsEnabled() {
+        return smsEnabled;
+    }
+
+    /**
      * @return This is the name of the phone number. This is just for your own reference.
      */
     @JsonProperty("name")
@@ -83,7 +123,7 @@ public final class UpdateTwilioPhoneNumberDto {
 
     /**
      * @return This is the assistant that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
@@ -91,8 +131,17 @@ public final class UpdateTwilioPhoneNumberDto {
     }
 
     /**
+     * @return This is the workflow that will be used for incoming calls to this phone number.
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     */
+    @JsonProperty("workflowId")
+    public Optional<String> getWorkflowId() {
+        return workflowId;
+    }
+
+    /**
      * @return This is the squad that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("squadId")
     public Optional<String> getSquadId() {
@@ -137,6 +186,22 @@ public final class UpdateTwilioPhoneNumberDto {
         return twilioAuthToken;
     }
 
+    /**
+     * @return This is the Twilio API Key for the phone number.
+     */
+    @JsonProperty("twilioApiKey")
+    public Optional<String> getTwilioApiKey() {
+        return twilioApiKey;
+    }
+
+    /**
+     * @return This is the Twilio API Secret for the phone number.
+     */
+    @JsonProperty("twilioApiSecret")
+    public Optional<String> getTwilioApiSecret() {
+        return twilioApiSecret;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -150,26 +215,36 @@ public final class UpdateTwilioPhoneNumberDto {
 
     private boolean equalTo(UpdateTwilioPhoneNumberDto other) {
         return fallbackDestination.equals(other.fallbackDestination)
+                && hooks.equals(other.hooks)
+                && smsEnabled.equals(other.smsEnabled)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
+                && workflowId.equals(other.workflowId)
                 && squadId.equals(other.squadId)
                 && server.equals(other.server)
                 && number.equals(other.number)
                 && twilioAccountSid.equals(other.twilioAccountSid)
-                && twilioAuthToken.equals(other.twilioAuthToken);
+                && twilioAuthToken.equals(other.twilioAuthToken)
+                && twilioApiKey.equals(other.twilioApiKey)
+                && twilioApiSecret.equals(other.twilioApiSecret);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
                 this.fallbackDestination,
+                this.hooks,
+                this.smsEnabled,
                 this.name,
                 this.assistantId,
+                this.workflowId,
                 this.squadId,
                 this.server,
                 this.number,
                 this.twilioAccountSid,
-                this.twilioAuthToken);
+                this.twilioAuthToken,
+                this.twilioApiKey,
+                this.twilioApiSecret);
     }
 
     @java.lang.Override
@@ -185,9 +260,15 @@ public final class UpdateTwilioPhoneNumberDto {
     public static final class Builder {
         private Optional<UpdateTwilioPhoneNumberDtoFallbackDestination> fallbackDestination = Optional.empty();
 
+        private Optional<List<PhoneNumberHookCallRinging>> hooks = Optional.empty();
+
+        private Optional<Boolean> smsEnabled = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<String> assistantId = Optional.empty();
+
+        private Optional<String> workflowId = Optional.empty();
 
         private Optional<String> squadId = Optional.empty();
 
@@ -199,6 +280,10 @@ public final class UpdateTwilioPhoneNumberDto {
 
         private Optional<String> twilioAuthToken = Optional.empty();
 
+        private Optional<String> twilioApiKey = Optional.empty();
+
+        private Optional<String> twilioApiSecret = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -206,13 +291,18 @@ public final class UpdateTwilioPhoneNumberDto {
 
         public Builder from(UpdateTwilioPhoneNumberDto other) {
             fallbackDestination(other.getFallbackDestination());
+            hooks(other.getHooks());
+            smsEnabled(other.getSmsEnabled());
             name(other.getName());
             assistantId(other.getAssistantId());
+            workflowId(other.getWorkflowId());
             squadId(other.getSquadId());
             server(other.getServer());
             number(other.getNumber());
             twilioAccountSid(other.getTwilioAccountSid());
             twilioAuthToken(other.getTwilioAuthToken());
+            twilioApiKey(other.getTwilioApiKey());
+            twilioApiSecret(other.getTwilioApiSecret());
             return this;
         }
 
@@ -225,6 +315,28 @@ public final class UpdateTwilioPhoneNumberDto {
 
         public Builder fallbackDestination(UpdateTwilioPhoneNumberDtoFallbackDestination fallbackDestination) {
             this.fallbackDestination = Optional.ofNullable(fallbackDestination);
+            return this;
+        }
+
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public Builder hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        public Builder hooks(List<PhoneNumberHookCallRinging> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
+        @JsonSetter(value = "smsEnabled", nulls = Nulls.SKIP)
+        public Builder smsEnabled(Optional<Boolean> smsEnabled) {
+            this.smsEnabled = smsEnabled;
+            return this;
+        }
+
+        public Builder smsEnabled(Boolean smsEnabled) {
+            this.smsEnabled = Optional.ofNullable(smsEnabled);
             return this;
         }
 
@@ -247,6 +359,17 @@ public final class UpdateTwilioPhoneNumberDto {
 
         public Builder assistantId(String assistantId) {
             this.assistantId = Optional.ofNullable(assistantId);
+            return this;
+        }
+
+        @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
+        public Builder workflowId(Optional<String> workflowId) {
+            this.workflowId = workflowId;
+            return this;
+        }
+
+        public Builder workflowId(String workflowId) {
+            this.workflowId = Optional.ofNullable(workflowId);
             return this;
         }
 
@@ -305,16 +428,43 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        @JsonSetter(value = "twilioApiKey", nulls = Nulls.SKIP)
+        public Builder twilioApiKey(Optional<String> twilioApiKey) {
+            this.twilioApiKey = twilioApiKey;
+            return this;
+        }
+
+        public Builder twilioApiKey(String twilioApiKey) {
+            this.twilioApiKey = Optional.ofNullable(twilioApiKey);
+            return this;
+        }
+
+        @JsonSetter(value = "twilioApiSecret", nulls = Nulls.SKIP)
+        public Builder twilioApiSecret(Optional<String> twilioApiSecret) {
+            this.twilioApiSecret = twilioApiSecret;
+            return this;
+        }
+
+        public Builder twilioApiSecret(String twilioApiSecret) {
+            this.twilioApiSecret = Optional.ofNullable(twilioApiSecret);
+            return this;
+        }
+
         public UpdateTwilioPhoneNumberDto build() {
             return new UpdateTwilioPhoneNumberDto(
                     fallbackDestination,
+                    hooks,
+                    smsEnabled,
                     name,
                     assistantId,
+                    workflowId,
                     squadId,
                     server,
                     number,
                     twilioAccountSid,
                     twilioAuthToken,
+                    twilioApiKey,
+                    twilioApiSecret,
                     additionalProperties);
         }
     }

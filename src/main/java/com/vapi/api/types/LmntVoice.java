@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = LmntVoice.Builder.class)
 public final class LmntVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final LmntVoiceId voiceId;
 
     private final Optional<Double> speed;
@@ -32,16 +34,26 @@ public final class LmntVoice {
     private final Map<String, Object> additionalProperties;
 
     private LmntVoice(
+            Optional<Boolean> cachingEnabled,
             LmntVoiceId voiceId,
             Optional<Double> speed,
             Optional<ChunkPlan> chunkPlan,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.speed = speed;
         this.chunkPlan = chunkPlan;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -88,7 +100,8 @@ public final class LmntVoice {
     }
 
     private boolean equalTo(LmntVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && speed.equals(other.speed)
                 && chunkPlan.equals(other.chunkPlan)
                 && fallbackPlan.equals(other.fallbackPlan);
@@ -96,7 +109,7 @@ public final class LmntVoice {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.speed, this.chunkPlan, this.fallbackPlan);
+        return Objects.hash(this.cachingEnabled, this.voiceId, this.speed, this.chunkPlan, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -116,6 +129,10 @@ public final class LmntVoice {
 
     public interface _FinalStage {
         LmntVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage speed(Optional<Double> speed);
 
@@ -140,6 +157,8 @@ public final class LmntVoice {
 
         private Optional<Double> speed = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -147,6 +166,7 @@ public final class LmntVoice {
 
         @java.lang.Override
         public Builder from(LmntVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             speed(other.getSpeed());
             chunkPlan(other.getChunkPlan());
@@ -216,9 +236,26 @@ public final class LmntVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public LmntVoice build() {
-            return new LmntVoice(voiceId, speed, chunkPlan, fallbackPlan, additionalProperties);
+            return new LmntVoice(cachingEnabled, voiceId, speed, chunkPlan, fallbackPlan, additionalProperties);
         }
     }
 }

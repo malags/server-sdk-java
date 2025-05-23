@@ -57,6 +57,8 @@ public final class Assistant {
 
     private final Optional<List<AssistantCredentialsItem>> credentials;
 
+    private final Optional<List<AssistantHooksItem>> hooks;
+
     private final Optional<String> name;
 
     private final Optional<String> voicemailMessage;
@@ -84,8 +86,6 @@ public final class Assistant {
     private final Optional<List<String>> credentialIds;
 
     private final Optional<Server> server;
-
-    private final Optional<List<AssistantHooks>> hooks;
 
     private final Optional<KeypadInputPlan> keypadInputPlan;
 
@@ -117,6 +117,7 @@ public final class Assistant {
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
             Optional<LangfuseObservabilityPlan> observabilityPlan,
             Optional<List<AssistantCredentialsItem>> credentials,
+            Optional<List<AssistantHooksItem>> hooks,
             Optional<String> name,
             Optional<String> voicemailMessage,
             Optional<String> endCallMessage,
@@ -131,7 +132,6 @@ public final class Assistant {
             Optional<MonitorPlan> monitorPlan,
             Optional<List<String>> credentialIds,
             Optional<Server> server,
-            Optional<List<AssistantHooks>> hooks,
             Optional<KeypadInputPlan> keypadInputPlan,
             String id,
             String orgId,
@@ -155,6 +155,7 @@ public final class Assistant {
         this.transportConfigurations = transportConfigurations;
         this.observabilityPlan = observabilityPlan;
         this.credentials = credentials;
+        this.hooks = hooks;
         this.name = name;
         this.voicemailMessage = voicemailMessage;
         this.endCallMessage = endCallMessage;
@@ -169,7 +170,6 @@ public final class Assistant {
         this.monitorPlan = monitorPlan;
         this.credentialIds = credentialIds;
         this.server = server;
-        this.hooks = hooks;
         this.keypadInputPlan = keypadInputPlan;
         this.id = id;
         this.orgId = orgId;
@@ -330,6 +330,14 @@ public final class Assistant {
     }
 
     /**
+     * @return This is a set of actions that will be performed on certain events.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<AssistantHooksItem>> getHooks() {
+        return hooks;
+    }
+
+    /**
      * @return This is the name of the assistant.
      * <p>This is required when you want to transfer between assistants in a call.</p>
      */
@@ -469,14 +477,6 @@ public final class Assistant {
         return server;
     }
 
-    /**
-     * @return This is a set of actions that will be performed on certain events.
-     */
-    @JsonProperty("hooks")
-    public Optional<List<AssistantHooks>> getHooks() {
-        return hooks;
-    }
-
     @JsonProperty("keypadInputPlan")
     public Optional<KeypadInputPlan> getKeypadInputPlan() {
         return keypadInputPlan;
@@ -543,6 +543,7 @@ public final class Assistant {
                 && transportConfigurations.equals(other.transportConfigurations)
                 && observabilityPlan.equals(other.observabilityPlan)
                 && credentials.equals(other.credentials)
+                && hooks.equals(other.hooks)
                 && name.equals(other.name)
                 && voicemailMessage.equals(other.voicemailMessage)
                 && endCallMessage.equals(other.endCallMessage)
@@ -557,7 +558,6 @@ public final class Assistant {
                 && monitorPlan.equals(other.monitorPlan)
                 && credentialIds.equals(other.credentialIds)
                 && server.equals(other.server)
-                && hooks.equals(other.hooks)
                 && keypadInputPlan.equals(other.keypadInputPlan)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
@@ -585,6 +585,7 @@ public final class Assistant {
                 this.transportConfigurations,
                 this.observabilityPlan,
                 this.credentials,
+                this.hooks,
                 this.name,
                 this.voicemailMessage,
                 this.endCallMessage,
@@ -599,7 +600,6 @@ public final class Assistant {
                 this.monitorPlan,
                 this.credentialIds,
                 this.server,
-                this.hooks,
                 this.keypadInputPlan,
                 this.id,
                 this.orgId,
@@ -705,6 +705,10 @@ public final class Assistant {
 
         _FinalStage credentials(List<AssistantCredentialsItem> credentials);
 
+        _FinalStage hooks(Optional<List<AssistantHooksItem>> hooks);
+
+        _FinalStage hooks(List<AssistantHooksItem> hooks);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -761,10 +765,6 @@ public final class Assistant {
 
         _FinalStage server(Server server);
 
-        _FinalStage hooks(Optional<List<AssistantHooks>> hooks);
-
-        _FinalStage hooks(List<AssistantHooks> hooks);
-
         _FinalStage keypadInputPlan(Optional<KeypadInputPlan> keypadInputPlan);
 
         _FinalStage keypadInputPlan(KeypadInputPlan keypadInputPlan);
@@ -781,8 +781,6 @@ public final class Assistant {
         private OffsetDateTime updatedAt;
 
         private Optional<KeypadInputPlan> keypadInputPlan = Optional.empty();
-
-        private Optional<List<AssistantHooks>> hooks = Optional.empty();
 
         private Optional<Server> server = Optional.empty();
 
@@ -811,6 +809,8 @@ public final class Assistant {
         private Optional<String> voicemailMessage = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<List<AssistantHooksItem>> hooks = Optional.empty();
 
         private Optional<List<AssistantCredentialsItem>> credentials = Optional.empty();
 
@@ -870,6 +870,7 @@ public final class Assistant {
             transportConfigurations(other.getTransportConfigurations());
             observabilityPlan(other.getObservabilityPlan());
             credentials(other.getCredentials());
+            hooks(other.getHooks());
             name(other.getName());
             voicemailMessage(other.getVoicemailMessage());
             endCallMessage(other.getEndCallMessage());
@@ -884,7 +885,6 @@ public final class Assistant {
             monitorPlan(other.getMonitorPlan());
             credentialIds(other.getCredentialIds());
             server(other.getServer());
-            hooks(other.getHooks());
             keypadInputPlan(other.getKeypadInputPlan());
             id(other.getId());
             orgId(other.getOrgId());
@@ -947,23 +947,6 @@ public final class Assistant {
         @JsonSetter(value = "keypadInputPlan", nulls = Nulls.SKIP)
         public _FinalStage keypadInputPlan(Optional<KeypadInputPlan> keypadInputPlan) {
             this.keypadInputPlan = keypadInputPlan;
-            return this;
-        }
-
-        /**
-         * <p>This is a set of actions that will be performed on certain events.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage hooks(List<AssistantHooks> hooks) {
-            this.hooks = Optional.ofNullable(hooks);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
-        public _FinalStage hooks(Optional<List<AssistantHooks>> hooks) {
-            this.hooks = hooks;
             return this;
         }
 
@@ -1229,6 +1212,23 @@ public final class Assistant {
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
             this.name = name;
+            return this;
+        }
+
+        /**
+         * <p>This is a set of actions that will be performed on certain events.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage hooks(List<AssistantHooksItem> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public _FinalStage hooks(Optional<List<AssistantHooksItem>> hooks) {
+            this.hooks = hooks;
             return this;
         }
 
@@ -1556,6 +1556,7 @@ public final class Assistant {
                     transportConfigurations,
                     observabilityPlan,
                     credentials,
+                    hooks,
                     name,
                     voicemailMessage,
                     endCallMessage,
@@ -1570,7 +1571,6 @@ public final class Assistant {
                     monitorPlan,
                     credentialIds,
                     server,
-                    hooks,
                     keypadInputPlan,
                     id,
                     orgId,

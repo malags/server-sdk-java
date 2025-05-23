@@ -46,6 +46,8 @@ public final class Org {
 
     private final Optional<OrgPlan> plan;
 
+    private final Optional<String> jwtSecret;
+
     private final Optional<String> name;
 
     private final Optional<OrgChannel> channel;
@@ -73,6 +75,7 @@ public final class Org {
             Optional<OffsetDateTime> stripeSubscriptionCurrentPeriodStart,
             Optional<String> stripeSubscriptionStatus,
             Optional<OrgPlan> plan,
+            Optional<String> jwtSecret,
             Optional<String> name,
             Optional<OrgChannel> channel,
             Optional<Double> billingLimit,
@@ -92,6 +95,7 @@ public final class Org {
         this.stripeSubscriptionCurrentPeriodStart = stripeSubscriptionCurrentPeriodStart;
         this.stripeSubscriptionStatus = stripeSubscriptionStatus;
         this.plan = plan;
+        this.jwtSecret = jwtSecret;
         this.name = name;
         this.channel = channel;
         this.billingLimit = billingLimit;
@@ -197,6 +201,14 @@ public final class Org {
     }
 
     /**
+     * @return This is the secret key used for signing JWT tokens for the org.
+     */
+    @JsonProperty("jwtSecret")
+    public Optional<String> getJwtSecret() {
+        return jwtSecret;
+    }
+
+    /**
      * @return This is the name of the org. This is just for your own reference.
      */
     @JsonProperty("name")
@@ -279,6 +291,7 @@ public final class Org {
                 && stripeSubscriptionCurrentPeriodStart.equals(other.stripeSubscriptionCurrentPeriodStart)
                 && stripeSubscriptionStatus.equals(other.stripeSubscriptionStatus)
                 && plan.equals(other.plan)
+                && jwtSecret.equals(other.jwtSecret)
                 && name.equals(other.name)
                 && channel.equals(other.channel)
                 && billingLimit.equals(other.billingLimit)
@@ -302,6 +315,7 @@ public final class Org {
                 this.stripeSubscriptionCurrentPeriodStart,
                 this.stripeSubscriptionStatus,
                 this.plan,
+                this.jwtSecret,
                 this.name,
                 this.channel,
                 this.billingLimit,
@@ -372,6 +386,10 @@ public final class Org {
 
         _FinalStage plan(OrgPlan plan);
 
+        _FinalStage jwtSecret(Optional<String> jwtSecret);
+
+        _FinalStage jwtSecret(String jwtSecret);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -417,6 +435,8 @@ public final class Org {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<String> jwtSecret = Optional.empty();
+
         private Optional<OrgPlan> plan = Optional.empty();
 
         private Optional<String> stripeSubscriptionStatus = Optional.empty();
@@ -454,6 +474,7 @@ public final class Org {
             stripeSubscriptionCurrentPeriodStart(other.getStripeSubscriptionCurrentPeriodStart());
             stripeSubscriptionStatus(other.getStripeSubscriptionStatus());
             plan(other.getPlan());
+            jwtSecret(other.getJwtSecret());
             name(other.getName());
             channel(other.getChannel());
             billingLimit(other.getBillingLimit());
@@ -606,6 +627,23 @@ public final class Org {
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
             this.name = name;
+            return this;
+        }
+
+        /**
+         * <p>This is the secret key used for signing JWT tokens for the org.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage jwtSecret(String jwtSecret) {
+            this.jwtSecret = Optional.ofNullable(jwtSecret);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "jwtSecret", nulls = Nulls.SKIP)
+        public _FinalStage jwtSecret(Optional<String> jwtSecret) {
+            this.jwtSecret = jwtSecret;
             return this;
         }
 
@@ -776,6 +814,7 @@ public final class Org {
                     stripeSubscriptionCurrentPeriodStart,
                     stripeSubscriptionStatus,
                     plan,
+                    jwtSecret,
                     name,
                     channel,
                     billingLimit,

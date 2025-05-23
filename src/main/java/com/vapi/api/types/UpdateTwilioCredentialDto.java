@@ -22,6 +22,10 @@ import java.util.Optional;
 public final class UpdateTwilioCredentialDto {
     private final Optional<String> authToken;
 
+    private final Optional<String> apiKey;
+
+    private final Optional<String> apiSecret;
+
     private final Optional<String> name;
 
     private final Optional<String> accountSid;
@@ -30,10 +34,14 @@ public final class UpdateTwilioCredentialDto {
 
     private UpdateTwilioCredentialDto(
             Optional<String> authToken,
+            Optional<String> apiKey,
+            Optional<String> apiSecret,
             Optional<String> name,
             Optional<String> accountSid,
             Map<String, Object> additionalProperties) {
         this.authToken = authToken;
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
         this.name = name;
         this.accountSid = accountSid;
         this.additionalProperties = additionalProperties;
@@ -45,6 +53,22 @@ public final class UpdateTwilioCredentialDto {
     @JsonProperty("authToken")
     public Optional<String> getAuthToken() {
         return authToken;
+    }
+
+    /**
+     * @return This is not returned in the API.
+     */
+    @JsonProperty("apiKey")
+    public Optional<String> getApiKey() {
+        return apiKey;
+    }
+
+    /**
+     * @return This is not returned in the API.
+     */
+    @JsonProperty("apiSecret")
+    public Optional<String> getApiSecret() {
+        return apiSecret;
     }
 
     /**
@@ -72,12 +96,16 @@ public final class UpdateTwilioCredentialDto {
     }
 
     private boolean equalTo(UpdateTwilioCredentialDto other) {
-        return authToken.equals(other.authToken) && name.equals(other.name) && accountSid.equals(other.accountSid);
+        return authToken.equals(other.authToken)
+                && apiKey.equals(other.apiKey)
+                && apiSecret.equals(other.apiSecret)
+                && name.equals(other.name)
+                && accountSid.equals(other.accountSid);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.authToken, this.name, this.accountSid);
+        return Objects.hash(this.authToken, this.apiKey, this.apiSecret, this.name, this.accountSid);
     }
 
     @java.lang.Override
@@ -93,6 +121,10 @@ public final class UpdateTwilioCredentialDto {
     public static final class Builder {
         private Optional<String> authToken = Optional.empty();
 
+        private Optional<String> apiKey = Optional.empty();
+
+        private Optional<String> apiSecret = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<String> accountSid = Optional.empty();
@@ -104,6 +136,8 @@ public final class UpdateTwilioCredentialDto {
 
         public Builder from(UpdateTwilioCredentialDto other) {
             authToken(other.getAuthToken());
+            apiKey(other.getApiKey());
+            apiSecret(other.getApiSecret());
             name(other.getName());
             accountSid(other.getAccountSid());
             return this;
@@ -117,6 +151,28 @@ public final class UpdateTwilioCredentialDto {
 
         public Builder authToken(String authToken) {
             this.authToken = Optional.ofNullable(authToken);
+            return this;
+        }
+
+        @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
+        public Builder apiKey(Optional<String> apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Optional.ofNullable(apiKey);
+            return this;
+        }
+
+        @JsonSetter(value = "apiSecret", nulls = Nulls.SKIP)
+        public Builder apiSecret(Optional<String> apiSecret) {
+            this.apiSecret = apiSecret;
+            return this;
+        }
+
+        public Builder apiSecret(String apiSecret) {
+            this.apiSecret = Optional.ofNullable(apiSecret);
             return this;
         }
 
@@ -143,7 +199,7 @@ public final class UpdateTwilioCredentialDto {
         }
 
         public UpdateTwilioCredentialDto build() {
-            return new UpdateTwilioCredentialDto(authToken, name, accountSid, additionalProperties);
+            return new UpdateTwilioCredentialDto(authToken, apiKey, apiSecret, name, accountSid, additionalProperties);
         }
     }
 }

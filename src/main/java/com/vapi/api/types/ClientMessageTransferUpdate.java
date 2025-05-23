@@ -20,7 +20,17 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageTransferUpdate.Builder.class)
 public final class ClientMessageTransferUpdate {
+    private final Optional<ClientMessageTransferUpdatePhoneNumber> phoneNumber;
+
     private final Optional<ClientMessageTransferUpdateDestination> destination;
+
+    private final Optional<Double> timestamp;
+
+    private final Optional<Call> call;
+
+    private final Optional<CreateCustomerDto> customer;
+
+    private final Optional<CreateAssistantDto> assistant;
 
     private final Optional<CreateAssistantDto> toAssistant;
 
@@ -33,18 +43,36 @@ public final class ClientMessageTransferUpdate {
     private final Map<String, Object> additionalProperties;
 
     private ClientMessageTransferUpdate(
+            Optional<ClientMessageTransferUpdatePhoneNumber> phoneNumber,
             Optional<ClientMessageTransferUpdateDestination> destination,
+            Optional<Double> timestamp,
+            Optional<Call> call,
+            Optional<CreateCustomerDto> customer,
+            Optional<CreateAssistantDto> assistant,
             Optional<CreateAssistantDto> toAssistant,
             Optional<CreateAssistantDto> fromAssistant,
             Optional<Map<String, Object>> toStepRecord,
             Optional<Map<String, Object>> fromStepRecord,
             Map<String, Object> additionalProperties) {
+        this.phoneNumber = phoneNumber;
         this.destination = destination;
+        this.timestamp = timestamp;
+        this.call = call;
+        this.customer = customer;
+        this.assistant = assistant;
         this.toAssistant = toAssistant;
         this.fromAssistant = fromAssistant;
         this.toStepRecord = toStepRecord;
         this.fromStepRecord = fromStepRecord;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the phone number that the message is associated with.
+     */
+    @JsonProperty("phoneNumber")
+    public Optional<ClientMessageTransferUpdatePhoneNumber> getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
@@ -61,6 +89,38 @@ public final class ClientMessageTransferUpdate {
     @JsonProperty("destination")
     public Optional<ClientMessageTransferUpdateDestination> getDestination() {
         return destination;
+    }
+
+    /**
+     * @return This is the timestamp of the message.
+     */
+    @JsonProperty("timestamp")
+    public Optional<Double> getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * @return This is the call that the message is associated with.
+     */
+    @JsonProperty("call")
+    public Optional<Call> getCall() {
+        return call;
+    }
+
+    /**
+     * @return This is the customer that the message is associated with.
+     */
+    @JsonProperty("customer")
+    public Optional<CreateCustomerDto> getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @return This is the assistant that the message is associated with.
+     */
+    @JsonProperty("assistant")
+    public Optional<CreateAssistantDto> getAssistant() {
+        return assistant;
     }
 
     /**
@@ -107,7 +167,12 @@ public final class ClientMessageTransferUpdate {
     }
 
     private boolean equalTo(ClientMessageTransferUpdate other) {
-        return destination.equals(other.destination)
+        return phoneNumber.equals(other.phoneNumber)
+                && destination.equals(other.destination)
+                && timestamp.equals(other.timestamp)
+                && call.equals(other.call)
+                && customer.equals(other.customer)
+                && assistant.equals(other.assistant)
                 && toAssistant.equals(other.toAssistant)
                 && fromAssistant.equals(other.fromAssistant)
                 && toStepRecord.equals(other.toStepRecord)
@@ -117,7 +182,16 @@ public final class ClientMessageTransferUpdate {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.destination, this.toAssistant, this.fromAssistant, this.toStepRecord, this.fromStepRecord);
+                this.phoneNumber,
+                this.destination,
+                this.timestamp,
+                this.call,
+                this.customer,
+                this.assistant,
+                this.toAssistant,
+                this.fromAssistant,
+                this.toStepRecord,
+                this.fromStepRecord);
     }
 
     @java.lang.Override
@@ -131,7 +205,17 @@ public final class ClientMessageTransferUpdate {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<ClientMessageTransferUpdatePhoneNumber> phoneNumber = Optional.empty();
+
         private Optional<ClientMessageTransferUpdateDestination> destination = Optional.empty();
+
+        private Optional<Double> timestamp = Optional.empty();
+
+        private Optional<Call> call = Optional.empty();
+
+        private Optional<CreateCustomerDto> customer = Optional.empty();
+
+        private Optional<CreateAssistantDto> assistant = Optional.empty();
 
         private Optional<CreateAssistantDto> toAssistant = Optional.empty();
 
@@ -147,11 +231,27 @@ public final class ClientMessageTransferUpdate {
         private Builder() {}
 
         public Builder from(ClientMessageTransferUpdate other) {
+            phoneNumber(other.getPhoneNumber());
             destination(other.getDestination());
+            timestamp(other.getTimestamp());
+            call(other.getCall());
+            customer(other.getCustomer());
+            assistant(other.getAssistant());
             toAssistant(other.getToAssistant());
             fromAssistant(other.getFromAssistant());
             toStepRecord(other.getToStepRecord());
             fromStepRecord(other.getFromStepRecord());
+            return this;
+        }
+
+        @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
+        public Builder phoneNumber(Optional<ClientMessageTransferUpdatePhoneNumber> phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Builder phoneNumber(ClientMessageTransferUpdatePhoneNumber phoneNumber) {
+            this.phoneNumber = Optional.ofNullable(phoneNumber);
             return this;
         }
 
@@ -163,6 +263,50 @@ public final class ClientMessageTransferUpdate {
 
         public Builder destination(ClientMessageTransferUpdateDestination destination) {
             this.destination = Optional.ofNullable(destination);
+            return this;
+        }
+
+        @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
+        public Builder timestamp(Optional<Double> timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public Builder timestamp(Double timestamp) {
+            this.timestamp = Optional.ofNullable(timestamp);
+            return this;
+        }
+
+        @JsonSetter(value = "call", nulls = Nulls.SKIP)
+        public Builder call(Optional<Call> call) {
+            this.call = call;
+            return this;
+        }
+
+        public Builder call(Call call) {
+            this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        @JsonSetter(value = "customer", nulls = Nulls.SKIP)
+        public Builder customer(Optional<CreateCustomerDto> customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        public Builder customer(CreateCustomerDto customer) {
+            this.customer = Optional.ofNullable(customer);
+            return this;
+        }
+
+        @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
+        public Builder assistant(Optional<CreateAssistantDto> assistant) {
+            this.assistant = assistant;
+            return this;
+        }
+
+        public Builder assistant(CreateAssistantDto assistant) {
+            this.assistant = Optional.ofNullable(assistant);
             return this;
         }
 
@@ -212,7 +356,17 @@ public final class ClientMessageTransferUpdate {
 
         public ClientMessageTransferUpdate build() {
             return new ClientMessageTransferUpdate(
-                    destination, toAssistant, fromAssistant, toStepRecord, fromStepRecord, additionalProperties);
+                    phoneNumber,
+                    destination,
+                    timestamp,
+                    call,
+                    customer,
+                    assistant,
+                    toAssistant,
+                    fromAssistant,
+                    toStepRecord,
+                    fromStepRecord,
+                    additionalProperties);
         }
     }
 }

@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ToolCallResult.Builder.class)
 public final class ToolCallResult {
-    private final Optional<List<ToolCallResultMessageItem>> message;
+    private final Optional<ToolCallResultMessage> message;
 
     private final String name;
 
@@ -32,20 +31,24 @@ public final class ToolCallResult {
 
     private final Optional<String> error;
 
+    private final Optional<Map<String, Object>> metadata;
+
     private final Map<String, Object> additionalProperties;
 
     private ToolCallResult(
-            Optional<List<ToolCallResultMessageItem>> message,
+            Optional<ToolCallResultMessage> message,
             String name,
             String toolCallId,
             Optional<String> result,
             Optional<String> error,
+            Optional<Map<String, Object>> metadata,
             Map<String, Object> additionalProperties) {
         this.message = message;
         this.name = name;
         this.toolCallId = toolCallId;
         this.result = result;
         this.error = error;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -58,7 +61,7 @@ public final class ToolCallResult {
      * </ol>
      */
     @JsonProperty("message")
-    public Optional<List<ToolCallResultMessageItem>> getMessage() {
+    public Optional<ToolCallResultMessage> getMessage() {
         return message;
     }
 
@@ -106,6 +109,14 @@ public final class ToolCallResult {
         return error;
     }
 
+    /**
+     * @return This is optional metadata for the tool call result to be sent to the client.
+     */
+    @JsonProperty("metadata")
+    public Optional<Map<String, Object>> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -122,12 +133,13 @@ public final class ToolCallResult {
                 && name.equals(other.name)
                 && toolCallId.equals(other.toolCallId)
                 && result.equals(other.result)
-                && error.equals(other.error);
+                && error.equals(other.error)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.message, this.name, this.toolCallId, this.result, this.error);
+        return Objects.hash(this.message, this.name, this.toolCallId, this.result, this.error, this.metadata);
     }
 
     @java.lang.Override
@@ -152,9 +164,9 @@ public final class ToolCallResult {
     public interface _FinalStage {
         ToolCallResult build();
 
-        _FinalStage message(Optional<List<ToolCallResultMessageItem>> message);
+        _FinalStage message(Optional<ToolCallResultMessage> message);
 
-        _FinalStage message(List<ToolCallResultMessageItem> message);
+        _FinalStage message(ToolCallResultMessage message);
 
         _FinalStage result(Optional<String> result);
 
@@ -163,6 +175,10 @@ public final class ToolCallResult {
         _FinalStage error(Optional<String> error);
 
         _FinalStage error(String error);
+
+        _FinalStage metadata(Optional<Map<String, Object>> metadata);
+
+        _FinalStage metadata(Map<String, Object> metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -171,11 +187,13 @@ public final class ToolCallResult {
 
         private String toolCallId;
 
+        private Optional<Map<String, Object>> metadata = Optional.empty();
+
         private Optional<String> error = Optional.empty();
 
         private Optional<String> result = Optional.empty();
 
-        private Optional<List<ToolCallResultMessageItem>> message = Optional.empty();
+        private Optional<ToolCallResultMessage> message = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -189,6 +207,7 @@ public final class ToolCallResult {
             toolCallId(other.getToolCallId());
             result(other.getResult());
             error(other.getError());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -211,6 +230,23 @@ public final class ToolCallResult {
         @JsonSetter("toolCallId")
         public _FinalStage toolCallId(@NotNull String toolCallId) {
             this.toolCallId = Objects.requireNonNull(toolCallId, "toolCallId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is optional metadata for the tool call result to be sent to the client.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage metadata(Map<String, Object> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
+            this.metadata = metadata;
             return this;
         }
 
@@ -270,21 +306,21 @@ public final class ToolCallResult {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage message(List<ToolCallResultMessageItem> message) {
+        public _FinalStage message(ToolCallResultMessage message) {
             this.message = Optional.ofNullable(message);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
-        public _FinalStage message(Optional<List<ToolCallResultMessageItem>> message) {
+        public _FinalStage message(Optional<ToolCallResultMessage> message) {
             this.message = message;
             return this;
         }
 
         @java.lang.Override
         public ToolCallResult build() {
-            return new ToolCallResult(message, name, toolCallId, result, error, additionalProperties);
+            return new ToolCallResult(message, name, toolCallId, result, error, metadata, additionalProperties);
         }
     }
 }

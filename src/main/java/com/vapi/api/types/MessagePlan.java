@@ -25,6 +25,8 @@ public final class MessagePlan {
 
     private final Optional<Double> idleMessageMaxSpokenCount;
 
+    private final Optional<Boolean> idleMessageResetCountOnUserSpeechEnabled;
+
     private final Optional<Double> idleTimeoutSeconds;
 
     private final Optional<String> silenceTimeoutMessage;
@@ -34,11 +36,13 @@ public final class MessagePlan {
     private MessagePlan(
             Optional<List<String>> idleMessages,
             Optional<Double> idleMessageMaxSpokenCount,
+            Optional<Boolean> idleMessageResetCountOnUserSpeechEnabled,
             Optional<Double> idleTimeoutSeconds,
             Optional<String> silenceTimeoutMessage,
             Map<String, Object> additionalProperties) {
         this.idleMessages = idleMessages;
         this.idleMessageMaxSpokenCount = idleMessageMaxSpokenCount;
+        this.idleMessageResetCountOnUserSpeechEnabled = idleMessageResetCountOnUserSpeechEnabled;
         this.idleTimeoutSeconds = idleTimeoutSeconds;
         this.silenceTimeoutMessage = silenceTimeoutMessage;
         this.additionalProperties = additionalProperties;
@@ -65,6 +69,15 @@ public final class MessagePlan {
     @JsonProperty("idleMessageMaxSpokenCount")
     public Optional<Double> getIdleMessageMaxSpokenCount() {
         return idleMessageMaxSpokenCount;
+    }
+
+    /**
+     * @return This determines whether the idle message count is reset whenever the user speaks.
+     * <p>@default false</p>
+     */
+    @JsonProperty("idleMessageResetCountOnUserSpeechEnabled")
+    public Optional<Boolean> getIdleMessageResetCountOnUserSpeechEnabled() {
+        return idleMessageResetCountOnUserSpeechEnabled;
     }
 
     /**
@@ -99,6 +112,7 @@ public final class MessagePlan {
     private boolean equalTo(MessagePlan other) {
         return idleMessages.equals(other.idleMessages)
                 && idleMessageMaxSpokenCount.equals(other.idleMessageMaxSpokenCount)
+                && idleMessageResetCountOnUserSpeechEnabled.equals(other.idleMessageResetCountOnUserSpeechEnabled)
                 && idleTimeoutSeconds.equals(other.idleTimeoutSeconds)
                 && silenceTimeoutMessage.equals(other.silenceTimeoutMessage);
     }
@@ -106,7 +120,11 @@ public final class MessagePlan {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.idleMessages, this.idleMessageMaxSpokenCount, this.idleTimeoutSeconds, this.silenceTimeoutMessage);
+                this.idleMessages,
+                this.idleMessageMaxSpokenCount,
+                this.idleMessageResetCountOnUserSpeechEnabled,
+                this.idleTimeoutSeconds,
+                this.silenceTimeoutMessage);
     }
 
     @java.lang.Override
@@ -124,6 +142,8 @@ public final class MessagePlan {
 
         private Optional<Double> idleMessageMaxSpokenCount = Optional.empty();
 
+        private Optional<Boolean> idleMessageResetCountOnUserSpeechEnabled = Optional.empty();
+
         private Optional<Double> idleTimeoutSeconds = Optional.empty();
 
         private Optional<String> silenceTimeoutMessage = Optional.empty();
@@ -136,6 +156,7 @@ public final class MessagePlan {
         public Builder from(MessagePlan other) {
             idleMessages(other.getIdleMessages());
             idleMessageMaxSpokenCount(other.getIdleMessageMaxSpokenCount());
+            idleMessageResetCountOnUserSpeechEnabled(other.getIdleMessageResetCountOnUserSpeechEnabled());
             idleTimeoutSeconds(other.getIdleTimeoutSeconds());
             silenceTimeoutMessage(other.getSilenceTimeoutMessage());
             return this;
@@ -160,6 +181,19 @@ public final class MessagePlan {
 
         public Builder idleMessageMaxSpokenCount(Double idleMessageMaxSpokenCount) {
             this.idleMessageMaxSpokenCount = Optional.ofNullable(idleMessageMaxSpokenCount);
+            return this;
+        }
+
+        @JsonSetter(value = "idleMessageResetCountOnUserSpeechEnabled", nulls = Nulls.SKIP)
+        public Builder idleMessageResetCountOnUserSpeechEnabled(
+                Optional<Boolean> idleMessageResetCountOnUserSpeechEnabled) {
+            this.idleMessageResetCountOnUserSpeechEnabled = idleMessageResetCountOnUserSpeechEnabled;
+            return this;
+        }
+
+        public Builder idleMessageResetCountOnUserSpeechEnabled(Boolean idleMessageResetCountOnUserSpeechEnabled) {
+            this.idleMessageResetCountOnUserSpeechEnabled =
+                    Optional.ofNullable(idleMessageResetCountOnUserSpeechEnabled);
             return this;
         }
 
@@ -189,6 +223,7 @@ public final class MessagePlan {
             return new MessagePlan(
                     idleMessages,
                     idleMessageMaxSpokenCount,
+                    idleMessageResetCountOnUserSpeechEnabled,
                     idleTimeoutSeconds,
                     silenceTimeoutMessage,
                     additionalProperties);

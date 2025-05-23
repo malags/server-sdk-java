@@ -65,6 +65,14 @@ public final class CreateVoicemailToolDto {
     }
 
     /**
+     * @return The type of tool. &quot;voicemail&quot;. This uses the model itself to determine if a voicemil was reached. Can be used alternatively/alongside with TwilioVoicemailDetection
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return "voicemail";
+    }
+
+    /**
      * @return This is the function definition of the tool.
      * <p>For <code>endCall</code>, <code>transferCall</code>, and <code>dtmf</code> tools, this is auto-filled based on tool-specific fields like <code>tool.destinations</code>. But, even in those cases, you can provide a custom function definition for advanced use cases.</p>
      * <p>An example of an advanced use case is if you want to customize the message that's spoken for <code>endCall</code> tool. You can specify a function where it returns an argument &quot;reason&quot;. Then, in <code>messages</code> array, you can have many &quot;request-complete&quot; messages. One of these messages will be triggered if the <code>messages[].conditions</code> matches the &quot;reason&quot; argument.</p>

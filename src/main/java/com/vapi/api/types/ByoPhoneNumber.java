@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonDeserialize(builder = ByoPhoneNumber.Builder.class)
 public final class ByoPhoneNumber {
     private final Optional<ByoPhoneNumberFallbackDestination> fallbackDestination;
+
+    private final Optional<List<PhoneNumberHookCallRinging>> hooks;
 
     private final Optional<Boolean> numberE164CheckEnabled;
 
@@ -40,6 +43,8 @@ public final class ByoPhoneNumber {
 
     private final Optional<String> assistantId;
 
+    private final Optional<String> workflowId;
+
     private final Optional<String> squadId;
 
     private final Optional<Server> server;
@@ -52,6 +57,7 @@ public final class ByoPhoneNumber {
 
     private ByoPhoneNumber(
             Optional<ByoPhoneNumberFallbackDestination> fallbackDestination,
+            Optional<List<PhoneNumberHookCallRinging>> hooks,
             Optional<Boolean> numberE164CheckEnabled,
             String id,
             String orgId,
@@ -60,12 +66,14 @@ public final class ByoPhoneNumber {
             Optional<ByoPhoneNumberStatus> status,
             Optional<String> name,
             Optional<String> assistantId,
+            Optional<String> workflowId,
             Optional<String> squadId,
             Optional<Server> server,
             Optional<String> number,
             String credentialId,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
+        this.hooks = hooks;
         this.numberE164CheckEnabled = numberE164CheckEnabled;
         this.id = id;
         this.orgId = orgId;
@@ -74,6 +82,7 @@ public final class ByoPhoneNumber {
         this.status = status;
         this.name = name;
         this.assistantId = assistantId;
+        this.workflowId = workflowId;
         this.squadId = squadId;
         this.server = server;
         this.number = number;
@@ -93,6 +102,14 @@ public final class ByoPhoneNumber {
     @JsonProperty("fallbackDestination")
     public Optional<ByoPhoneNumberFallbackDestination> getFallbackDestination() {
         return fallbackDestination;
+    }
+
+    /**
+     * @return This is the hooks that will be used for incoming calls to this phone number.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<PhoneNumberHookCallRinging>> getHooks() {
+        return hooks;
     }
 
     /**
@@ -160,7 +177,7 @@ public final class ByoPhoneNumber {
 
     /**
      * @return This is the assistant that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
@@ -168,8 +185,17 @@ public final class ByoPhoneNumber {
     }
 
     /**
+     * @return This is the workflow that will be used for incoming calls to this phone number.
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     */
+    @JsonProperty("workflowId")
+    public Optional<String> getWorkflowId() {
+        return workflowId;
+    }
+
+    /**
      * @return This is the squad that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("squadId")
     public Optional<String> getSquadId() {
@@ -220,6 +246,7 @@ public final class ByoPhoneNumber {
 
     private boolean equalTo(ByoPhoneNumber other) {
         return fallbackDestination.equals(other.fallbackDestination)
+                && hooks.equals(other.hooks)
                 && numberE164CheckEnabled.equals(other.numberE164CheckEnabled)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
@@ -228,6 +255,7 @@ public final class ByoPhoneNumber {
                 && status.equals(other.status)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
+                && workflowId.equals(other.workflowId)
                 && squadId.equals(other.squadId)
                 && server.equals(other.server)
                 && number.equals(other.number)
@@ -238,6 +266,7 @@ public final class ByoPhoneNumber {
     public int hashCode() {
         return Objects.hash(
                 this.fallbackDestination,
+                this.hooks,
                 this.numberE164CheckEnabled,
                 this.id,
                 this.orgId,
@@ -246,6 +275,7 @@ public final class ByoPhoneNumber {
                 this.status,
                 this.name,
                 this.assistantId,
+                this.workflowId,
                 this.squadId,
                 this.server,
                 this.number,
@@ -290,6 +320,10 @@ public final class ByoPhoneNumber {
 
         _FinalStage fallbackDestination(ByoPhoneNumberFallbackDestination fallbackDestination);
 
+        _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks);
+
+        _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks);
+
         _FinalStage numberE164CheckEnabled(Optional<Boolean> numberE164CheckEnabled);
 
         _FinalStage numberE164CheckEnabled(Boolean numberE164CheckEnabled);
@@ -305,6 +339,10 @@ public final class ByoPhoneNumber {
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
+
+        _FinalStage workflowId(Optional<String> workflowId);
+
+        _FinalStage workflowId(String workflowId);
 
         _FinalStage squadId(Optional<String> squadId);
 
@@ -338,6 +376,8 @@ public final class ByoPhoneNumber {
 
         private Optional<String> squadId = Optional.empty();
 
+        private Optional<String> workflowId = Optional.empty();
+
         private Optional<String> assistantId = Optional.empty();
 
         private Optional<String> name = Optional.empty();
@@ -345,6 +385,8 @@ public final class ByoPhoneNumber {
         private Optional<ByoPhoneNumberStatus> status = Optional.empty();
 
         private Optional<Boolean> numberE164CheckEnabled = Optional.empty();
+
+        private Optional<List<PhoneNumberHookCallRinging>> hooks = Optional.empty();
 
         private Optional<ByoPhoneNumberFallbackDestination> fallbackDestination = Optional.empty();
 
@@ -356,6 +398,7 @@ public final class ByoPhoneNumber {
         @java.lang.Override
         public Builder from(ByoPhoneNumber other) {
             fallbackDestination(other.getFallbackDestination());
+            hooks(other.getHooks());
             numberE164CheckEnabled(other.getNumberE164CheckEnabled());
             id(other.getId());
             orgId(other.getOrgId());
@@ -364,6 +407,7 @@ public final class ByoPhoneNumber {
             status(other.getStatus());
             name(other.getName());
             assistantId(other.getAssistantId());
+            workflowId(other.getWorkflowId());
             squadId(other.getSquadId());
             server(other.getServer());
             number(other.getNumber());
@@ -469,7 +513,7 @@ public final class ByoPhoneNumber {
 
         /**
          * <p>This is the squad that will be used for incoming calls to this phone number.</p>
-         * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -486,8 +530,26 @@ public final class ByoPhoneNumber {
         }
 
         /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage workflowId(String workflowId) {
+            this.workflowId = Optional.ofNullable(workflowId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
+        public _FinalStage workflowId(Optional<String> workflowId) {
+            this.workflowId = workflowId;
+            return this;
+        }
+
+        /**
          * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
-         * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -562,6 +624,23 @@ public final class ByoPhoneNumber {
         }
 
         /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        /**
          * <p>This is the fallback destination an inbound call will be transferred to if:</p>
          * <ol>
          * <li><code>assistantId</code> is not set</li>
@@ -588,6 +667,7 @@ public final class ByoPhoneNumber {
         public ByoPhoneNumber build() {
             return new ByoPhoneNumber(
                     fallbackDestination,
+                    hooks,
                     numberE164CheckEnabled,
                     id,
                     orgId,
@@ -596,6 +676,7 @@ public final class ByoPhoneNumber {
                     status,
                     name,
                     assistantId,
+                    workflowId,
                     squadId,
                     server,
                     number,

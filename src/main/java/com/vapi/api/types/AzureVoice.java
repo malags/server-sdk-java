@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AzureVoice.Builder.class)
 public final class AzureVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final AzureVoiceId voiceId;
 
     private final Optional<ChunkPlan> chunkPlan;
@@ -32,16 +34,26 @@ public final class AzureVoice {
     private final Map<String, Object> additionalProperties;
 
     private AzureVoice(
+            Optional<Boolean> cachingEnabled,
             AzureVoiceId voiceId,
             Optional<ChunkPlan> chunkPlan,
             Optional<Double> speed,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.chunkPlan = chunkPlan;
         this.speed = speed;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -88,7 +100,8 @@ public final class AzureVoice {
     }
 
     private boolean equalTo(AzureVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && chunkPlan.equals(other.chunkPlan)
                 && speed.equals(other.speed)
                 && fallbackPlan.equals(other.fallbackPlan);
@@ -96,7 +109,7 @@ public final class AzureVoice {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.chunkPlan, this.speed, this.fallbackPlan);
+        return Objects.hash(this.cachingEnabled, this.voiceId, this.chunkPlan, this.speed, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -116,6 +129,10 @@ public final class AzureVoice {
 
     public interface _FinalStage {
         AzureVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
@@ -140,6 +157,8 @@ public final class AzureVoice {
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -147,6 +166,7 @@ public final class AzureVoice {
 
         @java.lang.Override
         public Builder from(AzureVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             chunkPlan(other.getChunkPlan());
             speed(other.getSpeed());
@@ -216,9 +236,26 @@ public final class AzureVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public AzureVoice build() {
-            return new AzureVoice(voiceId, chunkPlan, speed, fallbackPlan, additionalProperties);
+            return new AzureVoice(cachingEnabled, voiceId, chunkPlan, speed, fallbackPlan, additionalProperties);
         }
     }
 }

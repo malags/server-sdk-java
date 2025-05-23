@@ -9,23 +9,55 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageLanguageChangeDetected.Builder.class)
 public final class ClientMessageLanguageChangeDetected {
+    private final Optional<ClientMessageLanguageChangeDetectedPhoneNumber> phoneNumber;
+
+    private final Optional<Double> timestamp;
+
+    private final Optional<Call> call;
+
+    private final Optional<CreateCustomerDto> customer;
+
+    private final Optional<CreateAssistantDto> assistant;
+
     private final String language;
 
     private final Map<String, Object> additionalProperties;
 
-    private ClientMessageLanguageChangeDetected(String language, Map<String, Object> additionalProperties) {
+    private ClientMessageLanguageChangeDetected(
+            Optional<ClientMessageLanguageChangeDetectedPhoneNumber> phoneNumber,
+            Optional<Double> timestamp,
+            Optional<Call> call,
+            Optional<CreateCustomerDto> customer,
+            Optional<CreateAssistantDto> assistant,
+            String language,
+            Map<String, Object> additionalProperties) {
+        this.phoneNumber = phoneNumber;
+        this.timestamp = timestamp;
+        this.call = call;
+        this.customer = customer;
+        this.assistant = assistant;
         this.language = language;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the phone number that the message is associated with.
+     */
+    @JsonProperty("phoneNumber")
+    public Optional<ClientMessageLanguageChangeDetectedPhoneNumber> getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
@@ -34,6 +66,38 @@ public final class ClientMessageLanguageChangeDetected {
     @JsonProperty("type")
     public String getType() {
         return "language-change-detected";
+    }
+
+    /**
+     * @return This is the timestamp of the message.
+     */
+    @JsonProperty("timestamp")
+    public Optional<Double> getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * @return This is the call that the message is associated with.
+     */
+    @JsonProperty("call")
+    public Optional<Call> getCall() {
+        return call;
+    }
+
+    /**
+     * @return This is the customer that the message is associated with.
+     */
+    @JsonProperty("customer")
+    public Optional<CreateCustomerDto> getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @return This is the assistant that the message is associated with.
+     */
+    @JsonProperty("assistant")
+    public Optional<CreateAssistantDto> getAssistant() {
+        return assistant;
     }
 
     /**
@@ -57,12 +121,17 @@ public final class ClientMessageLanguageChangeDetected {
     }
 
     private boolean equalTo(ClientMessageLanguageChangeDetected other) {
-        return language.equals(other.language);
+        return phoneNumber.equals(other.phoneNumber)
+                && timestamp.equals(other.timestamp)
+                && call.equals(other.call)
+                && customer.equals(other.customer)
+                && assistant.equals(other.assistant)
+                && language.equals(other.language);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.language);
+        return Objects.hash(this.phoneNumber, this.timestamp, this.call, this.customer, this.assistant, this.language);
     }
 
     @java.lang.Override
@@ -82,11 +151,41 @@ public final class ClientMessageLanguageChangeDetected {
 
     public interface _FinalStage {
         ClientMessageLanguageChangeDetected build();
+
+        _FinalStage phoneNumber(Optional<ClientMessageLanguageChangeDetectedPhoneNumber> phoneNumber);
+
+        _FinalStage phoneNumber(ClientMessageLanguageChangeDetectedPhoneNumber phoneNumber);
+
+        _FinalStage timestamp(Optional<Double> timestamp);
+
+        _FinalStage timestamp(Double timestamp);
+
+        _FinalStage call(Optional<Call> call);
+
+        _FinalStage call(Call call);
+
+        _FinalStage customer(Optional<CreateCustomerDto> customer);
+
+        _FinalStage customer(CreateCustomerDto customer);
+
+        _FinalStage assistant(Optional<CreateAssistantDto> assistant);
+
+        _FinalStage assistant(CreateAssistantDto assistant);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements LanguageStage, _FinalStage {
         private String language;
+
+        private Optional<CreateAssistantDto> assistant = Optional.empty();
+
+        private Optional<CreateCustomerDto> customer = Optional.empty();
+
+        private Optional<Call> call = Optional.empty();
+
+        private Optional<Double> timestamp = Optional.empty();
+
+        private Optional<ClientMessageLanguageChangeDetectedPhoneNumber> phoneNumber = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -95,6 +194,11 @@ public final class ClientMessageLanguageChangeDetected {
 
         @java.lang.Override
         public Builder from(ClientMessageLanguageChangeDetected other) {
+            phoneNumber(other.getPhoneNumber());
+            timestamp(other.getTimestamp());
+            call(other.getCall());
+            customer(other.getCustomer());
+            assistant(other.getAssistant());
             language(other.getLanguage());
             return this;
         }
@@ -110,9 +214,95 @@ public final class ClientMessageLanguageChangeDetected {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage assistant(CreateAssistantDto assistant) {
+            this.assistant = Optional.ofNullable(assistant);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
+        public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
+            this.assistant = assistant;
+            return this;
+        }
+
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage customer(CreateCustomerDto customer) {
+            this.customer = Optional.ofNullable(customer);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "customer", nulls = Nulls.SKIP)
+        public _FinalStage customer(Optional<CreateCustomerDto> customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage call(Call call) {
+            this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "call", nulls = Nulls.SKIP)
+        public _FinalStage call(Optional<Call> call) {
+            this.call = call;
+            return this;
+        }
+
+        /**
+         * <p>This is the timestamp of the message.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timestamp(Double timestamp) {
+            this.timestamp = Optional.ofNullable(timestamp);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
+        public _FinalStage timestamp(Optional<Double> timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage phoneNumber(ClientMessageLanguageChangeDetectedPhoneNumber phoneNumber) {
+            this.phoneNumber = Optional.ofNullable(phoneNumber);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
+        public _FinalStage phoneNumber(Optional<ClientMessageLanguageChangeDetectedPhoneNumber> phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
         @java.lang.Override
         public ClientMessageLanguageChangeDetected build() {
-            return new ClientMessageLanguageChangeDetected(language, additionalProperties);
+            return new ClientMessageLanguageChangeDetected(
+                    phoneNumber, timestamp, call, customer, assistant, language, additionalProperties);
         }
     }
 }

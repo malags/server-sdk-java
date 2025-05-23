@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElevenLabsVoice.Builder.class)
 public final class ElevenLabsVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final ElevenLabsVoiceId voiceId;
 
     private final Optional<Double> stability;
@@ -50,6 +52,7 @@ public final class ElevenLabsVoice {
     private final Map<String, Object> additionalProperties;
 
     private ElevenLabsVoice(
+            Optional<Boolean> cachingEnabled,
             ElevenLabsVoiceId voiceId,
             Optional<Double> stability,
             Optional<Double> similarityBoost,
@@ -64,6 +67,7 @@ public final class ElevenLabsVoice {
             Optional<String> language,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.stability = stability;
         this.similarityBoost = similarityBoost;
@@ -78,6 +82,14 @@ public final class ElevenLabsVoice {
         this.language = language;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -197,7 +209,8 @@ public final class ElevenLabsVoice {
     }
 
     private boolean equalTo(ElevenLabsVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && stability.equals(other.stability)
                 && similarityBoost.equals(other.similarityBoost)
                 && style.equals(other.style)
@@ -215,6 +228,7 @@ public final class ElevenLabsVoice {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cachingEnabled,
                 this.voiceId,
                 this.stability,
                 this.similarityBoost,
@@ -247,6 +261,10 @@ public final class ElevenLabsVoice {
 
     public interface _FinalStage {
         ElevenLabsVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage stability(Optional<Double> stability);
 
@@ -325,6 +343,8 @@ public final class ElevenLabsVoice {
 
         private Optional<Double> stability = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -332,6 +352,7 @@ public final class ElevenLabsVoice {
 
         @java.lang.Override
         public Builder from(ElevenLabsVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             stability(other.getStability());
             similarityBoost(other.getSimilarityBoost());
@@ -564,9 +585,27 @@ public final class ElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public ElevenLabsVoice build() {
             return new ElevenLabsVoice(
+                    cachingEnabled,
                     voiceId,
                     stability,
                     similarityBoost,

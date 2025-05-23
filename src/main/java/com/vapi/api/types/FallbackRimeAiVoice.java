@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FallbackRimeAiVoice.Builder.class)
 public final class FallbackRimeAiVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final FallbackRimeAiVoiceId voiceId;
 
     private final Optional<FallbackRimeAiVoiceModel> model;
@@ -40,6 +42,7 @@ public final class FallbackRimeAiVoice {
     private final Map<String, Object> additionalProperties;
 
     private FallbackRimeAiVoice(
+            Optional<Boolean> cachingEnabled,
             FallbackRimeAiVoiceId voiceId,
             Optional<FallbackRimeAiVoiceModel> model,
             Optional<Double> speed,
@@ -49,6 +52,7 @@ public final class FallbackRimeAiVoice {
             Optional<String> inlineSpeedAlpha,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.model = model;
         this.speed = speed;
@@ -58,6 +62,14 @@ public final class FallbackRimeAiVoice {
         this.inlineSpeedAlpha = inlineSpeedAlpha;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -85,7 +97,7 @@ public final class FallbackRimeAiVoice {
     }
 
     /**
-     * @return This is a flag that controls whether to add slight pauses using angle brackets. Example: “Hi. &lt;200&gt; I’d love to have a conversation with you.” adds a 200ms pause between the first and second sentences.
+     * @return This is a flag that controls whether to add slight pauses using angle brackets. Example: &quot;Hi. &lt;200&gt; I'd love to have a conversation with you.&quot; adds a 200ms pause between the first and second sentences.
      */
     @JsonProperty("pauseBetweenBrackets")
     public Optional<Boolean> getPauseBetweenBrackets() {
@@ -136,7 +148,8 @@ public final class FallbackRimeAiVoice {
     }
 
     private boolean equalTo(FallbackRimeAiVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && model.equals(other.model)
                 && speed.equals(other.speed)
                 && pauseBetweenBrackets.equals(other.pauseBetweenBrackets)
@@ -149,6 +162,7 @@ public final class FallbackRimeAiVoice {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cachingEnabled,
                 this.voiceId,
                 this.model,
                 this.speed,
@@ -176,6 +190,10 @@ public final class FallbackRimeAiVoice {
 
     public interface _FinalStage {
         FallbackRimeAiVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage model(Optional<FallbackRimeAiVoiceModel> model);
 
@@ -224,6 +242,8 @@ public final class FallbackRimeAiVoice {
 
         private Optional<FallbackRimeAiVoiceModel> model = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -231,6 +251,7 @@ public final class FallbackRimeAiVoice {
 
         @java.lang.Override
         public Builder from(FallbackRimeAiVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             model(other.getModel());
             speed(other.getSpeed());
@@ -322,7 +343,7 @@ public final class FallbackRimeAiVoice {
         }
 
         /**
-         * <p>This is a flag that controls whether to add slight pauses using angle brackets. Example: “Hi. &lt;200&gt; I’d love to have a conversation with you.” adds a 200ms pause between the first and second sentences.</p>
+         * <p>This is a flag that controls whether to add slight pauses using angle brackets. Example: &quot;Hi. &lt;200&gt; I'd love to have a conversation with you.&quot; adds a 200ms pause between the first and second sentences.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -372,9 +393,27 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public FallbackRimeAiVoice build() {
             return new FallbackRimeAiVoice(
+                    cachingEnabled,
                     voiceId,
                     model,
                     speed,

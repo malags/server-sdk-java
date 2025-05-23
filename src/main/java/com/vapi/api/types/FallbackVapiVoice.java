@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FallbackVapiVoice.Builder.class)
 public final class FallbackVapiVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final FallbackVapiVoiceVoiceId voiceId;
 
     private final Optional<Double> speed;
@@ -32,16 +34,26 @@ public final class FallbackVapiVoice {
     private final Map<String, Object> additionalProperties;
 
     private FallbackVapiVoice(
+            Optional<Boolean> cachingEnabled,
             FallbackVapiVoiceVoiceId voiceId,
             Optional<Double> speed,
             Optional<FallbackVapiVoiceLanguage> language,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.speed = speed;
         this.language = language;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -90,7 +102,8 @@ public final class FallbackVapiVoice {
     }
 
     private boolean equalTo(FallbackVapiVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && speed.equals(other.speed)
                 && language.equals(other.language)
                 && chunkPlan.equals(other.chunkPlan);
@@ -98,7 +111,7 @@ public final class FallbackVapiVoice {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.speed, this.language, this.chunkPlan);
+        return Objects.hash(this.cachingEnabled, this.voiceId, this.speed, this.language, this.chunkPlan);
     }
 
     @java.lang.Override
@@ -118,6 +131,10 @@ public final class FallbackVapiVoice {
 
     public interface _FinalStage {
         FallbackVapiVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage speed(Optional<Double> speed);
 
@@ -142,6 +159,8 @@ public final class FallbackVapiVoice {
 
         private Optional<Double> speed = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -149,6 +168,7 @@ public final class FallbackVapiVoice {
 
         @java.lang.Override
         public Builder from(FallbackVapiVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             speed(other.getSpeed());
             language(other.getLanguage());
@@ -220,9 +240,26 @@ public final class FallbackVapiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public FallbackVapiVoice build() {
-            return new FallbackVapiVoice(voiceId, speed, language, chunkPlan, additionalProperties);
+            return new FallbackVapiVoice(cachingEnabled, voiceId, speed, language, chunkPlan, additionalProperties);
         }
     }
 }

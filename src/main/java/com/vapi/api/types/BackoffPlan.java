@@ -20,32 +20,23 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BackoffPlan.Builder.class)
 public final class BackoffPlan {
-    private final double maxRetries;
-
     private final Map<String, Object> type;
+
+    private final double maxRetries;
 
     private final double baseDelaySeconds;
 
     private final Map<String, Object> additionalProperties;
 
     private BackoffPlan(
-            double maxRetries,
             Map<String, Object> type,
+            double maxRetries,
             double baseDelaySeconds,
             Map<String, Object> additionalProperties) {
-        this.maxRetries = maxRetries;
         this.type = type;
+        this.maxRetries = maxRetries;
         this.baseDelaySeconds = baseDelaySeconds;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This is the maximum number of retries to attempt if the request fails. Defaults to 0 (no retries).
-     * <p>@default 0</p>
-     */
-    @JsonProperty("maxRetries")
-    public double getMaxRetries() {
-        return maxRetries;
     }
 
     /**
@@ -55,6 +46,15 @@ public final class BackoffPlan {
     @JsonProperty("type")
     public Map<String, Object> getType() {
         return type;
+    }
+
+    /**
+     * @return This is the maximum number of retries to attempt if the request fails. Defaults to 0 (no retries).
+     * <p>@default 0</p>
+     */
+    @JsonProperty("maxRetries")
+    public double getMaxRetries() {
+        return maxRetries;
     }
 
     /**
@@ -77,12 +77,12 @@ public final class BackoffPlan {
     }
 
     private boolean equalTo(BackoffPlan other) {
-        return maxRetries == other.maxRetries && type.equals(other.type) && baseDelaySeconds == other.baseDelaySeconds;
+        return type.equals(other.type) && maxRetries == other.maxRetries && baseDelaySeconds == other.baseDelaySeconds;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.maxRetries, this.type, this.baseDelaySeconds);
+        return Objects.hash(this.type, this.maxRetries, this.baseDelaySeconds);
     }
 
     @java.lang.Override
@@ -129,8 +129,8 @@ public final class BackoffPlan {
 
         @java.lang.Override
         public Builder from(BackoffPlan other) {
-            maxRetries(other.getMaxRetries());
             type(other.getType());
+            maxRetries(other.getMaxRetries());
             baseDelaySeconds(other.getBaseDelaySeconds());
             return this;
         }
@@ -190,7 +190,7 @@ public final class BackoffPlan {
 
         @java.lang.Override
         public BackoffPlan build() {
-            return new BackoffPlan(maxRetries, type, baseDelaySeconds, additionalProperties);
+            return new BackoffPlan(type, maxRetries, baseDelaySeconds, additionalProperties);
         }
     }
 }

@@ -11,20 +11,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.vapi.api.types.AnthropicModel;
-import com.vapi.api.types.AnyscaleModel;
-import com.vapi.api.types.CerebrasModel;
-import com.vapi.api.types.CustomLlmModel;
-import com.vapi.api.types.DeepInfraModel;
-import com.vapi.api.types.DeepSeekModel;
-import com.vapi.api.types.GoogleModel;
-import com.vapi.api.types.GroqModel;
-import com.vapi.api.types.InflectionAiModel;
-import com.vapi.api.types.OpenAiModel;
-import com.vapi.api.types.OpenRouterModel;
-import com.vapi.api.types.PerplexityAiModel;
-import com.vapi.api.types.TogetherAiModel;
-import com.vapi.api.types.XaiModel;
+import com.vapi.api.types.WorkflowAnthropicModel;
+import com.vapi.api.types.WorkflowOpenAiModel;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,216 +28,36 @@ public final class UpdateWorkflowDtoModel {
         return value.visit(visitor);
     }
 
-    public static UpdateWorkflowDtoModel anthropic(AnthropicModel value) {
-        return new UpdateWorkflowDtoModel(new AnthropicValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel anyscale(AnyscaleModel value) {
-        return new UpdateWorkflowDtoModel(new AnyscaleValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel cerebras(CerebrasModel value) {
-        return new UpdateWorkflowDtoModel(new CerebrasValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel customLlm(CustomLlmModel value) {
-        return new UpdateWorkflowDtoModel(new CustomLlmValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel deepinfra(DeepInfraModel value) {
-        return new UpdateWorkflowDtoModel(new DeepinfraValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel deepSeek(DeepSeekModel value) {
-        return new UpdateWorkflowDtoModel(new DeepSeekValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel google(GoogleModel value) {
-        return new UpdateWorkflowDtoModel(new GoogleValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel groq(GroqModel value) {
-        return new UpdateWorkflowDtoModel(new GroqValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel inflectionAi(InflectionAiModel value) {
-        return new UpdateWorkflowDtoModel(new InflectionAiValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel openai(OpenAiModel value) {
+    public static UpdateWorkflowDtoModel openai(WorkflowOpenAiModel value) {
         return new UpdateWorkflowDtoModel(new OpenaiValue(value));
     }
 
-    public static UpdateWorkflowDtoModel openrouter(OpenRouterModel value) {
-        return new UpdateWorkflowDtoModel(new OpenrouterValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel perplexityAi(PerplexityAiModel value) {
-        return new UpdateWorkflowDtoModel(new PerplexityAiValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel togetherAi(TogetherAiModel value) {
-        return new UpdateWorkflowDtoModel(new TogetherAiValue(value));
-    }
-
-    public static UpdateWorkflowDtoModel xai(XaiModel value) {
-        return new UpdateWorkflowDtoModel(new XaiValue(value));
-    }
-
-    public boolean isAnthropic() {
-        return value instanceof AnthropicValue;
-    }
-
-    public boolean isAnyscale() {
-        return value instanceof AnyscaleValue;
-    }
-
-    public boolean isCerebras() {
-        return value instanceof CerebrasValue;
-    }
-
-    public boolean isCustomLlm() {
-        return value instanceof CustomLlmValue;
-    }
-
-    public boolean isDeepinfra() {
-        return value instanceof DeepinfraValue;
-    }
-
-    public boolean isDeepSeek() {
-        return value instanceof DeepSeekValue;
-    }
-
-    public boolean isGoogle() {
-        return value instanceof GoogleValue;
-    }
-
-    public boolean isGroq() {
-        return value instanceof GroqValue;
-    }
-
-    public boolean isInflectionAi() {
-        return value instanceof InflectionAiValue;
+    public static UpdateWorkflowDtoModel anthropic(WorkflowAnthropicModel value) {
+        return new UpdateWorkflowDtoModel(new AnthropicValue(value));
     }
 
     public boolean isOpenai() {
         return value instanceof OpenaiValue;
     }
 
-    public boolean isOpenrouter() {
-        return value instanceof OpenrouterValue;
-    }
-
-    public boolean isPerplexityAi() {
-        return value instanceof PerplexityAiValue;
-    }
-
-    public boolean isTogetherAi() {
-        return value instanceof TogetherAiValue;
-    }
-
-    public boolean isXai() {
-        return value instanceof XaiValue;
+    public boolean isAnthropic() {
+        return value instanceof AnthropicValue;
     }
 
     public boolean _isUnknown() {
         return value instanceof _UnknownValue;
     }
 
-    public Optional<AnthropicModel> getAnthropic() {
-        if (isAnthropic()) {
-            return Optional.of(((AnthropicValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<AnyscaleModel> getAnyscale() {
-        if (isAnyscale()) {
-            return Optional.of(((AnyscaleValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<CerebrasModel> getCerebras() {
-        if (isCerebras()) {
-            return Optional.of(((CerebrasValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<CustomLlmModel> getCustomLlm() {
-        if (isCustomLlm()) {
-            return Optional.of(((CustomLlmValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<DeepInfraModel> getDeepinfra() {
-        if (isDeepinfra()) {
-            return Optional.of(((DeepinfraValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<DeepSeekModel> getDeepSeek() {
-        if (isDeepSeek()) {
-            return Optional.of(((DeepSeekValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<GoogleModel> getGoogle() {
-        if (isGoogle()) {
-            return Optional.of(((GoogleValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<GroqModel> getGroq() {
-        if (isGroq()) {
-            return Optional.of(((GroqValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<InflectionAiModel> getInflectionAi() {
-        if (isInflectionAi()) {
-            return Optional.of(((InflectionAiValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<OpenAiModel> getOpenai() {
+    public Optional<WorkflowOpenAiModel> getOpenai() {
         if (isOpenai()) {
             return Optional.of(((OpenaiValue) value).value);
         }
         return Optional.empty();
     }
 
-    public Optional<OpenRouterModel> getOpenrouter() {
-        if (isOpenrouter()) {
-            return Optional.of(((OpenrouterValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<PerplexityAiModel> getPerplexityAi() {
-        if (isPerplexityAi()) {
-            return Optional.of(((PerplexityAiValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<TogetherAiModel> getTogetherAi() {
-        if (isTogetherAi()) {
-            return Optional.of(((TogetherAiValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<XaiModel> getXai() {
-        if (isXai()) {
-            return Optional.of(((XaiValue) value).value);
+    public Optional<WorkflowAnthropicModel> getAnthropic() {
+        if (isAnthropic()) {
+            return Optional.of(((AnthropicValue) value).value);
         }
         return Optional.empty();
     }
@@ -267,420 +75,30 @@ public final class UpdateWorkflowDtoModel {
     }
 
     public interface Visitor<T> {
-        T visitAnthropic(AnthropicModel anthropic);
+        T visitOpenai(WorkflowOpenAiModel openai);
 
-        T visitAnyscale(AnyscaleModel anyscale);
-
-        T visitCerebras(CerebrasModel cerebras);
-
-        T visitCustomLlm(CustomLlmModel customLlm);
-
-        T visitDeepinfra(DeepInfraModel deepinfra);
-
-        T visitDeepSeek(DeepSeekModel deepSeek);
-
-        T visitGoogle(GoogleModel google);
-
-        T visitGroq(GroqModel groq);
-
-        T visitInflectionAi(InflectionAiModel inflectionAi);
-
-        T visitOpenai(OpenAiModel openai);
-
-        T visitOpenrouter(OpenRouterModel openrouter);
-
-        T visitPerplexityAi(PerplexityAiModel perplexityAi);
-
-        T visitTogetherAi(TogetherAiModel togetherAi);
-
-        T visitXai(XaiModel xai);
+        T visitAnthropic(WorkflowAnthropicModel anthropic);
 
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "provider", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({
-        @JsonSubTypes.Type(AnthropicValue.class),
-        @JsonSubTypes.Type(AnyscaleValue.class),
-        @JsonSubTypes.Type(CerebrasValue.class),
-        @JsonSubTypes.Type(CustomLlmValue.class),
-        @JsonSubTypes.Type(DeepinfraValue.class),
-        @JsonSubTypes.Type(DeepSeekValue.class),
-        @JsonSubTypes.Type(GoogleValue.class),
-        @JsonSubTypes.Type(GroqValue.class),
-        @JsonSubTypes.Type(InflectionAiValue.class),
-        @JsonSubTypes.Type(OpenaiValue.class),
-        @JsonSubTypes.Type(OpenrouterValue.class),
-        @JsonSubTypes.Type(PerplexityAiValue.class),
-        @JsonSubTypes.Type(TogetherAiValue.class),
-        @JsonSubTypes.Type(XaiValue.class)
-    })
+    @JsonSubTypes({@JsonSubTypes.Type(OpenaiValue.class), @JsonSubTypes.Type(AnthropicValue.class)})
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
-    }
-
-    @JsonTypeName("anthropic")
-    @JsonIgnoreProperties("provider")
-    private static final class AnthropicValue implements Value {
-        @JsonUnwrapped
-        private AnthropicModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private AnthropicValue() {}
-
-        private AnthropicValue(AnthropicModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitAnthropic(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof AnthropicValue && equalTo((AnthropicValue) other);
-        }
-
-        private boolean equalTo(AnthropicValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("anyscale")
-    @JsonIgnoreProperties("provider")
-    private static final class AnyscaleValue implements Value {
-        @JsonUnwrapped
-        private AnyscaleModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private AnyscaleValue() {}
-
-        private AnyscaleValue(AnyscaleModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitAnyscale(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof AnyscaleValue && equalTo((AnyscaleValue) other);
-        }
-
-        private boolean equalTo(AnyscaleValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("cerebras")
-    @JsonIgnoreProperties("provider")
-    private static final class CerebrasValue implements Value {
-        @JsonUnwrapped
-        private CerebrasModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private CerebrasValue() {}
-
-        private CerebrasValue(CerebrasModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitCerebras(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof CerebrasValue && equalTo((CerebrasValue) other);
-        }
-
-        private boolean equalTo(CerebrasValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("custom-llm")
-    @JsonIgnoreProperties("provider")
-    private static final class CustomLlmValue implements Value {
-        @JsonUnwrapped
-        private CustomLlmModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private CustomLlmValue() {}
-
-        private CustomLlmValue(CustomLlmModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitCustomLlm(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof CustomLlmValue && equalTo((CustomLlmValue) other);
-        }
-
-        private boolean equalTo(CustomLlmValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("deepinfra")
-    @JsonIgnoreProperties("provider")
-    private static final class DeepinfraValue implements Value {
-        @JsonUnwrapped
-        private DeepInfraModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private DeepinfraValue() {}
-
-        private DeepinfraValue(DeepInfraModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitDeepinfra(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof DeepinfraValue && equalTo((DeepinfraValue) other);
-        }
-
-        private boolean equalTo(DeepinfraValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("deep-seek")
-    @JsonIgnoreProperties("provider")
-    private static final class DeepSeekValue implements Value {
-        @JsonUnwrapped
-        private DeepSeekModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private DeepSeekValue() {}
-
-        private DeepSeekValue(DeepSeekModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitDeepSeek(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof DeepSeekValue && equalTo((DeepSeekValue) other);
-        }
-
-        private boolean equalTo(DeepSeekValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("google")
-    @JsonIgnoreProperties("provider")
-    private static final class GoogleValue implements Value {
-        @JsonUnwrapped
-        private GoogleModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private GoogleValue() {}
-
-        private GoogleValue(GoogleModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitGoogle(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof GoogleValue && equalTo((GoogleValue) other);
-        }
-
-        private boolean equalTo(GoogleValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("groq")
-    @JsonIgnoreProperties("provider")
-    private static final class GroqValue implements Value {
-        @JsonUnwrapped
-        private GroqModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private GroqValue() {}
-
-        private GroqValue(GroqModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitGroq(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof GroqValue && equalTo((GroqValue) other);
-        }
-
-        private boolean equalTo(GroqValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("inflection-ai")
-    @JsonIgnoreProperties("provider")
-    private static final class InflectionAiValue implements Value {
-        @JsonUnwrapped
-        private InflectionAiModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private InflectionAiValue() {}
-
-        private InflectionAiValue(InflectionAiModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitInflectionAi(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof InflectionAiValue && equalTo((InflectionAiValue) other);
-        }
-
-        private boolean equalTo(InflectionAiValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
     }
 
     @JsonTypeName("openai")
     @JsonIgnoreProperties("provider")
     private static final class OpenaiValue implements Value {
         @JsonUnwrapped
-        private OpenAiModel value;
+        private WorkflowOpenAiModel value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
         private OpenaiValue() {}
 
-        private OpenaiValue(OpenAiModel value) {
+        private OpenaiValue(WorkflowOpenAiModel value) {
             this.value = value;
         }
 
@@ -710,148 +128,31 @@ public final class UpdateWorkflowDtoModel {
         }
     }
 
-    @JsonTypeName("openrouter")
+    @JsonTypeName("anthropic")
     @JsonIgnoreProperties("provider")
-    private static final class OpenrouterValue implements Value {
+    private static final class AnthropicValue implements Value {
         @JsonUnwrapped
-        private OpenRouterModel value;
+        private WorkflowAnthropicModel value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private OpenrouterValue() {}
+        private AnthropicValue() {}
 
-        private OpenrouterValue(OpenRouterModel value) {
+        private AnthropicValue(WorkflowAnthropicModel value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitOpenrouter(value);
+            return visitor.visitAnthropic(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof OpenrouterValue && equalTo((OpenrouterValue) other);
+            return other instanceof AnthropicValue && equalTo((AnthropicValue) other);
         }
 
-        private boolean equalTo(OpenrouterValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("perplexity-ai")
-    @JsonIgnoreProperties("provider")
-    private static final class PerplexityAiValue implements Value {
-        @JsonUnwrapped
-        private PerplexityAiModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private PerplexityAiValue() {}
-
-        private PerplexityAiValue(PerplexityAiModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitPerplexityAi(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof PerplexityAiValue && equalTo((PerplexityAiValue) other);
-        }
-
-        private boolean equalTo(PerplexityAiValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("together-ai")
-    @JsonIgnoreProperties("provider")
-    private static final class TogetherAiValue implements Value {
-        @JsonUnwrapped
-        private TogetherAiModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private TogetherAiValue() {}
-
-        private TogetherAiValue(TogetherAiModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitTogetherAi(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof TogetherAiValue && equalTo((TogetherAiValue) other);
-        }
-
-        private boolean equalTo(TogetherAiValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateWorkflowDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("xai")
-    @JsonIgnoreProperties("provider")
-    private static final class XaiValue implements Value {
-        @JsonUnwrapped
-        private XaiModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private XaiValue() {}
-
-        private XaiValue(XaiModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitXai(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof XaiValue && equalTo((XaiValue) other);
-        }
-
-        private boolean equalTo(XaiValue other) {
+        private boolean equalTo(AnthropicValue other) {
             return value.equals(other.value);
         }
 

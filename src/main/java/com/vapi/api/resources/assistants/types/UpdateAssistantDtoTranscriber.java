@@ -60,16 +60,16 @@ public final class UpdateAssistantDtoTranscriber {
         return new UpdateAssistantDtoTranscriber(new GladiaValue(value));
     }
 
+    public static UpdateAssistantDtoTranscriber google(GoogleTranscriber value) {
+        return new UpdateAssistantDtoTranscriber(new GoogleValue(value));
+    }
+
     public static UpdateAssistantDtoTranscriber speechmatics(SpeechmaticsTranscriber value) {
         return new UpdateAssistantDtoTranscriber(new SpeechmaticsValue(value));
     }
 
     public static UpdateAssistantDtoTranscriber talkscriber(TalkscriberTranscriber value) {
         return new UpdateAssistantDtoTranscriber(new TalkscriberValue(value));
-    }
-
-    public static UpdateAssistantDtoTranscriber google(GoogleTranscriber value) {
-        return new UpdateAssistantDtoTranscriber(new GoogleValue(value));
     }
 
     public static UpdateAssistantDtoTranscriber openai(OpenAiTranscriber value) {
@@ -100,16 +100,16 @@ public final class UpdateAssistantDtoTranscriber {
         return value instanceof GladiaValue;
     }
 
+    public boolean isGoogle() {
+        return value instanceof GoogleValue;
+    }
+
     public boolean isSpeechmatics() {
         return value instanceof SpeechmaticsValue;
     }
 
     public boolean isTalkscriber() {
         return value instanceof TalkscriberValue;
-    }
-
-    public boolean isGoogle() {
-        return value instanceof GoogleValue;
     }
 
     public boolean isOpenai() {
@@ -162,6 +162,13 @@ public final class UpdateAssistantDtoTranscriber {
         return Optional.empty();
     }
 
+    public Optional<GoogleTranscriber> getGoogle() {
+        if (isGoogle()) {
+            return Optional.of(((GoogleValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<SpeechmaticsTranscriber> getSpeechmatics() {
         if (isSpeechmatics()) {
             return Optional.of(((SpeechmaticsValue) value).value);
@@ -172,13 +179,6 @@ public final class UpdateAssistantDtoTranscriber {
     public Optional<TalkscriberTranscriber> getTalkscriber() {
         if (isTalkscriber()) {
             return Optional.of(((TalkscriberValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<GoogleTranscriber> getGoogle() {
-        if (isGoogle()) {
-            return Optional.of(((GoogleValue) value).value);
         }
         return Optional.empty();
     }
@@ -215,11 +215,11 @@ public final class UpdateAssistantDtoTranscriber {
 
         T visitGladia(GladiaTranscriber gladia);
 
+        T visitGoogle(GoogleTranscriber google);
+
         T visitSpeechmatics(SpeechmaticsTranscriber speechmatics);
 
         T visitTalkscriber(TalkscriberTranscriber talkscriber);
-
-        T visitGoogle(GoogleTranscriber google);
 
         T visitOpenai(OpenAiTranscriber openai);
 
@@ -234,9 +234,9 @@ public final class UpdateAssistantDtoTranscriber {
         @JsonSubTypes.Type(DeepgramValue.class),
         @JsonSubTypes.Type(_11LabsValue.class),
         @JsonSubTypes.Type(GladiaValue.class),
+        @JsonSubTypes.Type(GoogleValue.class),
         @JsonSubTypes.Type(SpeechmaticsValue.class),
         @JsonSubTypes.Type(TalkscriberValue.class),
-        @JsonSubTypes.Type(GoogleValue.class),
         @JsonSubTypes.Type(OpenaiValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -478,6 +478,45 @@ public final class UpdateAssistantDtoTranscriber {
         }
     }
 
+    @JsonTypeName("google")
+    @JsonIgnoreProperties("provider")
+    private static final class GoogleValue implements Value {
+        @JsonUnwrapped
+        private GoogleTranscriber value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleValue() {}
+
+        private GoogleValue(GoogleTranscriber value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogle(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleValue && equalTo((GoogleValue) other);
+        }
+
+        private boolean equalTo(GoogleValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoTranscriber{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("speechmatics")
     @JsonIgnoreProperties("provider")
     private static final class SpeechmaticsValue implements Value {
@@ -542,45 +581,6 @@ public final class UpdateAssistantDtoTranscriber {
         }
 
         private boolean equalTo(TalkscriberValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateAssistantDtoTranscriber{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("google")
-    @JsonIgnoreProperties("provider")
-    private static final class GoogleValue implements Value {
-        @JsonUnwrapped
-        private GoogleTranscriber value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private GoogleValue() {}
-
-        private GoogleValue(GoogleTranscriber value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitGoogle(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof GoogleValue && equalTo((GoogleValue) other);
-        }
-
-        private boolean equalTo(GoogleValue other) {
             return value.equals(other.value);
         }
 

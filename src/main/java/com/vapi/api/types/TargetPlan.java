@@ -26,21 +26,27 @@ public final class TargetPlan {
 
     private final Optional<String> assistantId;
 
+    private final Optional<AssistantOverrides> assistantOverrides;
+
     private final Map<String, Object> additionalProperties;
 
     private TargetPlan(
             Optional<String> phoneNumberId,
             Optional<TestSuitePhoneNumber> phoneNumber,
             Optional<String> assistantId,
+            Optional<AssistantOverrides> assistantOverrides,
             Map<String, Object> additionalProperties) {
         this.phoneNumberId = phoneNumberId;
         this.phoneNumber = phoneNumber;
         this.assistantId = assistantId;
+        this.assistantOverrides = assistantOverrides;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return This is the phoneNumberId that is being tested.
+     * @return This is the phone number that is being tested.
+     * During the actual test, it'll be called and the assistant attached to it will pick up and be tested.
+     * To test an assistant directly, send assistantId instead.
      */
     @JsonProperty("phoneNumberId")
     public Optional<String> getPhoneNumberId() {
@@ -48,7 +54,9 @@ public final class TargetPlan {
     }
 
     /**
-     * @return This is the phone number that is being tested. Only use this if you have not imported the phone number to Vapi.
+     * @return This can be any phone number (even not on Vapi).
+     * During the actual test, it'll be called.
+     * To test a Vapi number, send phoneNumberId. To test an assistant directly, send assistantId instead.
      */
     @JsonProperty("phoneNumber")
     public Optional<TestSuitePhoneNumber> getPhoneNumber() {
@@ -56,11 +64,21 @@ public final class TargetPlan {
     }
 
     /**
-     * @return This is the assistantId that is being tested.
+     * @return This is the assistant being tested.
+     * During the actual test, it'll invoked directly.
+     * To test the assistant over phone number, send phoneNumberId instead.
      */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
         return assistantId;
+    }
+
+    /**
+     * @return This is the assistant overrides applied to assistantId before it is tested.
+     */
+    @JsonProperty("assistantOverrides")
+    public Optional<AssistantOverrides> getAssistantOverrides() {
+        return assistantOverrides;
     }
 
     @java.lang.Override
@@ -77,12 +95,13 @@ public final class TargetPlan {
     private boolean equalTo(TargetPlan other) {
         return phoneNumberId.equals(other.phoneNumberId)
                 && phoneNumber.equals(other.phoneNumber)
-                && assistantId.equals(other.assistantId);
+                && assistantId.equals(other.assistantId)
+                && assistantOverrides.equals(other.assistantOverrides);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.phoneNumberId, this.phoneNumber, this.assistantId);
+        return Objects.hash(this.phoneNumberId, this.phoneNumber, this.assistantId, this.assistantOverrides);
     }
 
     @java.lang.Override
@@ -102,6 +121,8 @@ public final class TargetPlan {
 
         private Optional<String> assistantId = Optional.empty();
 
+        private Optional<AssistantOverrides> assistantOverrides = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -111,6 +132,7 @@ public final class TargetPlan {
             phoneNumberId(other.getPhoneNumberId());
             phoneNumber(other.getPhoneNumber());
             assistantId(other.getAssistantId());
+            assistantOverrides(other.getAssistantOverrides());
             return this;
         }
 
@@ -147,8 +169,19 @@ public final class TargetPlan {
             return this;
         }
 
+        @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
+        public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
+            this.assistantOverrides = assistantOverrides;
+            return this;
+        }
+
+        public Builder assistantOverrides(AssistantOverrides assistantOverrides) {
+            this.assistantOverrides = Optional.ofNullable(assistantOverrides);
+            return this;
+        }
+
         public TargetPlan build() {
-            return new TargetPlan(phoneNumberId, phoneNumber, assistantId, additionalProperties);
+            return new TargetPlan(phoneNumberId, phoneNumber, assistantId, assistantOverrides, additionalProperties);
         }
     }
 }

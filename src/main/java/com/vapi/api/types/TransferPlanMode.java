@@ -20,7 +20,9 @@ public enum TransferPlanMode {
             "warm-transfer-wait-for-operator-to-speak-first-and-then-say-message"),
 
     WARM_TRANSFER_WAIT_FOR_OPERATOR_TO_SPEAK_FIRST_AND_THEN_SAY_SUMMARY(
-            "warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary");
+            "warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary"),
+
+    WARM_TRANSFER_EXPERIMENTAL("warm-transfer-experimental");
 
     private final String value;
 

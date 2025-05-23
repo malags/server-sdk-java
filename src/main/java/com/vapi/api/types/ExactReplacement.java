@@ -9,26 +9,46 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ExactReplacement.Builder.class)
 public final class ExactReplacement {
+    private final Optional<Boolean> replaceAllEnabled;
+
     private final String key;
 
     private final String value;
 
     private final Map<String, Object> additionalProperties;
 
-    private ExactReplacement(String key, String value, Map<String, Object> additionalProperties) {
+    private ExactReplacement(
+            Optional<Boolean> replaceAllEnabled, String key, String value, Map<String, Object> additionalProperties) {
+        this.replaceAllEnabled = replaceAllEnabled;
         this.key = key;
         this.value = value;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This option let's you control whether to replace all instances of the key or only the first one. By default, it only replaces the first instance.
+     * Examples:
+     * <ul>
+     * <li>For { type: 'exact', key: 'hello', value: 'hi', replaceAllEnabled: false }. Before: &quot;hello world, hello universe&quot; | After: &quot;hi world, hello universe&quot;</li>
+     * <li>For { type: 'exact', key: 'hello', value: 'hi', replaceAllEnabled: true }. Before: &quot;hello world, hello universe&quot; | After: &quot;hi world, hi universe&quot;
+     * @default false</li>
+     * </ul>
+     */
+    @JsonProperty("replaceAllEnabled")
+    public Optional<Boolean> getReplaceAllEnabled() {
+        return replaceAllEnabled;
     }
 
     /**
@@ -59,12 +79,12 @@ public final class ExactReplacement {
     }
 
     private boolean equalTo(ExactReplacement other) {
-        return key.equals(other.key) && value.equals(other.value);
+        return replaceAllEnabled.equals(other.replaceAllEnabled) && key.equals(other.key) && value.equals(other.value);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.key, this.value);
+        return Objects.hash(this.replaceAllEnabled, this.key, this.value);
     }
 
     @java.lang.Override
@@ -88,6 +108,10 @@ public final class ExactReplacement {
 
     public interface _FinalStage {
         ExactReplacement build();
+
+        _FinalStage replaceAllEnabled(Optional<Boolean> replaceAllEnabled);
+
+        _FinalStage replaceAllEnabled(Boolean replaceAllEnabled);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -96,6 +120,8 @@ public final class ExactReplacement {
 
         private String value;
 
+        private Optional<Boolean> replaceAllEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -103,6 +129,7 @@ public final class ExactReplacement {
 
         @java.lang.Override
         public Builder from(ExactReplacement other) {
+            replaceAllEnabled(other.getReplaceAllEnabled());
             key(other.getKey());
             value(other.getValue());
             return this;
@@ -130,9 +157,32 @@ public final class ExactReplacement {
             return this;
         }
 
+        /**
+         * <p>This option let's you control whether to replace all instances of the key or only the first one. By default, it only replaces the first instance.
+         * Examples:</p>
+         * <ul>
+         * <li>For { type: 'exact', key: 'hello', value: 'hi', replaceAllEnabled: false }. Before: &quot;hello world, hello universe&quot; | After: &quot;hi world, hello universe&quot;</li>
+         * <li>For { type: 'exact', key: 'hello', value: 'hi', replaceAllEnabled: true }. Before: &quot;hello world, hello universe&quot; | After: &quot;hi world, hi universe&quot;
+         * @default false</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage replaceAllEnabled(Boolean replaceAllEnabled) {
+            this.replaceAllEnabled = Optional.ofNullable(replaceAllEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "replaceAllEnabled", nulls = Nulls.SKIP)
+        public _FinalStage replaceAllEnabled(Optional<Boolean> replaceAllEnabled) {
+            this.replaceAllEnabled = replaceAllEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public ExactReplacement build() {
-            return new ExactReplacement(key, value, additionalProperties);
+            return new ExactReplacement(replaceAllEnabled, key, value, additionalProperties);
         }
     }
 }

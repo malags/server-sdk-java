@@ -5,12 +5,15 @@ package com.vapi.api.types;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.vapi.api.core.Nullable;
+import com.vapi.api.core.NullableNonemptyFilter;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -45,14 +48,23 @@ public final class ChatCompletionMessageWorkflows {
         return role;
     }
 
-    @JsonProperty("content")
+    @JsonIgnore
     public Optional<String> getContent() {
+        if (content == null) {
+            return Optional.empty();
+        }
         return content;
     }
 
     @JsonProperty("metadata")
     public Optional<ChatCompletionMessageMetadata> getMetadata() {
         return metadata;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("content")
+    private Optional<String> _getContent() {
+        return content;
     }
 
     @java.lang.Override
@@ -129,6 +141,17 @@ public final class ChatCompletionMessageWorkflows {
 
         public Builder content(String content) {
             this.content = Optional.ofNullable(content);
+            return this;
+        }
+
+        public Builder content(Nullable<String> content) {
+            if (content.isNull()) {
+                this.content = null;
+            } else if (content.isEmpty()) {
+                this.content = Optional.empty();
+            } else {
+                this.content = Optional.of(content.get());
+            }
             return this;
         }
 

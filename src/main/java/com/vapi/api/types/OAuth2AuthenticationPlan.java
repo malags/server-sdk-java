@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = OAuth2AuthenticationPlan.Builder.class)
 public final class OAuth2AuthenticationPlan {
+    private final OAuth2AuthenticationPlanType type;
+
     private final String url;
 
     private final String clientId;
@@ -32,11 +34,13 @@ public final class OAuth2AuthenticationPlan {
     private final Map<String, Object> additionalProperties;
 
     private OAuth2AuthenticationPlan(
+            OAuth2AuthenticationPlanType type,
             String url,
             String clientId,
             String clientSecret,
             Optional<String> scope,
             Map<String, Object> additionalProperties) {
+        this.type = type;
         this.url = url;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
@@ -45,8 +49,8 @@ public final class OAuth2AuthenticationPlan {
     }
 
     @JsonProperty("type")
-    public String getType() {
-        return "oauth2";
+    public OAuth2AuthenticationPlanType getType() {
+        return type;
     }
 
     /**
@@ -93,7 +97,8 @@ public final class OAuth2AuthenticationPlan {
     }
 
     private boolean equalTo(OAuth2AuthenticationPlan other) {
-        return url.equals(other.url)
+        return type.equals(other.type)
+                && url.equals(other.url)
                 && clientId.equals(other.clientId)
                 && clientSecret.equals(other.clientSecret)
                 && scope.equals(other.scope);
@@ -101,7 +106,7 @@ public final class OAuth2AuthenticationPlan {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.url, this.clientId, this.clientSecret, this.scope);
+        return Objects.hash(this.type, this.url, this.clientId, this.clientSecret, this.scope);
     }
 
     @java.lang.Override
@@ -109,14 +114,18 @@ public final class OAuth2AuthenticationPlan {
         return ObjectMappers.stringify(this);
     }
 
-    public static UrlStage builder() {
+    public static TypeStage builder() {
         return new Builder();
+    }
+
+    public interface TypeStage {
+        UrlStage type(@NotNull OAuth2AuthenticationPlanType type);
+
+        Builder from(OAuth2AuthenticationPlan other);
     }
 
     public interface UrlStage {
         ClientIdStage url(@NotNull String url);
-
-        Builder from(OAuth2AuthenticationPlan other);
     }
 
     public interface ClientIdStage {
@@ -136,7 +145,9 @@ public final class OAuth2AuthenticationPlan {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UrlStage, ClientIdStage, ClientSecretStage, _FinalStage {
+    public static final class Builder implements TypeStage, UrlStage, ClientIdStage, ClientSecretStage, _FinalStage {
+        private OAuth2AuthenticationPlanType type;
+
         private String url;
 
         private String clientId;
@@ -152,10 +163,18 @@ public final class OAuth2AuthenticationPlan {
 
         @java.lang.Override
         public Builder from(OAuth2AuthenticationPlan other) {
+            type(other.getType());
             url(other.getUrl());
             clientId(other.getClientId());
             clientSecret(other.getClientSecret());
             scope(other.getScope());
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("type")
+        public UrlStage type(@NotNull OAuth2AuthenticationPlanType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
@@ -211,7 +230,7 @@ public final class OAuth2AuthenticationPlan {
 
         @java.lang.Override
         public OAuth2AuthenticationPlan build() {
-            return new OAuth2AuthenticationPlan(url, clientId, clientSecret, scope, additionalProperties);
+            return new OAuth2AuthenticationPlan(type, url, clientId, clientSecret, scope, additionalProperties);
         }
     }
 }

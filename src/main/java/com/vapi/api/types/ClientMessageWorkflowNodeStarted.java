@@ -16,17 +16,48 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageWorkflowNodeStarted.Builder.class)
 public final class ClientMessageWorkflowNodeStarted {
+    private final Optional<ClientMessageWorkflowNodeStartedPhoneNumber> phoneNumber;
+
+    private final Optional<Double> timestamp;
+
+    private final Optional<Call> call;
+
+    private final Optional<CreateCustomerDto> customer;
+
+    private final Optional<CreateAssistantDto> assistant;
+
     private final Map<String, Object> node;
 
     private final Map<String, Object> additionalProperties;
 
-    private ClientMessageWorkflowNodeStarted(Map<String, Object> node, Map<String, Object> additionalProperties) {
+    private ClientMessageWorkflowNodeStarted(
+            Optional<ClientMessageWorkflowNodeStartedPhoneNumber> phoneNumber,
+            Optional<Double> timestamp,
+            Optional<Call> call,
+            Optional<CreateCustomerDto> customer,
+            Optional<CreateAssistantDto> assistant,
+            Map<String, Object> node,
+            Map<String, Object> additionalProperties) {
+        this.phoneNumber = phoneNumber;
+        this.timestamp = timestamp;
+        this.call = call;
+        this.customer = customer;
+        this.assistant = assistant;
         this.node = node;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the phone number that the message is associated with.
+     */
+    @JsonProperty("phoneNumber")
+    public Optional<ClientMessageWorkflowNodeStartedPhoneNumber> getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
@@ -35,6 +66,38 @@ public final class ClientMessageWorkflowNodeStarted {
     @JsonProperty("type")
     public String getType() {
         return "workflow.node.started";
+    }
+
+    /**
+     * @return This is the timestamp of the message.
+     */
+    @JsonProperty("timestamp")
+    public Optional<Double> getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * @return This is the call that the message is associated with.
+     */
+    @JsonProperty("call")
+    public Optional<Call> getCall() {
+        return call;
+    }
+
+    /**
+     * @return This is the customer that the message is associated with.
+     */
+    @JsonProperty("customer")
+    public Optional<CreateCustomerDto> getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @return This is the assistant that the message is associated with.
+     */
+    @JsonProperty("assistant")
+    public Optional<CreateAssistantDto> getAssistant() {
+        return assistant;
     }
 
     /**
@@ -57,12 +120,17 @@ public final class ClientMessageWorkflowNodeStarted {
     }
 
     private boolean equalTo(ClientMessageWorkflowNodeStarted other) {
-        return node.equals(other.node);
+        return phoneNumber.equals(other.phoneNumber)
+                && timestamp.equals(other.timestamp)
+                && call.equals(other.call)
+                && customer.equals(other.customer)
+                && assistant.equals(other.assistant)
+                && node.equals(other.node);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.node);
+        return Objects.hash(this.phoneNumber, this.timestamp, this.call, this.customer, this.assistant, this.node);
     }
 
     @java.lang.Override
@@ -76,6 +144,16 @@ public final class ClientMessageWorkflowNodeStarted {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<ClientMessageWorkflowNodeStartedPhoneNumber> phoneNumber = Optional.empty();
+
+        private Optional<Double> timestamp = Optional.empty();
+
+        private Optional<Call> call = Optional.empty();
+
+        private Optional<CreateCustomerDto> customer = Optional.empty();
+
+        private Optional<CreateAssistantDto> assistant = Optional.empty();
+
         private Map<String, Object> node = new LinkedHashMap<>();
 
         @JsonAnySetter
@@ -84,7 +162,67 @@ public final class ClientMessageWorkflowNodeStarted {
         private Builder() {}
 
         public Builder from(ClientMessageWorkflowNodeStarted other) {
+            phoneNumber(other.getPhoneNumber());
+            timestamp(other.getTimestamp());
+            call(other.getCall());
+            customer(other.getCustomer());
+            assistant(other.getAssistant());
             node(other.getNode());
+            return this;
+        }
+
+        @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
+        public Builder phoneNumber(Optional<ClientMessageWorkflowNodeStartedPhoneNumber> phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Builder phoneNumber(ClientMessageWorkflowNodeStartedPhoneNumber phoneNumber) {
+            this.phoneNumber = Optional.ofNullable(phoneNumber);
+            return this;
+        }
+
+        @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
+        public Builder timestamp(Optional<Double> timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public Builder timestamp(Double timestamp) {
+            this.timestamp = Optional.ofNullable(timestamp);
+            return this;
+        }
+
+        @JsonSetter(value = "call", nulls = Nulls.SKIP)
+        public Builder call(Optional<Call> call) {
+            this.call = call;
+            return this;
+        }
+
+        public Builder call(Call call) {
+            this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        @JsonSetter(value = "customer", nulls = Nulls.SKIP)
+        public Builder customer(Optional<CreateCustomerDto> customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        public Builder customer(CreateCustomerDto customer) {
+            this.customer = Optional.ofNullable(customer);
+            return this;
+        }
+
+        @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
+        public Builder assistant(Optional<CreateAssistantDto> assistant) {
+            this.assistant = assistant;
+            return this;
+        }
+
+        public Builder assistant(CreateAssistantDto assistant) {
+            this.assistant = Optional.ofNullable(assistant);
             return this;
         }
 
@@ -106,7 +244,8 @@ public final class ClientMessageWorkflowNodeStarted {
         }
 
         public ClientMessageWorkflowNodeStarted build() {
-            return new ClientMessageWorkflowNodeStarted(node, additionalProperties);
+            return new ClientMessageWorkflowNodeStarted(
+                    phoneNumber, timestamp, call, customer, assistant, node, additionalProperties);
         }
     }
 }

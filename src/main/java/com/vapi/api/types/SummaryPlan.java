@@ -42,11 +42,11 @@ public final class SummaryPlan {
 
     /**
      * @return These are the messages used to generate the summary.
-     * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert note-taker. You will be given a transcript of a call. Summarize the call in 2-3 sentences. DO NOT return anything except the summary.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n&quot; } ]</code></p>
+     * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert note-taker. You will be given a transcript of a call. Summarize the call in 2-3 sentences. DO NOT return anything except the summary.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n. Here is the ended reason of the call:\n\n{{endedReason}}\n\n&quot; } ]</code></p>
      * <p>You can customize by providing any messages you want.</p>
      * <p>Here are the template variables available:</p>
      * <ul>
-     * <li>{{transcript}}: The transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: The system prompt of the call from <code>assistant.model.messages[type=system].content</code></li>
+     * <li>{{transcript}}: The transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: The system prompt of the call from <code>assistant.model.messages[type=system].content</code>- {{endedReason}}: The ended reason of the call from <code>call.endedReason</code></li>
      * </ul>
      */
     @JsonProperty("messages")

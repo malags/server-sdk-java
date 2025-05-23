@@ -31,10 +31,6 @@ public final class ServerMessageResponseTransferDestinationRequestDestination {
         return new ServerMessageResponseTransferDestinationRequestDestination(new AssistantValue(value));
     }
 
-    public static ServerMessageResponseTransferDestinationRequestDestination step(TransferDestinationStep value) {
-        return new ServerMessageResponseTransferDestinationRequestDestination(new StepValue(value));
-    }
-
     public static ServerMessageResponseTransferDestinationRequestDestination number(TransferDestinationNumber value) {
         return new ServerMessageResponseTransferDestinationRequestDestination(new NumberValue(value));
     }
@@ -45,10 +41,6 @@ public final class ServerMessageResponseTransferDestinationRequestDestination {
 
     public boolean isAssistant() {
         return value instanceof AssistantValue;
-    }
-
-    public boolean isStep() {
-        return value instanceof StepValue;
     }
 
     public boolean isNumber() {
@@ -66,13 +58,6 @@ public final class ServerMessageResponseTransferDestinationRequestDestination {
     public Optional<TransferDestinationAssistant> getAssistant() {
         if (isAssistant()) {
             return Optional.of(((AssistantValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<TransferDestinationStep> getStep() {
-        if (isStep()) {
-            return Optional.of(((StepValue) value).value);
         }
         return Optional.empty();
     }
@@ -106,8 +91,6 @@ public final class ServerMessageResponseTransferDestinationRequestDestination {
     public interface Visitor<T> {
         T visitAssistant(TransferDestinationAssistant assistant);
 
-        T visitStep(TransferDestinationStep step);
-
         T visitNumber(TransferDestinationNumber number);
 
         T visitSip(TransferDestinationSip sip);
@@ -118,7 +101,6 @@ public final class ServerMessageResponseTransferDestinationRequestDestination {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
         @JsonSubTypes.Type(AssistantValue.class),
-        @JsonSubTypes.Type(StepValue.class),
         @JsonSubTypes.Type(NumberValue.class),
         @JsonSubTypes.Type(SipValue.class)
     })
@@ -152,45 +134,6 @@ public final class ServerMessageResponseTransferDestinationRequestDestination {
         }
 
         private boolean equalTo(AssistantValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "ServerMessageResponseTransferDestinationRequestDestination{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("step")
-    @JsonIgnoreProperties("type")
-    private static final class StepValue implements Value {
-        @JsonUnwrapped
-        private TransferDestinationStep value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private StepValue() {}
-
-        private StepValue(TransferDestinationStep value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitStep(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof StepValue && equalTo((StepValue) other);
-        }
-
-        private boolean equalTo(StepValue other) {
             return value.equals(other.value);
         }
 

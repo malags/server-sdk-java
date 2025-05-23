@@ -10,7 +10,9 @@ public enum VoicemailDetectionCostProvider {
 
     GOOGLE("google"),
 
-    OPENAI("openai");
+    OPENAI("openai"),
+
+    VAPI("vapi");
 
     private final String value;
 

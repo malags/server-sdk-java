@@ -31,14 +31,6 @@ public final class TransferAssistantHookAction {
     }
 
     /**
-     * @return This is the type of action - must be &quot;transfer&quot;
-     */
-    @JsonProperty("type")
-    public String getType() {
-        return "transfer";
-    }
-
-    /**
      * @return This is the destination details for the transfer - can be a phone number or SIP URI
      */
     @JsonProperty("destination")

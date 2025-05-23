@@ -33,6 +33,8 @@ public final class Artifact {
 
     private final Optional<Double> videoRecordingStartDelaySeconds;
 
+    private final Optional<Recording> recording;
+
     private final Optional<String> transcript;
 
     private final Optional<String> pcapUrl;
@@ -46,6 +48,7 @@ public final class Artifact {
             Optional<String> stereoRecordingUrl,
             Optional<String> videoRecordingUrl,
             Optional<Double> videoRecordingStartDelaySeconds,
+            Optional<Recording> recording,
             Optional<String> transcript,
             Optional<String> pcapUrl,
             Map<String, Object> additionalProperties) {
@@ -55,6 +58,7 @@ public final class Artifact {
         this.stereoRecordingUrl = stereoRecordingUrl;
         this.videoRecordingUrl = videoRecordingUrl;
         this.videoRecordingStartDelaySeconds = videoRecordingStartDelaySeconds;
+        this.recording = recording;
         this.transcript = transcript;
         this.pcapUrl = pcapUrl;
         this.additionalProperties = additionalProperties;
@@ -109,6 +113,14 @@ public final class Artifact {
     }
 
     /**
+     * @return This is the recording url for the call. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.
+     */
+    @JsonProperty("recording")
+    public Optional<Recording> getRecording() {
+        return recording;
+    }
+
+    /**
      * @return This is the transcript of the call. This is derived from <code>artifact.messages</code> but provided for convenience.
      */
     @JsonProperty("transcript")
@@ -142,6 +154,7 @@ public final class Artifact {
                 && stereoRecordingUrl.equals(other.stereoRecordingUrl)
                 && videoRecordingUrl.equals(other.videoRecordingUrl)
                 && videoRecordingStartDelaySeconds.equals(other.videoRecordingStartDelaySeconds)
+                && recording.equals(other.recording)
                 && transcript.equals(other.transcript)
                 && pcapUrl.equals(other.pcapUrl);
     }
@@ -155,6 +168,7 @@ public final class Artifact {
                 this.stereoRecordingUrl,
                 this.videoRecordingUrl,
                 this.videoRecordingStartDelaySeconds,
+                this.recording,
                 this.transcript,
                 this.pcapUrl);
     }
@@ -182,6 +196,8 @@ public final class Artifact {
 
         private Optional<Double> videoRecordingStartDelaySeconds = Optional.empty();
 
+        private Optional<Recording> recording = Optional.empty();
+
         private Optional<String> transcript = Optional.empty();
 
         private Optional<String> pcapUrl = Optional.empty();
@@ -198,6 +214,7 @@ public final class Artifact {
             stereoRecordingUrl(other.getStereoRecordingUrl());
             videoRecordingUrl(other.getVideoRecordingUrl());
             videoRecordingStartDelaySeconds(other.getVideoRecordingStartDelaySeconds());
+            recording(other.getRecording());
             transcript(other.getTranscript());
             pcapUrl(other.getPcapUrl());
             return this;
@@ -269,6 +286,17 @@ public final class Artifact {
             return this;
         }
 
+        @JsonSetter(value = "recording", nulls = Nulls.SKIP)
+        public Builder recording(Optional<Recording> recording) {
+            this.recording = recording;
+            return this;
+        }
+
+        public Builder recording(Recording recording) {
+            this.recording = Optional.ofNullable(recording);
+            return this;
+        }
+
         @JsonSetter(value = "transcript", nulls = Nulls.SKIP)
         public Builder transcript(Optional<String> transcript) {
             this.transcript = transcript;
@@ -299,6 +327,7 @@ public final class Artifact {
                     stereoRecordingUrl,
                     videoRecordingUrl,
                     videoRecordingStartDelaySeconds,
+                    recording,
                     transcript,
                     pcapUrl,
                     additionalProperties);

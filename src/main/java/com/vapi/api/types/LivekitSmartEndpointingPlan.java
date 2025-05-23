@@ -49,7 +49,7 @@ public final class LivekitSmartEndpointingPlan {
      * <p>This is a millisecond valued function. It maps probabilities (real numbers on [0,1]) to milliseconds that the bot should wait before speaking ([0, \infty]). Any negative values that are returned are set to zero (the bot can't start talking in the past).</p>
      * <p>A probability of zero represents very high confidence that the caller has stopped speaking, and would like the bot to speak to them. A probability of one represents very high confidence that the caller is still speaking.</p>
      * <p>Under the hood, this is parsed into a mathjs expression. Whatever you use to write your expression needs to be valid with respect to mathjs</p>
-     * <p>@default &quot;70 + 4000 * x&quot;</p>
+     * <p>@default &quot;20 + 500 * sqrt(x) + 2500 * x^3&quot;</p>
      */
     @JsonProperty("waitFunction")
     public Optional<String> getWaitFunction() {
@@ -133,7 +133,7 @@ public final class LivekitSmartEndpointingPlan {
          * <p>This is a millisecond valued function. It maps probabilities (real numbers on [0,1]) to milliseconds that the bot should wait before speaking ([0, \infty]). Any negative values that are returned are set to zero (the bot can't start talking in the past).</p>
          * <p>A probability of zero represents very high confidence that the caller has stopped speaking, and would like the bot to speak to them. A probability of one represents very high confidence that the caller is still speaking.</p>
          * <p>Under the hood, this is parsed into a mathjs expression. Whatever you use to write your expression needs to be valid with respect to mathjs</p>
-         * <p>@default &quot;70 + 4000 * x&quot;</p>
+         * <p>@default &quot;20 + 500 * sqrt(x) + 2500 * x^3&quot;</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

@@ -55,6 +55,8 @@ public final class AssistantOverrides {
 
     private final Optional<List<AssistantOverridesCredentialsItem>> credentials;
 
+    private final Optional<List<AssistantOverridesHooksItem>> hooks;
+
     private final Optional<Map<String, Object>> variableValues;
 
     private final Optional<String> name;
@@ -85,8 +87,6 @@ public final class AssistantOverrides {
 
     private final Optional<Server> server;
 
-    private final Optional<List<AssistantHooks>> hooks;
-
     private final Optional<KeypadInputPlan> keypadInputPlan;
 
     private final Map<String, Object> additionalProperties;
@@ -109,6 +109,7 @@ public final class AssistantOverrides {
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
             Optional<LangfuseObservabilityPlan> observabilityPlan,
             Optional<List<AssistantOverridesCredentialsItem>> credentials,
+            Optional<List<AssistantOverridesHooksItem>> hooks,
             Optional<Map<String, Object>> variableValues,
             Optional<String> name,
             Optional<String> voicemailMessage,
@@ -124,7 +125,6 @@ public final class AssistantOverrides {
             Optional<MonitorPlan> monitorPlan,
             Optional<List<String>> credentialIds,
             Optional<Server> server,
-            Optional<List<AssistantHooks>> hooks,
             Optional<KeypadInputPlan> keypadInputPlan,
             Map<String, Object> additionalProperties) {
         this.transcriber = transcriber;
@@ -144,6 +144,7 @@ public final class AssistantOverrides {
         this.transportConfigurations = transportConfigurations;
         this.observabilityPlan = observabilityPlan;
         this.credentials = credentials;
+        this.hooks = hooks;
         this.variableValues = variableValues;
         this.name = name;
         this.voicemailMessage = voicemailMessage;
@@ -159,7 +160,6 @@ public final class AssistantOverrides {
         this.monitorPlan = monitorPlan;
         this.credentialIds = credentialIds;
         this.server = server;
-        this.hooks = hooks;
         this.keypadInputPlan = keypadInputPlan;
         this.additionalProperties = additionalProperties;
     }
@@ -313,6 +313,14 @@ public final class AssistantOverrides {
     @JsonProperty("credentials")
     public Optional<List<AssistantOverridesCredentialsItem>> getCredentials() {
         return credentials;
+    }
+
+    /**
+     * @return This is a set of actions that will be performed on certain events.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<AssistantOverridesHooksItem>> getHooks() {
+        return hooks;
     }
 
     /**
@@ -470,14 +478,6 @@ public final class AssistantOverrides {
         return server;
     }
 
-    /**
-     * @return This is a set of actions that will be performed on certain events.
-     */
-    @JsonProperty("hooks")
-    public Optional<List<AssistantHooks>> getHooks() {
-        return hooks;
-    }
-
     @JsonProperty("keypadInputPlan")
     public Optional<KeypadInputPlan> getKeypadInputPlan() {
         return keypadInputPlan;
@@ -512,6 +512,7 @@ public final class AssistantOverrides {
                 && transportConfigurations.equals(other.transportConfigurations)
                 && observabilityPlan.equals(other.observabilityPlan)
                 && credentials.equals(other.credentials)
+                && hooks.equals(other.hooks)
                 && variableValues.equals(other.variableValues)
                 && name.equals(other.name)
                 && voicemailMessage.equals(other.voicemailMessage)
@@ -527,7 +528,6 @@ public final class AssistantOverrides {
                 && monitorPlan.equals(other.monitorPlan)
                 && credentialIds.equals(other.credentialIds)
                 && server.equals(other.server)
-                && hooks.equals(other.hooks)
                 && keypadInputPlan.equals(other.keypadInputPlan);
     }
 
@@ -551,6 +551,7 @@ public final class AssistantOverrides {
                 this.transportConfigurations,
                 this.observabilityPlan,
                 this.credentials,
+                this.hooks,
                 this.variableValues,
                 this.name,
                 this.voicemailMessage,
@@ -566,7 +567,6 @@ public final class AssistantOverrides {
                 this.monitorPlan,
                 this.credentialIds,
                 this.server,
-                this.hooks,
                 this.keypadInputPlan);
     }
 
@@ -615,6 +615,8 @@ public final class AssistantOverrides {
 
         private Optional<List<AssistantOverridesCredentialsItem>> credentials = Optional.empty();
 
+        private Optional<List<AssistantOverridesHooksItem>> hooks = Optional.empty();
+
         private Optional<Map<String, Object>> variableValues = Optional.empty();
 
         private Optional<String> name = Optional.empty();
@@ -645,8 +647,6 @@ public final class AssistantOverrides {
 
         private Optional<Server> server = Optional.empty();
 
-        private Optional<List<AssistantHooks>> hooks = Optional.empty();
-
         private Optional<KeypadInputPlan> keypadInputPlan = Optional.empty();
 
         @JsonAnySetter
@@ -672,6 +672,7 @@ public final class AssistantOverrides {
             transportConfigurations(other.getTransportConfigurations());
             observabilityPlan(other.getObservabilityPlan());
             credentials(other.getCredentials());
+            hooks(other.getHooks());
             variableValues(other.getVariableValues());
             name(other.getName());
             voicemailMessage(other.getVoicemailMessage());
@@ -687,7 +688,6 @@ public final class AssistantOverrides {
             monitorPlan(other.getMonitorPlan());
             credentialIds(other.getCredentialIds());
             server(other.getServer());
-            hooks(other.getHooks());
             keypadInputPlan(other.getKeypadInputPlan());
             return this;
         }
@@ -879,6 +879,17 @@ public final class AssistantOverrides {
             return this;
         }
 
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public Builder hooks(Optional<List<AssistantOverridesHooksItem>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        public Builder hooks(List<AssistantOverridesHooksItem> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
         @JsonSetter(value = "variableValues", nulls = Nulls.SKIP)
         public Builder variableValues(Optional<Map<String, Object>> variableValues) {
             this.variableValues = variableValues;
@@ -1044,17 +1055,6 @@ public final class AssistantOverrides {
             return this;
         }
 
-        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
-        public Builder hooks(Optional<List<AssistantHooks>> hooks) {
-            this.hooks = hooks;
-            return this;
-        }
-
-        public Builder hooks(List<AssistantHooks> hooks) {
-            this.hooks = Optional.ofNullable(hooks);
-            return this;
-        }
-
         @JsonSetter(value = "keypadInputPlan", nulls = Nulls.SKIP)
         public Builder keypadInputPlan(Optional<KeypadInputPlan> keypadInputPlan) {
             this.keypadInputPlan = keypadInputPlan;
@@ -1085,6 +1085,7 @@ public final class AssistantOverrides {
                     transportConfigurations,
                     observabilityPlan,
                     credentials,
+                    hooks,
                     variableValues,
                     name,
                     voicemailMessage,
@@ -1100,7 +1101,6 @@ public final class AssistantOverrides {
                     monitorPlan,
                     credentialIds,
                     server,
-                    hooks,
                     keypadInputPlan,
                     additionalProperties);
         }

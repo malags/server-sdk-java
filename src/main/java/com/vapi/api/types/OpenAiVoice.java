@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = OpenAiVoice.Builder.class)
 public final class OpenAiVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final OpenAiVoiceId voiceId;
 
     private final Optional<OpenAiVoiceModel> model;
@@ -36,6 +38,7 @@ public final class OpenAiVoice {
     private final Map<String, Object> additionalProperties;
 
     private OpenAiVoice(
+            Optional<Boolean> cachingEnabled,
             OpenAiVoiceId voiceId,
             Optional<OpenAiVoiceModel> model,
             Optional<String> instructions,
@@ -43,6 +46,7 @@ public final class OpenAiVoice {
             Optional<ChunkPlan> chunkPlan,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.model = model;
         this.instructions = instructions;
@@ -50,6 +54,14 @@ public final class OpenAiVoice {
         this.chunkPlan = chunkPlan;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -114,7 +126,8 @@ public final class OpenAiVoice {
     }
 
     private boolean equalTo(OpenAiVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && model.equals(other.model)
                 && instructions.equals(other.instructions)
                 && speed.equals(other.speed)
@@ -124,7 +137,14 @@ public final class OpenAiVoice {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.model, this.instructions, this.speed, this.chunkPlan, this.fallbackPlan);
+        return Objects.hash(
+                this.cachingEnabled,
+                this.voiceId,
+                this.model,
+                this.instructions,
+                this.speed,
+                this.chunkPlan,
+                this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -144,6 +164,10 @@ public final class OpenAiVoice {
 
     public interface _FinalStage {
         OpenAiVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage model(Optional<OpenAiVoiceModel> model);
 
@@ -180,6 +204,8 @@ public final class OpenAiVoice {
 
         private Optional<OpenAiVoiceModel> model = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -187,6 +213,7 @@ public final class OpenAiVoice {
 
         @java.lang.Override
         public Builder from(OpenAiVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             model(other.getModel());
             instructions(other.getInstructions());
@@ -294,9 +321,27 @@ public final class OpenAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public OpenAiVoice build() {
-            return new OpenAiVoice(voiceId, model, instructions, speed, chunkPlan, fallbackPlan, additionalProperties);
+            return new OpenAiVoice(
+                    cachingEnabled, voiceId, model, instructions, speed, chunkPlan, fallbackPlan, additionalProperties);
         }
     }
 }

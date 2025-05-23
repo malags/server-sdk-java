@@ -25,14 +25,18 @@ public final class Oauth2AuthenticationSession {
 
     private final Optional<OffsetDateTime> expiresAt;
 
+    private final Optional<String> refreshToken;
+
     private final Map<String, Object> additionalProperties;
 
     private Oauth2AuthenticationSession(
             Optional<String> accessToken,
             Optional<OffsetDateTime> expiresAt,
+            Optional<String> refreshToken,
             Map<String, Object> additionalProperties) {
         this.accessToken = accessToken;
         this.expiresAt = expiresAt;
+        this.refreshToken = refreshToken;
         this.additionalProperties = additionalProperties;
     }
 
@@ -52,6 +56,14 @@ public final class Oauth2AuthenticationSession {
         return expiresAt;
     }
 
+    /**
+     * @return This is the OAuth2 refresh token.
+     */
+    @JsonProperty("refreshToken")
+    public Optional<String> getRefreshToken() {
+        return refreshToken;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -64,12 +76,14 @@ public final class Oauth2AuthenticationSession {
     }
 
     private boolean equalTo(Oauth2AuthenticationSession other) {
-        return accessToken.equals(other.accessToken) && expiresAt.equals(other.expiresAt);
+        return accessToken.equals(other.accessToken)
+                && expiresAt.equals(other.expiresAt)
+                && refreshToken.equals(other.refreshToken);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.accessToken, this.expiresAt);
+        return Objects.hash(this.accessToken, this.expiresAt, this.refreshToken);
     }
 
     @java.lang.Override
@@ -87,6 +101,8 @@ public final class Oauth2AuthenticationSession {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
+        private Optional<String> refreshToken = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -95,6 +111,7 @@ public final class Oauth2AuthenticationSession {
         public Builder from(Oauth2AuthenticationSession other) {
             accessToken(other.getAccessToken());
             expiresAt(other.getExpiresAt());
+            refreshToken(other.getRefreshToken());
             return this;
         }
 
@@ -120,8 +137,19 @@ public final class Oauth2AuthenticationSession {
             return this;
         }
 
+        @JsonSetter(value = "refreshToken", nulls = Nulls.SKIP)
+        public Builder refreshToken(Optional<String> refreshToken) {
+            this.refreshToken = refreshToken;
+            return this;
+        }
+
+        public Builder refreshToken(String refreshToken) {
+            this.refreshToken = Optional.ofNullable(refreshToken);
+            return this;
+        }
+
         public Oauth2AuthenticationSession build() {
-            return new Oauth2AuthenticationSession(accessToken, expiresAt, additionalProperties);
+            return new Oauth2AuthenticationSession(accessToken, expiresAt, refreshToken, additionalProperties);
         }
     }
 }

@@ -30,6 +30,8 @@ public enum AssistantClientMessagesItem {
 
     TOOL_CALLS_RESULT("tool-calls-result"),
 
+    TOOL_COMPLETED("tool.completed"),
+
     TRANSFER_UPDATE("transfer-update"),
 
     USER_INTERRUPTED("user-interrupted"),

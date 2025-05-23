@@ -22,19 +22,47 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageConversationUpdate.Builder.class)
 public final class ClientMessageConversationUpdate {
+    private final Optional<ClientMessageConversationUpdatePhoneNumber> phoneNumber;
+
     private final Optional<List<ClientMessageConversationUpdateMessagesItem>> messages;
 
     private final List<OpenAiMessage> messagesOpenAiFormatted;
 
+    private final Optional<Double> timestamp;
+
+    private final Optional<Call> call;
+
+    private final Optional<CreateCustomerDto> customer;
+
+    private final Optional<CreateAssistantDto> assistant;
+
     private final Map<String, Object> additionalProperties;
 
     private ClientMessageConversationUpdate(
+            Optional<ClientMessageConversationUpdatePhoneNumber> phoneNumber,
             Optional<List<ClientMessageConversationUpdateMessagesItem>> messages,
             List<OpenAiMessage> messagesOpenAiFormatted,
+            Optional<Double> timestamp,
+            Optional<Call> call,
+            Optional<CreateCustomerDto> customer,
+            Optional<CreateAssistantDto> assistant,
             Map<String, Object> additionalProperties) {
+        this.phoneNumber = phoneNumber;
         this.messages = messages;
         this.messagesOpenAiFormatted = messagesOpenAiFormatted;
+        this.timestamp = timestamp;
+        this.call = call;
+        this.customer = customer;
+        this.assistant = assistant;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the phone number that the message is associated with.
+     */
+    @JsonProperty("phoneNumber")
+    public Optional<ClientMessageConversationUpdatePhoneNumber> getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
@@ -61,6 +89,38 @@ public final class ClientMessageConversationUpdate {
         return messagesOpenAiFormatted;
     }
 
+    /**
+     * @return This is the timestamp of the message.
+     */
+    @JsonProperty("timestamp")
+    public Optional<Double> getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * @return This is the call that the message is associated with.
+     */
+    @JsonProperty("call")
+    public Optional<Call> getCall() {
+        return call;
+    }
+
+    /**
+     * @return This is the customer that the message is associated with.
+     */
+    @JsonProperty("customer")
+    public Optional<CreateCustomerDto> getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @return This is the assistant that the message is associated with.
+     */
+    @JsonProperty("assistant")
+    public Optional<CreateAssistantDto> getAssistant() {
+        return assistant;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -73,12 +133,25 @@ public final class ClientMessageConversationUpdate {
     }
 
     private boolean equalTo(ClientMessageConversationUpdate other) {
-        return messages.equals(other.messages) && messagesOpenAiFormatted.equals(other.messagesOpenAiFormatted);
+        return phoneNumber.equals(other.phoneNumber)
+                && messages.equals(other.messages)
+                && messagesOpenAiFormatted.equals(other.messagesOpenAiFormatted)
+                && timestamp.equals(other.timestamp)
+                && call.equals(other.call)
+                && customer.equals(other.customer)
+                && assistant.equals(other.assistant);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.messages, this.messagesOpenAiFormatted);
+        return Objects.hash(
+                this.phoneNumber,
+                this.messages,
+                this.messagesOpenAiFormatted,
+                this.timestamp,
+                this.call,
+                this.customer,
+                this.assistant);
     }
 
     @java.lang.Override
@@ -92,9 +165,19 @@ public final class ClientMessageConversationUpdate {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<ClientMessageConversationUpdatePhoneNumber> phoneNumber = Optional.empty();
+
         private Optional<List<ClientMessageConversationUpdateMessagesItem>> messages = Optional.empty();
 
         private List<OpenAiMessage> messagesOpenAiFormatted = new ArrayList<>();
+
+        private Optional<Double> timestamp = Optional.empty();
+
+        private Optional<Call> call = Optional.empty();
+
+        private Optional<CreateCustomerDto> customer = Optional.empty();
+
+        private Optional<CreateAssistantDto> assistant = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -102,8 +185,24 @@ public final class ClientMessageConversationUpdate {
         private Builder() {}
 
         public Builder from(ClientMessageConversationUpdate other) {
+            phoneNumber(other.getPhoneNumber());
             messages(other.getMessages());
             messagesOpenAiFormatted(other.getMessagesOpenAiFormatted());
+            timestamp(other.getTimestamp());
+            call(other.getCall());
+            customer(other.getCustomer());
+            assistant(other.getAssistant());
+            return this;
+        }
+
+        @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
+        public Builder phoneNumber(Optional<ClientMessageConversationUpdatePhoneNumber> phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Builder phoneNumber(ClientMessageConversationUpdatePhoneNumber phoneNumber) {
+            this.phoneNumber = Optional.ofNullable(phoneNumber);
             return this;
         }
 
@@ -135,8 +234,60 @@ public final class ClientMessageConversationUpdate {
             return this;
         }
 
+        @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
+        public Builder timestamp(Optional<Double> timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public Builder timestamp(Double timestamp) {
+            this.timestamp = Optional.ofNullable(timestamp);
+            return this;
+        }
+
+        @JsonSetter(value = "call", nulls = Nulls.SKIP)
+        public Builder call(Optional<Call> call) {
+            this.call = call;
+            return this;
+        }
+
+        public Builder call(Call call) {
+            this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        @JsonSetter(value = "customer", nulls = Nulls.SKIP)
+        public Builder customer(Optional<CreateCustomerDto> customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        public Builder customer(CreateCustomerDto customer) {
+            this.customer = Optional.ofNullable(customer);
+            return this;
+        }
+
+        @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
+        public Builder assistant(Optional<CreateAssistantDto> assistant) {
+            this.assistant = assistant;
+            return this;
+        }
+
+        public Builder assistant(CreateAssistantDto assistant) {
+            this.assistant = Optional.ofNullable(assistant);
+            return this;
+        }
+
         public ClientMessageConversationUpdate build() {
-            return new ClientMessageConversationUpdate(messages, messagesOpenAiFormatted, additionalProperties);
+            return new ClientMessageConversationUpdate(
+                    phoneNumber,
+                    messages,
+                    messagesOpenAiFormatted,
+                    timestamp,
+                    call,
+                    customer,
+                    assistant,
+                    additionalProperties);
         }
     }
 }

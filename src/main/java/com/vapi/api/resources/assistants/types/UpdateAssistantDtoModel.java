@@ -24,7 +24,6 @@ import com.vapi.api.types.OpenAiModel;
 import com.vapi.api.types.OpenRouterModel;
 import com.vapi.api.types.PerplexityAiModel;
 import com.vapi.api.types.TogetherAiModel;
-import com.vapi.api.types.VapiModel;
 import com.vapi.api.types.XaiModel;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,12 +40,12 @@ public final class UpdateAssistantDtoModel {
         return value.visit(visitor);
     }
 
-    public static UpdateAssistantDtoModel anyscale(AnyscaleModel value) {
-        return new UpdateAssistantDtoModel(new AnyscaleValue(value));
-    }
-
     public static UpdateAssistantDtoModel anthropic(AnthropicModel value) {
         return new UpdateAssistantDtoModel(new AnthropicValue(value));
+    }
+
+    public static UpdateAssistantDtoModel anyscale(AnyscaleModel value) {
+        return new UpdateAssistantDtoModel(new AnyscaleValue(value));
     }
 
     public static UpdateAssistantDtoModel cerebras(CerebrasModel value) {
@@ -93,20 +92,16 @@ public final class UpdateAssistantDtoModel {
         return new UpdateAssistantDtoModel(new TogetherAiValue(value));
     }
 
-    public static UpdateAssistantDtoModel vapi(VapiModel value) {
-        return new UpdateAssistantDtoModel(new VapiValue(value));
-    }
-
     public static UpdateAssistantDtoModel xai(XaiModel value) {
         return new UpdateAssistantDtoModel(new XaiValue(value));
     }
 
-    public boolean isAnyscale() {
-        return value instanceof AnyscaleValue;
-    }
-
     public boolean isAnthropic() {
         return value instanceof AnthropicValue;
+    }
+
+    public boolean isAnyscale() {
+        return value instanceof AnyscaleValue;
     }
 
     public boolean isCerebras() {
@@ -153,10 +148,6 @@ public final class UpdateAssistantDtoModel {
         return value instanceof TogetherAiValue;
     }
 
-    public boolean isVapi() {
-        return value instanceof VapiValue;
-    }
-
     public boolean isXai() {
         return value instanceof XaiValue;
     }
@@ -165,16 +156,16 @@ public final class UpdateAssistantDtoModel {
         return value instanceof _UnknownValue;
     }
 
-    public Optional<AnyscaleModel> getAnyscale() {
-        if (isAnyscale()) {
-            return Optional.of(((AnyscaleValue) value).value);
+    public Optional<AnthropicModel> getAnthropic() {
+        if (isAnthropic()) {
+            return Optional.of(((AnthropicValue) value).value);
         }
         return Optional.empty();
     }
 
-    public Optional<AnthropicModel> getAnthropic() {
-        if (isAnthropic()) {
-            return Optional.of(((AnthropicValue) value).value);
+    public Optional<AnyscaleModel> getAnyscale() {
+        if (isAnyscale()) {
+            return Optional.of(((AnyscaleValue) value).value);
         }
         return Optional.empty();
     }
@@ -256,13 +247,6 @@ public final class UpdateAssistantDtoModel {
         return Optional.empty();
     }
 
-    public Optional<VapiModel> getVapi() {
-        if (isVapi()) {
-            return Optional.of(((VapiValue) value).value);
-        }
-        return Optional.empty();
-    }
-
     public Optional<XaiModel> getXai() {
         if (isXai()) {
             return Optional.of(((XaiValue) value).value);
@@ -283,9 +267,9 @@ public final class UpdateAssistantDtoModel {
     }
 
     public interface Visitor<T> {
-        T visitAnyscale(AnyscaleModel anyscale);
-
         T visitAnthropic(AnthropicModel anthropic);
+
+        T visitAnyscale(AnyscaleModel anyscale);
 
         T visitCerebras(CerebrasModel cerebras);
 
@@ -309,8 +293,6 @@ public final class UpdateAssistantDtoModel {
 
         T visitTogetherAi(TogetherAiModel togetherAi);
 
-        T visitVapi(VapiModel vapi);
-
         T visitXai(XaiModel xai);
 
         T _visitUnknown(Object unknownType);
@@ -318,8 +300,8 @@ public final class UpdateAssistantDtoModel {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "provider", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
-        @JsonSubTypes.Type(AnyscaleValue.class),
         @JsonSubTypes.Type(AnthropicValue.class),
+        @JsonSubTypes.Type(AnyscaleValue.class),
         @JsonSubTypes.Type(CerebrasValue.class),
         @JsonSubTypes.Type(CustomLlmValue.class),
         @JsonSubTypes.Type(DeepinfraValue.class),
@@ -331,51 +313,11 @@ public final class UpdateAssistantDtoModel {
         @JsonSubTypes.Type(OpenrouterValue.class),
         @JsonSubTypes.Type(PerplexityAiValue.class),
         @JsonSubTypes.Type(TogetherAiValue.class),
-        @JsonSubTypes.Type(VapiValue.class),
         @JsonSubTypes.Type(XaiValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
-    }
-
-    @JsonTypeName("anyscale")
-    @JsonIgnoreProperties("provider")
-    private static final class AnyscaleValue implements Value {
-        @JsonUnwrapped
-        private AnyscaleModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private AnyscaleValue() {}
-
-        private AnyscaleValue(AnyscaleModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitAnyscale(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof AnyscaleValue && equalTo((AnyscaleValue) other);
-        }
-
-        private boolean equalTo(AnyscaleValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateAssistantDtoModel{" + "value: " + value + "}";
-        }
     }
 
     @JsonTypeName("anthropic")
@@ -403,6 +345,45 @@ public final class UpdateAssistantDtoModel {
         }
 
         private boolean equalTo(AnthropicValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoModel{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("anyscale")
+    @JsonIgnoreProperties("provider")
+    private static final class AnyscaleValue implements Value {
+        @JsonUnwrapped
+        private AnyscaleModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private AnyscaleValue() {}
+
+        private AnyscaleValue(AnyscaleModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitAnyscale(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof AnyscaleValue && equalTo((AnyscaleValue) other);
+        }
+
+        private boolean equalTo(AnyscaleValue other) {
             return value.equals(other.value);
         }
 
@@ -832,45 +813,6 @@ public final class UpdateAssistantDtoModel {
         }
 
         private boolean equalTo(TogetherAiValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "UpdateAssistantDtoModel{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("vapi")
-    @JsonIgnoreProperties("provider")
-    private static final class VapiValue implements Value {
-        @JsonUnwrapped
-        private VapiModel value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private VapiValue() {}
-
-        private VapiValue(VapiModel value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitVapi(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof VapiValue && equalTo((VapiValue) other);
-        }
-
-        private boolean equalTo(VapiValue other) {
             return value.equals(other.value);
         }
 

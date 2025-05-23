@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TavusVoice.Builder.class)
 public final class TavusVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final TavusVoiceVoiceId voiceId;
 
     private final Optional<ChunkPlan> chunkPlan;
@@ -42,6 +44,7 @@ public final class TavusVoice {
     private final Map<String, Object> additionalProperties;
 
     private TavusVoice(
+            Optional<Boolean> cachingEnabled,
             TavusVoiceVoiceId voiceId,
             Optional<ChunkPlan> chunkPlan,
             Optional<String> personaId,
@@ -52,6 +55,7 @@ public final class TavusVoice {
             Optional<TavusConversationProperties> properties,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.chunkPlan = chunkPlan;
         this.personaId = personaId;
@@ -62,6 +66,14 @@ public final class TavusVoice {
         this.properties = properties;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -148,7 +160,8 @@ public final class TavusVoice {
     }
 
     private boolean equalTo(TavusVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && chunkPlan.equals(other.chunkPlan)
                 && personaId.equals(other.personaId)
                 && callbackUrl.equals(other.callbackUrl)
@@ -162,6 +175,7 @@ public final class TavusVoice {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cachingEnabled,
                 this.voiceId,
                 this.chunkPlan,
                 this.personaId,
@@ -190,6 +204,10 @@ public final class TavusVoice {
 
     public interface _FinalStage {
         TavusVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
@@ -244,6 +262,8 @@ public final class TavusVoice {
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -251,6 +271,7 @@ public final class TavusVoice {
 
         @java.lang.Override
         public Builder from(TavusVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             chunkPlan(other.getChunkPlan());
             personaId(other.getPersonaId());
@@ -410,9 +431,27 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public TavusVoice build() {
             return new TavusVoice(
+                    cachingEnabled,
                     voiceId,
                     chunkPlan,
                     personaId,

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateTelnyxPhoneNumberDto {
     private final Optional<CreateTelnyxPhoneNumberDtoFallbackDestination> fallbackDestination;
 
+    private final Optional<List<PhoneNumberHookCallRinging>> hooks;
+
     private final String number;
 
     private final String credentialId;
@@ -30,6 +33,8 @@ public final class CreateTelnyxPhoneNumberDto {
     private final Optional<String> name;
 
     private final Optional<String> assistantId;
+
+    private final Optional<String> workflowId;
 
     private final Optional<String> squadId;
 
@@ -39,18 +44,22 @@ public final class CreateTelnyxPhoneNumberDto {
 
     private CreateTelnyxPhoneNumberDto(
             Optional<CreateTelnyxPhoneNumberDtoFallbackDestination> fallbackDestination,
+            Optional<List<PhoneNumberHookCallRinging>> hooks,
             String number,
             String credentialId,
             Optional<String> name,
             Optional<String> assistantId,
+            Optional<String> workflowId,
             Optional<String> squadId,
             Optional<Server> server,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
+        this.hooks = hooks;
         this.number = number;
         this.credentialId = credentialId;
         this.name = name;
         this.assistantId = assistantId;
+        this.workflowId = workflowId;
         this.squadId = squadId;
         this.server = server;
         this.additionalProperties = additionalProperties;
@@ -68,6 +77,14 @@ public final class CreateTelnyxPhoneNumberDto {
     @JsonProperty("fallbackDestination")
     public Optional<CreateTelnyxPhoneNumberDtoFallbackDestination> getFallbackDestination() {
         return fallbackDestination;
+    }
+
+    /**
+     * @return This is the hooks that will be used for incoming calls to this phone number.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<PhoneNumberHookCallRinging>> getHooks() {
+        return hooks;
     }
 
     /**
@@ -96,7 +113,7 @@ public final class CreateTelnyxPhoneNumberDto {
 
     /**
      * @return This is the assistant that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
@@ -104,8 +121,17 @@ public final class CreateTelnyxPhoneNumberDto {
     }
 
     /**
+     * @return This is the workflow that will be used for incoming calls to this phone number.
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     */
+    @JsonProperty("workflowId")
+    public Optional<String> getWorkflowId() {
+        return workflowId;
+    }
+
+    /**
      * @return This is the squad that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("squadId")
     public Optional<String> getSquadId() {
@@ -139,10 +165,12 @@ public final class CreateTelnyxPhoneNumberDto {
 
     private boolean equalTo(CreateTelnyxPhoneNumberDto other) {
         return fallbackDestination.equals(other.fallbackDestination)
+                && hooks.equals(other.hooks)
                 && number.equals(other.number)
                 && credentialId.equals(other.credentialId)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
+                && workflowId.equals(other.workflowId)
                 && squadId.equals(other.squadId)
                 && server.equals(other.server);
     }
@@ -151,10 +179,12 @@ public final class CreateTelnyxPhoneNumberDto {
     public int hashCode() {
         return Objects.hash(
                 this.fallbackDestination,
+                this.hooks,
                 this.number,
                 this.credentialId,
                 this.name,
                 this.assistantId,
+                this.workflowId,
                 this.squadId,
                 this.server);
     }
@@ -185,6 +215,10 @@ public final class CreateTelnyxPhoneNumberDto {
 
         _FinalStage fallbackDestination(CreateTelnyxPhoneNumberDtoFallbackDestination fallbackDestination);
 
+        _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks);
+
+        _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -192,6 +226,10 @@ public final class CreateTelnyxPhoneNumberDto {
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
+
+        _FinalStage workflowId(Optional<String> workflowId);
+
+        _FinalStage workflowId(String workflowId);
 
         _FinalStage squadId(Optional<String> squadId);
 
@@ -212,9 +250,13 @@ public final class CreateTelnyxPhoneNumberDto {
 
         private Optional<String> squadId = Optional.empty();
 
+        private Optional<String> workflowId = Optional.empty();
+
         private Optional<String> assistantId = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<List<PhoneNumberHookCallRinging>> hooks = Optional.empty();
 
         private Optional<CreateTelnyxPhoneNumberDtoFallbackDestination> fallbackDestination = Optional.empty();
 
@@ -226,10 +268,12 @@ public final class CreateTelnyxPhoneNumberDto {
         @java.lang.Override
         public Builder from(CreateTelnyxPhoneNumberDto other) {
             fallbackDestination(other.getFallbackDestination());
+            hooks(other.getHooks());
             number(other.getNumber());
             credentialId(other.getCredentialId());
             name(other.getName());
             assistantId(other.getAssistantId());
+            workflowId(other.getWorkflowId());
             squadId(other.getSquadId());
             server(other.getServer());
             return this;
@@ -282,7 +326,7 @@ public final class CreateTelnyxPhoneNumberDto {
 
         /**
          * <p>This is the squad that will be used for incoming calls to this phone number.</p>
-         * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -299,8 +343,26 @@ public final class CreateTelnyxPhoneNumberDto {
         }
 
         /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage workflowId(String workflowId) {
+            this.workflowId = Optional.ofNullable(workflowId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
+        public _FinalStage workflowId(Optional<String> workflowId) {
+            this.workflowId = workflowId;
+            return this;
+        }
+
+        /**
          * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
-         * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -334,6 +396,23 @@ public final class CreateTelnyxPhoneNumberDto {
         }
 
         /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        /**
          * <p>This is the fallback destination an inbound call will be transferred to if:</p>
          * <ol>
          * <li><code>assistantId</code> is not set</li>
@@ -361,10 +440,12 @@ public final class CreateTelnyxPhoneNumberDto {
         public CreateTelnyxPhoneNumberDto build() {
             return new CreateTelnyxPhoneNumberDto(
                     fallbackDestination,
+                    hooks,
                     number,
                     credentialId,
                     name,
                     assistantId,
+                    workflowId,
                     squadId,
                     server,
                     additionalProperties);

@@ -75,6 +75,10 @@ public final class Call {
 
     private final Optional<CreateSquadDto> squad;
 
+    private final Optional<String> workflowId;
+
+    private final Optional<CreateWorkflowDto> workflow;
+
     private final Optional<String> phoneNumberId;
 
     private final Optional<ImportTwilioPhoneNumberDto> phoneNumber;
@@ -118,6 +122,8 @@ public final class Call {
             Optional<AssistantOverrides> assistantOverrides,
             Optional<String> squadId,
             Optional<CreateSquadDto> squad,
+            Optional<String> workflowId,
+            Optional<CreateWorkflowDto> workflow,
             Optional<String> phoneNumberId,
             Optional<ImportTwilioPhoneNumberDto> phoneNumber,
             Optional<String> customerId,
@@ -152,6 +158,8 @@ public final class Call {
         this.assistantOverrides = assistantOverrides;
         this.squadId = squadId;
         this.squad = squad;
+        this.workflowId = workflowId;
+        this.workflow = workflow;
         this.phoneNumberId = phoneNumberId;
         this.phoneNumber = phoneNumber;
         this.customerId = customerId;
@@ -331,7 +339,13 @@ public final class Call {
     }
 
     /**
-     * @return This is the assistant that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.
+     * @return This is the assistant ID that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.
+     * <p>To start a call with:</p>
+     * <ul>
+     * <li>Assistant, use <code>assistantId</code> or <code>assistant</code></li>
+     * <li>Squad, use <code>squadId</code> or <code>squad</code></li>
+     * <li>Workflow, use <code>workflowId</code> or <code>workflow</code></li>
+     * </ul>
      */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
@@ -340,6 +354,12 @@ public final class Call {
 
     /**
      * @return This is the assistant that will be used for the call. To use an existing assistant, use <code>assistantId</code> instead.
+     * <p>To start a call with:</p>
+     * <ul>
+     * <li>Assistant, use <code>assistant</code></li>
+     * <li>Squad, use <code>squad</code></li>
+     * <li>Workflow, use <code>workflow</code></li>
+     * </ul>
      */
     @JsonProperty("assistant")
     public Optional<CreateAssistantDto> getAssistant() {
@@ -356,6 +376,12 @@ public final class Call {
 
     /**
      * @return This is the squad that will be used for the call. To use a transient squad, use <code>squad</code> instead.
+     * <p>To start a call with:</p>
+     * <ul>
+     * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+     * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+     * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+     * </ul>
      */
     @JsonProperty("squadId")
     public Optional<String> getSquadId() {
@@ -364,10 +390,46 @@ public final class Call {
 
     /**
      * @return This is a squad that will be used for the call. To use an existing squad, use <code>squadId</code> instead.
+     * <p>To start a call with:</p>
+     * <ul>
+     * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+     * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+     * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+     * </ul>
      */
     @JsonProperty("squad")
     public Optional<CreateSquadDto> getSquad() {
         return squad;
+    }
+
+    /**
+     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
+     * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+     * <p>To start a call with:</p>
+     * <ul>
+     * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+     * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+     * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+     * </ul>
+     */
+    @JsonProperty("workflowId")
+    public Optional<String> getWorkflowId() {
+        return workflowId;
+    }
+
+    /**
+     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
+     * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+     * <p>To start a call with:</p>
+     * <ul>
+     * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+     * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+     * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+     * </ul>
+     */
+    @JsonProperty("workflow")
+    public Optional<CreateWorkflowDto> getWorkflow() {
+        return workflow;
     }
 
     /**
@@ -468,6 +530,8 @@ public final class Call {
                 && assistantOverrides.equals(other.assistantOverrides)
                 && squadId.equals(other.squadId)
                 && squad.equals(other.squad)
+                && workflowId.equals(other.workflowId)
+                && workflow.equals(other.workflow)
                 && phoneNumberId.equals(other.phoneNumberId)
                 && phoneNumber.equals(other.phoneNumber)
                 && customerId.equals(other.customerId)
@@ -506,6 +570,8 @@ public final class Call {
                 this.assistantOverrides,
                 this.squadId,
                 this.squad,
+                this.workflowId,
+                this.workflow,
                 this.phoneNumberId,
                 this.phoneNumber,
                 this.customerId,
@@ -633,6 +699,14 @@ public final class Call {
 
         _FinalStage squad(CreateSquadDto squad);
 
+        _FinalStage workflowId(Optional<String> workflowId);
+
+        _FinalStage workflowId(String workflowId);
+
+        _FinalStage workflow(Optional<CreateWorkflowDto> workflow);
+
+        _FinalStage workflow(CreateWorkflowDto workflow);
+
         _FinalStage phoneNumberId(Optional<String> phoneNumberId);
 
         _FinalStage phoneNumberId(String phoneNumberId);
@@ -685,6 +759,10 @@ public final class Call {
         private Optional<ImportTwilioPhoneNumberDto> phoneNumber = Optional.empty();
 
         private Optional<String> phoneNumberId = Optional.empty();
+
+        private Optional<CreateWorkflowDto> workflow = Optional.empty();
+
+        private Optional<String> workflowId = Optional.empty();
 
         private Optional<CreateSquadDto> squad = Optional.empty();
 
@@ -763,6 +841,8 @@ public final class Call {
             assistantOverrides(other.getAssistantOverrides());
             squadId(other.getSquadId());
             squad(other.getSquad());
+            workflowId(other.getWorkflowId());
+            workflow(other.getWorkflow());
             phoneNumberId(other.getPhoneNumberId());
             phoneNumber(other.getPhoneNumber());
             customerId(other.getCustomerId());
@@ -941,7 +1021,61 @@ public final class Call {
         }
 
         /**
+         * <p>[BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.</p>
+         * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage workflow(CreateWorkflowDto workflow) {
+            this.workflow = Optional.ofNullable(workflow);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "workflow", nulls = Nulls.SKIP)
+        public _FinalStage workflow(Optional<CreateWorkflowDto> workflow) {
+            this.workflow = workflow;
+            return this;
+        }
+
+        /**
+         * <p>[BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.</p>
+         * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage workflowId(String workflowId) {
+            this.workflowId = Optional.ofNullable(workflowId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
+        public _FinalStage workflowId(Optional<String> workflowId) {
+            this.workflowId = workflowId;
+            return this;
+        }
+
+        /**
          * <p>This is a squad that will be used for the call. To use an existing squad, use <code>squadId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -959,6 +1093,12 @@ public final class Call {
 
         /**
          * <p>This is the squad that will be used for the call. To use a transient squad, use <code>squad</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -993,6 +1133,12 @@ public final class Call {
 
         /**
          * <p>This is the assistant that will be used for the call. To use an existing assistant, use <code>assistantId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code></li>
+         * <li>Squad, use <code>squad</code></li>
+         * <li>Workflow, use <code>workflow</code></li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1009,7 +1155,13 @@ public final class Call {
         }
 
         /**
-         * <p>This is the assistant that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.</p>
+         * <p>This is the assistant ID that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistantId</code> or <code>assistant</code></li>
+         * <li>Squad, use <code>squadId</code> or <code>squad</code></li>
+         * <li>Workflow, use <code>workflowId</code> or <code>workflow</code></li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1342,6 +1494,8 @@ public final class Call {
                     assistantOverrides,
                     squadId,
                     squad,
+                    workflowId,
+                    workflow,
                     phoneNumberId,
                     phoneNumber,
                     customerId,

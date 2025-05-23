@@ -5,12 +5,15 @@ package com.vapi.api.resources.logs.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.vapi.api.core.Nullable;
+import com.vapi.api.core.NullableNonemptyFilter;
 import com.vapi.api.core.ObjectMappers;
 import com.vapi.api.resources.logs.types.LoggingControllerLogsDeleteQueryRequestType;
 import java.util.HashMap;
@@ -55,45 +58,99 @@ public final class LoggingControllerLogsDeleteQueryRequest {
     /**
      * @return This is the type of the log.
      */
-    @JsonProperty("type")
+    @JsonIgnore
     public Optional<LoggingControllerLogsDeleteQueryRequestType> getType() {
+        if (type == null) {
+            return Optional.empty();
+        }
         return type;
     }
 
-    @JsonProperty("assistantId")
+    @JsonIgnore
     public Optional<String> getAssistantId() {
+        if (assistantId == null) {
+            return Optional.empty();
+        }
         return assistantId;
     }
 
     /**
      * @return This is the ID of the phone number.
      */
-    @JsonProperty("phoneNumberId")
+    @JsonIgnore
     public Optional<String> getPhoneNumberId() {
+        if (phoneNumberId == null) {
+            return Optional.empty();
+        }
         return phoneNumberId;
     }
 
     /**
      * @return This is the ID of the customer.
      */
-    @JsonProperty("customerId")
+    @JsonIgnore
     public Optional<String> getCustomerId() {
+        if (customerId == null) {
+            return Optional.empty();
+        }
         return customerId;
     }
 
     /**
      * @return This is the ID of the squad.
      */
-    @JsonProperty("squadId")
+    @JsonIgnore
     public Optional<String> getSquadId() {
+        if (squadId == null) {
+            return Optional.empty();
+        }
         return squadId;
     }
 
     /**
      * @return This is the ID of the call.
      */
-    @JsonProperty("callId")
+    @JsonIgnore
     public Optional<String> getCallId() {
+        if (callId == null) {
+            return Optional.empty();
+        }
+        return callId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("type")
+    private Optional<LoggingControllerLogsDeleteQueryRequestType> _getType() {
+        return type;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("assistantId")
+    private Optional<String> _getAssistantId() {
+        return assistantId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("phoneNumberId")
+    private Optional<String> _getPhoneNumberId() {
+        return phoneNumberId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("customerId")
+    private Optional<String> _getCustomerId() {
+        return customerId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("squadId")
+    private Optional<String> _getSquadId() {
+        return squadId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("callId")
+    private Optional<String> _getCallId() {
         return callId;
     }
 
@@ -173,6 +230,17 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
+        public Builder type(Nullable<LoggingControllerLogsDeleteQueryRequestType> type) {
+            if (type.isNull()) {
+                this.type = null;
+            } else if (type.isEmpty()) {
+                this.type = Optional.empty();
+            } else {
+                this.type = Optional.of(type.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -181,6 +249,17 @@ public final class LoggingControllerLogsDeleteQueryRequest {
 
         public Builder assistantId(String assistantId) {
             this.assistantId = Optional.ofNullable(assistantId);
+            return this;
+        }
+
+        public Builder assistantId(Nullable<String> assistantId) {
+            if (assistantId.isNull()) {
+                this.assistantId = null;
+            } else if (assistantId.isEmpty()) {
+                this.assistantId = Optional.empty();
+            } else {
+                this.assistantId = Optional.of(assistantId.get());
+            }
             return this;
         }
 
@@ -195,6 +274,17 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
+        public Builder phoneNumberId(Nullable<String> phoneNumberId) {
+            if (phoneNumberId.isNull()) {
+                this.phoneNumberId = null;
+            } else if (phoneNumberId.isEmpty()) {
+                this.phoneNumberId = Optional.empty();
+            } else {
+                this.phoneNumberId = Optional.of(phoneNumberId.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "customerId", nulls = Nulls.SKIP)
         public Builder customerId(Optional<String> customerId) {
             this.customerId = customerId;
@@ -203,6 +293,17 @@ public final class LoggingControllerLogsDeleteQueryRequest {
 
         public Builder customerId(String customerId) {
             this.customerId = Optional.ofNullable(customerId);
+            return this;
+        }
+
+        public Builder customerId(Nullable<String> customerId) {
+            if (customerId.isNull()) {
+                this.customerId = null;
+            } else if (customerId.isEmpty()) {
+                this.customerId = Optional.empty();
+            } else {
+                this.customerId = Optional.of(customerId.get());
+            }
             return this;
         }
 
@@ -217,6 +318,17 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
+        public Builder squadId(Nullable<String> squadId) {
+            if (squadId.isNull()) {
+                this.squadId = null;
+            } else if (squadId.isEmpty()) {
+                this.squadId = Optional.empty();
+            } else {
+                this.squadId = Optional.of(squadId.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "callId", nulls = Nulls.SKIP)
         public Builder callId(Optional<String> callId) {
             this.callId = callId;
@@ -225,6 +337,17 @@ public final class LoggingControllerLogsDeleteQueryRequest {
 
         public Builder callId(String callId) {
             this.callId = Optional.ofNullable(callId);
+            return this;
+        }
+
+        public Builder callId(Nullable<String> callId) {
+            if (callId.isNull()) {
+                this.callId = null;
+            } else if (callId.isEmpty()) {
+                this.callId = Optional.empty();
+            } else {
+                this.callId = Optional.of(callId.get());
+            }
             return this;
         }
 

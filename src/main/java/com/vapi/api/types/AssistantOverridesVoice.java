@@ -82,6 +82,10 @@ public final class AssistantOverridesVoice {
         return new AssistantOverridesVoice(new VapiValue(value));
     }
 
+    public static AssistantOverridesVoice sesame(SesameVoice value) {
+        return new AssistantOverridesVoice(new SesameValue(value));
+    }
+
     public boolean isAzure() {
         return value instanceof AzureValue;
     }
@@ -136,6 +140,10 @@ public final class AssistantOverridesVoice {
 
     public boolean isVapi() {
         return value instanceof VapiValue;
+    }
+
+    public boolean isSesame() {
+        return value instanceof SesameValue;
     }
 
     public boolean _isUnknown() {
@@ -240,6 +248,13 @@ public final class AssistantOverridesVoice {
         return Optional.empty();
     }
 
+    public Optional<SesameVoice> getSesame() {
+        if (isSesame()) {
+            return Optional.of(((SesameValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -281,6 +296,8 @@ public final class AssistantOverridesVoice {
 
         T visitVapi(VapiVoice vapi);
 
+        T visitSesame(SesameVoice sesame);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -299,7 +316,8 @@ public final class AssistantOverridesVoice {
         @JsonSubTypes.Type(RimeAiValue.class),
         @JsonSubTypes.Type(SmallestAiValue.class),
         @JsonSubTypes.Type(TavusValue.class),
-        @JsonSubTypes.Type(VapiValue.class)
+        @JsonSubTypes.Type(VapiValue.class),
+        @JsonSubTypes.Type(SesameValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -838,6 +856,45 @@ public final class AssistantOverridesVoice {
         }
 
         private boolean equalTo(VapiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesVoice{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("sesame")
+    @JsonIgnoreProperties("provider")
+    private static final class SesameValue implements Value {
+        @JsonUnwrapped
+        private SesameVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SesameValue() {}
+
+        private SesameValue(SesameVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSesame(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SesameValue && equalTo((SesameValue) other);
+        }
+
+        private boolean equalTo(SesameValue other) {
             return value.equals(other.value);
         }
 

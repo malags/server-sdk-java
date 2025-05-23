@@ -16,6 +16,7 @@ import com.vapi.api.resources.assistants.types.UpdateAssistantDtoBackgroundSound
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoClientMessagesItem;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoCredentialsItem;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoFirstMessageMode;
+import com.vapi.api.resources.assistants.types.UpdateAssistantDtoHooksItem;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoModel;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoServerMessagesItem;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoTranscriber;
@@ -23,7 +24,6 @@ import com.vapi.api.resources.assistants.types.UpdateAssistantDtoVoice;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoVoicemailDetection;
 import com.vapi.api.types.AnalysisPlan;
 import com.vapi.api.types.ArtifactPlan;
-import com.vapi.api.types.AssistantHooks;
 import com.vapi.api.types.CompliancePlan;
 import com.vapi.api.types.KeypadInputPlan;
 import com.vapi.api.types.LangfuseObservabilityPlan;
@@ -76,6 +76,8 @@ public final class UpdateAssistantDto {
 
     private final Optional<List<UpdateAssistantDtoCredentialsItem>> credentials;
 
+    private final Optional<List<UpdateAssistantDtoHooksItem>> hooks;
+
     private final Optional<String> name;
 
     private final Optional<String> voicemailMessage;
@@ -104,8 +106,6 @@ public final class UpdateAssistantDto {
 
     private final Optional<Server> server;
 
-    private final Optional<List<AssistantHooks>> hooks;
-
     private final Optional<KeypadInputPlan> keypadInputPlan;
 
     private final Map<String, Object> additionalProperties;
@@ -128,6 +128,7 @@ public final class UpdateAssistantDto {
             Optional<List<TransportConfigurationTwilio>> transportConfigurations,
             Optional<LangfuseObservabilityPlan> observabilityPlan,
             Optional<List<UpdateAssistantDtoCredentialsItem>> credentials,
+            Optional<List<UpdateAssistantDtoHooksItem>> hooks,
             Optional<String> name,
             Optional<String> voicemailMessage,
             Optional<String> endCallMessage,
@@ -142,7 +143,6 @@ public final class UpdateAssistantDto {
             Optional<MonitorPlan> monitorPlan,
             Optional<List<String>> credentialIds,
             Optional<Server> server,
-            Optional<List<AssistantHooks>> hooks,
             Optional<KeypadInputPlan> keypadInputPlan,
             Map<String, Object> additionalProperties) {
         this.transcriber = transcriber;
@@ -162,6 +162,7 @@ public final class UpdateAssistantDto {
         this.transportConfigurations = transportConfigurations;
         this.observabilityPlan = observabilityPlan;
         this.credentials = credentials;
+        this.hooks = hooks;
         this.name = name;
         this.voicemailMessage = voicemailMessage;
         this.endCallMessage = endCallMessage;
@@ -176,7 +177,6 @@ public final class UpdateAssistantDto {
         this.monitorPlan = monitorPlan;
         this.credentialIds = credentialIds;
         this.server = server;
-        this.hooks = hooks;
         this.keypadInputPlan = keypadInputPlan;
         this.additionalProperties = additionalProperties;
     }
@@ -333,6 +333,14 @@ public final class UpdateAssistantDto {
     }
 
     /**
+     * @return This is a set of actions that will be performed on certain events.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<UpdateAssistantDtoHooksItem>> getHooks() {
+        return hooks;
+    }
+
+    /**
      * @return This is the name of the assistant.
      * <p>This is required when you want to transfer between assistants in a call.</p>
      */
@@ -472,14 +480,6 @@ public final class UpdateAssistantDto {
         return server;
     }
 
-    /**
-     * @return This is a set of actions that will be performed on certain events.
-     */
-    @JsonProperty("hooks")
-    public Optional<List<AssistantHooks>> getHooks() {
-        return hooks;
-    }
-
     @JsonProperty("keypadInputPlan")
     public Optional<KeypadInputPlan> getKeypadInputPlan() {
         return keypadInputPlan;
@@ -514,6 +514,7 @@ public final class UpdateAssistantDto {
                 && transportConfigurations.equals(other.transportConfigurations)
                 && observabilityPlan.equals(other.observabilityPlan)
                 && credentials.equals(other.credentials)
+                && hooks.equals(other.hooks)
                 && name.equals(other.name)
                 && voicemailMessage.equals(other.voicemailMessage)
                 && endCallMessage.equals(other.endCallMessage)
@@ -528,7 +529,6 @@ public final class UpdateAssistantDto {
                 && monitorPlan.equals(other.monitorPlan)
                 && credentialIds.equals(other.credentialIds)
                 && server.equals(other.server)
-                && hooks.equals(other.hooks)
                 && keypadInputPlan.equals(other.keypadInputPlan);
     }
 
@@ -552,6 +552,7 @@ public final class UpdateAssistantDto {
                 this.transportConfigurations,
                 this.observabilityPlan,
                 this.credentials,
+                this.hooks,
                 this.name,
                 this.voicemailMessage,
                 this.endCallMessage,
@@ -566,7 +567,6 @@ public final class UpdateAssistantDto {
                 this.monitorPlan,
                 this.credentialIds,
                 this.server,
-                this.hooks,
                 this.keypadInputPlan);
     }
 
@@ -615,6 +615,8 @@ public final class UpdateAssistantDto {
 
         private Optional<List<UpdateAssistantDtoCredentialsItem>> credentials = Optional.empty();
 
+        private Optional<List<UpdateAssistantDtoHooksItem>> hooks = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<String> voicemailMessage = Optional.empty();
@@ -643,8 +645,6 @@ public final class UpdateAssistantDto {
 
         private Optional<Server> server = Optional.empty();
 
-        private Optional<List<AssistantHooks>> hooks = Optional.empty();
-
         private Optional<KeypadInputPlan> keypadInputPlan = Optional.empty();
 
         @JsonAnySetter
@@ -670,6 +670,7 @@ public final class UpdateAssistantDto {
             transportConfigurations(other.getTransportConfigurations());
             observabilityPlan(other.getObservabilityPlan());
             credentials(other.getCredentials());
+            hooks(other.getHooks());
             name(other.getName());
             voicemailMessage(other.getVoicemailMessage());
             endCallMessage(other.getEndCallMessage());
@@ -684,7 +685,6 @@ public final class UpdateAssistantDto {
             monitorPlan(other.getMonitorPlan());
             credentialIds(other.getCredentialIds());
             server(other.getServer());
-            hooks(other.getHooks());
             keypadInputPlan(other.getKeypadInputPlan());
             return this;
         }
@@ -876,6 +876,17 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public Builder hooks(Optional<List<UpdateAssistantDtoHooksItem>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        public Builder hooks(List<UpdateAssistantDtoHooksItem> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -1030,17 +1041,6 @@ public final class UpdateAssistantDto {
             return this;
         }
 
-        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
-        public Builder hooks(Optional<List<AssistantHooks>> hooks) {
-            this.hooks = hooks;
-            return this;
-        }
-
-        public Builder hooks(List<AssistantHooks> hooks) {
-            this.hooks = Optional.ofNullable(hooks);
-            return this;
-        }
-
         @JsonSetter(value = "keypadInputPlan", nulls = Nulls.SKIP)
         public Builder keypadInputPlan(Optional<KeypadInputPlan> keypadInputPlan) {
             this.keypadInputPlan = keypadInputPlan;
@@ -1071,6 +1071,7 @@ public final class UpdateAssistantDto {
                     transportConfigurations,
                     observabilityPlan,
                     credentials,
+                    hooks,
                     name,
                     voicemailMessage,
                     endCallMessage,
@@ -1085,7 +1086,6 @@ public final class UpdateAssistantDto {
                     monitorPlan,
                     credentialIds,
                     server,
-                    hooks,
                     keypadInputPlan,
                     additionalProperties);
         }

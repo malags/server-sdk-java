@@ -36,7 +36,9 @@ public enum FormatPlanFormattersEnabledItem {
 
     PHONE_NUMBER("phoneNumber"),
 
-    NUMBER("number");
+    NUMBER("number"),
+
+    STRIP_ASTERISK("stripAsterisk");
 
     private final String value;
 

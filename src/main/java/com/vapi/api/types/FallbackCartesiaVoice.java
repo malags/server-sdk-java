@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FallbackCartesiaVoice.Builder.class)
 public final class FallbackCartesiaVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final String voiceId;
 
     private final Optional<FallbackCartesiaVoiceModel> model;
@@ -34,18 +36,28 @@ public final class FallbackCartesiaVoice {
     private final Map<String, Object> additionalProperties;
 
     private FallbackCartesiaVoice(
+            Optional<Boolean> cachingEnabled,
             String voiceId,
             Optional<FallbackCartesiaVoiceModel> model,
             Optional<FallbackCartesiaVoiceLanguage> language,
             Optional<CartesiaExperimentalControls> experimentalControls,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.model = model;
         this.language = language;
         this.experimentalControls = experimentalControls;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -100,7 +112,8 @@ public final class FallbackCartesiaVoice {
     }
 
     private boolean equalTo(FallbackCartesiaVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && model.equals(other.model)
                 && language.equals(other.language)
                 && experimentalControls.equals(other.experimentalControls)
@@ -109,7 +122,13 @@ public final class FallbackCartesiaVoice {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.model, this.language, this.experimentalControls, this.chunkPlan);
+        return Objects.hash(
+                this.cachingEnabled,
+                this.voiceId,
+                this.model,
+                this.language,
+                this.experimentalControls,
+                this.chunkPlan);
     }
 
     @java.lang.Override
@@ -129,6 +148,10 @@ public final class FallbackCartesiaVoice {
 
     public interface _FinalStage {
         FallbackCartesiaVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage model(Optional<FallbackCartesiaVoiceModel> model);
 
@@ -159,6 +182,8 @@ public final class FallbackCartesiaVoice {
 
         private Optional<FallbackCartesiaVoiceModel> model = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -166,6 +191,7 @@ public final class FallbackCartesiaVoice {
 
         @java.lang.Override
         public Builder from(FallbackCartesiaVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             model(other.getModel());
             language(other.getLanguage());
@@ -253,10 +279,27 @@ public final class FallbackCartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public FallbackCartesiaVoice build() {
             return new FallbackCartesiaVoice(
-                    voiceId, model, language, experimentalControls, chunkPlan, additionalProperties);
+                    cachingEnabled, voiceId, model, language, experimentalControls, chunkPlan, additionalProperties);
         }
     }
 }

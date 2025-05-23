@@ -9,32 +9,57 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = OpenAiVoicemailDetectionPlan.Builder.class)
 public final class OpenAiVoicemailDetectionPlan {
-    private final double voicemailExpectedDurationSeconds;
+    private final Optional<Double> beepMaxAwaitSeconds;
+
+    private final Optional<VoicemailDetectionBackoffPlan> backoffPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private OpenAiVoicemailDetectionPlan(
-            double voicemailExpectedDurationSeconds, Map<String, Object> additionalProperties) {
-        this.voicemailExpectedDurationSeconds = voicemailExpectedDurationSeconds;
+            Optional<Double> beepMaxAwaitSeconds,
+            Optional<VoicemailDetectionBackoffPlan> backoffPlan,
+            Map<String, Object> additionalProperties) {
+        this.beepMaxAwaitSeconds = beepMaxAwaitSeconds;
+        this.backoffPlan = backoffPlan;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return This is how long should we listen in order to determine if we were sent to voicemail or not?
-     * <p>@default 15</p>
+     * @return This is the maximum duration from the start of the call that we will wait for a voicemail beep, before speaking our message
+     * <ul>
+     * <li>
+     * <p>If we detect a voicemail beep before this, we will speak the message at that point.</p>
+     * </li>
+     * <li>
+     * <p>Setting too low a value means that the bot will start speaking its voicemail message too early. If it does so before the actual beep, it will get cut off. You should definitely tune this to your use case.</p>
+     * </li>
+     * </ul>
+     * <p>@default 30
+     * @min 0
+     * @max 60</p>
      */
-    @JsonProperty("voicemailExpectedDurationSeconds")
-    public double getVoicemailExpectedDurationSeconds() {
-        return voicemailExpectedDurationSeconds;
+    @JsonProperty("beepMaxAwaitSeconds")
+    public Optional<Double> getBeepMaxAwaitSeconds() {
+        return beepMaxAwaitSeconds;
+    }
+
+    /**
+     * @return This is the backoff plan for the voicemail detection.
+     */
+    @JsonProperty("backoffPlan")
+    public Optional<VoicemailDetectionBackoffPlan> getBackoffPlan() {
+        return backoffPlan;
     }
 
     @java.lang.Override
@@ -49,12 +74,12 @@ public final class OpenAiVoicemailDetectionPlan {
     }
 
     private boolean equalTo(OpenAiVoicemailDetectionPlan other) {
-        return voicemailExpectedDurationSeconds == other.voicemailExpectedDurationSeconds;
+        return beepMaxAwaitSeconds.equals(other.beepMaxAwaitSeconds) && backoffPlan.equals(other.backoffPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voicemailExpectedDurationSeconds);
+        return Objects.hash(this.beepMaxAwaitSeconds, this.backoffPlan);
     }
 
     @java.lang.Override
@@ -62,50 +87,51 @@ public final class OpenAiVoicemailDetectionPlan {
         return ObjectMappers.stringify(this);
     }
 
-    public static VoicemailExpectedDurationSecondsStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface VoicemailExpectedDurationSecondsStage {
-        _FinalStage voicemailExpectedDurationSeconds(double voicemailExpectedDurationSeconds);
-
-        Builder from(OpenAiVoicemailDetectionPlan other);
-    }
-
-    public interface _FinalStage {
-        OpenAiVoicemailDetectionPlan build();
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements VoicemailExpectedDurationSecondsStage, _FinalStage {
-        private double voicemailExpectedDurationSeconds;
+    public static final class Builder {
+        private Optional<Double> beepMaxAwaitSeconds = Optional.empty();
+
+        private Optional<VoicemailDetectionBackoffPlan> backoffPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(OpenAiVoicemailDetectionPlan other) {
-            voicemailExpectedDurationSeconds(other.getVoicemailExpectedDurationSeconds());
+            beepMaxAwaitSeconds(other.getBeepMaxAwaitSeconds());
+            backoffPlan(other.getBackoffPlan());
             return this;
         }
 
-        /**
-         * <p>This is how long should we listen in order to determine if we were sent to voicemail or not?</p>
-         * <p>@default 15</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("voicemailExpectedDurationSeconds")
-        public _FinalStage voicemailExpectedDurationSeconds(double voicemailExpectedDurationSeconds) {
-            this.voicemailExpectedDurationSeconds = voicemailExpectedDurationSeconds;
+        @JsonSetter(value = "beepMaxAwaitSeconds", nulls = Nulls.SKIP)
+        public Builder beepMaxAwaitSeconds(Optional<Double> beepMaxAwaitSeconds) {
+            this.beepMaxAwaitSeconds = beepMaxAwaitSeconds;
             return this;
         }
 
-        @java.lang.Override
+        public Builder beepMaxAwaitSeconds(Double beepMaxAwaitSeconds) {
+            this.beepMaxAwaitSeconds = Optional.ofNullable(beepMaxAwaitSeconds);
+            return this;
+        }
+
+        @JsonSetter(value = "backoffPlan", nulls = Nulls.SKIP)
+        public Builder backoffPlan(Optional<VoicemailDetectionBackoffPlan> backoffPlan) {
+            this.backoffPlan = backoffPlan;
+            return this;
+        }
+
+        public Builder backoffPlan(VoicemailDetectionBackoffPlan backoffPlan) {
+            this.backoffPlan = Optional.ofNullable(backoffPlan);
+            return this;
+        }
+
         public OpenAiVoicemailDetectionPlan build() {
-            return new OpenAiVoicemailDetectionPlan(voicemailExpectedDurationSeconds, additionalProperties);
+            return new OpenAiVoicemailDetectionPlan(beepMaxAwaitSeconds, backoffPlan, additionalProperties);
         }
     }
 }

@@ -16,17 +16,48 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientMessageToolCallsResult.Builder.class)
 public final class ClientMessageToolCallsResult {
+    private final Optional<ClientMessageToolCallsResultPhoneNumber> phoneNumber;
+
+    private final Optional<Double> timestamp;
+
+    private final Optional<Call> call;
+
+    private final Optional<CreateCustomerDto> customer;
+
+    private final Optional<CreateAssistantDto> assistant;
+
     private final Map<String, Object> toolCallResult;
 
     private final Map<String, Object> additionalProperties;
 
-    private ClientMessageToolCallsResult(Map<String, Object> toolCallResult, Map<String, Object> additionalProperties) {
+    private ClientMessageToolCallsResult(
+            Optional<ClientMessageToolCallsResultPhoneNumber> phoneNumber,
+            Optional<Double> timestamp,
+            Optional<Call> call,
+            Optional<CreateCustomerDto> customer,
+            Optional<CreateAssistantDto> assistant,
+            Map<String, Object> toolCallResult,
+            Map<String, Object> additionalProperties) {
+        this.phoneNumber = phoneNumber;
+        this.timestamp = timestamp;
+        this.call = call;
+        this.customer = customer;
+        this.assistant = assistant;
         this.toolCallResult = toolCallResult;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the phone number that the message is associated with.
+     */
+    @JsonProperty("phoneNumber")
+    public Optional<ClientMessageToolCallsResultPhoneNumber> getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**
@@ -35,6 +66,38 @@ public final class ClientMessageToolCallsResult {
     @JsonProperty("type")
     public String getType() {
         return "tool-calls-result";
+    }
+
+    /**
+     * @return This is the timestamp of the message.
+     */
+    @JsonProperty("timestamp")
+    public Optional<Double> getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * @return This is the call that the message is associated with.
+     */
+    @JsonProperty("call")
+    public Optional<Call> getCall() {
+        return call;
+    }
+
+    /**
+     * @return This is the customer that the message is associated with.
+     */
+    @JsonProperty("customer")
+    public Optional<CreateCustomerDto> getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @return This is the assistant that the message is associated with.
+     */
+    @JsonProperty("assistant")
+    public Optional<CreateAssistantDto> getAssistant() {
+        return assistant;
     }
 
     /**
@@ -57,12 +120,18 @@ public final class ClientMessageToolCallsResult {
     }
 
     private boolean equalTo(ClientMessageToolCallsResult other) {
-        return toolCallResult.equals(other.toolCallResult);
+        return phoneNumber.equals(other.phoneNumber)
+                && timestamp.equals(other.timestamp)
+                && call.equals(other.call)
+                && customer.equals(other.customer)
+                && assistant.equals(other.assistant)
+                && toolCallResult.equals(other.toolCallResult);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.toolCallResult);
+        return Objects.hash(
+                this.phoneNumber, this.timestamp, this.call, this.customer, this.assistant, this.toolCallResult);
     }
 
     @java.lang.Override
@@ -76,6 +145,16 @@ public final class ClientMessageToolCallsResult {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<ClientMessageToolCallsResultPhoneNumber> phoneNumber = Optional.empty();
+
+        private Optional<Double> timestamp = Optional.empty();
+
+        private Optional<Call> call = Optional.empty();
+
+        private Optional<CreateCustomerDto> customer = Optional.empty();
+
+        private Optional<CreateAssistantDto> assistant = Optional.empty();
+
         private Map<String, Object> toolCallResult = new LinkedHashMap<>();
 
         @JsonAnySetter
@@ -84,7 +163,67 @@ public final class ClientMessageToolCallsResult {
         private Builder() {}
 
         public Builder from(ClientMessageToolCallsResult other) {
+            phoneNumber(other.getPhoneNumber());
+            timestamp(other.getTimestamp());
+            call(other.getCall());
+            customer(other.getCustomer());
+            assistant(other.getAssistant());
             toolCallResult(other.getToolCallResult());
+            return this;
+        }
+
+        @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
+        public Builder phoneNumber(Optional<ClientMessageToolCallsResultPhoneNumber> phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Builder phoneNumber(ClientMessageToolCallsResultPhoneNumber phoneNumber) {
+            this.phoneNumber = Optional.ofNullable(phoneNumber);
+            return this;
+        }
+
+        @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
+        public Builder timestamp(Optional<Double> timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public Builder timestamp(Double timestamp) {
+            this.timestamp = Optional.ofNullable(timestamp);
+            return this;
+        }
+
+        @JsonSetter(value = "call", nulls = Nulls.SKIP)
+        public Builder call(Optional<Call> call) {
+            this.call = call;
+            return this;
+        }
+
+        public Builder call(Call call) {
+            this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        @JsonSetter(value = "customer", nulls = Nulls.SKIP)
+        public Builder customer(Optional<CreateCustomerDto> customer) {
+            this.customer = customer;
+            return this;
+        }
+
+        public Builder customer(CreateCustomerDto customer) {
+            this.customer = Optional.ofNullable(customer);
+            return this;
+        }
+
+        @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
+        public Builder assistant(Optional<CreateAssistantDto> assistant) {
+            this.assistant = assistant;
+            return this;
+        }
+
+        public Builder assistant(CreateAssistantDto assistant) {
+            this.assistant = Optional.ofNullable(assistant);
             return this;
         }
 
@@ -106,7 +245,8 @@ public final class ClientMessageToolCallsResult {
         }
 
         public ClientMessageToolCallsResult build() {
-            return new ClientMessageToolCallsResult(toolCallResult, additionalProperties);
+            return new ClientMessageToolCallsResult(
+                    phoneNumber, timestamp, call, customer, assistant, toolCallResult, additionalProperties);
         }
     }
 }

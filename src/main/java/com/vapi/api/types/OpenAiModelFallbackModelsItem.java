@@ -16,7 +16,11 @@ public enum OpenAiModelFallbackModelsItem {
 
     CHATGPT_4_O_LATEST("chatgpt-4o-latest"),
 
+    O_3("o3"),
+
     O_3_MINI("o3-mini"),
+
+    O_4_MINI("o4-mini"),
 
     O_1_PREVIEW("o1-preview"),
 

@@ -5,12 +5,15 @@ package com.vapi.api.resources.calls.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.vapi.api.core.Nullable;
+import com.vapi.api.core.NullableNonemptyFilter;
 import com.vapi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -79,16 +82,22 @@ public final class CallsListRequest {
     /**
      * @return This is the unique identifier for the call.
      */
-    @JsonProperty("id")
+    @JsonIgnore
     public Optional<String> getId() {
+        if (id == null) {
+            return Optional.empty();
+        }
         return id;
     }
 
     /**
      * @return This will return calls with the specified assistantId.
      */
-    @JsonProperty("assistantId")
+    @JsonIgnore
     public Optional<String> getAssistantId() {
+        if (assistantId == null) {
+            return Optional.empty();
+        }
         return assistantId;
     }
 
@@ -96,80 +105,182 @@ public final class CallsListRequest {
      * @return This is the phone number that will be used for the call. To use a transient number, use <code>phoneNumber</code> instead.
      * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
      */
-    @JsonProperty("phoneNumberId")
+    @JsonIgnore
     public Optional<String> getPhoneNumberId() {
+        if (phoneNumberId == null) {
+            return Optional.empty();
+        }
         return phoneNumberId;
     }
 
     /**
      * @return This is the maximum number of items to return. Defaults to 100.
      */
-    @JsonProperty("limit")
+    @JsonIgnore
     public Optional<Double> getLimit() {
+        if (limit == null) {
+            return Optional.empty();
+        }
         return limit;
     }
 
     /**
      * @return This will return items where the createdAt is greater than the specified value.
      */
-    @JsonProperty("createdAtGt")
+    @JsonIgnore
     public Optional<OffsetDateTime> getCreatedAtGt() {
+        if (createdAtGt == null) {
+            return Optional.empty();
+        }
         return createdAtGt;
     }
 
     /**
      * @return This will return items where the createdAt is less than the specified value.
      */
-    @JsonProperty("createdAtLt")
+    @JsonIgnore
     public Optional<OffsetDateTime> getCreatedAtLt() {
+        if (createdAtLt == null) {
+            return Optional.empty();
+        }
         return createdAtLt;
     }
 
     /**
      * @return This will return items where the createdAt is greater than or equal to the specified value.
      */
-    @JsonProperty("createdAtGe")
+    @JsonIgnore
     public Optional<OffsetDateTime> getCreatedAtGe() {
+        if (createdAtGe == null) {
+            return Optional.empty();
+        }
         return createdAtGe;
     }
 
     /**
      * @return This will return items where the createdAt is less than or equal to the specified value.
      */
-    @JsonProperty("createdAtLe")
+    @JsonIgnore
     public Optional<OffsetDateTime> getCreatedAtLe() {
+        if (createdAtLe == null) {
+            return Optional.empty();
+        }
         return createdAtLe;
     }
 
     /**
      * @return This will return items where the updatedAt is greater than the specified value.
      */
-    @JsonProperty("updatedAtGt")
+    @JsonIgnore
     public Optional<OffsetDateTime> getUpdatedAtGt() {
+        if (updatedAtGt == null) {
+            return Optional.empty();
+        }
         return updatedAtGt;
     }
 
     /**
      * @return This will return items where the updatedAt is less than the specified value.
      */
-    @JsonProperty("updatedAtLt")
+    @JsonIgnore
     public Optional<OffsetDateTime> getUpdatedAtLt() {
+        if (updatedAtLt == null) {
+            return Optional.empty();
+        }
         return updatedAtLt;
     }
 
     /**
      * @return This will return items where the updatedAt is greater than or equal to the specified value.
      */
-    @JsonProperty("updatedAtGe")
+    @JsonIgnore
     public Optional<OffsetDateTime> getUpdatedAtGe() {
+        if (updatedAtGe == null) {
+            return Optional.empty();
+        }
         return updatedAtGe;
     }
 
     /**
      * @return This will return items where the updatedAt is less than or equal to the specified value.
      */
-    @JsonProperty("updatedAtLe")
+    @JsonIgnore
     public Optional<OffsetDateTime> getUpdatedAtLe() {
+        if (updatedAtLe == null) {
+            return Optional.empty();
+        }
+        return updatedAtLe;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("id")
+    private Optional<String> _getId() {
+        return id;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("assistantId")
+    private Optional<String> _getAssistantId() {
+        return assistantId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("phoneNumberId")
+    private Optional<String> _getPhoneNumberId() {
+        return phoneNumberId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("limit")
+    private Optional<Double> _getLimit() {
+        return limit;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("createdAtGt")
+    private Optional<OffsetDateTime> _getCreatedAtGt() {
+        return createdAtGt;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("createdAtLt")
+    private Optional<OffsetDateTime> _getCreatedAtLt() {
+        return createdAtLt;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("createdAtGe")
+    private Optional<OffsetDateTime> _getCreatedAtGe() {
+        return createdAtGe;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("createdAtLe")
+    private Optional<OffsetDateTime> _getCreatedAtLe() {
+        return createdAtLe;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("updatedAtGt")
+    private Optional<OffsetDateTime> _getUpdatedAtGt() {
+        return updatedAtGt;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("updatedAtLt")
+    private Optional<OffsetDateTime> _getUpdatedAtLt() {
+        return updatedAtLt;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("updatedAtGe")
+    private Optional<OffsetDateTime> _getUpdatedAtGe() {
+        return updatedAtGe;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("updatedAtLe")
+    private Optional<OffsetDateTime> _getUpdatedAtLe() {
         return updatedAtLe;
     }
 
@@ -283,6 +394,17 @@ public final class CallsListRequest {
             return this;
         }
 
+        public Builder id(Nullable<String> id) {
+            if (id.isNull()) {
+                this.id = null;
+            } else if (id.isEmpty()) {
+                this.id = Optional.empty();
+            } else {
+                this.id = Optional.of(id.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -291,6 +413,17 @@ public final class CallsListRequest {
 
         public Builder assistantId(String assistantId) {
             this.assistantId = Optional.ofNullable(assistantId);
+            return this;
+        }
+
+        public Builder assistantId(Nullable<String> assistantId) {
+            if (assistantId.isNull()) {
+                this.assistantId = null;
+            } else if (assistantId.isEmpty()) {
+                this.assistantId = Optional.empty();
+            } else {
+                this.assistantId = Optional.of(assistantId.get());
+            }
             return this;
         }
 
@@ -305,6 +438,17 @@ public final class CallsListRequest {
             return this;
         }
 
+        public Builder phoneNumberId(Nullable<String> phoneNumberId) {
+            if (phoneNumberId.isNull()) {
+                this.phoneNumberId = null;
+            } else if (phoneNumberId.isEmpty()) {
+                this.phoneNumberId = Optional.empty();
+            } else {
+                this.phoneNumberId = Optional.of(phoneNumberId.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Double> limit) {
             this.limit = limit;
@@ -313,6 +457,17 @@ public final class CallsListRequest {
 
         public Builder limit(Double limit) {
             this.limit = Optional.ofNullable(limit);
+            return this;
+        }
+
+        public Builder limit(Nullable<Double> limit) {
+            if (limit.isNull()) {
+                this.limit = null;
+            } else if (limit.isEmpty()) {
+                this.limit = Optional.empty();
+            } else {
+                this.limit = Optional.of(limit.get());
+            }
             return this;
         }
 
@@ -327,6 +482,17 @@ public final class CallsListRequest {
             return this;
         }
 
+        public Builder createdAtGt(Nullable<OffsetDateTime> createdAtGt) {
+            if (createdAtGt.isNull()) {
+                this.createdAtGt = null;
+            } else if (createdAtGt.isEmpty()) {
+                this.createdAtGt = Optional.empty();
+            } else {
+                this.createdAtGt = Optional.of(createdAtGt.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "createdAtLt", nulls = Nulls.SKIP)
         public Builder createdAtLt(Optional<OffsetDateTime> createdAtLt) {
             this.createdAtLt = createdAtLt;
@@ -335,6 +501,17 @@ public final class CallsListRequest {
 
         public Builder createdAtLt(OffsetDateTime createdAtLt) {
             this.createdAtLt = Optional.ofNullable(createdAtLt);
+            return this;
+        }
+
+        public Builder createdAtLt(Nullable<OffsetDateTime> createdAtLt) {
+            if (createdAtLt.isNull()) {
+                this.createdAtLt = null;
+            } else if (createdAtLt.isEmpty()) {
+                this.createdAtLt = Optional.empty();
+            } else {
+                this.createdAtLt = Optional.of(createdAtLt.get());
+            }
             return this;
         }
 
@@ -349,6 +526,17 @@ public final class CallsListRequest {
             return this;
         }
 
+        public Builder createdAtGe(Nullable<OffsetDateTime> createdAtGe) {
+            if (createdAtGe.isNull()) {
+                this.createdAtGe = null;
+            } else if (createdAtGe.isEmpty()) {
+                this.createdAtGe = Optional.empty();
+            } else {
+                this.createdAtGe = Optional.of(createdAtGe.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "createdAtLe", nulls = Nulls.SKIP)
         public Builder createdAtLe(Optional<OffsetDateTime> createdAtLe) {
             this.createdAtLe = createdAtLe;
@@ -357,6 +545,17 @@ public final class CallsListRequest {
 
         public Builder createdAtLe(OffsetDateTime createdAtLe) {
             this.createdAtLe = Optional.ofNullable(createdAtLe);
+            return this;
+        }
+
+        public Builder createdAtLe(Nullable<OffsetDateTime> createdAtLe) {
+            if (createdAtLe.isNull()) {
+                this.createdAtLe = null;
+            } else if (createdAtLe.isEmpty()) {
+                this.createdAtLe = Optional.empty();
+            } else {
+                this.createdAtLe = Optional.of(createdAtLe.get());
+            }
             return this;
         }
 
@@ -371,6 +570,17 @@ public final class CallsListRequest {
             return this;
         }
 
+        public Builder updatedAtGt(Nullable<OffsetDateTime> updatedAtGt) {
+            if (updatedAtGt.isNull()) {
+                this.updatedAtGt = null;
+            } else if (updatedAtGt.isEmpty()) {
+                this.updatedAtGt = Optional.empty();
+            } else {
+                this.updatedAtGt = Optional.of(updatedAtGt.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "updatedAtLt", nulls = Nulls.SKIP)
         public Builder updatedAtLt(Optional<OffsetDateTime> updatedAtLt) {
             this.updatedAtLt = updatedAtLt;
@@ -379,6 +589,17 @@ public final class CallsListRequest {
 
         public Builder updatedAtLt(OffsetDateTime updatedAtLt) {
             this.updatedAtLt = Optional.ofNullable(updatedAtLt);
+            return this;
+        }
+
+        public Builder updatedAtLt(Nullable<OffsetDateTime> updatedAtLt) {
+            if (updatedAtLt.isNull()) {
+                this.updatedAtLt = null;
+            } else if (updatedAtLt.isEmpty()) {
+                this.updatedAtLt = Optional.empty();
+            } else {
+                this.updatedAtLt = Optional.of(updatedAtLt.get());
+            }
             return this;
         }
 
@@ -393,6 +614,17 @@ public final class CallsListRequest {
             return this;
         }
 
+        public Builder updatedAtGe(Nullable<OffsetDateTime> updatedAtGe) {
+            if (updatedAtGe.isNull()) {
+                this.updatedAtGe = null;
+            } else if (updatedAtGe.isEmpty()) {
+                this.updatedAtGe = Optional.empty();
+            } else {
+                this.updatedAtGe = Optional.of(updatedAtGe.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "updatedAtLe", nulls = Nulls.SKIP)
         public Builder updatedAtLe(Optional<OffsetDateTime> updatedAtLe) {
             this.updatedAtLe = updatedAtLe;
@@ -401,6 +633,17 @@ public final class CallsListRequest {
 
         public Builder updatedAtLe(OffsetDateTime updatedAtLe) {
             this.updatedAtLe = Optional.ofNullable(updatedAtLe);
+            return this;
+        }
+
+        public Builder updatedAtLe(Nullable<OffsetDateTime> updatedAtLe) {
+            if (updatedAtLe.isNull()) {
+                this.updatedAtLe = null;
+            } else if (updatedAtLe.isEmpty()) {
+                this.updatedAtLe = Optional.empty();
+            } else {
+                this.updatedAtLe = Optional.of(updatedAtLe.get());
+            }
             return this;
         }
 

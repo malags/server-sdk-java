@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum ClientMessageTranscriptType {
     TRANSCRIPT("transcript"),
 
-    TRANSCRIPT_TRANSCRIPT_TYPE_FINAL("transcript[transcriptType='final']");
+    TRANSCRIPT_TRANSCRIPT_TYPE_FINAL("transcript[transcriptType=\"final\"]");
 
     private final String value;
 

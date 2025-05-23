@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,6 +22,8 @@ import java.util.Optional;
 @JsonDeserialize(builder = CreateVapiPhoneNumberDto.Builder.class)
 public final class CreateVapiPhoneNumberDto {
     private final Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination;
+
+    private final Optional<List<PhoneNumberHookCallRinging>> hooks;
 
     private final Optional<String> numberDesiredAreaCode;
 
@@ -32,6 +35,8 @@ public final class CreateVapiPhoneNumberDto {
 
     private final Optional<String> assistantId;
 
+    private final Optional<String> workflowId;
+
     private final Optional<String> squadId;
 
     private final Optional<Server> server;
@@ -40,20 +45,24 @@ public final class CreateVapiPhoneNumberDto {
 
     private CreateVapiPhoneNumberDto(
             Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination,
+            Optional<List<PhoneNumberHookCallRinging>> hooks,
             Optional<String> numberDesiredAreaCode,
             Optional<String> sipUri,
             Optional<SipAuthentication> authentication,
             Optional<String> name,
             Optional<String> assistantId,
+            Optional<String> workflowId,
             Optional<String> squadId,
             Optional<Server> server,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
+        this.hooks = hooks;
         this.numberDesiredAreaCode = numberDesiredAreaCode;
         this.sipUri = sipUri;
         this.authentication = authentication;
         this.name = name;
         this.assistantId = assistantId;
+        this.workflowId = workflowId;
         this.squadId = squadId;
         this.server = server;
         this.additionalProperties = additionalProperties;
@@ -71,6 +80,14 @@ public final class CreateVapiPhoneNumberDto {
     @JsonProperty("fallbackDestination")
     public Optional<CreateVapiPhoneNumberDtoFallbackDestination> getFallbackDestination() {
         return fallbackDestination;
+    }
+
+    /**
+     * @return This is the hooks that will be used for incoming calls to this phone number.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<PhoneNumberHookCallRinging>> getHooks() {
+        return hooks;
     }
 
     /**
@@ -109,7 +126,7 @@ public final class CreateVapiPhoneNumberDto {
 
     /**
      * @return This is the assistant that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
@@ -117,8 +134,17 @@ public final class CreateVapiPhoneNumberDto {
     }
 
     /**
+     * @return This is the workflow that will be used for incoming calls to this phone number.
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     */
+    @JsonProperty("workflowId")
+    public Optional<String> getWorkflowId() {
+        return workflowId;
+    }
+
+    /**
      * @return This is the squad that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("squadId")
     public Optional<String> getSquadId() {
@@ -152,11 +178,13 @@ public final class CreateVapiPhoneNumberDto {
 
     private boolean equalTo(CreateVapiPhoneNumberDto other) {
         return fallbackDestination.equals(other.fallbackDestination)
+                && hooks.equals(other.hooks)
                 && numberDesiredAreaCode.equals(other.numberDesiredAreaCode)
                 && sipUri.equals(other.sipUri)
                 && authentication.equals(other.authentication)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
+                && workflowId.equals(other.workflowId)
                 && squadId.equals(other.squadId)
                 && server.equals(other.server);
     }
@@ -165,11 +193,13 @@ public final class CreateVapiPhoneNumberDto {
     public int hashCode() {
         return Objects.hash(
                 this.fallbackDestination,
+                this.hooks,
                 this.numberDesiredAreaCode,
                 this.sipUri,
                 this.authentication,
                 this.name,
                 this.assistantId,
+                this.workflowId,
                 this.squadId,
                 this.server);
     }
@@ -187,6 +217,8 @@ public final class CreateVapiPhoneNumberDto {
     public static final class Builder {
         private Optional<CreateVapiPhoneNumberDtoFallbackDestination> fallbackDestination = Optional.empty();
 
+        private Optional<List<PhoneNumberHookCallRinging>> hooks = Optional.empty();
+
         private Optional<String> numberDesiredAreaCode = Optional.empty();
 
         private Optional<String> sipUri = Optional.empty();
@@ -196,6 +228,8 @@ public final class CreateVapiPhoneNumberDto {
         private Optional<String> name = Optional.empty();
 
         private Optional<String> assistantId = Optional.empty();
+
+        private Optional<String> workflowId = Optional.empty();
 
         private Optional<String> squadId = Optional.empty();
 
@@ -208,11 +242,13 @@ public final class CreateVapiPhoneNumberDto {
 
         public Builder from(CreateVapiPhoneNumberDto other) {
             fallbackDestination(other.getFallbackDestination());
+            hooks(other.getHooks());
             numberDesiredAreaCode(other.getNumberDesiredAreaCode());
             sipUri(other.getSipUri());
             authentication(other.getAuthentication());
             name(other.getName());
             assistantId(other.getAssistantId());
+            workflowId(other.getWorkflowId());
             squadId(other.getSquadId());
             server(other.getServer());
             return this;
@@ -226,6 +262,17 @@ public final class CreateVapiPhoneNumberDto {
 
         public Builder fallbackDestination(CreateVapiPhoneNumberDtoFallbackDestination fallbackDestination) {
             this.fallbackDestination = Optional.ofNullable(fallbackDestination);
+            return this;
+        }
+
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public Builder hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        public Builder hooks(List<PhoneNumberHookCallRinging> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
             return this;
         }
 
@@ -284,6 +331,17 @@ public final class CreateVapiPhoneNumberDto {
             return this;
         }
 
+        @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
+        public Builder workflowId(Optional<String> workflowId) {
+            this.workflowId = workflowId;
+            return this;
+        }
+
+        public Builder workflowId(String workflowId) {
+            this.workflowId = Optional.ofNullable(workflowId);
+            return this;
+        }
+
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -309,11 +367,13 @@ public final class CreateVapiPhoneNumberDto {
         public CreateVapiPhoneNumberDto build() {
             return new CreateVapiPhoneNumberDto(
                     fallbackDestination,
+                    hooks,
                     numberDesiredAreaCode,
                     sipUri,
                     authentication,
                     name,
                     assistantId,
+                    workflowId,
                     squadId,
                     server,
                     additionalProperties);

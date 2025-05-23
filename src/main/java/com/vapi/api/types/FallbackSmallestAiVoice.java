@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FallbackSmallestAiVoice.Builder.class)
 public final class FallbackSmallestAiVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final FallbackSmallestAiVoiceId voiceId;
 
     private final Optional<String> model;
@@ -32,16 +34,26 @@ public final class FallbackSmallestAiVoice {
     private final Map<String, Object> additionalProperties;
 
     private FallbackSmallestAiVoice(
+            Optional<Boolean> cachingEnabled,
             FallbackSmallestAiVoiceId voiceId,
             Optional<String> model,
             Optional<Double> speed,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.model = model;
         this.speed = speed;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -88,7 +100,8 @@ public final class FallbackSmallestAiVoice {
     }
 
     private boolean equalTo(FallbackSmallestAiVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && model.equals(other.model)
                 && speed.equals(other.speed)
                 && chunkPlan.equals(other.chunkPlan);
@@ -96,7 +109,7 @@ public final class FallbackSmallestAiVoice {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.voiceId, this.model, this.speed, this.chunkPlan);
+        return Objects.hash(this.cachingEnabled, this.voiceId, this.model, this.speed, this.chunkPlan);
     }
 
     @java.lang.Override
@@ -116,6 +129,10 @@ public final class FallbackSmallestAiVoice {
 
     public interface _FinalStage {
         FallbackSmallestAiVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage model(Optional<String> model);
 
@@ -140,6 +157,8 @@ public final class FallbackSmallestAiVoice {
 
         private Optional<String> model = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -147,6 +166,7 @@ public final class FallbackSmallestAiVoice {
 
         @java.lang.Override
         public Builder from(FallbackSmallestAiVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             model(other.getModel());
             speed(other.getSpeed());
@@ -216,9 +236,26 @@ public final class FallbackSmallestAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public FallbackSmallestAiVoice build() {
-            return new FallbackSmallestAiVoice(voiceId, model, speed, chunkPlan, additionalProperties);
+            return new FallbackSmallestAiVoice(cachingEnabled, voiceId, model, speed, chunkPlan, additionalProperties);
         }
     }
 }

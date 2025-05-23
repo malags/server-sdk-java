@@ -28,6 +28,7 @@ import com.vapi.api.types.CreateElevenLabsCredentialDto;
 import com.vapi.api.types.CreateGcpCredentialDto;
 import com.vapi.api.types.CreateGladiaCredentialDto;
 import com.vapi.api.types.CreateGoHighLevelCredentialDto;
+import com.vapi.api.types.CreateGoHighLevelMcpCredentialDto;
 import com.vapi.api.types.CreateGoogleCalendarOAuth2AuthorizationCredentialDto;
 import com.vapi.api.types.CreateGoogleCalendarOAuth2ClientCredentialDto;
 import com.vapi.api.types.CreateGoogleCredentialDto;
@@ -265,6 +266,10 @@ public final class UpdateAssistantDtoCredentialsItem {
         return new UpdateAssistantDtoCredentialsItem(new SlackOauth2AuthorizationValue(value));
     }
 
+    public static UpdateAssistantDtoCredentialsItem ghlOauth2Authorization(CreateGoHighLevelMcpCredentialDto value) {
+        return new UpdateAssistantDtoCredentialsItem(new GhlOauth2AuthorizationValue(value));
+    }
+
     public boolean is11Labs() {
         return value instanceof _11LabsValue;
     }
@@ -451,6 +456,10 @@ public final class UpdateAssistantDtoCredentialsItem {
 
     public boolean isSlackOauth2Authorization() {
         return value instanceof SlackOauth2AuthorizationValue;
+    }
+
+    public boolean isGhlOauth2Authorization() {
+        return value instanceof GhlOauth2AuthorizationValue;
     }
 
     public boolean _isUnknown() {
@@ -786,6 +795,13 @@ public final class UpdateAssistantDtoCredentialsItem {
         return Optional.empty();
     }
 
+    public Optional<CreateGoHighLevelMcpCredentialDto> getGhlOauth2Authorization() {
+        if (isGhlOauth2Authorization()) {
+            return Optional.of(((GhlOauth2AuthorizationValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -895,6 +911,8 @@ public final class UpdateAssistantDtoCredentialsItem {
 
         T visitSlackOauth2Authorization(CreateSlackOAuth2AuthorizationCredentialDto slackOauth2Authorization);
 
+        T visitGhlOauth2Authorization(CreateGoHighLevelMcpCredentialDto ghlOauth2Authorization);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -946,7 +964,8 @@ public final class UpdateAssistantDtoCredentialsItem {
         @JsonSubTypes.Type(GoogleCalendarOauth2ClientValue.class),
         @JsonSubTypes.Type(GoogleCalendarOauth2AuthorizationValue.class),
         @JsonSubTypes.Type(GoogleSheetsOauth2AuthorizationValue.class),
-        @JsonSubTypes.Type(SlackOauth2AuthorizationValue.class)
+        @JsonSubTypes.Type(SlackOauth2AuthorizationValue.class),
+        @JsonSubTypes.Type(GhlOauth2AuthorizationValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -2774,6 +2793,45 @@ public final class UpdateAssistantDtoCredentialsItem {
         }
 
         private boolean equalTo(SlackOauth2AuthorizationValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("ghl.oauth2-authorization")
+    @JsonIgnoreProperties("provider")
+    private static final class GhlOauth2AuthorizationValue implements Value {
+        @JsonUnwrapped
+        private CreateGoHighLevelMcpCredentialDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GhlOauth2AuthorizationValue() {}
+
+        private GhlOauth2AuthorizationValue(CreateGoHighLevelMcpCredentialDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGhlOauth2Authorization(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GhlOauth2AuthorizationValue && equalTo((GhlOauth2AuthorizationValue) other);
+        }
+
+        private boolean equalTo(GhlOauth2AuthorizationValue other) {
             return value.equals(other.value);
         }
 

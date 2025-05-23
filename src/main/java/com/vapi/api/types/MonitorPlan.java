@@ -22,16 +22,24 @@ import java.util.Optional;
 public final class MonitorPlan {
     private final Optional<Boolean> listenEnabled;
 
+    private final Optional<Boolean> listenAuthenticationEnabled;
+
     private final Optional<Boolean> controlEnabled;
+
+    private final Optional<Boolean> controlAuthenticationEnabled;
 
     private final Map<String, Object> additionalProperties;
 
     private MonitorPlan(
             Optional<Boolean> listenEnabled,
+            Optional<Boolean> listenAuthenticationEnabled,
             Optional<Boolean> controlEnabled,
+            Optional<Boolean> controlAuthenticationEnabled,
             Map<String, Object> additionalProperties) {
         this.listenEnabled = listenEnabled;
+        this.listenAuthenticationEnabled = listenAuthenticationEnabled;
         this.controlEnabled = controlEnabled;
+        this.controlAuthenticationEnabled = controlAuthenticationEnabled;
         this.additionalProperties = additionalProperties;
     }
 
@@ -46,6 +54,16 @@ public final class MonitorPlan {
     }
 
     /**
+     * @return This enables authentication on the <code>call.monitor.listenUrl</code>.
+     * <p>If <code>listenAuthenticationEnabled</code> is <code>true</code>, the <code>call.monitor.listenUrl</code> will require an <code>Authorization: Bearer &lt;vapi-public-api-key&gt;</code> header.</p>
+     * <p>@default false</p>
+     */
+    @JsonProperty("listenAuthenticationEnabled")
+    public Optional<Boolean> getListenAuthenticationEnabled() {
+        return listenAuthenticationEnabled;
+    }
+
+    /**
      * @return This determines whether the assistant's calls allow live control. Defaults to true.
      * <p>Fetch <code>call.monitor.controlUrl</code> to get the live control URL.</p>
      * <p>To use, send any control message via a POST request to <code>call.monitor.controlUrl</code>. Here are the types of controls supported: https://docs.vapi.ai/api-reference/messages/client-inbound-message</p>
@@ -54,6 +72,16 @@ public final class MonitorPlan {
     @JsonProperty("controlEnabled")
     public Optional<Boolean> getControlEnabled() {
         return controlEnabled;
+    }
+
+    /**
+     * @return This enables authentication on the <code>call.monitor.controlUrl</code>.
+     * <p>If <code>controlAuthenticationEnabled</code> is <code>true</code>, the <code>call.monitor.controlUrl</code> will require an <code>Authorization: Bearer &lt;vapi-public-api-key&gt;</code> header.</p>
+     * <p>@default false</p>
+     */
+    @JsonProperty("controlAuthenticationEnabled")
+    public Optional<Boolean> getControlAuthenticationEnabled() {
+        return controlAuthenticationEnabled;
     }
 
     @java.lang.Override
@@ -68,12 +96,19 @@ public final class MonitorPlan {
     }
 
     private boolean equalTo(MonitorPlan other) {
-        return listenEnabled.equals(other.listenEnabled) && controlEnabled.equals(other.controlEnabled);
+        return listenEnabled.equals(other.listenEnabled)
+                && listenAuthenticationEnabled.equals(other.listenAuthenticationEnabled)
+                && controlEnabled.equals(other.controlEnabled)
+                && controlAuthenticationEnabled.equals(other.controlAuthenticationEnabled);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.listenEnabled, this.controlEnabled);
+        return Objects.hash(
+                this.listenEnabled,
+                this.listenAuthenticationEnabled,
+                this.controlEnabled,
+                this.controlAuthenticationEnabled);
     }
 
     @java.lang.Override
@@ -89,7 +124,11 @@ public final class MonitorPlan {
     public static final class Builder {
         private Optional<Boolean> listenEnabled = Optional.empty();
 
+        private Optional<Boolean> listenAuthenticationEnabled = Optional.empty();
+
         private Optional<Boolean> controlEnabled = Optional.empty();
+
+        private Optional<Boolean> controlAuthenticationEnabled = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -98,7 +137,9 @@ public final class MonitorPlan {
 
         public Builder from(MonitorPlan other) {
             listenEnabled(other.getListenEnabled());
+            listenAuthenticationEnabled(other.getListenAuthenticationEnabled());
             controlEnabled(other.getControlEnabled());
+            controlAuthenticationEnabled(other.getControlAuthenticationEnabled());
             return this;
         }
 
@@ -113,6 +154,17 @@ public final class MonitorPlan {
             return this;
         }
 
+        @JsonSetter(value = "listenAuthenticationEnabled", nulls = Nulls.SKIP)
+        public Builder listenAuthenticationEnabled(Optional<Boolean> listenAuthenticationEnabled) {
+            this.listenAuthenticationEnabled = listenAuthenticationEnabled;
+            return this;
+        }
+
+        public Builder listenAuthenticationEnabled(Boolean listenAuthenticationEnabled) {
+            this.listenAuthenticationEnabled = Optional.ofNullable(listenAuthenticationEnabled);
+            return this;
+        }
+
         @JsonSetter(value = "controlEnabled", nulls = Nulls.SKIP)
         public Builder controlEnabled(Optional<Boolean> controlEnabled) {
             this.controlEnabled = controlEnabled;
@@ -124,8 +176,24 @@ public final class MonitorPlan {
             return this;
         }
 
+        @JsonSetter(value = "controlAuthenticationEnabled", nulls = Nulls.SKIP)
+        public Builder controlAuthenticationEnabled(Optional<Boolean> controlAuthenticationEnabled) {
+            this.controlAuthenticationEnabled = controlAuthenticationEnabled;
+            return this;
+        }
+
+        public Builder controlAuthenticationEnabled(Boolean controlAuthenticationEnabled) {
+            this.controlAuthenticationEnabled = Optional.ofNullable(controlAuthenticationEnabled);
+            return this;
+        }
+
         public MonitorPlan build() {
-            return new MonitorPlan(listenEnabled, controlEnabled, additionalProperties);
+            return new MonitorPlan(
+                    listenEnabled,
+                    listenAuthenticationEnabled,
+                    controlEnabled,
+                    controlAuthenticationEnabled,
+                    additionalProperties);
         }
     }
 }

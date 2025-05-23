@@ -42,6 +42,10 @@ public final class ServerMessageToolCallsPhoneNumber {
         return new ServerMessageToolCallsPhoneNumber(new VapiValue(value));
     }
 
+    public static ServerMessageToolCallsPhoneNumber telnyx(CreateTelnyxPhoneNumberDto value) {
+        return new ServerMessageToolCallsPhoneNumber(new TelnyxValue(value));
+    }
+
     public boolean isByoPhoneNumber() {
         return value instanceof ByoPhoneNumberValue;
     }
@@ -56,6 +60,10 @@ public final class ServerMessageToolCallsPhoneNumber {
 
     public boolean isVapi() {
         return value instanceof VapiValue;
+    }
+
+    public boolean isTelnyx() {
+        return value instanceof TelnyxValue;
     }
 
     public boolean _isUnknown() {
@@ -90,6 +98,13 @@ public final class ServerMessageToolCallsPhoneNumber {
         return Optional.empty();
     }
 
+    public Optional<CreateTelnyxPhoneNumberDto> getTelnyx() {
+        if (isTelnyx()) {
+            return Optional.of(((TelnyxValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -111,6 +126,8 @@ public final class ServerMessageToolCallsPhoneNumber {
 
         T visitVapi(CreateVapiPhoneNumberDto vapi);
 
+        T visitTelnyx(CreateTelnyxPhoneNumberDto telnyx);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -119,7 +136,8 @@ public final class ServerMessageToolCallsPhoneNumber {
         @JsonSubTypes.Type(ByoPhoneNumberValue.class),
         @JsonSubTypes.Type(TwilioValue.class),
         @JsonSubTypes.Type(VonageValue.class),
-        @JsonSubTypes.Type(VapiValue.class)
+        @JsonSubTypes.Type(VapiValue.class),
+        @JsonSubTypes.Type(TelnyxValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -268,6 +286,45 @@ public final class ServerMessageToolCallsPhoneNumber {
         }
 
         private boolean equalTo(VapiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ServerMessageToolCallsPhoneNumber{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("telnyx")
+    @JsonIgnoreProperties("provider")
+    private static final class TelnyxValue implements Value {
+        @JsonUnwrapped
+        private CreateTelnyxPhoneNumberDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TelnyxValue() {}
+
+        private TelnyxValue(CreateTelnyxPhoneNumberDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTelnyx(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TelnyxValue && equalTo((TelnyxValue) other);
+        }
+
+        private boolean equalTo(TelnyxValue other) {
             return value.equals(other.value);
         }
 

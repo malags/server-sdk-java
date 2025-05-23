@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CustomVoice.Builder.class)
 public final class CustomVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final Optional<ChunkPlan> chunkPlan;
 
     private final Server server;
@@ -30,14 +32,24 @@ public final class CustomVoice {
     private final Map<String, Object> additionalProperties;
 
     private CustomVoice(
+            Optional<Boolean> cachingEnabled,
             Optional<ChunkPlan> chunkPlan,
             Server server,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.chunkPlan = chunkPlan;
         this.server = server;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -92,14 +104,15 @@ public final class CustomVoice {
     }
 
     private boolean equalTo(CustomVoice other) {
-        return chunkPlan.equals(other.chunkPlan)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && chunkPlan.equals(other.chunkPlan)
                 && server.equals(other.server)
                 && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.chunkPlan, this.server, this.fallbackPlan);
+        return Objects.hash(this.cachingEnabled, this.chunkPlan, this.server, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -120,6 +133,10 @@ public final class CustomVoice {
     public interface _FinalStage {
         CustomVoice build();
 
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
+
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -137,6 +154,8 @@ public final class CustomVoice {
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -144,6 +163,7 @@ public final class CustomVoice {
 
         @java.lang.Override
         public Builder from(CustomVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             chunkPlan(other.getChunkPlan());
             server(other.getServer());
             fallbackPlan(other.getFallbackPlan());
@@ -211,9 +231,26 @@ public final class CustomVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public CustomVoice build() {
-            return new CustomVoice(chunkPlan, server, fallbackPlan, additionalProperties);
+            return new CustomVoice(cachingEnabled, chunkPlan, server, fallbackPlan, additionalProperties);
         }
     }
 }

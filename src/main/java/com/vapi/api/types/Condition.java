@@ -9,11 +9,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -25,15 +23,12 @@ public final class Condition {
 
     private final String param;
 
-    private final Map<String, Object> value;
+    private final String value;
 
     private final Map<String, Object> additionalProperties;
 
     private Condition(
-            ConditionOperator operator,
-            String param,
-            Map<String, Object> value,
-            Map<String, Object> additionalProperties) {
+            ConditionOperator operator, String param, String value, Map<String, Object> additionalProperties) {
         this.operator = operator;
         this.param = param;
         this.value = value;
@@ -60,7 +55,7 @@ public final class Condition {
      * @return This is the value you want to compare against the parameter.
      */
     @JsonProperty("value")
-    public Map<String, Object> getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -100,26 +95,24 @@ public final class Condition {
     }
 
     public interface ParamStage {
-        _FinalStage param(@NotNull String param);
+        ValueStage param(@NotNull String param);
+    }
+
+    public interface ValueStage {
+        _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
         Condition build();
-
-        _FinalStage value(Map<String, Object> value);
-
-        _FinalStage putAllValue(Map<String, Object> value);
-
-        _FinalStage value(String key, Object value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements OperatorStage, ParamStage, _FinalStage {
+    public static final class Builder implements OperatorStage, ParamStage, ValueStage, _FinalStage {
         private ConditionOperator operator;
 
         private String param;
 
-        private Map<String, Object> value = new LinkedHashMap<>();
+        private String value;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -151,7 +144,7 @@ public final class Condition {
          */
         @java.lang.Override
         @JsonSetter("param")
-        public _FinalStage param(@NotNull String param) {
+        public ValueStage param(@NotNull String param) {
             this.param = Objects.requireNonNull(param, "param must not be null");
             return this;
         }
@@ -161,26 +154,9 @@ public final class Condition {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage value(String key, Object value) {
-            this.value.put(key, value);
-            return this;
-        }
-
-        /**
-         * <p>This is the value you want to compare against the parameter.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage putAllValue(Map<String, Object> value) {
-            this.value.putAll(value);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "value", nulls = Nulls.SKIP)
-        public _FinalStage value(Map<String, Object> value) {
-            this.value.clear();
-            this.value.putAll(value);
+        @JsonSetter("value")
+        public _FinalStage value(@NotNull String value) {
+            this.value = Objects.requireNonNull(value, "value must not be null");
             return this;
         }
 

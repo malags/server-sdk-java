@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.vapi.api.types.GoogleVoicemailDetectionPlan;
 import com.vapi.api.types.OpenAiVoicemailDetectionPlan;
 import com.vapi.api.types.TwilioVoicemailDetectionPlan;
+import com.vapi.api.types.VapiVoicemailDetectionPlan;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -41,6 +42,10 @@ public final class UpdateAssistantDtoVoicemailDetection {
         return new UpdateAssistantDtoVoicemailDetection(new TwilioValue(value));
     }
 
+    public static UpdateAssistantDtoVoicemailDetection vapi(VapiVoicemailDetectionPlan value) {
+        return new UpdateAssistantDtoVoicemailDetection(new VapiValue(value));
+    }
+
     public boolean isGoogle() {
         return value instanceof GoogleValue;
     }
@@ -51,6 +56,10 @@ public final class UpdateAssistantDtoVoicemailDetection {
 
     public boolean isTwilio() {
         return value instanceof TwilioValue;
+    }
+
+    public boolean isVapi() {
+        return value instanceof VapiValue;
     }
 
     public boolean _isUnknown() {
@@ -78,6 +87,13 @@ public final class UpdateAssistantDtoVoicemailDetection {
         return Optional.empty();
     }
 
+    public Optional<VapiVoicemailDetectionPlan> getVapi() {
+        if (isVapi()) {
+            return Optional.of(((VapiValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -97,6 +113,8 @@ public final class UpdateAssistantDtoVoicemailDetection {
 
         T visitTwilio(TwilioVoicemailDetectionPlan twilio);
 
+        T visitVapi(VapiVoicemailDetectionPlan vapi);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -104,7 +122,8 @@ public final class UpdateAssistantDtoVoicemailDetection {
     @JsonSubTypes({
         @JsonSubTypes.Type(GoogleValue.class),
         @JsonSubTypes.Type(OpenaiValue.class),
-        @JsonSubTypes.Type(TwilioValue.class)
+        @JsonSubTypes.Type(TwilioValue.class),
+        @JsonSubTypes.Type(VapiValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -214,6 +233,45 @@ public final class UpdateAssistantDtoVoicemailDetection {
         }
 
         private boolean equalTo(TwilioValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoVoicemailDetection{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("vapi")
+    @JsonIgnoreProperties("provider")
+    private static final class VapiValue implements Value {
+        @JsonUnwrapped
+        private VapiVoicemailDetectionPlan value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private VapiValue() {}
+
+        private VapiValue(VapiVoicemailDetectionPlan value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitVapi(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof VapiValue && equalTo((VapiValue) other);
+        }
+
+        private boolean equalTo(VapiValue other) {
             return value.equals(other.value);
         }
 

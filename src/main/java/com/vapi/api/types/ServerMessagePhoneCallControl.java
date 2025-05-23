@@ -61,12 +61,7 @@ public final class ServerMessagePhoneCallControl {
     }
 
     /**
-     * @return This is the phone number associated with the call.
-     * <p>This matches one of the following:</p>
-     * <ul>
-     * <li><code>call.phoneNumber</code>,</li>
-     * <li><code>call.phoneNumberId</code>.</li>
-     * </ul>
+     * @return This is the phone number that the message is associated with.
      */
     @JsonProperty("phoneNumber")
     public Optional<ServerMessagePhoneCallControlPhoneNumber> getPhoneNumber() {
@@ -99,7 +94,7 @@ public final class ServerMessagePhoneCallControl {
     }
 
     /**
-     * @return This is the timestamp of when the message was sent in milliseconds since Unix Epoch.
+     * @return This is the timestamp of the message.
      */
     @JsonProperty("timestamp")
     public Optional<Double> getTimestamp() {
@@ -116,16 +111,7 @@ public final class ServerMessagePhoneCallControl {
     }
 
     /**
-     * @return This is the assistant that is currently active. This is provided for convenience.
-     * <p>This matches one of the following:</p>
-     * <ul>
-     * <li><code>call.assistant</code>,</li>
-     * <li><code>call.assistantId</code>,</li>
-     * <li><code>call.squad[n].assistant</code>,</li>
-     * <li><code>call.squad[n].assistantId</code>,</li>
-     * <li><code>call.squadId-&gt;[n].assistant</code>,</li>
-     * <li><code>call.squadId-&gt;[n].assistantId</code>.</li>
-     * </ul>
+     * @return This is the assistant that the message is associated with.
      */
     @JsonProperty("assistant")
     public Optional<CreateAssistantDto> getAssistant() {
@@ -133,12 +119,7 @@ public final class ServerMessagePhoneCallControl {
     }
 
     /**
-     * @return This is the customer associated with the call.
-     * <p>This matches one of the following:</p>
-     * <ul>
-     * <li><code>call.customer</code>,</li>
-     * <li><code>call.customerId</code>.</li>
-     * </ul>
+     * @return This is the customer that the message is associated with.
      */
     @JsonProperty("customer")
     public Optional<CreateCustomerDto> getCustomer() {
@@ -146,9 +127,7 @@ public final class ServerMessagePhoneCallControl {
     }
 
     /**
-     * @return This is the call object.
-     * <p>This matches what was returned in POST /call.</p>
-     * <p>Note: This might get stale during the call. To get the latest call object, especially after the call is ended, use GET /call/:id.</p>
+     * @return This is the call that the message is associated with.
      */
     @JsonProperty("call")
     public Optional<Call> getCall() {
@@ -285,9 +264,7 @@ public final class ServerMessagePhoneCallControl {
         }
 
         /**
-         * <p>This is the call object.</p>
-         * <p>This matches what was returned in POST /call.</p>
-         * <p>Note: This might get stale during the call. To get the latest call object, especially after the call is ended, use GET /call/:id.</p>
+         * <p>This is the call that the message is associated with.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -304,12 +281,7 @@ public final class ServerMessagePhoneCallControl {
         }
 
         /**
-         * <p>This is the customer associated with the call.</p>
-         * <p>This matches one of the following:</p>
-         * <ul>
-         * <li><code>call.customer</code>,</li>
-         * <li><code>call.customerId</code>.</li>
-         * </ul>
+         * <p>This is the customer that the message is associated with.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -326,16 +298,7 @@ public final class ServerMessagePhoneCallControl {
         }
 
         /**
-         * <p>This is the assistant that is currently active. This is provided for convenience.</p>
-         * <p>This matches one of the following:</p>
-         * <ul>
-         * <li><code>call.assistant</code>,</li>
-         * <li><code>call.assistantId</code>,</li>
-         * <li><code>call.squad[n].assistant</code>,</li>
-         * <li><code>call.squad[n].assistantId</code>,</li>
-         * <li><code>call.squadId-&gt;[n].assistant</code>,</li>
-         * <li><code>call.squadId-&gt;[n].assistantId</code>.</li>
-         * </ul>
+         * <p>This is the assistant that the message is associated with.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -370,7 +333,7 @@ public final class ServerMessagePhoneCallControl {
         }
 
         /**
-         * <p>This is the timestamp of when the message was sent in milliseconds since Unix Epoch.</p>
+         * <p>This is the timestamp of the message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -404,12 +367,7 @@ public final class ServerMessagePhoneCallControl {
         }
 
         /**
-         * <p>This is the phone number associated with the call.</p>
-         * <p>This matches one of the following:</p>
-         * <ul>
-         * <li><code>call.phoneNumber</code>,</li>
-         * <li><code>call.phoneNumberId</code>.</li>
-         * </ul>
+         * <p>This is the phone number that the message is associated with.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

@@ -4,6 +4,7 @@
 package com.vapi.api.errors;
 
 import com.vapi.api.core.VapiApiException;
+import okhttp3.Response;
 
 public final class BadRequestError extends VapiApiException {
     /**
@@ -13,6 +14,11 @@ public final class BadRequestError extends VapiApiException {
 
     public BadRequestError(Object body) {
         super("BadRequestError", 400, body);
+        this.body = body;
+    }
+
+    public BadRequestError(Object body, Response rawResponse) {
+        super("BadRequestError", 400, body, rawResponse);
         this.body = body;
     }
 

@@ -23,7 +23,7 @@ import java.util.Optional;
 public final class StartSpeakingPlan {
     private final Optional<Double> waitSeconds;
 
-    private final Optional<Map<String, Object>> smartEndpointingEnabled;
+    private final Optional<StartSpeakingPlanSmartEndpointingEnabled> smartEndpointingEnabled;
 
     private final Optional<StartSpeakingPlanSmartEndpointingPlan> smartEndpointingPlan;
 
@@ -35,7 +35,7 @@ public final class StartSpeakingPlan {
 
     private StartSpeakingPlan(
             Optional<Double> waitSeconds,
-            Optional<Map<String, Object>> smartEndpointingEnabled,
+            Optional<StartSpeakingPlanSmartEndpointingEnabled> smartEndpointingEnabled,
             Optional<StartSpeakingPlanSmartEndpointingPlan> smartEndpointingPlan,
             Optional<List<StartSpeakingPlanCustomEndpointingRulesItem>> customEndpointingRules,
             Optional<TranscriptionEndpointingPlan> transcriptionEndpointingPlan,
@@ -68,7 +68,7 @@ public final class StartSpeakingPlan {
     }
 
     @JsonProperty("smartEndpointingEnabled")
-    public Optional<Map<String, Object>> getSmartEndpointingEnabled() {
+    public Optional<StartSpeakingPlanSmartEndpointingEnabled> getSmartEndpointingEnabled() {
         return smartEndpointingEnabled;
     }
 
@@ -158,7 +158,7 @@ public final class StartSpeakingPlan {
     public static final class Builder {
         private Optional<Double> waitSeconds = Optional.empty();
 
-        private Optional<Map<String, Object>> smartEndpointingEnabled = Optional.empty();
+        private Optional<StartSpeakingPlanSmartEndpointingEnabled> smartEndpointingEnabled = Optional.empty();
 
         private Optional<StartSpeakingPlanSmartEndpointingPlan> smartEndpointingPlan = Optional.empty();
 
@@ -192,12 +192,13 @@ public final class StartSpeakingPlan {
         }
 
         @JsonSetter(value = "smartEndpointingEnabled", nulls = Nulls.SKIP)
-        public Builder smartEndpointingEnabled(Optional<Map<String, Object>> smartEndpointingEnabled) {
+        public Builder smartEndpointingEnabled(
+                Optional<StartSpeakingPlanSmartEndpointingEnabled> smartEndpointingEnabled) {
             this.smartEndpointingEnabled = smartEndpointingEnabled;
             return this;
         }
 
-        public Builder smartEndpointingEnabled(Map<String, Object> smartEndpointingEnabled) {
+        public Builder smartEndpointingEnabled(StartSpeakingPlanSmartEndpointingEnabled smartEndpointingEnabled) {
             this.smartEndpointingEnabled = Optional.ofNullable(smartEndpointingEnabled);
             return this;
         }

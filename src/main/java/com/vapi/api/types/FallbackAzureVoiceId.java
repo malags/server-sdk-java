@@ -29,6 +29,7 @@ public final class FallbackAzureVoiceId {
         return this.value;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T visit(Visitor<T> visitor) {
         if (this.type == 0) {
             return visitor.visit((FallbackAzureVoiceVoiceId) this.value);

@@ -66,11 +66,11 @@ public final class SuccessEvaluationPlan {
 
     /**
      * @return These are the messages used to generate the success evaluation.
-     * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert call evaluator. You will be given a transcript of a call and the system prompt of the AI participant. Determine if the call was successful based on the objectives inferred from the system prompt. DO NOT return anything except the result.\n\nRubric:\\n{{rubric}}\n\nOnly respond with the result.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here was the system prompt of the call:\n\n{{systemPrompt}}\n\n&quot; } ]</code></p>
+     * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert call evaluator. You will be given a transcript of a call and the system prompt of the AI participant. Determine if the call was successful based on the objectives inferred from the system prompt. DO NOT return anything except the result.\n\nRubric:\\n{{rubric}}\n\nOnly respond with the result.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here was the system prompt of the call:\n\n{{systemPrompt}}\n\n. Here is the ended reason of the call:\n\n{{endedReason}}\n\n&quot; } ]</code></p>
      * <p>You can customize by providing any messages you want.</p>
      * <p>Here are the template variables available:</p>
      * <ul>
-     * <li>{{transcript}}: the transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: the system prompt of the call from <code>assistant.model.messages[type=system].content</code>- {{rubric}}: the rubric of the success evaluation from <code>successEvaluationPlan.rubric</code></li>
+     * <li>{{transcript}}: the transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: the system prompt of the call from <code>assistant.model.messages[type=system].content</code>- {{rubric}}: the rubric of the success evaluation from <code>successEvaluationPlan.rubric</code>- {{endedReason}}: the ended reason of the call from <code>call.endedReason</code></li>
      * </ul>
      */
     @JsonProperty("messages")

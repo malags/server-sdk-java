@@ -16,16 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Server.Builder.class)
 public final class Server {
     private final Optional<Double> timeoutSeconds;
 
-    private final String url;
-
-    private final Optional<String> secret;
+    private final Optional<String> url;
 
     private final Optional<Map<String, Object>> headers;
 
@@ -35,21 +32,19 @@ public final class Server {
 
     private Server(
             Optional<Double> timeoutSeconds,
-            String url,
-            Optional<String> secret,
+            Optional<String> url,
             Optional<Map<String, Object>> headers,
             Optional<BackoffPlan> backoffPlan,
             Map<String, Object> additionalProperties) {
         this.timeoutSeconds = timeoutSeconds;
         this.url = url;
-        this.secret = secret;
         this.headers = headers;
         this.backoffPlan = backoffPlan;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return This is the timeout in seconds for the request to your server. Defaults to 20 seconds.
+     * @return This is the timeout in seconds for the request. Defaults to 20 seconds.
      * <p>@default 20</p>
      */
     @JsonProperty("timeoutSeconds")
@@ -58,24 +53,15 @@ public final class Server {
     }
 
     /**
-     * @return API endpoint to send requests to.
+     * @return This is where the request will be sent.
      */
     @JsonProperty("url")
-    public String getUrl() {
+    public Optional<String> getUrl() {
         return url;
     }
 
     /**
-     * @return This is the secret you can set that Vapi will send with every request to your server. Will be sent as a header called x-vapi-secret.
-     * <p>Same precedence logic as server.</p>
-     */
-    @JsonProperty("secret")
-    public Optional<String> getSecret() {
-        return secret;
-    }
-
-    /**
-     * @return These are the custom headers to include in the request sent to your server.
+     * @return These are the headers to include in the request.
      * <p>Each key-value pair represents a header name and its value.</p>
      */
     @JsonProperty("headers")
@@ -84,7 +70,8 @@ public final class Server {
     }
 
     /**
-     * @return This is the backoff plan to use if the request fails.
+     * @return This is the backoff plan if the request fails. Defaults to undefined (the request will not be retried).
+     * <p>@default undefined (the request will not be retried)</p>
      */
     @JsonProperty("backoffPlan")
     public Optional<BackoffPlan> getBackoffPlan() {
@@ -105,14 +92,13 @@ public final class Server {
     private boolean equalTo(Server other) {
         return timeoutSeconds.equals(other.timeoutSeconds)
                 && url.equals(other.url)
-                && secret.equals(other.secret)
                 && headers.equals(other.headers)
                 && backoffPlan.equals(other.backoffPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.timeoutSeconds, this.url, this.secret, this.headers, this.backoffPlan);
+        return Objects.hash(this.timeoutSeconds, this.url, this.headers, this.backoffPlan);
     }
 
     @java.lang.Override
@@ -120,148 +106,79 @@ public final class Server {
         return ObjectMappers.stringify(this);
     }
 
-    public static UrlStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface UrlStage {
-        _FinalStage url(@NotNull String url);
-
-        Builder from(Server other);
-    }
-
-    public interface _FinalStage {
-        Server build();
-
-        _FinalStage timeoutSeconds(Optional<Double> timeoutSeconds);
-
-        _FinalStage timeoutSeconds(Double timeoutSeconds);
-
-        _FinalStage secret(Optional<String> secret);
-
-        _FinalStage secret(String secret);
-
-        _FinalStage headers(Optional<Map<String, Object>> headers);
-
-        _FinalStage headers(Map<String, Object> headers);
-
-        _FinalStage backoffPlan(Optional<BackoffPlan> backoffPlan);
-
-        _FinalStage backoffPlan(BackoffPlan backoffPlan);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UrlStage, _FinalStage {
-        private String url;
+    public static final class Builder {
+        private Optional<Double> timeoutSeconds = Optional.empty();
 
-        private Optional<BackoffPlan> backoffPlan = Optional.empty();
+        private Optional<String> url = Optional.empty();
 
         private Optional<Map<String, Object>> headers = Optional.empty();
 
-        private Optional<String> secret = Optional.empty();
-
-        private Optional<Double> timeoutSeconds = Optional.empty();
+        private Optional<BackoffPlan> backoffPlan = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(Server other) {
             timeoutSeconds(other.getTimeoutSeconds());
             url(other.getUrl());
-            secret(other.getSecret());
             headers(other.getHeaders());
             backoffPlan(other.getBackoffPlan());
             return this;
         }
 
-        /**
-         * <p>API endpoint to send requests to.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("url")
-        public _FinalStage url(@NotNull String url) {
-            this.url = Objects.requireNonNull(url, "url must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the backoff plan to use if the request fails.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage backoffPlan(BackoffPlan backoffPlan) {
-            this.backoffPlan = Optional.ofNullable(backoffPlan);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "backoffPlan", nulls = Nulls.SKIP)
-        public _FinalStage backoffPlan(Optional<BackoffPlan> backoffPlan) {
-            this.backoffPlan = backoffPlan;
-            return this;
-        }
-
-        /**
-         * <p>These are the custom headers to include in the request sent to your server.</p>
-         * <p>Each key-value pair represents a header name and its value.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage headers(Map<String, Object> headers) {
-            this.headers = Optional.ofNullable(headers);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "headers", nulls = Nulls.SKIP)
-        public _FinalStage headers(Optional<Map<String, Object>> headers) {
-            this.headers = headers;
-            return this;
-        }
-
-        /**
-         * <p>This is the secret you can set that Vapi will send with every request to your server. Will be sent as a header called x-vapi-secret.</p>
-         * <p>Same precedence logic as server.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage secret(String secret) {
-            this.secret = Optional.ofNullable(secret);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "secret", nulls = Nulls.SKIP)
-        public _FinalStage secret(Optional<String> secret) {
-            this.secret = secret;
-            return this;
-        }
-
-        /**
-         * <p>This is the timeout in seconds for the request to your server. Defaults to 20 seconds.</p>
-         * <p>@default 20</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage timeoutSeconds(Double timeoutSeconds) {
-            this.timeoutSeconds = Optional.ofNullable(timeoutSeconds);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
-        public _FinalStage timeoutSeconds(Optional<Double> timeoutSeconds) {
+        public Builder timeoutSeconds(Optional<Double> timeoutSeconds) {
             this.timeoutSeconds = timeoutSeconds;
             return this;
         }
 
-        @java.lang.Override
+        public Builder timeoutSeconds(Double timeoutSeconds) {
+            this.timeoutSeconds = Optional.ofNullable(timeoutSeconds);
+            return this;
+        }
+
+        @JsonSetter(value = "url", nulls = Nulls.SKIP)
+        public Builder url(Optional<String> url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder url(String url) {
+            this.url = Optional.ofNullable(url);
+            return this;
+        }
+
+        @JsonSetter(value = "headers", nulls = Nulls.SKIP)
+        public Builder headers(Optional<Map<String, Object>> headers) {
+            this.headers = headers;
+            return this;
+        }
+
+        public Builder headers(Map<String, Object> headers) {
+            this.headers = Optional.ofNullable(headers);
+            return this;
+        }
+
+        @JsonSetter(value = "backoffPlan", nulls = Nulls.SKIP)
+        public Builder backoffPlan(Optional<BackoffPlan> backoffPlan) {
+            this.backoffPlan = backoffPlan;
+            return this;
+        }
+
+        public Builder backoffPlan(BackoffPlan backoffPlan) {
+            this.backoffPlan = Optional.ofNullable(backoffPlan);
+            return this;
+        }
+
         public Server build() {
-            return new Server(timeoutSeconds, url, secret, headers, backoffPlan, additionalProperties);
+            return new Server(timeoutSeconds, url, headers, backoffPlan, additionalProperties);
         }
     }
 }

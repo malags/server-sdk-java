@@ -20,14 +20,14 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CartesiaExperimentalControls.Builder.class)
 public final class CartesiaExperimentalControls {
-    private final Optional<CartesiaExperimentalControlsSpeed> speed;
+    private final Optional<CartesiaSpeedControl> speed;
 
     private final Optional<CartesiaExperimentalControlsEmotion> emotion;
 
     private final Map<String, Object> additionalProperties;
 
     private CartesiaExperimentalControls(
-            Optional<CartesiaExperimentalControlsSpeed> speed,
+            Optional<CartesiaSpeedControl> speed,
             Optional<CartesiaExperimentalControlsEmotion> emotion,
             Map<String, Object> additionalProperties) {
         this.speed = speed;
@@ -36,7 +36,7 @@ public final class CartesiaExperimentalControls {
     }
 
     @JsonProperty("speed")
-    public Optional<CartesiaExperimentalControlsSpeed> getSpeed() {
+    public Optional<CartesiaSpeedControl> getSpeed() {
         return speed;
     }
 
@@ -76,7 +76,7 @@ public final class CartesiaExperimentalControls {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<CartesiaExperimentalControlsSpeed> speed = Optional.empty();
+        private Optional<CartesiaSpeedControl> speed = Optional.empty();
 
         private Optional<CartesiaExperimentalControlsEmotion> emotion = Optional.empty();
 
@@ -92,12 +92,12 @@ public final class CartesiaExperimentalControls {
         }
 
         @JsonSetter(value = "speed", nulls = Nulls.SKIP)
-        public Builder speed(Optional<CartesiaExperimentalControlsSpeed> speed) {
+        public Builder speed(Optional<CartesiaSpeedControl> speed) {
             this.speed = speed;
             return this;
         }
 
-        public Builder speed(CartesiaExperimentalControlsSpeed speed) {
+        public Builder speed(CartesiaSpeedControl speed) {
             this.speed = Optional.ofNullable(speed);
             return this;
         }

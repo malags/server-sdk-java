@@ -204,6 +204,11 @@ public enum ServerMessageEndOfCallReportEndedReason {
 
     PHONE_CALL_PROVIDER_BYPASS_ENABLED_BUT_NO_CALL_RECEIVED("phone-call-provider-bypass-enabled-but-no-call-received"),
 
+    CALL_IN_PROGRESS_ERROR_PROVIDERFAULT_TRANSPORT_NEVER_CONNECTED(
+            "call.in-progress.error-providerfault-transport-never-connected"),
+
+    CALL_IN_PROGRESS_ERROR_VAPIFAULT_WORKER_NOT_AVAILABLE("call.in-progress.error-vapifault-worker-not-available"),
+
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_TRANSPORT_NEVER_CONNECTED(
             "call.in-progress.error-vapifault-transport-never-connected"),
 
@@ -1184,10 +1189,16 @@ public enum ServerMessageEndOfCallReportEndedReason {
 
     PHONE_CALL_PROVIDER_CLOSED_WEBSOCKET("phone-call-provider-closed-websocket"),
 
+    CALL_FORWARDING_OPERATOR_BUSY("call.forwarding.operator-busy"),
+
     SILENCE_TIMED_OUT("silence-timed-out"),
 
     CALL_IN_PROGRESS_ERROR_SIP_TELEPHONY_PROVIDER_FAILED_TO_CONNECT_CALL(
             "call.in-progress.error-sip-telephony-provider-failed-to-connect-call"),
+
+    CALL_RINGING_HOOK_EXECUTED_SAY("call.ringing.hook-executed-say"),
+
+    CALL_RINGING_HOOK_EXECUTED_TRANSFER("call.ringing.hook-executed-transfer"),
 
     TWILIO_FAILED_TO_CONNECT_CALL("twilio-failed-to-connect-call"),
 

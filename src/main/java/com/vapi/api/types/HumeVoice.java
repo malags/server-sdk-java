@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = HumeVoice.Builder.class)
 public final class HumeVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final Optional<String> model;
 
     private final String voiceId;
@@ -36,6 +38,7 @@ public final class HumeVoice {
     private final Map<String, Object> additionalProperties;
 
     private HumeVoice(
+            Optional<Boolean> cachingEnabled,
             Optional<String> model,
             String voiceId,
             Optional<Boolean> isCustomHumeVoice,
@@ -43,6 +46,7 @@ public final class HumeVoice {
             Optional<String> description,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.model = model;
         this.voiceId = voiceId;
         this.isCustomHumeVoice = isCustomHumeVoice;
@@ -50,6 +54,14 @@ public final class HumeVoice {
         this.description = description;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -114,7 +126,8 @@ public final class HumeVoice {
     }
 
     private boolean equalTo(HumeVoice other) {
-        return model.equals(other.model)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && model.equals(other.model)
                 && voiceId.equals(other.voiceId)
                 && isCustomHumeVoice.equals(other.isCustomHumeVoice)
                 && chunkPlan.equals(other.chunkPlan)
@@ -125,7 +138,13 @@ public final class HumeVoice {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.model, this.voiceId, this.isCustomHumeVoice, this.chunkPlan, this.description, this.fallbackPlan);
+                this.cachingEnabled,
+                this.model,
+                this.voiceId,
+                this.isCustomHumeVoice,
+                this.chunkPlan,
+                this.description,
+                this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -145,6 +164,10 @@ public final class HumeVoice {
 
     public interface _FinalStage {
         HumeVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage model(Optional<String> model);
 
@@ -181,6 +204,8 @@ public final class HumeVoice {
 
         private Optional<String> model = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -188,6 +213,7 @@ public final class HumeVoice {
 
         @java.lang.Override
         public Builder from(HumeVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             model(other.getModel());
             voiceId(other.getVoiceId());
             isCustomHumeVoice(other.getIsCustomHumeVoice());
@@ -295,10 +321,34 @@ public final class HumeVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public HumeVoice build() {
             return new HumeVoice(
-                    model, voiceId, isCustomHumeVoice, chunkPlan, description, fallbackPlan, additionalProperties);
+                    cachingEnabled,
+                    model,
+                    voiceId,
+                    isCustomHumeVoice,
+                    chunkPlan,
+                    description,
+                    fallbackPlan,
+                    additionalProperties);
         }
     }
 }

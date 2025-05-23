@@ -46,11 +46,11 @@ public final class StructuredDataPlan {
 
     /**
      * @return These are the messages used to generate the structured data.
-     * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert data extractor. You will be given a transcript of a call. Extract structured data per the JSON Schema. DO NOT return anything except the structured data.\n\nJson Schema:\\n{{schema}}\n\nOnly respond with the JSON.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n&quot; } ]</code></p>
+     * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert data extractor. You will be given a transcript of a call. Extract structured data per the JSON Schema. DO NOT return anything except the structured data.\n\nJson Schema:\\n{{schema}}\n\nOnly respond with the JSON.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n. Here is the ended reason of the call:\n\n{{endedReason}}\n\n&quot; } ]</code></p>
      * <p>You can customize by providing any messages you want.</p>
      * <p>Here are the template variables available:</p>
      * <ul>
-     * <li>{{transcript}}: the transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: the system prompt of the call from <code>assistant.model.messages[type=system].content</code>- {{schema}}: the schema of the structured data from <code>structuredDataPlan.schema</code></li>
+     * <li>{{transcript}}: the transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: the system prompt of the call from <code>assistant.model.messages[type=system].content</code>- {{schema}}: the schema of the structured data from <code>structuredDataPlan.schema</code>- {{endedReason}}: the ended reason of the call from <code>call.endedReason</code></li>
      * </ul>
      */
     @JsonProperty("messages")

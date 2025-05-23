@@ -3,293 +3,100 @@
  */
 package com.vapi.api.resources.testsuiteruns;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vapi.api.core.ClientOptions;
-import com.vapi.api.core.MediaTypes;
-import com.vapi.api.core.ObjectMappers;
 import com.vapi.api.core.RequestOptions;
-import com.vapi.api.core.VapiApiException;
-import com.vapi.api.core.VapiException;
 import com.vapi.api.resources.testsuiteruns.requests.CreateTestSuiteRunDto;
 import com.vapi.api.resources.testsuiteruns.requests.TestSuiteRunControllerFindAllPaginatedRequest;
 import com.vapi.api.resources.testsuiteruns.requests.UpdateTestSuiteRunDto;
 import com.vapi.api.types.TestSuiteRun;
 import com.vapi.api.types.TestSuiteRunsPaginatedResponse;
-import java.io.IOException;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class TestSuiteRunsClient {
     protected final ClientOptions clientOptions;
 
+    private final RawTestSuiteRunsClient rawClient;
+
     public TestSuiteRunsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawTestSuiteRunsClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawTestSuiteRunsClient withRawResponse() {
+        return this.rawClient;
     }
 
     public TestSuiteRunsPaginatedResponse testSuiteRunControllerFindAllPaginated(String testSuiteId) {
-        return testSuiteRunControllerFindAllPaginated(
-                testSuiteId,
-                TestSuiteRunControllerFindAllPaginatedRequest.builder().build());
+        return this.rawClient
+                .testSuiteRunControllerFindAllPaginated(testSuiteId)
+                .body();
     }
 
     public TestSuiteRunsPaginatedResponse testSuiteRunControllerFindAllPaginated(
             String testSuiteId, TestSuiteRunControllerFindAllPaginatedRequest request) {
-        return testSuiteRunControllerFindAllPaginated(testSuiteId, request, null);
+        return this.rawClient
+                .testSuiteRunControllerFindAllPaginated(testSuiteId, request)
+                .body();
     }
 
     public TestSuiteRunsPaginatedResponse testSuiteRunControllerFindAllPaginated(
             String testSuiteId, TestSuiteRunControllerFindAllPaginatedRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("test-suite")
-                .addPathSegment(testSuiteId)
-                .addPathSegments("run");
-        if (request.getPage().isPresent()) {
-            httpUrl.addQueryParameter("page", request.getPage().get().toString());
-        }
-        if (request.getSortOrder().isPresent()) {
-            httpUrl.addQueryParameter("sortOrder", request.getSortOrder().get().toString());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getCreatedAtGt().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "createdAtGt", request.getCreatedAtGt().get().toString());
-        }
-        if (request.getCreatedAtLt().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "createdAtLt", request.getCreatedAtLt().get().toString());
-        }
-        if (request.getCreatedAtGe().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "createdAtGe", request.getCreatedAtGe().get().toString());
-        }
-        if (request.getCreatedAtLe().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "createdAtLe", request.getCreatedAtLe().get().toString());
-        }
-        if (request.getUpdatedAtGt().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "updatedAtGt", request.getUpdatedAtGt().get().toString());
-        }
-        if (request.getUpdatedAtLt().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "updatedAtLt", request.getUpdatedAtLt().get().toString());
-        }
-        if (request.getUpdatedAtGe().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "updatedAtGe", request.getUpdatedAtGe().get().toString());
-        }
-        if (request.getUpdatedAtLe().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "updatedAtLe", request.getUpdatedAtLe().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TestSuiteRunsPaginatedResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new VapiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new VapiException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .testSuiteRunControllerFindAllPaginated(testSuiteId, request, requestOptions)
+                .body();
     }
 
     public TestSuiteRun testSuiteRunControllerCreate(String testSuiteId) {
-        return testSuiteRunControllerCreate(
-                testSuiteId, CreateTestSuiteRunDto.builder().build());
+        return this.rawClient.testSuiteRunControllerCreate(testSuiteId).body();
     }
 
     public TestSuiteRun testSuiteRunControllerCreate(String testSuiteId, CreateTestSuiteRunDto request) {
-        return testSuiteRunControllerCreate(testSuiteId, request, null);
+        return this.rawClient.testSuiteRunControllerCreate(testSuiteId, request).body();
     }
 
     public TestSuiteRun testSuiteRunControllerCreate(
             String testSuiteId, CreateTestSuiteRunDto request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("test-suite")
-                .addPathSegment(testSuiteId)
-                .addPathSegments("run")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new VapiException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TestSuiteRun.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new VapiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new VapiException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .testSuiteRunControllerCreate(testSuiteId, request, requestOptions)
+                .body();
     }
 
     public TestSuiteRun testSuiteRunControllerFindOne(String testSuiteId, String id) {
-        return testSuiteRunControllerFindOne(testSuiteId, id, null);
+        return this.rawClient.testSuiteRunControllerFindOne(testSuiteId, id).body();
     }
 
     public TestSuiteRun testSuiteRunControllerFindOne(String testSuiteId, String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("test-suite")
-                .addPathSegment(testSuiteId)
-                .addPathSegments("run")
-                .addPathSegment(id)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TestSuiteRun.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new VapiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new VapiException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .testSuiteRunControllerFindOne(testSuiteId, id, requestOptions)
+                .body();
     }
 
     public TestSuiteRun testSuiteRunControllerRemove(String testSuiteId, String id) {
-        return testSuiteRunControllerRemove(testSuiteId, id, null);
+        return this.rawClient.testSuiteRunControllerRemove(testSuiteId, id).body();
     }
 
     public TestSuiteRun testSuiteRunControllerRemove(String testSuiteId, String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("test-suite")
-                .addPathSegment(testSuiteId)
-                .addPathSegments("run")
-                .addPathSegment(id)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TestSuiteRun.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new VapiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new VapiException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .testSuiteRunControllerRemove(testSuiteId, id, requestOptions)
+                .body();
     }
 
     public TestSuiteRun testSuiteRunControllerUpdate(String testSuiteId, String id) {
-        return testSuiteRunControllerUpdate(
-                testSuiteId, id, UpdateTestSuiteRunDto.builder().build());
+        return this.rawClient.testSuiteRunControllerUpdate(testSuiteId, id).body();
     }
 
     public TestSuiteRun testSuiteRunControllerUpdate(String testSuiteId, String id, UpdateTestSuiteRunDto request) {
-        return testSuiteRunControllerUpdate(testSuiteId, id, request, null);
+        return this.rawClient
+                .testSuiteRunControllerUpdate(testSuiteId, id, request)
+                .body();
     }
 
     public TestSuiteRun testSuiteRunControllerUpdate(
             String testSuiteId, String id, UpdateTestSuiteRunDto request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("test-suite")
-                .addPathSegment(testSuiteId)
-                .addPathSegments("run")
-                .addPathSegment(id)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new VapiException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PATCH", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TestSuiteRun.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new VapiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new VapiException("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .testSuiteRunControllerUpdate(testSuiteId, id, request, requestOptions)
+                .body();
     }
 }

@@ -17,6 +17,10 @@ import com.vapi.api.types.CreateDtmfToolDto;
 import com.vapi.api.types.CreateEndCallToolDto;
 import com.vapi.api.types.CreateFunctionToolDto;
 import com.vapi.api.types.CreateGhlToolDto;
+import com.vapi.api.types.CreateGoHighLevelCalendarAvailabilityToolDto;
+import com.vapi.api.types.CreateGoHighLevelCalendarEventCreateToolDto;
+import com.vapi.api.types.CreateGoHighLevelContactCreateToolDto;
+import com.vapi.api.types.CreateGoHighLevelContactGetToolDto;
 import com.vapi.api.types.CreateGoogleCalendarCheckAvailabilityToolDto;
 import com.vapi.api.types.CreateGoogleCalendarCreateEventToolDto;
 import com.vapi.api.types.CreateGoogleSheetsRowAppendToolDto;
@@ -25,7 +29,7 @@ import com.vapi.api.types.CreateMcpToolDto;
 import com.vapi.api.types.CreateOutputToolDto;
 import com.vapi.api.types.CreateQueryToolDto;
 import com.vapi.api.types.CreateSlackSendMessageToolDto;
-import com.vapi.api.types.CreateSmsSendToolDto;
+import com.vapi.api.types.CreateSmsToolDto;
 import com.vapi.api.types.CreateTextEditorToolDto;
 import com.vapi.api.types.CreateTransferCallToolDto;
 import java.util.Objects;
@@ -104,12 +108,29 @@ public final class ToolsCreateRequest {
         return new ToolsCreateRequest(new SlackMessageSendValue(value));
     }
 
-    public static ToolsCreateRequest sms(CreateSmsSendToolDto value) {
+    public static ToolsCreateRequest sms(CreateSmsToolDto value) {
         return new ToolsCreateRequest(new SmsValue(value));
     }
 
     public static ToolsCreateRequest mcp(CreateMcpToolDto value) {
         return new ToolsCreateRequest(new McpValue(value));
+    }
+
+    public static ToolsCreateRequest gohighlevelCalendarAvailabilityCheck(
+            CreateGoHighLevelCalendarAvailabilityToolDto value) {
+        return new ToolsCreateRequest(new GohighlevelCalendarAvailabilityCheckValue(value));
+    }
+
+    public static ToolsCreateRequest gohighlevelCalendarEventCreate(CreateGoHighLevelCalendarEventCreateToolDto value) {
+        return new ToolsCreateRequest(new GohighlevelCalendarEventCreateValue(value));
+    }
+
+    public static ToolsCreateRequest gohighlevelContactCreate(CreateGoHighLevelContactCreateToolDto value) {
+        return new ToolsCreateRequest(new GohighlevelContactCreateValue(value));
+    }
+
+    public static ToolsCreateRequest gohighlevelContactGet(CreateGoHighLevelContactGetToolDto value) {
+        return new ToolsCreateRequest(new GohighlevelContactGetValue(value));
     }
 
     public boolean isDtmf() {
@@ -178,6 +199,22 @@ public final class ToolsCreateRequest {
 
     public boolean isMcp() {
         return value instanceof McpValue;
+    }
+
+    public boolean isGohighlevelCalendarAvailabilityCheck() {
+        return value instanceof GohighlevelCalendarAvailabilityCheckValue;
+    }
+
+    public boolean isGohighlevelCalendarEventCreate() {
+        return value instanceof GohighlevelCalendarEventCreateValue;
+    }
+
+    public boolean isGohighlevelContactCreate() {
+        return value instanceof GohighlevelContactCreateValue;
+    }
+
+    public boolean isGohighlevelContactGet() {
+        return value instanceof GohighlevelContactGetValue;
     }
 
     public boolean _isUnknown() {
@@ -289,7 +326,7 @@ public final class ToolsCreateRequest {
         return Optional.empty();
     }
 
-    public Optional<CreateSmsSendToolDto> getSms() {
+    public Optional<CreateSmsToolDto> getSms() {
         if (isSms()) {
             return Optional.of(((SmsValue) value).value);
         }
@@ -299,6 +336,34 @@ public final class ToolsCreateRequest {
     public Optional<CreateMcpToolDto> getMcp() {
         if (isMcp()) {
             return Optional.of(((McpValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoHighLevelCalendarAvailabilityToolDto> getGohighlevelCalendarAvailabilityCheck() {
+        if (isGohighlevelCalendarAvailabilityCheck()) {
+            return Optional.of(((GohighlevelCalendarAvailabilityCheckValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoHighLevelCalendarEventCreateToolDto> getGohighlevelCalendarEventCreate() {
+        if (isGohighlevelCalendarEventCreate()) {
+            return Optional.of(((GohighlevelCalendarEventCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoHighLevelContactCreateToolDto> getGohighlevelContactCreate() {
+        if (isGohighlevelContactCreate()) {
+            return Optional.of(((GohighlevelContactCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<CreateGoHighLevelContactGetToolDto> getGohighlevelContactGet() {
+        if (isGohighlevelContactGet()) {
+            return Optional.of(((GohighlevelContactGetValue) value).value);
         }
         return Optional.empty();
     }
@@ -347,9 +412,19 @@ public final class ToolsCreateRequest {
 
         T visitSlackMessageSend(CreateSlackSendMessageToolDto slackMessageSend);
 
-        T visitSms(CreateSmsSendToolDto sms);
+        T visitSms(CreateSmsToolDto sms);
 
         T visitMcp(CreateMcpToolDto mcp);
+
+        T visitGohighlevelCalendarAvailabilityCheck(
+                CreateGoHighLevelCalendarAvailabilityToolDto gohighlevelCalendarAvailabilityCheck);
+
+        T visitGohighlevelCalendarEventCreate(
+                CreateGoHighLevelCalendarEventCreateToolDto gohighlevelCalendarEventCreate);
+
+        T visitGohighlevelContactCreate(CreateGoHighLevelContactCreateToolDto gohighlevelContactCreate);
+
+        T visitGohighlevelContactGet(CreateGoHighLevelContactGetToolDto gohighlevelContactGet);
 
         T _visitUnknown(Object unknownType);
     }
@@ -372,7 +447,11 @@ public final class ToolsCreateRequest {
         @JsonSubTypes.Type(GoogleCalendarAvailabilityCheckValue.class),
         @JsonSubTypes.Type(SlackMessageSendValue.class),
         @JsonSubTypes.Type(SmsValue.class),
-        @JsonSubTypes.Type(McpValue.class)
+        @JsonSubTypes.Type(McpValue.class),
+        @JsonSubTypes.Type(GohighlevelCalendarAvailabilityCheckValue.class),
+        @JsonSubTypes.Type(GohighlevelCalendarEventCreateValue.class),
+        @JsonSubTypes.Type(GohighlevelContactCreateValue.class),
+        @JsonSubTypes.Type(GohighlevelContactGetValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -969,12 +1048,12 @@ public final class ToolsCreateRequest {
     @JsonIgnoreProperties("type")
     private static final class SmsValue implements Value {
         @JsonUnwrapped
-        private CreateSmsSendToolDto value;
+        private CreateSmsToolDto value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
         private SmsValue() {}
 
-        private SmsValue(CreateSmsSendToolDto value) {
+        private SmsValue(CreateSmsToolDto value) {
             this.value = value;
         }
 
@@ -1029,6 +1108,164 @@ public final class ToolsCreateRequest {
         }
 
         private boolean equalTo(McpValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsCreateRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("gohighlevel.calendar.availability.check")
+    @JsonIgnoreProperties("type")
+    private static final class GohighlevelCalendarAvailabilityCheckValue implements Value {
+        @JsonUnwrapped
+        private CreateGoHighLevelCalendarAvailabilityToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GohighlevelCalendarAvailabilityCheckValue() {}
+
+        private GohighlevelCalendarAvailabilityCheckValue(CreateGoHighLevelCalendarAvailabilityToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGohighlevelCalendarAvailabilityCheck(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GohighlevelCalendarAvailabilityCheckValue
+                    && equalTo((GohighlevelCalendarAvailabilityCheckValue) other);
+        }
+
+        private boolean equalTo(GohighlevelCalendarAvailabilityCheckValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsCreateRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("gohighlevel.calendar.event.create")
+    @JsonIgnoreProperties("type")
+    private static final class GohighlevelCalendarEventCreateValue implements Value {
+        @JsonUnwrapped
+        private CreateGoHighLevelCalendarEventCreateToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GohighlevelCalendarEventCreateValue() {}
+
+        private GohighlevelCalendarEventCreateValue(CreateGoHighLevelCalendarEventCreateToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGohighlevelCalendarEventCreate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GohighlevelCalendarEventCreateValue
+                    && equalTo((GohighlevelCalendarEventCreateValue) other);
+        }
+
+        private boolean equalTo(GohighlevelCalendarEventCreateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsCreateRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("gohighlevel.contact.create")
+    @JsonIgnoreProperties("type")
+    private static final class GohighlevelContactCreateValue implements Value {
+        @JsonUnwrapped
+        private CreateGoHighLevelContactCreateToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GohighlevelContactCreateValue() {}
+
+        private GohighlevelContactCreateValue(CreateGoHighLevelContactCreateToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGohighlevelContactCreate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GohighlevelContactCreateValue && equalTo((GohighlevelContactCreateValue) other);
+        }
+
+        private boolean equalTo(GohighlevelContactCreateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsCreateRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("gohighlevel.contact.get")
+    @JsonIgnoreProperties("type")
+    private static final class GohighlevelContactGetValue implements Value {
+        @JsonUnwrapped
+        private CreateGoHighLevelContactGetToolDto value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GohighlevelContactGetValue() {}
+
+        private GohighlevelContactGetValue(CreateGoHighLevelContactGetToolDto value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGohighlevelContactGet(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GohighlevelContactGetValue && equalTo((GohighlevelContactGetValue) other);
+        }
+
+        private boolean equalTo(GohighlevelContactGetValue other) {
             return value.equals(other.value);
         }
 

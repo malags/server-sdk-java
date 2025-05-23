@@ -28,7 +28,7 @@ public enum AssistantServerMessagesItem {
 
     TRANSCRIPT("transcript"),
 
-    TRANSCRIPT_TRANSCRIPT_TYPE_FINAL("transcript[transcriptType='final']"),
+    TRANSCRIPT_TRANSCRIPT_TYPE_FINAL("transcript[transcriptType=\"final\"]"),
 
     TOOL_CALLS("tool-calls"),
 

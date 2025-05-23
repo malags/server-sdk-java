@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PlayHtVoice.Builder.class)
 public final class PlayHtVoice {
+    private final Optional<Boolean> cachingEnabled;
+
     private final PlayHtVoiceId voiceId;
 
     private final Optional<Double> speed;
@@ -46,6 +48,7 @@ public final class PlayHtVoice {
     private final Map<String, Object> additionalProperties;
 
     private PlayHtVoice(
+            Optional<Boolean> cachingEnabled,
             PlayHtVoiceId voiceId,
             Optional<Double> speed,
             Optional<Double> temperature,
@@ -58,6 +61,7 @@ public final class PlayHtVoice {
             Optional<ChunkPlan> chunkPlan,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
+        this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.speed = speed;
         this.temperature = temperature;
@@ -70,6 +74,14 @@ public final class PlayHtVoice {
         this.chunkPlan = chunkPlan;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag to toggle voice caching for the assistant.
+     */
+    @JsonProperty("cachingEnabled")
+    public Optional<Boolean> getCachingEnabled() {
+        return cachingEnabled;
     }
 
     /**
@@ -172,7 +184,8 @@ public final class PlayHtVoice {
     }
 
     private boolean equalTo(PlayHtVoice other) {
-        return voiceId.equals(other.voiceId)
+        return cachingEnabled.equals(other.cachingEnabled)
+                && voiceId.equals(other.voiceId)
                 && speed.equals(other.speed)
                 && temperature.equals(other.temperature)
                 && emotion.equals(other.emotion)
@@ -188,6 +201,7 @@ public final class PlayHtVoice {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.cachingEnabled,
                 this.voiceId,
                 this.speed,
                 this.temperature,
@@ -218,6 +232,10 @@ public final class PlayHtVoice {
 
     public interface _FinalStage {
         PlayHtVoice build();
+
+        _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
+
+        _FinalStage cachingEnabled(Boolean cachingEnabled);
 
         _FinalStage speed(Optional<Double> speed);
 
@@ -284,6 +302,8 @@ public final class PlayHtVoice {
 
         private Optional<Double> speed = Optional.empty();
 
+        private Optional<Boolean> cachingEnabled = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -291,6 +311,7 @@ public final class PlayHtVoice {
 
         @java.lang.Override
         public Builder from(PlayHtVoice other) {
+            cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             speed(other.getSpeed());
             temperature(other.getTemperature());
@@ -486,9 +507,27 @@ public final class PlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage cachingEnabled(Boolean cachingEnabled) {
+            this.cachingEnabled = Optional.ofNullable(cachingEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
+        public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
+            this.cachingEnabled = cachingEnabled;
+            return this;
+        }
+
         @java.lang.Override
         public PlayHtVoice build() {
             return new PlayHtVoice(
+                    cachingEnabled,
                     voiceId,
                     speed,
                     temperature,

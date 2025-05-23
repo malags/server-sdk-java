@@ -4,6 +4,7 @@
 package com.vapi.api;
 
 import com.vapi.api.core.ClientOptions;
+import com.vapi.api.core.RequestOptions;
 import com.vapi.api.core.Suppliers;
 import com.vapi.api.resources.analytics.AnalyticsClient;
 import com.vapi.api.resources.assistants.AssistantsClient;
@@ -22,6 +23,8 @@ import java.util.function.Supplier;
 
 public class Vapi {
     protected final ClientOptions clientOptions;
+
+    private final RawVapi rawClient;
 
     protected final Supplier<CallsClient> callsClient;
 
@@ -51,6 +54,7 @@ public class Vapi {
 
     public Vapi(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawVapi(clientOptions);
         this.callsClient = Suppliers.memoize(() -> new CallsClient(clientOptions));
         this.assistantsClient = Suppliers.memoize(() -> new AssistantsClient(clientOptions));
         this.phoneNumbersClient = Suppliers.memoize(() -> new PhoneNumbersClient(clientOptions));
@@ -64,6 +68,21 @@ public class Vapi {
         this.testSuiteRunsClient = Suppliers.memoize(() -> new TestSuiteRunsClient(clientOptions));
         this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawVapi withRawResponse() {
+        return this.rawClient;
+    }
+
+    public void prometheusControllerIndex() {
+        this.rawClient.prometheusControllerIndex().body();
+    }
+
+    public void prometheusControllerIndex(RequestOptions requestOptions) {
+        this.rawClient.prometheusControllerIndex(requestOptions).body();
     }
 
     public CallsClient calls() {

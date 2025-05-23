@@ -5,6 +5,7 @@ package com.vapi.api.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import okhttp3.OkHttpClient;
@@ -31,10 +32,10 @@ public final class ClientOptions {
         this.headers.putAll(headers);
         this.headers.putAll(new HashMap<String, String>() {
             {
-                put("User-Agent", "dev.vapi:server-sdk/v0.5.1");
+                put("User-Agent", "dev.vapi:server-sdk/0.8.1");
                 put("X-Fern-Language", "JAVA");
                 put("X-Fern-SDK-Name", "com.vapi.fern:api-sdk");
-                put("X-Fern-SDK-Version", "v0.5.1");
+                put("X-Fern-SDK-Version", "0.8.1");
             }
         });
         this.headerSuppliers = headerSuppliers;
@@ -55,6 +56,13 @@ public final class ClientOptions {
             values.putAll(requestOptions.getHeaders());
         }
         return values;
+    }
+
+    public int timeout(RequestOptions requestOptions) {
+        if (requestOptions == null) {
+            return this.timeout;
+        }
+        return requestOptions.getTimeout().orElse(this.timeout);
     }
 
     public OkHttpClient httpClient() {
@@ -85,12 +93,11 @@ public final class ClientOptions {
 
         private final Map<String, Supplier<String>> headerSuppliers = new HashMap<>();
 
-        private int timeout = 60;
+        private int maxRetries = 2;
 
-        private OkHttpClient httpClient = new OkHttpClient.Builder()
-                .addInterceptor(new RetryInterceptor(3))
-                .callTimeout(this.timeout, TimeUnit.SECONDS)
-                .build();
+        private Optional<Integer> timeout = Optional.empty();
+
+        private OkHttpClient httpClient = null;
 
         public Builder environment(Environment environment) {
             this.environment = environment;
@@ -111,7 +118,23 @@ public final class ClientOptions {
          * Override the timeout in seconds. Defaults to 60 seconds.
          */
         public Builder timeout(int timeout) {
+            this.timeout = Optional.of(timeout);
+            return this;
+        }
+
+        /**
+         * Override the timeout in seconds. Defaults to 60 seconds.
+         */
+        public Builder timeout(Optional<Integer> timeout) {
             this.timeout = timeout;
+            return this;
+        }
+
+        /**
+         * Override the maximum number of retries. Defaults to 2 retries.
+         */
+        public Builder maxRetries(int maxRetries) {
+            this.maxRetries = maxRetries;
             return this;
         }
 
@@ -121,7 +144,28 @@ public final class ClientOptions {
         }
 
         public ClientOptions build() {
-            return new ClientOptions(environment, headers, headerSuppliers, httpClient, this.timeout);
+            OkHttpClient.Builder httpClientBuilder =
+                    this.httpClient != null ? this.httpClient.newBuilder() : new OkHttpClient.Builder();
+
+            if (this.httpClient != null) {
+                timeout.ifPresent(timeout -> httpClientBuilder
+                        .callTimeout(timeout, TimeUnit.SECONDS)
+                        .connectTimeout(0, TimeUnit.SECONDS)
+                        .writeTimeout(0, TimeUnit.SECONDS)
+                        .readTimeout(0, TimeUnit.SECONDS));
+            } else {
+                httpClientBuilder
+                        .callTimeout(this.timeout.orElse(60), TimeUnit.SECONDS)
+                        .connectTimeout(0, TimeUnit.SECONDS)
+                        .writeTimeout(0, TimeUnit.SECONDS)
+                        .readTimeout(0, TimeUnit.SECONDS)
+                        .addInterceptor(new RetryInterceptor(this.maxRetries));
+            }
+
+            this.httpClient = httpClientBuilder.build();
+            this.timeout = Optional.of(httpClient.callTimeoutMillis() / 1000);
+
+            return new ClientOptions(environment, headers, headerSuppliers, httpClient, this.timeout.get());
         }
     }
 }

@@ -54,6 +54,10 @@ public final class ServerMessageEndOfCallReportCostsItem {
         return new ServerMessageEndOfCallReportCostsItem(new AnalysisValue(value));
     }
 
+    public static ServerMessageEndOfCallReportCostsItem knowledgeBase(KnowledgeBaseCost value) {
+        return new ServerMessageEndOfCallReportCostsItem(new KnowledgeBaseValue(value));
+    }
+
     public boolean isTransport() {
         return value instanceof TransportValue;
     }
@@ -80,6 +84,10 @@ public final class ServerMessageEndOfCallReportCostsItem {
 
     public boolean isAnalysis() {
         return value instanceof AnalysisValue;
+    }
+
+    public boolean isKnowledgeBase() {
+        return value instanceof KnowledgeBaseValue;
     }
 
     public boolean _isUnknown() {
@@ -135,6 +143,13 @@ public final class ServerMessageEndOfCallReportCostsItem {
         return Optional.empty();
     }
 
+    public Optional<KnowledgeBaseCost> getKnowledgeBase() {
+        if (isKnowledgeBase()) {
+            return Optional.of(((KnowledgeBaseValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -162,6 +177,8 @@ public final class ServerMessageEndOfCallReportCostsItem {
 
         T visitAnalysis(AnalysisCost analysis);
 
+        T visitKnowledgeBase(KnowledgeBaseCost knowledgeBase);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -173,7 +190,8 @@ public final class ServerMessageEndOfCallReportCostsItem {
         @JsonSubTypes.Type(VoiceValue.class),
         @JsonSubTypes.Type(VapiValue.class),
         @JsonSubTypes.Type(VoicemailDetectionValue.class),
-        @JsonSubTypes.Type(AnalysisValue.class)
+        @JsonSubTypes.Type(AnalysisValue.class),
+        @JsonSubTypes.Type(KnowledgeBaseValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -439,6 +457,45 @@ public final class ServerMessageEndOfCallReportCostsItem {
         }
 
         private boolean equalTo(AnalysisValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ServerMessageEndOfCallReportCostsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("knowledge-base")
+    @JsonIgnoreProperties("type")
+    private static final class KnowledgeBaseValue implements Value {
+        @JsonUnwrapped
+        private KnowledgeBaseCost value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private KnowledgeBaseValue() {}
+
+        private KnowledgeBaseValue(KnowledgeBaseCost value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitKnowledgeBase(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof KnowledgeBaseValue && equalTo((KnowledgeBaseValue) other);
+        }
+
+        private boolean equalTo(KnowledgeBaseValue other) {
             return value.equals(other.value);
         }
 

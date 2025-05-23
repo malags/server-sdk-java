@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,15 +24,25 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateTwilioPhoneNumberDto {
     private final Optional<CreateTwilioPhoneNumberDtoFallbackDestination> fallbackDestination;
 
+    private final Optional<List<PhoneNumberHookCallRinging>> hooks;
+
+    private final Optional<Boolean> smsEnabled;
+
     private final String number;
 
     private final String twilioAccountSid;
 
-    private final String twilioAuthToken;
+    private final Optional<String> twilioAuthToken;
+
+    private final Optional<String> twilioApiKey;
+
+    private final Optional<String> twilioApiSecret;
 
     private final Optional<String> name;
 
     private final Optional<String> assistantId;
+
+    private final Optional<String> workflowId;
 
     private final Optional<String> squadId;
 
@@ -41,20 +52,30 @@ public final class CreateTwilioPhoneNumberDto {
 
     private CreateTwilioPhoneNumberDto(
             Optional<CreateTwilioPhoneNumberDtoFallbackDestination> fallbackDestination,
+            Optional<List<PhoneNumberHookCallRinging>> hooks,
+            Optional<Boolean> smsEnabled,
             String number,
             String twilioAccountSid,
-            String twilioAuthToken,
+            Optional<String> twilioAuthToken,
+            Optional<String> twilioApiKey,
+            Optional<String> twilioApiSecret,
             Optional<String> name,
             Optional<String> assistantId,
+            Optional<String> workflowId,
             Optional<String> squadId,
             Optional<Server> server,
             Map<String, Object> additionalProperties) {
         this.fallbackDestination = fallbackDestination;
+        this.hooks = hooks;
+        this.smsEnabled = smsEnabled;
         this.number = number;
         this.twilioAccountSid = twilioAccountSid;
         this.twilioAuthToken = twilioAuthToken;
+        this.twilioApiKey = twilioApiKey;
+        this.twilioApiSecret = twilioApiSecret;
         this.name = name;
         this.assistantId = assistantId;
+        this.workflowId = workflowId;
         this.squadId = squadId;
         this.server = server;
         this.additionalProperties = additionalProperties;
@@ -72,6 +93,25 @@ public final class CreateTwilioPhoneNumberDto {
     @JsonProperty("fallbackDestination")
     public Optional<CreateTwilioPhoneNumberDtoFallbackDestination> getFallbackDestination() {
         return fallbackDestination;
+    }
+
+    /**
+     * @return This is the hooks that will be used for incoming calls to this phone number.
+     */
+    @JsonProperty("hooks")
+    public Optional<List<PhoneNumberHookCallRinging>> getHooks() {
+        return hooks;
+    }
+
+    /**
+     * @return Controls whether Vapi sets the messaging webhook URL on the Twilio number during import.
+     * <p>If set to <code>false</code>, Vapi will not update the Twilio messaging URL, leaving it as is.
+     * If <code>true</code> or omitted (default), Vapi will configure both the voice and messaging URLs.</p>
+     * <p>@default true</p>
+     */
+    @JsonProperty("smsEnabled")
+    public Optional<Boolean> getSmsEnabled() {
+        return smsEnabled;
     }
 
     /**
@@ -94,8 +134,24 @@ public final class CreateTwilioPhoneNumberDto {
      * @return This is the Twilio Auth Token for the phone number.
      */
     @JsonProperty("twilioAuthToken")
-    public String getTwilioAuthToken() {
+    public Optional<String> getTwilioAuthToken() {
         return twilioAuthToken;
+    }
+
+    /**
+     * @return This is the Twilio API Key for the phone number.
+     */
+    @JsonProperty("twilioApiKey")
+    public Optional<String> getTwilioApiKey() {
+        return twilioApiKey;
+    }
+
+    /**
+     * @return This is the Twilio API Secret for the phone number.
+     */
+    @JsonProperty("twilioApiSecret")
+    public Optional<String> getTwilioApiSecret() {
+        return twilioApiSecret;
     }
 
     /**
@@ -108,7 +164,7 @@ public final class CreateTwilioPhoneNumberDto {
 
     /**
      * @return This is the assistant that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("assistantId")
     public Optional<String> getAssistantId() {
@@ -116,8 +172,17 @@ public final class CreateTwilioPhoneNumberDto {
     }
 
     /**
+     * @return This is the workflow that will be used for incoming calls to this phone number.
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     */
+    @JsonProperty("workflowId")
+    public Optional<String> getWorkflowId() {
+        return workflowId;
+    }
+
+    /**
      * @return This is the squad that will be used for incoming calls to this phone number.
-     * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+     * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
      */
     @JsonProperty("squadId")
     public Optional<String> getSquadId() {
@@ -151,11 +216,16 @@ public final class CreateTwilioPhoneNumberDto {
 
     private boolean equalTo(CreateTwilioPhoneNumberDto other) {
         return fallbackDestination.equals(other.fallbackDestination)
+                && hooks.equals(other.hooks)
+                && smsEnabled.equals(other.smsEnabled)
                 && number.equals(other.number)
                 && twilioAccountSid.equals(other.twilioAccountSid)
                 && twilioAuthToken.equals(other.twilioAuthToken)
+                && twilioApiKey.equals(other.twilioApiKey)
+                && twilioApiSecret.equals(other.twilioApiSecret)
                 && name.equals(other.name)
                 && assistantId.equals(other.assistantId)
+                && workflowId.equals(other.workflowId)
                 && squadId.equals(other.squadId)
                 && server.equals(other.server);
     }
@@ -164,11 +234,16 @@ public final class CreateTwilioPhoneNumberDto {
     public int hashCode() {
         return Objects.hash(
                 this.fallbackDestination,
+                this.hooks,
+                this.smsEnabled,
                 this.number,
                 this.twilioAccountSid,
                 this.twilioAuthToken,
+                this.twilioApiKey,
+                this.twilioApiSecret,
                 this.name,
                 this.assistantId,
+                this.workflowId,
                 this.squadId,
                 this.server);
     }
@@ -189,11 +264,7 @@ public final class CreateTwilioPhoneNumberDto {
     }
 
     public interface TwilioAccountSidStage {
-        TwilioAuthTokenStage twilioAccountSid(@NotNull String twilioAccountSid);
-    }
-
-    public interface TwilioAuthTokenStage {
-        _FinalStage twilioAuthToken(@NotNull String twilioAuthToken);
+        _FinalStage twilioAccountSid(@NotNull String twilioAccountSid);
     }
 
     public interface _FinalStage {
@@ -203,6 +274,26 @@ public final class CreateTwilioPhoneNumberDto {
 
         _FinalStage fallbackDestination(CreateTwilioPhoneNumberDtoFallbackDestination fallbackDestination);
 
+        _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks);
+
+        _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks);
+
+        _FinalStage smsEnabled(Optional<Boolean> smsEnabled);
+
+        _FinalStage smsEnabled(Boolean smsEnabled);
+
+        _FinalStage twilioAuthToken(Optional<String> twilioAuthToken);
+
+        _FinalStage twilioAuthToken(String twilioAuthToken);
+
+        _FinalStage twilioApiKey(Optional<String> twilioApiKey);
+
+        _FinalStage twilioApiKey(String twilioApiKey);
+
+        _FinalStage twilioApiSecret(Optional<String> twilioApiSecret);
+
+        _FinalStage twilioApiSecret(String twilioApiSecret);
+
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -210,6 +301,10 @@ public final class CreateTwilioPhoneNumberDto {
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
+
+        _FinalStage workflowId(Optional<String> workflowId);
+
+        _FinalStage workflowId(String workflowId);
 
         _FinalStage squadId(Optional<String> squadId);
 
@@ -221,20 +316,30 @@ public final class CreateTwilioPhoneNumberDto {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NumberStage, TwilioAccountSidStage, TwilioAuthTokenStage, _FinalStage {
+    public static final class Builder implements NumberStage, TwilioAccountSidStage, _FinalStage {
         private String number;
 
         private String twilioAccountSid;
-
-        private String twilioAuthToken;
 
         private Optional<Server> server = Optional.empty();
 
         private Optional<String> squadId = Optional.empty();
 
+        private Optional<String> workflowId = Optional.empty();
+
         private Optional<String> assistantId = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<String> twilioApiSecret = Optional.empty();
+
+        private Optional<String> twilioApiKey = Optional.empty();
+
+        private Optional<String> twilioAuthToken = Optional.empty();
+
+        private Optional<Boolean> smsEnabled = Optional.empty();
+
+        private Optional<List<PhoneNumberHookCallRinging>> hooks = Optional.empty();
 
         private Optional<CreateTwilioPhoneNumberDtoFallbackDestination> fallbackDestination = Optional.empty();
 
@@ -246,11 +351,16 @@ public final class CreateTwilioPhoneNumberDto {
         @java.lang.Override
         public Builder from(CreateTwilioPhoneNumberDto other) {
             fallbackDestination(other.getFallbackDestination());
+            hooks(other.getHooks());
+            smsEnabled(other.getSmsEnabled());
             number(other.getNumber());
             twilioAccountSid(other.getTwilioAccountSid());
             twilioAuthToken(other.getTwilioAuthToken());
+            twilioApiKey(other.getTwilioApiKey());
+            twilioApiSecret(other.getTwilioApiSecret());
             name(other.getName());
             assistantId(other.getAssistantId());
+            workflowId(other.getWorkflowId());
             squadId(other.getSquadId());
             server(other.getServer());
             return this;
@@ -273,19 +383,8 @@ public final class CreateTwilioPhoneNumberDto {
          */
         @java.lang.Override
         @JsonSetter("twilioAccountSid")
-        public TwilioAuthTokenStage twilioAccountSid(@NotNull String twilioAccountSid) {
+        public _FinalStage twilioAccountSid(@NotNull String twilioAccountSid) {
             this.twilioAccountSid = Objects.requireNonNull(twilioAccountSid, "twilioAccountSid must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the Twilio Auth Token for the phone number.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("twilioAuthToken")
-        public _FinalStage twilioAuthToken(@NotNull String twilioAuthToken) {
-            this.twilioAuthToken = Objects.requireNonNull(twilioAuthToken, "twilioAuthToken must not be null");
             return this;
         }
 
@@ -314,7 +413,7 @@ public final class CreateTwilioPhoneNumberDto {
 
         /**
          * <p>This is the squad that will be used for incoming calls to this phone number.</p>
-         * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -331,8 +430,26 @@ public final class CreateTwilioPhoneNumberDto {
         }
 
         /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage workflowId(String workflowId) {
+            this.workflowId = Optional.ofNullable(workflowId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
+        public _FinalStage workflowId(Optional<String> workflowId) {
+            this.workflowId = workflowId;
+            return this;
+        }
+
+        /**
          * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
-         * <p>If neither <code>assistantId</code> nor <code>squadId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -366,6 +483,94 @@ public final class CreateTwilioPhoneNumberDto {
         }
 
         /**
+         * <p>This is the Twilio API Secret for the phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage twilioApiSecret(String twilioApiSecret) {
+            this.twilioApiSecret = Optional.ofNullable(twilioApiSecret);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "twilioApiSecret", nulls = Nulls.SKIP)
+        public _FinalStage twilioApiSecret(Optional<String> twilioApiSecret) {
+            this.twilioApiSecret = twilioApiSecret;
+            return this;
+        }
+
+        /**
+         * <p>This is the Twilio API Key for the phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage twilioApiKey(String twilioApiKey) {
+            this.twilioApiKey = Optional.ofNullable(twilioApiKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "twilioApiKey", nulls = Nulls.SKIP)
+        public _FinalStage twilioApiKey(Optional<String> twilioApiKey) {
+            this.twilioApiKey = twilioApiKey;
+            return this;
+        }
+
+        /**
+         * <p>This is the Twilio Auth Token for the phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage twilioAuthToken(String twilioAuthToken) {
+            this.twilioAuthToken = Optional.ofNullable(twilioAuthToken);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "twilioAuthToken", nulls = Nulls.SKIP)
+        public _FinalStage twilioAuthToken(Optional<String> twilioAuthToken) {
+            this.twilioAuthToken = twilioAuthToken;
+            return this;
+        }
+
+        /**
+         * <p>Controls whether Vapi sets the messaging webhook URL on the Twilio number during import.</p>
+         * <p>If set to <code>false</code>, Vapi will not update the Twilio messaging URL, leaving it as is.
+         * If <code>true</code> or omitted (default), Vapi will configure both the voice and messaging URLs.</p>
+         * <p>@default true</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage smsEnabled(Boolean smsEnabled) {
+            this.smsEnabled = Optional.ofNullable(smsEnabled);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "smsEnabled", nulls = Nulls.SKIP)
+        public _FinalStage smsEnabled(Optional<Boolean> smsEnabled) {
+            this.smsEnabled = smsEnabled;
+            return this;
+        }
+
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks) {
+            this.hooks = Optional.ofNullable(hooks);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
+        public _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
+            this.hooks = hooks;
+            return this;
+        }
+
+        /**
          * <p>This is the fallback destination an inbound call will be transferred to if:</p>
          * <ol>
          * <li><code>assistantId</code> is not set</li>
@@ -393,11 +598,16 @@ public final class CreateTwilioPhoneNumberDto {
         public CreateTwilioPhoneNumberDto build() {
             return new CreateTwilioPhoneNumberDto(
                     fallbackDestination,
+                    hooks,
+                    smsEnabled,
                     number,
                     twilioAccountSid,
                     twilioAuthToken,
+                    twilioApiKey,
+                    twilioApiSecret,
                     name,
                     assistantId,
+                    workflowId,
                     squadId,
                     server,
                     additionalProperties);

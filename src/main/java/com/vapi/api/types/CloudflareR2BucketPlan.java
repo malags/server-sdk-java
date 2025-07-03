@@ -128,6 +128,9 @@ public final class CloudflareR2BucketPlan {
     }
 
     public interface NameStage {
+        /**
+         * <p>This is the name of the bucket.</p>
+         */
         _FinalStage name(@NotNull String name);
 
         Builder from(CloudflareR2BucketPlan other);
@@ -136,18 +139,36 @@ public final class CloudflareR2BucketPlan {
     public interface _FinalStage {
         CloudflareR2BucketPlan build();
 
+        /**
+         * <p>Cloudflare R2 Access key ID.</p>
+         */
         _FinalStage accessKeyId(Optional<String> accessKeyId);
 
         _FinalStage accessKeyId(String accessKeyId);
 
+        /**
+         * <p>Cloudflare R2 access key secret. This is not returned in the API.</p>
+         */
         _FinalStage secretAccessKey(Optional<String> secretAccessKey);
 
         _FinalStage secretAccessKey(String secretAccessKey);
 
+        /**
+         * <p>Cloudflare R2 base url.</p>
+         */
         _FinalStage url(Optional<String> url);
 
         _FinalStage url(String url);
 
+        /**
+         * <p>This is the path where call artifacts will be stored.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To store call artifacts in a specific folder, set this to the full path. Eg. &quot;/folder-name1/folder-name2&quot;.</li>
+         * <li>To store call artifacts in the root of the bucket, leave this blank.</li>
+         * </ul>
+         * <p>@default &quot;/&quot;</p>
+         */
         _FinalStage path(Optional<String> path);
 
         _FinalStage path(String path);
@@ -182,6 +203,7 @@ public final class CloudflareR2BucketPlan {
 
         /**
          * <p>This is the name of the bucket.</p>
+         * <p>This is the name of the bucket.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -207,6 +229,15 @@ public final class CloudflareR2BucketPlan {
             return this;
         }
 
+        /**
+         * <p>This is the path where call artifacts will be stored.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To store call artifacts in a specific folder, set this to the full path. Eg. &quot;/folder-name1/folder-name2&quot;.</li>
+         * <li>To store call artifacts in the root of the bucket, leave this blank.</li>
+         * </ul>
+         * <p>@default &quot;/&quot;</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "path", nulls = Nulls.SKIP)
         public _FinalStage path(Optional<String> path) {
@@ -224,6 +255,9 @@ public final class CloudflareR2BucketPlan {
             return this;
         }
 
+        /**
+         * <p>Cloudflare R2 base url.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "url", nulls = Nulls.SKIP)
         public _FinalStage url(Optional<String> url) {
@@ -241,6 +275,9 @@ public final class CloudflareR2BucketPlan {
             return this;
         }
 
+        /**
+         * <p>Cloudflare R2 access key secret. This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "secretAccessKey", nulls = Nulls.SKIP)
         public _FinalStage secretAccessKey(Optional<String> secretAccessKey) {
@@ -258,6 +295,9 @@ public final class CloudflareR2BucketPlan {
             return this;
         }
 
+        /**
+         * <p>Cloudflare R2 Access key ID.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "accessKeyId", nulls = Nulls.SKIP)
         public _FinalStage accessKeyId(Optional<String> accessKeyId) {

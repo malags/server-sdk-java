@@ -215,6 +215,11 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        /**
+         * <p>When this is enabled, no logs, recordings, or transcriptions will be stored. At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.
+         * When HIPAA is enabled, only OpenAI/Custom LLM or Azure Providers will be available for LLM and Voice respectively.
+         * This is due to the compliance requirements of HIPAA. Other providers may not meet these requirements.</p>
+         */
         @JsonSetter(value = "hipaaEnabled", nulls = Nulls.SKIP)
         public Builder hipaaEnabled(Optional<Boolean> hipaaEnabled) {
             this.hipaaEnabled = hipaaEnabled;
@@ -226,6 +231,9 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the subscription the org belongs to.</p>
+         */
         @JsonSetter(value = "subscriptionId", nulls = Nulls.SKIP)
         public Builder subscriptionId(Optional<String> subscriptionId) {
             this.subscriptionId = subscriptionId;
@@ -237,6 +245,9 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the org. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -248,6 +259,9 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        /**
+         * <p>This is the channel of the org. There is the cluster the API traffic for the org will be directed.</p>
+         */
         @JsonSetter(value = "channel", nulls = Nulls.SKIP)
         public Builder channel(Optional<UpdateOrgDtoChannel> channel) {
             this.channel = channel;
@@ -259,6 +273,9 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        /**
+         * <p>This is the monthly billing limit for the org. To go beyond $1000/mo, please contact us at support@vapi.ai.</p>
+         */
         @JsonSetter(value = "billingLimit", nulls = Nulls.SKIP)
         public Builder billingLimit(Optional<Double> billingLimit) {
             this.billingLimit = billingLimit;
@@ -270,6 +287,15 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public Builder server(Optional<Server> server) {
             this.server = server;
@@ -281,6 +307,9 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        /**
+         * <p>This is the concurrency limit for the org. This is the maximum number of calls that can be active at any given time. To go beyond 10, please contact us at support@vapi.ai.</p>
+         */
         @JsonSetter(value = "concurrencyLimit", nulls = Nulls.SKIP)
         public Builder concurrencyLimit(Optional<Double> concurrencyLimit) {
             this.concurrencyLimit = concurrencyLimit;
@@ -292,6 +321,14 @@ public final class UpdateOrgDto {
             return this;
         }
 
+        /**
+         * <p>Stores the information about the compliance plan enforced at the organization level. Currently pciEnabled is supported through this field.
+         * When this is enabled, any logs, recordings, or transcriptions will be shipped to the customer endpoints if provided else lost.
+         * At the end of the call, you will receive an end-of-call-report message to store on your server, if webhook is provided.
+         * Defaults to false.
+         * When PCI is enabled, only PCI-compliant Providers will be available for LLM, Voice and transcribers.
+         * This is due to the compliance requirements of PCI. Other providers may not meet these requirements.</p>
+         */
         @JsonSetter(value = "compliancePlan", nulls = Nulls.SKIP)
         public Builder compliancePlan(Optional<CompliancePlan> compliancePlan) {
             this.compliancePlan = compliancePlan;

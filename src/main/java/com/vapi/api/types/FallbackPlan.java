@@ -81,6 +81,9 @@ public final class FallbackPlan {
             return this;
         }
 
+        /**
+         * <p>This is the list of voices to fallback to in the event that the primary voice provider fails.</p>
+         */
         @JsonSetter(value = "voices", nulls = Nulls.SKIP)
         public Builder voices(List<FallbackPlanVoicesItem> voices) {
             this.voices.clear();

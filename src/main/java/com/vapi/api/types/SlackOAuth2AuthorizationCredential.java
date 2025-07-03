@@ -142,30 +142,48 @@ public final class SlackOAuth2AuthorizationCredential {
     }
 
     public interface AuthorizationIdStage {
+        /**
+         * <p>The authorization ID for the OAuth2 authorization</p>
+         */
         IdStage authorizationId(@NotNull String authorizationId);
 
         Builder from(SlackOAuth2AuthorizationCredential other);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         SlackOAuth2AuthorizationCredential build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -204,6 +222,7 @@ public final class SlackOAuth2AuthorizationCredential {
 
         /**
          * <p>The authorization ID for the OAuth2 authorization</p>
+         * <p>The authorization ID for the OAuth2 authorization</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -214,6 +233,7 @@ public final class SlackOAuth2AuthorizationCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the credential.</p>
          * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -226,6 +246,7 @@ public final class SlackOAuth2AuthorizationCredential {
 
         /**
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -237,6 +258,7 @@ public final class SlackOAuth2AuthorizationCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -247,6 +269,7 @@ public final class SlackOAuth2AuthorizationCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -267,6 +290,9 @@ public final class SlackOAuth2AuthorizationCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

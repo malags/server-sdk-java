@@ -33,6 +33,8 @@ public final class ServerMessageVoiceInput {
 
     private final Optional<Call> call;
 
+    private final Optional<Chat> chat;
+
     private final String input;
 
     private final Map<String, Object> additionalProperties;
@@ -44,6 +46,7 @@ public final class ServerMessageVoiceInput {
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
             Optional<Call> call,
+            Optional<Chat> chat,
             String input,
             Map<String, Object> additionalProperties) {
         this.phoneNumber = phoneNumber;
@@ -52,6 +55,7 @@ public final class ServerMessageVoiceInput {
         this.assistant = assistant;
         this.customer = customer;
         this.call = call;
+        this.chat = chat;
         this.input = input;
         this.additionalProperties = additionalProperties;
     }
@@ -114,6 +118,14 @@ public final class ServerMessageVoiceInput {
     }
 
     /**
+     * @return This is the chat object.
+     */
+    @JsonProperty("chat")
+    public Optional<Chat> getChat() {
+        return chat;
+    }
+
+    /**
      * @return This is the voice input content
      */
     @JsonProperty("input")
@@ -139,13 +151,21 @@ public final class ServerMessageVoiceInput {
                 && assistant.equals(other.assistant)
                 && customer.equals(other.customer)
                 && call.equals(other.call)
+                && chat.equals(other.chat)
                 && input.equals(other.input);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.phoneNumber, this.timestamp, this.artifact, this.assistant, this.customer, this.call, this.input);
+                this.phoneNumber,
+                this.timestamp,
+                this.artifact,
+                this.assistant,
+                this.customer,
+                this.call,
+                this.chat,
+                this.input);
     }
 
     @java.lang.Override
@@ -158,6 +178,9 @@ public final class ServerMessageVoiceInput {
     }
 
     public interface InputStage {
+        /**
+         * <p>This is the voice input content</p>
+         */
         _FinalStage input(@NotNull String input);
 
         Builder from(ServerMessageVoiceInput other);
@@ -166,34 +189,62 @@ public final class ServerMessageVoiceInput {
     public interface _FinalStage {
         ServerMessageVoiceInput build();
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         _FinalStage phoneNumber(Optional<ServerMessageVoiceInputPhoneNumber> phoneNumber);
 
         _FinalStage phoneNumber(ServerMessageVoiceInputPhoneNumber phoneNumber);
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         _FinalStage timestamp(Optional<Double> timestamp);
 
         _FinalStage timestamp(Double timestamp);
 
+        /**
+         * <p>This is a live version of the <code>call.artifact</code>.</p>
+         * <p>This matches what is stored on <code>call.artifact</code> after the call.</p>
+         */
         _FinalStage artifact(Optional<Artifact> artifact);
 
         _FinalStage artifact(Artifact artifact);
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         _FinalStage call(Optional<Call> call);
 
         _FinalStage call(Call call);
+
+        /**
+         * <p>This is the chat object.</p>
+         */
+        _FinalStage chat(Optional<Chat> chat);
+
+        _FinalStage chat(Chat chat);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements InputStage, _FinalStage {
         private String input;
+
+        private Optional<Chat> chat = Optional.empty();
 
         private Optional<Call> call = Optional.empty();
 
@@ -220,11 +271,13 @@ public final class ServerMessageVoiceInput {
             assistant(other.getAssistant());
             customer(other.getCustomer());
             call(other.getCall());
+            chat(other.getChat());
             input(other.getInput());
             return this;
         }
 
         /**
+         * <p>This is the voice input content</p>
          * <p>This is the voice input content</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -232,6 +285,26 @@ public final class ServerMessageVoiceInput {
         @JsonSetter("input")
         public _FinalStage input(@NotNull String input) {
             this.input = Objects.requireNonNull(input, "input must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage chat(Chat chat) {
+            this.chat = Optional.ofNullable(chat);
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "chat", nulls = Nulls.SKIP)
+        public _FinalStage chat(Optional<Chat> chat) {
+            this.chat = chat;
             return this;
         }
 
@@ -245,6 +318,9 @@ public final class ServerMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public _FinalStage call(Optional<Call> call) {
@@ -262,6 +338,9 @@ public final class ServerMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -279,6 +358,9 @@ public final class ServerMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -297,6 +379,10 @@ public final class ServerMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is a live version of the <code>call.artifact</code>.</p>
+         * <p>This matches what is stored on <code>call.artifact</code> after the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "artifact", nulls = Nulls.SKIP)
         public _FinalStage artifact(Optional<Artifact> artifact) {
@@ -314,6 +400,9 @@ public final class ServerMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public _FinalStage timestamp(Optional<Double> timestamp) {
@@ -331,6 +420,9 @@ public final class ServerMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ServerMessageVoiceInputPhoneNumber> phoneNumber) {
@@ -341,7 +433,7 @@ public final class ServerMessageVoiceInput {
         @java.lang.Override
         public ServerMessageVoiceInput build() {
             return new ServerMessageVoiceInput(
-                    phoneNumber, timestamp, artifact, assistant, customer, call, input, additionalProperties);
+                    phoneNumber, timestamp, artifact, assistant, customer, call, chat, input, additionalProperties);
         }
     }
 }

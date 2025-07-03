@@ -171,38 +171,63 @@ public final class TestSuite {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the test suite.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(TestSuite other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this test suite belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the test suite was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the test suite was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         TestSuite build();
 
+        /**
+         * <p>This is the name of the test suite.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the phone number ID associated with this test suite.</p>
+         */
         _FinalStage phoneNumberId(Optional<String> phoneNumberId);
 
         _FinalStage phoneNumberId(String phoneNumberId);
 
+        /**
+         * <p>Override the default tester plan by providing custom assistant configuration for the test agent.</p>
+         * <p>We recommend only using this if you are confident, as we have already set sensible defaults on the tester plan.</p>
+         */
         _FinalStage testerPlan(Optional<TesterPlan> testerPlan);
 
         _FinalStage testerPlan(TesterPlan testerPlan);
 
+        /**
+         * <p>These are the configuration for the assistant / phone number that is being tested.</p>
+         */
         _FinalStage targetPlan(Optional<TargetPlan> targetPlan);
 
         _FinalStage targetPlan(TargetPlan targetPlan);
@@ -246,6 +271,7 @@ public final class TestSuite {
 
         /**
          * <p>This is the unique identifier for the test suite.</p>
+         * <p>This is the unique identifier for the test suite.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -256,6 +282,7 @@ public final class TestSuite {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this test suite belongs to.</p>
          * <p>This is the unique identifier for the org that this test suite belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -268,6 +295,7 @@ public final class TestSuite {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the test suite was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the test suite was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -278,6 +306,7 @@ public final class TestSuite {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the test suite was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the test suite was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -298,6 +327,9 @@ public final class TestSuite {
             return this;
         }
 
+        /**
+         * <p>These are the configuration for the assistant / phone number that is being tested.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "targetPlan", nulls = Nulls.SKIP)
         public _FinalStage targetPlan(Optional<TargetPlan> targetPlan) {
@@ -316,6 +348,10 @@ public final class TestSuite {
             return this;
         }
 
+        /**
+         * <p>Override the default tester plan by providing custom assistant configuration for the test agent.</p>
+         * <p>We recommend only using this if you are confident, as we have already set sensible defaults on the tester plan.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "testerPlan", nulls = Nulls.SKIP)
         public _FinalStage testerPlan(Optional<TesterPlan> testerPlan) {
@@ -333,6 +369,9 @@ public final class TestSuite {
             return this;
         }
 
+        /**
+         * <p>This is the phone number ID associated with this test suite.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
         public _FinalStage phoneNumberId(Optional<String> phoneNumberId) {
@@ -350,6 +389,9 @@ public final class TestSuite {
             return this;
         }
 
+        /**
+         * <p>This is the name of the test suite.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

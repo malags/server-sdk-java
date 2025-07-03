@@ -43,6 +43,8 @@ public final class CreateOutboundCallDto {
 
     private final Optional<CreateWorkflowDto> workflow;
 
+    private final Optional<WorkflowOverrides> workflowOverrides;
+
     private final Optional<String> phoneNumberId;
 
     private final Optional<ImportTwilioPhoneNumberDto> phoneNumber;
@@ -65,6 +67,7 @@ public final class CreateOutboundCallDto {
             Optional<CreateSquadDto> squad,
             Optional<String> workflowId,
             Optional<CreateWorkflowDto> workflow,
+            Optional<WorkflowOverrides> workflowOverrides,
             Optional<String> phoneNumberId,
             Optional<ImportTwilioPhoneNumberDto> phoneNumber,
             Optional<String> customerId,
@@ -81,6 +84,7 @@ public final class CreateOutboundCallDto {
         this.squad = squad;
         this.workflowId = workflowId;
         this.workflow = workflow;
+        this.workflowOverrides = workflowOverrides;
         this.phoneNumberId = phoneNumberId;
         this.phoneNumber = phoneNumber;
         this.customerId = customerId;
@@ -186,8 +190,7 @@ public final class CreateOutboundCallDto {
     }
 
     /**
-     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
-     * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+     * @return This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.
      * <p>To start a call with:</p>
      * <ul>
      * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
@@ -201,8 +204,7 @@ public final class CreateOutboundCallDto {
     }
 
     /**
-     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
-     * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+     * @return This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.
      * <p>To start a call with:</p>
      * <ul>
      * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
@@ -213,6 +215,14 @@ public final class CreateOutboundCallDto {
     @JsonProperty("workflow")
     public Optional<CreateWorkflowDto> getWorkflow() {
         return workflow;
+    }
+
+    /**
+     * @return These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.
+     */
+    @JsonProperty("workflowOverrides")
+    public Optional<WorkflowOverrides> getWorkflowOverrides() {
+        return workflowOverrides;
     }
 
     /**
@@ -274,6 +284,7 @@ public final class CreateOutboundCallDto {
                 && squad.equals(other.squad)
                 && workflowId.equals(other.workflowId)
                 && workflow.equals(other.workflow)
+                && workflowOverrides.equals(other.workflowOverrides)
                 && phoneNumberId.equals(other.phoneNumberId)
                 && phoneNumber.equals(other.phoneNumber)
                 && customerId.equals(other.customerId)
@@ -294,6 +305,7 @@ public final class CreateOutboundCallDto {
                 this.squad,
                 this.workflowId,
                 this.workflow,
+                this.workflowOverrides,
                 this.phoneNumberId,
                 this.phoneNumber,
                 this.customerId,
@@ -333,6 +345,8 @@ public final class CreateOutboundCallDto {
 
         private Optional<CreateWorkflowDto> workflow = Optional.empty();
 
+        private Optional<WorkflowOverrides> workflowOverrides = Optional.empty();
+
         private Optional<String> phoneNumberId = Optional.empty();
 
         private Optional<ImportTwilioPhoneNumberDto> phoneNumber = Optional.empty();
@@ -358,6 +372,7 @@ public final class CreateOutboundCallDto {
             squad(other.getSquad());
             workflowId(other.getWorkflowId());
             workflow(other.getWorkflow());
+            workflowOverrides(other.getWorkflowOverrides());
             phoneNumberId(other.getPhoneNumberId());
             phoneNumber(other.getPhoneNumber());
             customerId(other.getCustomerId());
@@ -365,6 +380,10 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is used to issue batch calls to multiple customers.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code>. To call a single customer, use <code>customer</code> instead.</p>
+         */
         @JsonSetter(value = "customers", nulls = Nulls.SKIP)
         public Builder customers(Optional<List<CreateCustomerDto>> customers) {
             this.customers = customers;
@@ -376,6 +395,9 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the call. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -387,6 +409,9 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the schedule plan of the call.</p>
+         */
         @JsonSetter(value = "schedulePlan", nulls = Nulls.SKIP)
         public Builder schedulePlan(Optional<SchedulePlan> schedulePlan) {
             this.schedulePlan = schedulePlan;
@@ -398,6 +423,9 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the transport of the call.</p>
+         */
         @JsonSetter(value = "transport", nulls = Nulls.SKIP)
         public Builder transport(Optional<Map<String, Object>> transport) {
             this.transport = transport;
@@ -409,6 +437,15 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant ID that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistantId</code> or <code>assistant</code></li>
+         * <li>Squad, use <code>squadId</code> or <code>squad</code></li>
+         * <li>Workflow, use <code>workflowId</code> or <code>workflow</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -420,6 +457,15 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for the call. To use an existing assistant, use <code>assistantId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code></li>
+         * <li>Squad, use <code>squad</code></li>
+         * <li>Workflow, use <code>workflow</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -431,6 +477,9 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>These are the overrides for the <code>assistant</code> or <code>assistantId</code>'s settings and template variables.</p>
+         */
         @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
         public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
             this.assistantOverrides = assistantOverrides;
@@ -442,6 +491,15 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for the call. To use a transient squad, use <code>squad</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -453,6 +511,15 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is a squad that will be used for the call. To use an existing squad, use <code>squadId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "squad", nulls = Nulls.SKIP)
         public Builder squad(Optional<CreateSquadDto> squad) {
             this.squad = squad;
@@ -464,6 +531,15 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public Builder workflowId(Optional<String> workflowId) {
             this.workflowId = workflowId;
@@ -475,6 +551,15 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "workflow", nulls = Nulls.SKIP)
         public Builder workflow(Optional<CreateWorkflowDto> workflow) {
             this.workflow = workflow;
@@ -486,6 +571,24 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.</p>
+         */
+        @JsonSetter(value = "workflowOverrides", nulls = Nulls.SKIP)
+        public Builder workflowOverrides(Optional<WorkflowOverrides> workflowOverrides) {
+            this.workflowOverrides = workflowOverrides;
+            return this;
+        }
+
+        public Builder workflowOverrides(WorkflowOverrides workflowOverrides) {
+            this.workflowOverrides = Optional.ofNullable(workflowOverrides);
+            return this;
+        }
+
+        /**
+         * <p>This is the phone number that will be used for the call. To use a transient number, use <code>phoneNumber</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
         public Builder phoneNumberId(Optional<String> phoneNumberId) {
             this.phoneNumberId = phoneNumberId;
@@ -497,6 +600,10 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that will be used for the call. To use an existing number, use <code>phoneNumberId</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public Builder phoneNumber(Optional<ImportTwilioPhoneNumberDto> phoneNumber) {
             this.phoneNumber = phoneNumber;
@@ -508,6 +615,10 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the customer that will be called. To call a transient customer , use <code>customer</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @JsonSetter(value = "customerId", nulls = Nulls.SKIP)
         public Builder customerId(Optional<String> customerId) {
             this.customerId = customerId;
@@ -519,6 +630,10 @@ public final class CreateOutboundCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the customer that will be called. To call an existing customer, use <code>customerId</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public Builder customer(Optional<CreateCustomerDto> customer) {
             this.customer = customer;
@@ -543,6 +658,7 @@ public final class CreateOutboundCallDto {
                     squad,
                     workflowId,
                     workflow,
+                    workflowOverrides,
                     phoneNumberId,
                     phoneNumber,
                     customerId,

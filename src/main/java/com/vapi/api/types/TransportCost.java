@@ -90,12 +90,18 @@ public final class TransportCost {
     }
 
     public interface MinutesStage {
+        /**
+         * <p>This is the minutes of <code>transport</code> usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code>.</p>
+         */
         CostStage minutes(double minutes);
 
         Builder from(TransportCost other);
     }
 
     public interface CostStage {
+        /**
+         * <p>This is the cost of the component in USD.</p>
+         */
         _FinalStage cost(double cost);
     }
 
@@ -130,6 +136,7 @@ public final class TransportCost {
 
         /**
          * <p>This is the minutes of <code>transport</code> usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code>.</p>
+         * <p>This is the minutes of <code>transport</code> usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -140,6 +147,7 @@ public final class TransportCost {
         }
 
         /**
+         * <p>This is the cost of the component in USD.</p>
          * <p>This is the cost of the component in USD.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

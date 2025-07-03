@@ -30,6 +30,8 @@ public final class CostBreakdown {
 
     private final Optional<Double> vapi;
 
+    private final Optional<Double> chat;
+
     private final Optional<Double> total;
 
     private final Optional<Double> llmPromptTokens;
@@ -48,6 +50,7 @@ public final class CostBreakdown {
             Optional<Double> llm,
             Optional<Double> tts,
             Optional<Double> vapi,
+            Optional<Double> chat,
             Optional<Double> total,
             Optional<Double> llmPromptTokens,
             Optional<Double> llmCompletionTokens,
@@ -59,6 +62,7 @@ public final class CostBreakdown {
         this.llm = llm;
         this.tts = tts;
         this.vapi = vapi;
+        this.chat = chat;
         this.total = total;
         this.llmPromptTokens = llmPromptTokens;
         this.llmCompletionTokens = llmCompletionTokens;
@@ -105,6 +109,14 @@ public final class CostBreakdown {
     @JsonProperty("vapi")
     public Optional<Double> getVapi() {
         return vapi;
+    }
+
+    /**
+     * @return This is the cost of chat interactions.
+     */
+    @JsonProperty("chat")
+    public Optional<Double> getChat() {
+        return chat;
     }
 
     /**
@@ -164,6 +176,7 @@ public final class CostBreakdown {
                 && llm.equals(other.llm)
                 && tts.equals(other.tts)
                 && vapi.equals(other.vapi)
+                && chat.equals(other.chat)
                 && total.equals(other.total)
                 && llmPromptTokens.equals(other.llmPromptTokens)
                 && llmCompletionTokens.equals(other.llmCompletionTokens)
@@ -179,6 +192,7 @@ public final class CostBreakdown {
                 this.llm,
                 this.tts,
                 this.vapi,
+                this.chat,
                 this.total,
                 this.llmPromptTokens,
                 this.llmCompletionTokens,
@@ -207,6 +221,8 @@ public final class CostBreakdown {
 
         private Optional<Double> vapi = Optional.empty();
 
+        private Optional<Double> chat = Optional.empty();
+
         private Optional<Double> total = Optional.empty();
 
         private Optional<Double> llmPromptTokens = Optional.empty();
@@ -228,6 +244,7 @@ public final class CostBreakdown {
             llm(other.getLlm());
             tts(other.getTts());
             vapi(other.getVapi());
+            chat(other.getChat());
             total(other.getTotal());
             llmPromptTokens(other.getLlmPromptTokens());
             llmCompletionTokens(other.getLlmCompletionTokens());
@@ -236,6 +253,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost of the transport provider, like Twilio or Vonage.</p>
+         */
         @JsonSetter(value = "transport", nulls = Nulls.SKIP)
         public Builder transport(Optional<Double> transport) {
             this.transport = transport;
@@ -247,6 +267,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost of the speech-to-text service.</p>
+         */
         @JsonSetter(value = "stt", nulls = Nulls.SKIP)
         public Builder stt(Optional<Double> stt) {
             this.stt = stt;
@@ -258,6 +281,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost of the language model.</p>
+         */
         @JsonSetter(value = "llm", nulls = Nulls.SKIP)
         public Builder llm(Optional<Double> llm) {
             this.llm = llm;
@@ -269,6 +295,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost of the text-to-speech service.</p>
+         */
         @JsonSetter(value = "tts", nulls = Nulls.SKIP)
         public Builder tts(Optional<Double> tts) {
             this.tts = tts;
@@ -280,6 +309,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost of Vapi.</p>
+         */
         @JsonSetter(value = "vapi", nulls = Nulls.SKIP)
         public Builder vapi(Optional<Double> vapi) {
             this.vapi = vapi;
@@ -291,6 +323,23 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost of chat interactions.</p>
+         */
+        @JsonSetter(value = "chat", nulls = Nulls.SKIP)
+        public Builder chat(Optional<Double> chat) {
+            this.chat = chat;
+            return this;
+        }
+
+        public Builder chat(Double chat) {
+            this.chat = Optional.ofNullable(chat);
+            return this;
+        }
+
+        /**
+         * <p>This is the total cost of the call.</p>
+         */
         @JsonSetter(value = "total", nulls = Nulls.SKIP)
         public Builder total(Optional<Double> total) {
             this.total = total;
@@ -302,6 +351,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the LLM prompt tokens used for the call.</p>
+         */
         @JsonSetter(value = "llmPromptTokens", nulls = Nulls.SKIP)
         public Builder llmPromptTokens(Optional<Double> llmPromptTokens) {
             this.llmPromptTokens = llmPromptTokens;
@@ -313,6 +365,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the LLM completion tokens used for the call.</p>
+         */
         @JsonSetter(value = "llmCompletionTokens", nulls = Nulls.SKIP)
         public Builder llmCompletionTokens(Optional<Double> llmCompletionTokens) {
             this.llmCompletionTokens = llmCompletionTokens;
@@ -324,6 +379,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the TTS characters used for the call.</p>
+         */
         @JsonSetter(value = "ttsCharacters", nulls = Nulls.SKIP)
         public Builder ttsCharacters(Optional<Double> ttsCharacters) {
             this.ttsCharacters = ttsCharacters;
@@ -335,6 +393,9 @@ public final class CostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost of the analysis.</p>
+         */
         @JsonSetter(value = "analysisCostBreakdown", nulls = Nulls.SKIP)
         public Builder analysisCostBreakdown(Optional<AnalysisCostBreakdown> analysisCostBreakdown) {
             this.analysisCostBreakdown = analysisCostBreakdown;
@@ -353,6 +414,7 @@ public final class CostBreakdown {
                     llm,
                     tts,
                     vapi,
+                    chat,
                     total,
                     llmPromptTokens,
                     llmCompletionTokens,

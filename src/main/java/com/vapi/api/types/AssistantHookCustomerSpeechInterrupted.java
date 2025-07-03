@@ -83,6 +83,9 @@ public final class AssistantHookCustomerSpeechInterrupted {
             return this;
         }
 
+        /**
+         * <p>This is the set of actions to perform when the hook triggers</p>
+         */
         @JsonSetter(value = "do", nulls = Nulls.SKIP)
         public Builder do_(List<AssistantHookCustomerSpeechInterruptedDoItem> do_) {
             this.do_.clear();

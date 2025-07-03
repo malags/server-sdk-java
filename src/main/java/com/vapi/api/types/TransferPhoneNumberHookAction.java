@@ -81,6 +81,9 @@ public final class TransferPhoneNumberHookAction {
             return this;
         }
 
+        /**
+         * <p>This is the destination details for the transfer - can be a phone number or SIP URI</p>
+         */
         @JsonSetter(value = "destination", nulls = Nulls.SKIP)
         public Builder destination(Optional<TransferPhoneNumberHookActionDestination> destination) {
             this.destination = destination;

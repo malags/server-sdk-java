@@ -96,6 +96,9 @@ public final class UpdateGoogleSheetsOAuth2AuthorizationCredentialDto {
             return this;
         }
 
+        /**
+         * <p>The authorization ID for the OAuth2 authorization</p>
+         */
         @JsonSetter(value = "authorizationId", nulls = Nulls.SKIP)
         public Builder authorizationId(Optional<String> authorizationId) {
             this.authorizationId = authorizationId;
@@ -107,6 +110,9 @@ public final class UpdateGoogleSheetsOAuth2AuthorizationCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

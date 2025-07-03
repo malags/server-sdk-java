@@ -21,14 +21,14 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateWebhookCredentialDto.Builder.class)
 public final class CreateWebhookCredentialDto {
-    private final OAuth2AuthenticationPlan authenticationPlan;
+    private final CreateWebhookCredentialDtoAuthenticationPlan authenticationPlan;
 
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateWebhookCredentialDto(
-            OAuth2AuthenticationPlan authenticationPlan,
+            CreateWebhookCredentialDtoAuthenticationPlan authenticationPlan,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.authenticationPlan = authenticationPlan;
@@ -37,10 +37,10 @@ public final class CreateWebhookCredentialDto {
     }
 
     /**
-     * @return This is the authentication plan. Currently supports OAuth2 RFC 6749.
+     * @return This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.
      */
     @JsonProperty("authenticationPlan")
-    public OAuth2AuthenticationPlan getAuthenticationPlan() {
+    public CreateWebhookCredentialDtoAuthenticationPlan getAuthenticationPlan() {
         return authenticationPlan;
     }
 
@@ -82,7 +82,10 @@ public final class CreateWebhookCredentialDto {
     }
 
     public interface AuthenticationPlanStage {
-        _FinalStage authenticationPlan(@NotNull OAuth2AuthenticationPlan authenticationPlan);
+        /**
+         * <p>This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.</p>
+         */
+        _FinalStage authenticationPlan(@NotNull CreateWebhookCredentialDtoAuthenticationPlan authenticationPlan);
 
         Builder from(CreateWebhookCredentialDto other);
     }
@@ -90,6 +93,9 @@ public final class CreateWebhookCredentialDto {
     public interface _FinalStage {
         CreateWebhookCredentialDto build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -97,7 +103,7 @@ public final class CreateWebhookCredentialDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements AuthenticationPlanStage, _FinalStage {
-        private OAuth2AuthenticationPlan authenticationPlan;
+        private CreateWebhookCredentialDtoAuthenticationPlan authenticationPlan;
 
         private Optional<String> name = Optional.empty();
 
@@ -114,12 +120,14 @@ public final class CreateWebhookCredentialDto {
         }
 
         /**
-         * <p>This is the authentication plan. Currently supports OAuth2 RFC 6749.</p>
+         * <p>This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.</p>
+         * <p>This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("authenticationPlan")
-        public _FinalStage authenticationPlan(@NotNull OAuth2AuthenticationPlan authenticationPlan) {
+        public _FinalStage authenticationPlan(
+                @NotNull CreateWebhookCredentialDtoAuthenticationPlan authenticationPlan) {
             this.authenticationPlan = Objects.requireNonNull(authenticationPlan, "authenticationPlan must not be null");
             return this;
         }
@@ -134,6 +142,9 @@ public final class CreateWebhookCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

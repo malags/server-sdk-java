@@ -79,6 +79,9 @@ public final class CreateMistralCredentialDto {
     }
 
     public interface ApiKeyStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiKey(@NotNull String apiKey);
 
         Builder from(CreateMistralCredentialDto other);
@@ -87,6 +90,9 @@ public final class CreateMistralCredentialDto {
     public interface _FinalStage {
         CreateMistralCredentialDto build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -112,6 +118,7 @@ public final class CreateMistralCredentialDto {
 
         /**
          * <p>This is not returned in the API.</p>
+         * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -131,6 +138,9 @@ public final class CreateMistralCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

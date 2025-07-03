@@ -110,6 +110,15 @@ public final class CustomMessage {
             return this;
         }
 
+        /**
+         * <p>This is an alternative to the <code>content</code> property. It allows to specify variants of the same content, one per language.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If your assistants are multilingual, you can provide content for each language.</li>
+         * <li>If you don't provide content for a language, the first item in the array will be automatically translated to the active language at that moment.</li>
+         * </ul>
+         * <p>This will override the <code>content</code> property.</p>
+         */
         @JsonSetter(value = "contents", nulls = Nulls.SKIP)
         public Builder contents(Optional<List<TextContent>> contents) {
             this.contents = contents;
@@ -121,6 +130,9 @@ public final class CustomMessage {
             return this;
         }
 
+        /**
+         * <p>This is the content that the assistant will say when this message is triggered.</p>
+         */
         @JsonSetter(value = "content", nulls = Nulls.SKIP)
         public Builder content(Optional<String> content) {
             this.content = content;

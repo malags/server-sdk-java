@@ -91,18 +91,27 @@ public final class KnowledgeBaseResponseDocument {
     }
 
     public interface ContentStage {
+        /**
+         * <p>This is the content of the document.</p>
+         */
         SimilarityStage content(@NotNull String content);
 
         Builder from(KnowledgeBaseResponseDocument other);
     }
 
     public interface SimilarityStage {
+        /**
+         * <p>This is the similarity score of the document.</p>
+         */
         _FinalStage similarity(double similarity);
     }
 
     public interface _FinalStage {
         KnowledgeBaseResponseDocument build();
 
+        /**
+         * <p>This is the uuid of the document.</p>
+         */
         _FinalStage uuid(Optional<String> uuid);
 
         _FinalStage uuid(String uuid);
@@ -131,6 +140,7 @@ public final class KnowledgeBaseResponseDocument {
 
         /**
          * <p>This is the content of the document.</p>
+         * <p>This is the content of the document.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -141,6 +151,7 @@ public final class KnowledgeBaseResponseDocument {
         }
 
         /**
+         * <p>This is the similarity score of the document.</p>
          * <p>This is the similarity score of the document.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -161,6 +172,9 @@ public final class KnowledgeBaseResponseDocument {
             return this;
         }
 
+        /**
+         * <p>This is the uuid of the document.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "uuid", nulls = Nulls.SKIP)
         public _FinalStage uuid(Optional<String> uuid) {

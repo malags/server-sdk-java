@@ -178,6 +178,9 @@ public final class TransferDestinationNumber {
     }
 
     public interface NumberStage {
+        /**
+         * <p>This is the phone number to transfer the call to.</p>
+         */
         _FinalStage number(@NotNull String number);
 
         Builder from(TransferDestinationNumber other);
@@ -186,26 +189,67 @@ public final class TransferDestinationNumber {
     public interface _FinalStage {
         TransferDestinationNumber build();
 
+        /**
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+         */
         _FinalStage message(Optional<TransferDestinationNumberMessage> message);
 
         _FinalStage message(TransferDestinationNumberMessage message);
 
+        /**
+         * <p>This is the flag to toggle the E164 check for the <code>number</code> field. This is an advanced property which should be used if you know your use case requires it.</p>
+         * <p>Use cases:</p>
+         * <ul>
+         * <li><code>false</code>: To allow non-E164 numbers like <code>+001234567890</code>, <code>1234</code>, or <code>abc</code>. This is useful for dialing out to non-E164 numbers on your SIP trunks.</li>
+         * <li><code>true</code> (default): To allow only E164 numbers like <code>+14155551234</code>. This is standard for PSTN calls.</li>
+         * </ul>
+         * <p>If <code>false</code>, the <code>number</code> is still required to only contain alphanumeric characters (regex: <code>/^\+?[a-zA-Z0-9]+$/</code>).</p>
+         * <p>@default true (E164 check is enabled)</p>
+         */
         _FinalStage numberE164CheckEnabled(Optional<Boolean> numberE164CheckEnabled);
 
         _FinalStage numberE164CheckEnabled(Boolean numberE164CheckEnabled);
 
+        /**
+         * <p>This is the extension to dial after transferring the call to the <code>number</code>.</p>
+         */
         _FinalStage extension(Optional<String> extension);
 
         _FinalStage extension(String extension);
 
+        /**
+         * <p>This is the caller ID to use when transferring the call to the <code>number</code>.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If not provided, the caller ID will be the number the call is coming from. Example, +14151111111 calls in to and the assistant transfers out to +16470000000. +16470000000 will see +14151111111 as the caller.</li>
+         * <li>To change this behavior, provide a <code>callerId</code>.</li>
+         * <li>Set to '{{customer.number}}' to always use the customer's number as the caller ID.</li>
+         * <li>Set to '{{phoneNumber.number}}' to always use the phone number of the assistant as the caller ID.</li>
+         * <li>Set to any E164 number to always use that number as the caller ID. This needs to be a number that is owned or verified by your Transport provider like Twilio.</li>
+         * </ul>
+         * <p>For Twilio, you can read up more here: https://www.twilio.com/docs/voice/twiml/dial#callerid</p>
+         */
         _FinalStage callerId(Optional<String> callerId);
 
         _FinalStage callerId(String callerId);
 
+        /**
+         * <p>This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to <code>blind-transfer</code>.</p>
+         * <p>@default <code>transferPlan.mode='blind-transfer'</code></p>
+         */
         _FinalStage transferPlan(Optional<TransferPlan> transferPlan);
 
         _FinalStage transferPlan(TransferPlan transferPlan);
 
+        /**
+         * <p>This is the description of the destination, used by the AI to choose when and how to transfer the call.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
@@ -246,6 +290,7 @@ public final class TransferDestinationNumber {
 
         /**
          * <p>This is the phone number to transfer the call to.</p>
+         * <p>This is the phone number to transfer the call to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -265,6 +310,9 @@ public final class TransferDestinationNumber {
             return this;
         }
 
+        /**
+         * <p>This is the description of the destination, used by the AI to choose when and how to transfer the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
@@ -283,6 +331,10 @@ public final class TransferDestinationNumber {
             return this;
         }
 
+        /**
+         * <p>This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to <code>blind-transfer</code>.</p>
+         * <p>@default <code>transferPlan.mode='blind-transfer'</code></p>
+         */
         @java.lang.Override
         @JsonSetter(value = "transferPlan", nulls = Nulls.SKIP)
         public _FinalStage transferPlan(Optional<TransferPlan> transferPlan) {
@@ -309,6 +361,18 @@ public final class TransferDestinationNumber {
             return this;
         }
 
+        /**
+         * <p>This is the caller ID to use when transferring the call to the <code>number</code>.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If not provided, the caller ID will be the number the call is coming from. Example, +14151111111 calls in to and the assistant transfers out to +16470000000. +16470000000 will see +14151111111 as the caller.</li>
+         * <li>To change this behavior, provide a <code>callerId</code>.</li>
+         * <li>Set to '{{customer.number}}' to always use the customer's number as the caller ID.</li>
+         * <li>Set to '{{phoneNumber.number}}' to always use the phone number of the assistant as the caller ID.</li>
+         * <li>Set to any E164 number to always use that number as the caller ID. This needs to be a number that is owned or verified by your Transport provider like Twilio.</li>
+         * </ul>
+         * <p>For Twilio, you can read up more here: https://www.twilio.com/docs/voice/twiml/dial#callerid</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "callerId", nulls = Nulls.SKIP)
         public _FinalStage callerId(Optional<String> callerId) {
@@ -326,6 +390,9 @@ public final class TransferDestinationNumber {
             return this;
         }
 
+        /**
+         * <p>This is the extension to dial after transferring the call to the <code>number</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "extension", nulls = Nulls.SKIP)
         public _FinalStage extension(Optional<String> extension) {
@@ -350,6 +417,16 @@ public final class TransferDestinationNumber {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle the E164 check for the <code>number</code> field. This is an advanced property which should be used if you know your use case requires it.</p>
+         * <p>Use cases:</p>
+         * <ul>
+         * <li><code>false</code>: To allow non-E164 numbers like <code>+001234567890</code>, <code>1234</code>, or <code>abc</code>. This is useful for dialing out to non-E164 numbers on your SIP trunks.</li>
+         * <li><code>true</code> (default): To allow only E164 numbers like <code>+14155551234</code>. This is standard for PSTN calls.</li>
+         * </ul>
+         * <p>If <code>false</code>, the <code>number</code> is still required to only contain alphanumeric characters (regex: <code>/^\+?[a-zA-Z0-9]+$/</code>).</p>
+         * <p>@default true (E164 check is enabled)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "numberE164CheckEnabled", nulls = Nulls.SKIP)
         public _FinalStage numberE164CheckEnabled(Optional<Boolean> numberE164CheckEnabled) {
@@ -373,6 +450,15 @@ public final class TransferDestinationNumber {
             return this;
         }
 
+        /**
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
         public _FinalStage message(Optional<TransferDestinationNumberMessage> message) {

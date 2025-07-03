@@ -132,6 +132,9 @@ public final class TestSuiteRunTestAttempt {
             return this;
         }
 
+        /**
+         * <p>These are the results of the scorers used to evaluate the test attempt.</p>
+         */
         @JsonSetter(value = "scorerResults", nulls = Nulls.SKIP)
         public Builder scorerResults(List<TestSuiteRunScorerAi> scorerResults) {
             this.scorerResults.clear();
@@ -149,6 +152,9 @@ public final class TestSuiteRunTestAttempt {
             return this;
         }
 
+        /**
+         * <p>This is the call made during the test attempt.</p>
+         */
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public Builder call(Optional<TestSuiteRunTestAttemptCall> call) {
             this.call = call;
@@ -160,6 +166,9 @@ public final class TestSuiteRunTestAttempt {
             return this;
         }
 
+        /**
+         * <p>This is the call ID for the test attempt.</p>
+         */
         @JsonSetter(value = "callId", nulls = Nulls.SKIP)
         public Builder callId(Optional<String> callId) {
             this.callId = callId;
@@ -171,6 +180,9 @@ public final class TestSuiteRunTestAttempt {
             return this;
         }
 
+        /**
+         * <p>This is the metadata for the test attempt.</p>
+         */
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public Builder metadata(Optional<TestSuiteRunTestAttemptMetadata> metadata) {
             this.metadata = metadata;

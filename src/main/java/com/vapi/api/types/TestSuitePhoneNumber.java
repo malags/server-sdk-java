@@ -74,6 +74,9 @@ public final class TestSuitePhoneNumber {
     }
 
     public interface NumberStage {
+        /**
+         * <p>This is the phone number that is being tested.</p>
+         */
         _FinalStage number(@NotNull String number);
 
         Builder from(TestSuitePhoneNumber other);
@@ -99,6 +102,7 @@ public final class TestSuitePhoneNumber {
         }
 
         /**
+         * <p>This is the phone number that is being tested.</p>
          * <p>This is the phone number that is being tested.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

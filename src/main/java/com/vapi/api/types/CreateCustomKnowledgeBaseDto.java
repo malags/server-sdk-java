@@ -99,6 +99,42 @@ public final class CreateCustomKnowledgeBaseDto {
     }
 
     public interface ServerStage {
+        /**
+         * <p>This is where the knowledge base request will be sent.</p>
+         * <p>Request Example:</p>
+         * <p>POST https://{server.url}
+         * Content-Type: application/json</p>
+         * <p>{
+         * &quot;messsage&quot;: {
+         * &quot;type&quot;: &quot;knowledge-base-request&quot;,
+         * &quot;messages&quot;: [
+         * {
+         * &quot;role&quot;: &quot;user&quot;,
+         * &quot;content&quot;: &quot;Why is ocean blue?&quot;
+         * }
+         * ],
+         * ...other metadata about the call...
+         * }
+         * }</p>
+         * <p>Response Expected:</p>
+         * <pre><code>{
+         *   &quot;message&quot;: {
+         *      &quot;role&quot;: &quot;assistant&quot;,
+         *      &quot;content&quot;: &quot;The ocean is blue because water absorbs everything but blue.&quot;,
+         *   }, // YOU CAN RETURN THE EXACT RESPONSE TO SPEAK
+         *   &quot;documents&quot;: [
+         *     {
+         *       &quot;content&quot;: &quot;The ocean is blue primarily because water absorbs colors in the red part of the light spectrum and scatters the blue light, making it more visible to our eyes.&quot;,
+         *       &quot;similarity&quot;: 1
+         *     },
+         *     {
+         *       &quot;content&quot;: &quot;Blue light is scattered more by the water molecules than other colors, enhancing the blue appearance of the ocean.&quot;,
+         *       &quot;similarity&quot;: .5
+         *     }
+         *   ] // OR, YOU CAN RETURN AN ARRAY OF DOCUMENTS THAT WILL BE SENT TO THE MODEL
+         * }
+         * </code></pre>
+         */
         _FinalStage server(@NotNull Server server);
 
         Builder from(CreateCustomKnowledgeBaseDto other);
@@ -124,6 +160,40 @@ public final class CreateCustomKnowledgeBaseDto {
         }
 
         /**
+         * <p>This is where the knowledge base request will be sent.</p>
+         * <p>Request Example:</p>
+         * <p>POST https://{server.url}
+         * Content-Type: application/json</p>
+         * <p>{
+         * &quot;messsage&quot;: {
+         * &quot;type&quot;: &quot;knowledge-base-request&quot;,
+         * &quot;messages&quot;: [
+         * {
+         * &quot;role&quot;: &quot;user&quot;,
+         * &quot;content&quot;: &quot;Why is ocean blue?&quot;
+         * }
+         * ],
+         * ...other metadata about the call...
+         * }
+         * }</p>
+         * <p>Response Expected:</p>
+         * <pre><code>{
+         *   &quot;message&quot;: {
+         *      &quot;role&quot;: &quot;assistant&quot;,
+         *      &quot;content&quot;: &quot;The ocean is blue because water absorbs everything but blue.&quot;,
+         *   }, // YOU CAN RETURN THE EXACT RESPONSE TO SPEAK
+         *   &quot;documents&quot;: [
+         *     {
+         *       &quot;content&quot;: &quot;The ocean is blue primarily because water absorbs colors in the red part of the light spectrum and scatters the blue light, making it more visible to our eyes.&quot;,
+         *       &quot;similarity&quot;: 1
+         *     },
+         *     {
+         *       &quot;content&quot;: &quot;Blue light is scattered more by the water molecules than other colors, enhancing the blue appearance of the ocean.&quot;,
+         *       &quot;similarity&quot;: .5
+         *     }
+         *   ] // OR, YOU CAN RETURN AN ARRAY OF DOCUMENTS THAT WILL BE SENT TO THE MODEL
+         * }
+         * </code></pre>
          * <p>This is where the knowledge base request will be sent.</p>
          * <p>Request Example:</p>
          * <p>POST https://{server.url}

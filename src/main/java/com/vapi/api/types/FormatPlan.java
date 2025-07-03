@@ -156,6 +156,15 @@ public final class FormatPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether the chunk is formatted before being sent to the voice provider. This helps with enunciation. This includes phone numbers, emails and addresses. Default <code>true</code>.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To rely on the voice provider's formatting logic, set this to <code>false</code>.</li>
+         * </ul>
+         * <p>If <code>voice.chunkPlan.enabled</code> is <code>false</code>, this is automatically <code>false</code> since there's no chunk to format.</p>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -167,6 +176,19 @@ public final class FormatPlan {
             return this;
         }
 
+        /**
+         * <p>This is the cutoff after which a number is converted to individual digits instead of being spoken as words.</p>
+         * <p>Example:</p>
+         * <ul>
+         * <li>If cutoff 2025, &quot;12345&quot; is converted to &quot;1 2 3 4 5&quot; while &quot;1200&quot; is converted to &quot;twelve hundred&quot;.</li>
+         * </ul>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If your use case doesn't involve IDs like zip codes, set this to a high value.</li>
+         * <li>If your use case involves IDs that are shorter than 5 digits, set this to a lower value.</li>
+         * </ul>
+         * <p>@default 2025</p>
+         */
         @JsonSetter(value = "numberToDigitsCutoff", nulls = Nulls.SKIP)
         public Builder numberToDigitsCutoff(Optional<Double> numberToDigitsCutoff) {
             this.numberToDigitsCutoff = numberToDigitsCutoff;
@@ -178,6 +200,15 @@ public final class FormatPlan {
             return this;
         }
 
+        /**
+         * <p>These are the custom replacements you can make to the chunk before it is sent to the voice provider.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To replace a specific word or phrase with a different word or phrase, use the <code>ExactReplacement</code> type. Eg. <code>{ type: 'exact', key: 'hello', value: 'hi' }</code></li>
+         * <li>To replace a word or phrase that matches a pattern, use the <code>RegexReplacement</code> type. Eg. <code>{ type: 'regex', regex: '\\b[a-zA-Z]{5}\\b', value: 'hi' }</code></li>
+         * </ul>
+         * <p>@default []</p>
+         */
         @JsonSetter(value = "replacements", nulls = Nulls.SKIP)
         public Builder replacements(Optional<List<FormatPlanReplacementsItem>> replacements) {
             this.replacements = replacements;
@@ -189,6 +220,12 @@ public final class FormatPlan {
             return this;
         }
 
+        /**
+         * <p>List of formatters to apply. If not provided, all default formatters will be applied.
+         * If provided, only the specified formatters will be applied.
+         * Note: Some essential formatters like angle bracket removal will always be applied.
+         * @default undefined</p>
+         */
         @JsonSetter(value = "formattersEnabled", nulls = Nulls.SKIP)
         public Builder formattersEnabled(Optional<List<FormatPlanFormattersEnabledItem>> formattersEnabled) {
             this.formattersEnabled = formattersEnabled;

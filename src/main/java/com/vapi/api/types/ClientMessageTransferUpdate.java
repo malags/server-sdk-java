@@ -244,6 +244,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public Builder phoneNumber(Optional<ClientMessageTransferUpdatePhoneNumber> phoneNumber) {
             this.phoneNumber = phoneNumber;
@@ -255,6 +258,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the destination of the transfer.</p>
+         */
         @JsonSetter(value = "destination", nulls = Nulls.SKIP)
         public Builder destination(Optional<ClientMessageTransferUpdateDestination> destination) {
             this.destination = destination;
@@ -266,6 +272,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public Builder timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
@@ -277,6 +286,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public Builder call(Optional<Call> call) {
             this.call = call;
@@ -288,6 +300,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public Builder customer(Optional<CreateCustomerDto> customer) {
             this.customer = customer;
@@ -299,6 +314,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -310,6 +328,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the call is being transferred to. This is only sent if <code>destination.type</code> is &quot;assistant&quot;.</p>
+         */
         @JsonSetter(value = "toAssistant", nulls = Nulls.SKIP)
         public Builder toAssistant(Optional<CreateAssistantDto> toAssistant) {
             this.toAssistant = toAssistant;
@@ -321,6 +342,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the call is being transferred from. This is only sent if <code>destination.type</code> is &quot;assistant&quot;.</p>
+         */
         @JsonSetter(value = "fromAssistant", nulls = Nulls.SKIP)
         public Builder fromAssistant(Optional<CreateAssistantDto> fromAssistant) {
             this.fromAssistant = fromAssistant;
@@ -332,6 +356,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the step that the conversation moved to.</p>
+         */
         @JsonSetter(value = "toStepRecord", nulls = Nulls.SKIP)
         public Builder toStepRecord(Optional<Map<String, Object>> toStepRecord) {
             this.toStepRecord = toStepRecord;
@@ -343,6 +370,9 @@ public final class ClientMessageTransferUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the step that the conversation moved from. =</p>
+         */
         @JsonSetter(value = "fromStepRecord", nulls = Nulls.SKIP)
         public Builder fromStepRecord(Optional<Map<String, Object>> fromStepRecord) {
             this.fromStepRecord = fromStepRecord;

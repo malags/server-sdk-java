@@ -34,7 +34,9 @@ public enum SyncVoiceLibraryDtoProvidersItem {
 
     TAVUS("tavus"),
 
-    SESAME("sesame");
+    SESAME("sesame"),
+
+    INWORLD("inworld");
 
     private final String value;
 

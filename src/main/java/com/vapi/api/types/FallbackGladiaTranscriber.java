@@ -26,6 +26,8 @@ public final class FallbackGladiaTranscriber {
 
     private final Optional<FallbackGladiaTranscriberLanguage> language;
 
+    private final Optional<FallbackGladiaTranscriberLanguages> languages;
+
     private final Optional<String> transcriptionHint;
 
     private final Optional<Boolean> prosody;
@@ -40,6 +42,7 @@ public final class FallbackGladiaTranscriber {
             Optional<FallbackGladiaTranscriberModel> model,
             Optional<FallbackGladiaTranscriberLanguageBehaviour> languageBehaviour,
             Optional<FallbackGladiaTranscriberLanguage> language,
+            Optional<FallbackGladiaTranscriberLanguages> languages,
             Optional<String> transcriptionHint,
             Optional<Boolean> prosody,
             Optional<Boolean> audioEnhancer,
@@ -48,6 +51,7 @@ public final class FallbackGladiaTranscriber {
         this.model = model;
         this.languageBehaviour = languageBehaviour;
         this.language = language;
+        this.languages = languages;
         this.transcriptionHint = transcriptionHint;
         this.prosody = prosody;
         this.audioEnhancer = audioEnhancer;
@@ -71,6 +75,14 @@ public final class FallbackGladiaTranscriber {
     @JsonProperty("language")
     public Optional<FallbackGladiaTranscriberLanguage> getLanguage() {
         return language;
+    }
+
+    /**
+     * @return Defines the languages to use for the transcription. Required when languageBehaviour is 'manual'.
+     */
+    @JsonProperty("languages")
+    public Optional<FallbackGladiaTranscriberLanguages> getLanguages() {
+        return languages;
     }
 
     /**
@@ -122,6 +134,7 @@ public final class FallbackGladiaTranscriber {
         return model.equals(other.model)
                 && languageBehaviour.equals(other.languageBehaviour)
                 && language.equals(other.language)
+                && languages.equals(other.languages)
                 && transcriptionHint.equals(other.transcriptionHint)
                 && prosody.equals(other.prosody)
                 && audioEnhancer.equals(other.audioEnhancer)
@@ -134,6 +147,7 @@ public final class FallbackGladiaTranscriber {
                 this.model,
                 this.languageBehaviour,
                 this.language,
+                this.languages,
                 this.transcriptionHint,
                 this.prosody,
                 this.audioEnhancer,
@@ -157,6 +171,8 @@ public final class FallbackGladiaTranscriber {
 
         private Optional<FallbackGladiaTranscriberLanguage> language = Optional.empty();
 
+        private Optional<FallbackGladiaTranscriberLanguages> languages = Optional.empty();
+
         private Optional<String> transcriptionHint = Optional.empty();
 
         private Optional<Boolean> prosody = Optional.empty();
@@ -174,6 +190,7 @@ public final class FallbackGladiaTranscriber {
             model(other.getModel());
             languageBehaviour(other.getLanguageBehaviour());
             language(other.getLanguage());
+            languages(other.getLanguages());
             transcriptionHint(other.getTranscriptionHint());
             prosody(other.getProsody());
             audioEnhancer(other.getAudioEnhancer());
@@ -203,6 +220,9 @@ public final class FallbackGladiaTranscriber {
             return this;
         }
 
+        /**
+         * <p>Defines the language to use for the transcription. Required when languageBehaviour is 'manual'.</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<FallbackGladiaTranscriberLanguage> language) {
             this.language = language;
@@ -214,6 +234,24 @@ public final class FallbackGladiaTranscriber {
             return this;
         }
 
+        /**
+         * <p>Defines the languages to use for the transcription. Required when languageBehaviour is 'manual'.</p>
+         */
+        @JsonSetter(value = "languages", nulls = Nulls.SKIP)
+        public Builder languages(Optional<FallbackGladiaTranscriberLanguages> languages) {
+            this.languages = languages;
+            return this;
+        }
+
+        public Builder languages(FallbackGladiaTranscriberLanguages languages) {
+            this.languages = Optional.ofNullable(languages);
+            return this;
+        }
+
+        /**
+         * <p>Provides a custom vocabulary to the model to improve accuracy of transcribing context specific words, technical terms, names, etc. If empty, this argument is ignored.
+         * ⚠️ Warning ⚠️: Please be aware that the transcription_hint field has a character limit of 600. If you provide a transcription_hint longer than 600 characters, it will be automatically truncated to meet this limit.</p>
+         */
         @JsonSetter(value = "transcriptionHint", nulls = Nulls.SKIP)
         public Builder transcriptionHint(Optional<String> transcriptionHint) {
             this.transcriptionHint = transcriptionHint;
@@ -225,6 +263,9 @@ public final class FallbackGladiaTranscriber {
             return this;
         }
 
+        /**
+         * <p>If prosody is true, you will get a transcription that can contain prosodies i.e. (laugh) (giggles) (malefic laugh) (toss) (music)… Default value is false.</p>
+         */
         @JsonSetter(value = "prosody", nulls = Nulls.SKIP)
         public Builder prosody(Optional<Boolean> prosody) {
             this.prosody = prosody;
@@ -236,6 +277,9 @@ public final class FallbackGladiaTranscriber {
             return this;
         }
 
+        /**
+         * <p>If true, audio will be pre-processed to improve accuracy but latency will increase. Default value is false.</p>
+         */
         @JsonSetter(value = "audioEnhancer", nulls = Nulls.SKIP)
         public Builder audioEnhancer(Optional<Boolean> audioEnhancer) {
             this.audioEnhancer = audioEnhancer;
@@ -247,6 +291,10 @@ public final class FallbackGladiaTranscriber {
             return this;
         }
 
+        /**
+         * <p>Transcripts below this confidence threshold will be discarded.</p>
+         * <p>@default 0.4</p>
+         */
         @JsonSetter(value = "confidenceThreshold", nulls = Nulls.SKIP)
         public Builder confidenceThreshold(Optional<Double> confidenceThreshold) {
             this.confidenceThreshold = confidenceThreshold;
@@ -263,6 +311,7 @@ public final class FallbackGladiaTranscriber {
                     model,
                     languageBehaviour,
                     language,
+                    languages,
                     transcriptionHint,
                     prosody,
                     audioEnhancer,

@@ -107,20 +107,32 @@ public final class SystemMessage {
     }
 
     public interface RoleStage {
+        /**
+         * <p>The role of the system in the conversation.</p>
+         */
         MessageStage role(@NotNull String role);
 
         Builder from(SystemMessage other);
     }
 
     public interface MessageStage {
+        /**
+         * <p>The message content from the system.</p>
+         */
         TimeStage message(@NotNull String message);
     }
 
     public interface TimeStage {
+        /**
+         * <p>The timestamp when the message was sent.</p>
+         */
         SecondsFromStartStage time(double time);
     }
 
     public interface SecondsFromStartStage {
+        /**
+         * <p>The number of seconds from the start of the conversation.</p>
+         */
         _FinalStage secondsFromStart(double secondsFromStart);
     }
 
@@ -155,6 +167,7 @@ public final class SystemMessage {
 
         /**
          * <p>The role of the system in the conversation.</p>
+         * <p>The role of the system in the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -165,6 +178,7 @@ public final class SystemMessage {
         }
 
         /**
+         * <p>The message content from the system.</p>
          * <p>The message content from the system.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -177,6 +191,7 @@ public final class SystemMessage {
 
         /**
          * <p>The timestamp when the message was sent.</p>
+         * <p>The timestamp when the message was sent.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -187,6 +202,7 @@ public final class SystemMessage {
         }
 
         /**
+         * <p>The number of seconds from the start of the conversation.</p>
          * <p>The number of seconds from the start of the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

@@ -115,6 +115,9 @@ public final class Oauth2AuthenticationSession {
             return this;
         }
 
+        /**
+         * <p>This is the OAuth2 access token.</p>
+         */
         @JsonSetter(value = "accessToken", nulls = Nulls.SKIP)
         public Builder accessToken(Optional<String> accessToken) {
             this.accessToken = accessToken;
@@ -126,6 +129,9 @@ public final class Oauth2AuthenticationSession {
             return this;
         }
 
+        /**
+         * <p>This is the OAuth2 access token expiration.</p>
+         */
         @JsonSetter(value = "expiresAt", nulls = Nulls.SKIP)
         public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
             this.expiresAt = expiresAt;
@@ -137,6 +143,9 @@ public final class Oauth2AuthenticationSession {
             return this;
         }
 
+        /**
+         * <p>This is the OAuth2 refresh token.</p>
+         */
         @JsonSetter(value = "refreshToken", nulls = Nulls.SKIP)
         public Builder refreshToken(Optional<String> refreshToken) {
             this.refreshToken = refreshToken;

@@ -83,6 +83,9 @@ public final class TestSuiteTestsPaginatedResponse {
     }
 
     public interface MetadataStage {
+        /**
+         * <p>Metadata about the pagination.</p>
+         */
         _FinalStage metadata(@NotNull PaginationMeta metadata);
 
         Builder from(TestSuiteTestsPaginatedResponse other);
@@ -91,6 +94,9 @@ public final class TestSuiteTestsPaginatedResponse {
     public interface _FinalStage {
         TestSuiteTestsPaginatedResponse build();
 
+        /**
+         * <p>A list of test suite tests.</p>
+         */
         _FinalStage results(List<TestSuiteTestsPaginatedResponseResultsItem> results);
 
         _FinalStage addResults(TestSuiteTestsPaginatedResponseResultsItem results);
@@ -117,6 +123,7 @@ public final class TestSuiteTestsPaginatedResponse {
         }
 
         /**
+         * <p>Metadata about the pagination.</p>
          * <p>Metadata about the pagination.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -147,6 +154,9 @@ public final class TestSuiteTestsPaginatedResponse {
             return this;
         }
 
+        /**
+         * <p>A list of test suite tests.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public _FinalStage results(List<TestSuiteTestsPaginatedResponseResultsItem> results) {

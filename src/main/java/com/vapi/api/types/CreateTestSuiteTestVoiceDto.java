@@ -111,6 +111,9 @@ public final class CreateTestSuiteTestVoiceDto {
     }
 
     public interface ScriptStage {
+        /**
+         * <p>This is the script to be used for the voice test.</p>
+         */
         _FinalStage script(@NotNull String script);
 
         Builder from(CreateTestSuiteTestVoiceDto other);
@@ -119,16 +122,25 @@ public final class CreateTestSuiteTestVoiceDto {
     public interface _FinalStage {
         CreateTestSuiteTestVoiceDto build();
 
+        /**
+         * <p>These are the scorers used to evaluate the test.</p>
+         */
         _FinalStage scorers(List<TestSuiteTestScorerAi> scorers);
 
         _FinalStage addScorers(TestSuiteTestScorerAi scorers);
 
         _FinalStage addAllScorers(List<TestSuiteTestScorerAi> scorers);
 
+        /**
+         * <p>This is the number of attempts allowed for the test.</p>
+         */
         _FinalStage numAttempts(Optional<Double> numAttempts);
 
         _FinalStage numAttempts(Double numAttempts);
 
+        /**
+         * <p>This is the name of the test.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -160,6 +172,7 @@ public final class CreateTestSuiteTestVoiceDto {
 
         /**
          * <p>This is the script to be used for the voice test.</p>
+         * <p>This is the script to be used for the voice test.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -179,6 +192,9 @@ public final class CreateTestSuiteTestVoiceDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the test.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -196,6 +212,9 @@ public final class CreateTestSuiteTestVoiceDto {
             return this;
         }
 
+        /**
+         * <p>This is the number of attempts allowed for the test.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "numAttempts", nulls = Nulls.SKIP)
         public _FinalStage numAttempts(Optional<Double> numAttempts) {
@@ -223,6 +242,9 @@ public final class CreateTestSuiteTestVoiceDto {
             return this;
         }
 
+        /**
+         * <p>These are the scorers used to evaluate the test.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "scorers", nulls = Nulls.SKIP)
         public _FinalStage scorers(List<TestSuiteTestScorerAi> scorers) {

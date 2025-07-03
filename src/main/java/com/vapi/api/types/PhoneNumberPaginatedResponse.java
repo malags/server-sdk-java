@@ -83,6 +83,9 @@ public final class PhoneNumberPaginatedResponse {
     }
 
     public interface MetadataStage {
+        /**
+         * <p>Metadata about the pagination.</p>
+         */
         _FinalStage metadata(@NotNull PaginationMeta metadata);
 
         Builder from(PhoneNumberPaginatedResponse other);
@@ -91,6 +94,9 @@ public final class PhoneNumberPaginatedResponse {
     public interface _FinalStage {
         PhoneNumberPaginatedResponse build();
 
+        /**
+         * <p>A list of phone numbers, which can be of any provider type.</p>
+         */
         _FinalStage results(List<PhoneNumberPaginatedResponseResultsItem> results);
 
         _FinalStage addResults(PhoneNumberPaginatedResponseResultsItem results);
@@ -117,6 +123,7 @@ public final class PhoneNumberPaginatedResponse {
         }
 
         /**
+         * <p>Metadata about the pagination.</p>
          * <p>Metadata about the pagination.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -147,6 +154,9 @@ public final class PhoneNumberPaginatedResponse {
             return this;
         }
 
+        /**
+         * <p>A list of phone numbers, which can be of any provider type.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public _FinalStage results(List<PhoneNumberPaginatedResponseResultsItem> results) {

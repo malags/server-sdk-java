@@ -237,6 +237,15 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
         public Builder fallbackDestination(Optional<UpdateVapiPhoneNumberDtoFallbackDestination> fallbackDestination) {
             this.fallbackDestination = fallbackDestination;
@@ -248,6 +257,9 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public Builder hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
             this.hooks = hooks;
@@ -259,6 +271,9 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -270,6 +285,10 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -281,6 +300,10 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public Builder workflowId(Optional<String> workflowId) {
             this.workflowId = workflowId;
@@ -292,6 +315,10 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -303,6 +330,15 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public Builder server(Optional<Server> server) {
             this.server = server;
@@ -314,6 +350,10 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the SIP URI of the phone number. You can SIP INVITE this. The assistant attached to this number will answer.</p>
+         * <p>This is case-insensitive.</p>
+         */
         @JsonSetter(value = "sipUri", nulls = Nulls.SKIP)
         public Builder sipUri(Optional<String> sipUri) {
             this.sipUri = sipUri;
@@ -325,6 +365,10 @@ public final class UpdateVapiPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This enables authentication for incoming SIP INVITE requests to the <code>sipUri</code>.</p>
+         * <p>If not set, any username/password to the 401 challenge of the SIP INVITE will be accepted.</p>
+         */
         @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
         public Builder authentication(Optional<SipAuthentication> authentication) {
             this.authentication = authentication;

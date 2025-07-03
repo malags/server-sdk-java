@@ -20,6 +20,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientInboundMessageSay.Builder.class)
 public final class ClientInboundMessageSay {
+    private final Optional<Boolean> interruptAssistantEnabled;
+
     private final Optional<String> content;
 
     private final Optional<Boolean> endCallAfterSpoken;
@@ -29,14 +31,25 @@ public final class ClientInboundMessageSay {
     private final Map<String, Object> additionalProperties;
 
     private ClientInboundMessageSay(
+            Optional<Boolean> interruptAssistantEnabled,
             Optional<String> content,
             Optional<Boolean> endCallAfterSpoken,
             Optional<Boolean> interruptionsEnabled,
             Map<String, Object> additionalProperties) {
+        this.interruptAssistantEnabled = interruptAssistantEnabled;
         this.content = content;
         this.endCallAfterSpoken = endCallAfterSpoken;
         this.interruptionsEnabled = interruptionsEnabled;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the flag for whether the message should replace existing assistant speech.
+     * <p>@default false</p>
+     */
+    @JsonProperty("interruptAssistantEnabled")
+    public Optional<Boolean> getInterruptAssistantEnabled() {
+        return interruptAssistantEnabled;
     }
 
     /**
@@ -56,7 +69,7 @@ public final class ClientInboundMessageSay {
     }
 
     /**
-     * @return This is the flag for whether the message is interruptible.
+     * @return This is the flag for whether the message is interruptible by the user.
      */
     @JsonProperty("interruptionsEnabled")
     public Optional<Boolean> getInterruptionsEnabled() {
@@ -75,14 +88,16 @@ public final class ClientInboundMessageSay {
     }
 
     private boolean equalTo(ClientInboundMessageSay other) {
-        return content.equals(other.content)
+        return interruptAssistantEnabled.equals(other.interruptAssistantEnabled)
+                && content.equals(other.content)
                 && endCallAfterSpoken.equals(other.endCallAfterSpoken)
                 && interruptionsEnabled.equals(other.interruptionsEnabled);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.content, this.endCallAfterSpoken, this.interruptionsEnabled);
+        return Objects.hash(
+                this.interruptAssistantEnabled, this.content, this.endCallAfterSpoken, this.interruptionsEnabled);
     }
 
     @java.lang.Override
@@ -96,6 +111,8 @@ public final class ClientInboundMessageSay {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Boolean> interruptAssistantEnabled = Optional.empty();
+
         private Optional<String> content = Optional.empty();
 
         private Optional<Boolean> endCallAfterSpoken = Optional.empty();
@@ -108,12 +125,31 @@ public final class ClientInboundMessageSay {
         private Builder() {}
 
         public Builder from(ClientInboundMessageSay other) {
+            interruptAssistantEnabled(other.getInterruptAssistantEnabled());
             content(other.getContent());
             endCallAfterSpoken(other.getEndCallAfterSpoken());
             interruptionsEnabled(other.getInterruptionsEnabled());
             return this;
         }
 
+        /**
+         * <p>This is the flag for whether the message should replace existing assistant speech.</p>
+         * <p>@default false</p>
+         */
+        @JsonSetter(value = "interruptAssistantEnabled", nulls = Nulls.SKIP)
+        public Builder interruptAssistantEnabled(Optional<Boolean> interruptAssistantEnabled) {
+            this.interruptAssistantEnabled = interruptAssistantEnabled;
+            return this;
+        }
+
+        public Builder interruptAssistantEnabled(Boolean interruptAssistantEnabled) {
+            this.interruptAssistantEnabled = Optional.ofNullable(interruptAssistantEnabled);
+            return this;
+        }
+
+        /**
+         * <p>This is the content to say.</p>
+         */
         @JsonSetter(value = "content", nulls = Nulls.SKIP)
         public Builder content(Optional<String> content) {
             this.content = content;
@@ -125,6 +161,9 @@ public final class ClientInboundMessageSay {
             return this;
         }
 
+        /**
+         * <p>This is the flag to end call after content is spoken.</p>
+         */
         @JsonSetter(value = "endCallAfterSpoken", nulls = Nulls.SKIP)
         public Builder endCallAfterSpoken(Optional<Boolean> endCallAfterSpoken) {
             this.endCallAfterSpoken = endCallAfterSpoken;
@@ -136,6 +175,9 @@ public final class ClientInboundMessageSay {
             return this;
         }
 
+        /**
+         * <p>This is the flag for whether the message is interruptible by the user.</p>
+         */
         @JsonSetter(value = "interruptionsEnabled", nulls = Nulls.SKIP)
         public Builder interruptionsEnabled(Optional<Boolean> interruptionsEnabled) {
             this.interruptionsEnabled = interruptionsEnabled;
@@ -148,7 +190,8 @@ public final class ClientInboundMessageSay {
         }
 
         public ClientInboundMessageSay build() {
-            return new ClientInboundMessageSay(content, endCallAfterSpoken, interruptionsEnabled, additionalProperties);
+            return new ClientInboundMessageSay(
+                    interruptAssistantEnabled, content, endCallAfterSpoken, interruptionsEnabled, additionalProperties);
         }
     }
 }

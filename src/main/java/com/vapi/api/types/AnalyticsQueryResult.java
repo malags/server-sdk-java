@@ -101,18 +101,33 @@ public final class AnalyticsQueryResult {
     }
 
     public interface NameStage {
+        /**
+         * <p>This is the unique key for the query.</p>
+         */
         TimeRangeStage name(@NotNull String name);
 
         Builder from(AnalyticsQueryResult other);
     }
 
     public interface TimeRangeStage {
+        /**
+         * <p>This is the time range for the query.</p>
+         */
         _FinalStage timeRange(@NotNull TimeRange timeRange);
     }
 
     public interface _FinalStage {
         AnalyticsQueryResult build();
 
+        /**
+         * <p>This is the result of the query, a list of unique groups with result of their aggregations.</p>
+         * <p>Example:
+         * &quot;result&quot;: [
+         * { &quot;date&quot;: &quot;2023-01-01&quot;, &quot;assistantId&quot;: &quot;123&quot;, &quot;endedReason&quot;: &quot;customer-ended-call&quot;, &quot;sumDuration&quot;: 120, &quot;avgCost&quot;: 10.5 },
+         * { &quot;date&quot;: &quot;2023-01-02&quot;, &quot;assistantId&quot;: &quot;123&quot;, &quot;endedReason&quot;: &quot;customer-did-not-give-microphone-permission&quot;, &quot;sumDuration&quot;: 0, &quot;avgCost&quot;: 0 },
+         * // Additional results
+         * ]</p>
+         */
         _FinalStage result(List<Map<String, Object>> result);
 
         _FinalStage addResult(Map<String, Object> result);
@@ -143,6 +158,7 @@ public final class AnalyticsQueryResult {
 
         /**
          * <p>This is the unique key for the query.</p>
+         * <p>This is the unique key for the query.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -153,6 +169,7 @@ public final class AnalyticsQueryResult {
         }
 
         /**
+         * <p>This is the time range for the query.</p>
          * <p>This is the time range for the query.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -195,6 +212,15 @@ public final class AnalyticsQueryResult {
             return this;
         }
 
+        /**
+         * <p>This is the result of the query, a list of unique groups with result of their aggregations.</p>
+         * <p>Example:
+         * &quot;result&quot;: [
+         * { &quot;date&quot;: &quot;2023-01-01&quot;, &quot;assistantId&quot;: &quot;123&quot;, &quot;endedReason&quot;: &quot;customer-ended-call&quot;, &quot;sumDuration&quot;: 120, &quot;avgCost&quot;: 10.5 },
+         * { &quot;date&quot;: &quot;2023-01-02&quot;, &quot;assistantId&quot;: &quot;123&quot;, &quot;endedReason&quot;: &quot;customer-did-not-give-microphone-permission&quot;, &quot;sumDuration&quot;: 0, &quot;avgCost&quot;: 0 },
+         * // Additional results
+         * ]</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "result", nulls = Nulls.SKIP)
         public _FinalStage result(List<Map<String, Object>> result) {

@@ -32,6 +32,10 @@ public final class CreateCustomerDto {
 
     private final Optional<String> name;
 
+    private final Optional<String> email;
+
+    private final Optional<String> externalId;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateCustomerDto(
@@ -41,6 +45,8 @@ public final class CreateCustomerDto {
             Optional<String> number,
             Optional<String> sipUri,
             Optional<String> name,
+            Optional<String> email,
+            Optional<String> externalId,
             Map<String, Object> additionalProperties) {
         this.numberE164CheckEnabled = numberE164CheckEnabled;
         this.extension = extension;
@@ -48,6 +54,8 @@ public final class CreateCustomerDto {
         this.number = number;
         this.sipUri = sipUri;
         this.name = name;
+        this.email = email;
+        this.externalId = externalId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -108,6 +116,22 @@ public final class CreateCustomerDto {
         return name;
     }
 
+    /**
+     * @return This is the email of the customer.
+     */
+    @JsonProperty("email")
+    public Optional<String> getEmail() {
+        return email;
+    }
+
+    /**
+     * @return This is the external ID of the customer.
+     */
+    @JsonProperty("externalId")
+    public Optional<String> getExternalId() {
+        return externalId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -125,7 +149,9 @@ public final class CreateCustomerDto {
                 && assistantOverrides.equals(other.assistantOverrides)
                 && number.equals(other.number)
                 && sipUri.equals(other.sipUri)
-                && name.equals(other.name);
+                && name.equals(other.name)
+                && email.equals(other.email)
+                && externalId.equals(other.externalId);
     }
 
     @java.lang.Override
@@ -136,7 +162,9 @@ public final class CreateCustomerDto {
                 this.assistantOverrides,
                 this.number,
                 this.sipUri,
-                this.name);
+                this.name,
+                this.email,
+                this.externalId);
     }
 
     @java.lang.Override
@@ -162,6 +190,10 @@ public final class CreateCustomerDto {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<String> email = Optional.empty();
+
+        private Optional<String> externalId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -174,9 +206,21 @@ public final class CreateCustomerDto {
             number(other.getNumber());
             sipUri(other.getSipUri());
             name(other.getName());
+            email(other.getEmail());
+            externalId(other.getExternalId());
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle the E164 check for the <code>number</code> field. This is an advanced property which should be used if you know your use case requires it.</p>
+         * <p>Use cases:</p>
+         * <ul>
+         * <li><code>false</code>: To allow non-E164 numbers like <code>+001234567890</code>, <code>1234</code>, or <code>abc</code>. This is useful for dialing out to non-E164 numbers on your SIP trunks.</li>
+         * <li><code>true</code> (default): To allow only E164 numbers like <code>+14155551234</code>. This is standard for PSTN calls.</li>
+         * </ul>
+         * <p>If <code>false</code>, the <code>number</code> is still required to only contain alphanumeric characters (regex: <code>/^\+?[a-zA-Z0-9]+$/</code>).</p>
+         * <p>@default true (E164 check is enabled)</p>
+         */
         @JsonSetter(value = "numberE164CheckEnabled", nulls = Nulls.SKIP)
         public Builder numberE164CheckEnabled(Optional<Boolean> numberE164CheckEnabled) {
             this.numberE164CheckEnabled = numberE164CheckEnabled;
@@ -188,6 +232,9 @@ public final class CreateCustomerDto {
             return this;
         }
 
+        /**
+         * <p>This is the extension that will be dialed after the call is answered.</p>
+         */
         @JsonSetter(value = "extension", nulls = Nulls.SKIP)
         public Builder extension(Optional<String> extension) {
             this.extension = extension;
@@ -199,6 +246,10 @@ public final class CreateCustomerDto {
             return this;
         }
 
+        /**
+         * <p>These are the overrides for the assistant's settings and template variables specific to this customer.
+         * This allows customization of the assistant's behavior for individual customers in batch calls.</p>
+         */
         @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
         public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
             this.assistantOverrides = assistantOverrides;
@@ -210,6 +261,9 @@ public final class CreateCustomerDto {
             return this;
         }
 
+        /**
+         * <p>This is the number of the customer.</p>
+         */
         @JsonSetter(value = "number", nulls = Nulls.SKIP)
         public Builder number(Optional<String> number) {
             this.number = number;
@@ -221,6 +275,9 @@ public final class CreateCustomerDto {
             return this;
         }
 
+        /**
+         * <p>This is the SIP URI of the customer.</p>
+         */
         @JsonSetter(value = "sipUri", nulls = Nulls.SKIP)
         public Builder sipUri(Optional<String> sipUri) {
             this.sipUri = sipUri;
@@ -232,6 +289,10 @@ public final class CreateCustomerDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the customer. This is just for your own reference.</p>
+         * <p>For SIP inbound calls, this is extracted from the <code>From</code> SIP header with format <code>&quot;Display Name&quot; &lt;sip:username@domain&gt;</code>.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -243,9 +304,45 @@ public final class CreateCustomerDto {
             return this;
         }
 
+        /**
+         * <p>This is the email of the customer.</p>
+         */
+        @JsonSetter(value = "email", nulls = Nulls.SKIP)
+        public Builder email(Optional<String> email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = Optional.ofNullable(email);
+            return this;
+        }
+
+        /**
+         * <p>This is the external ID of the customer.</p>
+         */
+        @JsonSetter(value = "externalId", nulls = Nulls.SKIP)
+        public Builder externalId(Optional<String> externalId) {
+            this.externalId = externalId;
+            return this;
+        }
+
+        public Builder externalId(String externalId) {
+            this.externalId = Optional.ofNullable(externalId);
+            return this;
+        }
+
         public CreateCustomerDto build() {
             return new CreateCustomerDto(
-                    numberE164CheckEnabled, extension, assistantOverrides, number, sipUri, name, additionalProperties);
+                    numberE164CheckEnabled,
+                    extension,
+                    assistantOverrides,
+                    number,
+                    sipUri,
+                    name,
+                    email,
+                    externalId,
+                    additionalProperties);
         }
     }
 }

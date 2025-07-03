@@ -95,6 +95,9 @@ public final class CreateSesameVoiceDto {
             return this;
         }
 
+        /**
+         * <p>The name of the voice.</p>
+         */
         @JsonSetter(value = "voiceName", nulls = Nulls.SKIP)
         public Builder voiceName(Optional<String> voiceName) {
             this.voiceName = voiceName;
@@ -106,6 +109,9 @@ public final class CreateSesameVoiceDto {
             return this;
         }
 
+        /**
+         * <p>The transcript of the utterance.</p>
+         */
         @JsonSetter(value = "transcription", nulls = Nulls.SKIP)
         public Builder transcription(Optional<String> transcription) {
             this.transcription = transcription;

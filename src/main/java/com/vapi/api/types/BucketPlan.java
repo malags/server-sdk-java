@@ -63,6 +63,7 @@ public final class BucketPlan {
      * <li>If <code>credential.type</code> is <code>aws</code>, then this is required.</li>
      * <li>If <code>credential.type</code> is <code>gcp</code>, then this is optional since GCP allows buckets to be accessed without a region but region is required for data residency requirements. Read here: https://cloud.google.com/storage/docs/request-endpoints</li>
      * </ul>
+     * <p>This overrides the <code>credential.region</code> field if it is provided.</p>
      */
     @JsonProperty("region")
     public Optional<String> getRegion() {
@@ -144,6 +145,9 @@ public final class BucketPlan {
     }
 
     public interface NameStage {
+        /**
+         * <p>This is the name of the bucket.</p>
+         */
         _FinalStage name(@NotNull String name);
 
         Builder from(BucketPlan other);
@@ -152,18 +156,53 @@ public final class BucketPlan {
     public interface _FinalStage {
         BucketPlan build();
 
+        /**
+         * <p>This is the region of the bucket.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If <code>credential.type</code> is <code>aws</code>, then this is required.</li>
+         * <li>If <code>credential.type</code> is <code>gcp</code>, then this is optional since GCP allows buckets to be accessed without a region but region is required for data residency requirements. Read here: https://cloud.google.com/storage/docs/request-endpoints</li>
+         * </ul>
+         * <p>This overrides the <code>credential.region</code> field if it is provided.</p>
+         */
         _FinalStage region(Optional<String> region);
 
         _FinalStage region(String region);
 
+        /**
+         * <p>This is the path where call artifacts will be stored.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To store call artifacts in a specific folder, set this to the full path. Eg. &quot;/folder-name1/folder-name2&quot;.</li>
+         * <li>To store call artifacts in the root of the bucket, leave this blank.</li>
+         * </ul>
+         * <p>@default &quot;/&quot;</p>
+         */
         _FinalStage path(Optional<String> path);
 
         _FinalStage path(String path);
 
+        /**
+         * <p>This is the HMAC access key offered by GCP for interoperability with S3 clients. Here is the guide on how to create: https://cloud.google.com/storage/docs/authentication/managing-hmackeys#console</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If <code>credential.type</code> is <code>gcp</code>, then this is required.</li>
+         * <li>If <code>credential.type</code> is <code>aws</code>, then this is not required since credential.awsAccessKeyId is used instead.</li>
+         * </ul>
+         */
         _FinalStage hmacAccessKey(Optional<String> hmacAccessKey);
 
         _FinalStage hmacAccessKey(String hmacAccessKey);
 
+        /**
+         * <p>This is the secret for the HMAC access key. Here is the guide on how to create: https://cloud.google.com/storage/docs/authentication/managing-hmackeys#console</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If <code>credential.type</code> is <code>gcp</code>, then this is required.</li>
+         * <li>If <code>credential.type</code> is <code>aws</code>, then this is not required since credential.awsSecretAccessKey is used instead.</li>
+         * </ul>
+         * <p>Note: This is not returned in the API.</p>
+         */
         _FinalStage hmacSecret(Optional<String> hmacSecret);
 
         _FinalStage hmacSecret(String hmacSecret);
@@ -198,6 +237,7 @@ public final class BucketPlan {
 
         /**
          * <p>This is the name of the bucket.</p>
+         * <p>This is the name of the bucket.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -223,6 +263,15 @@ public final class BucketPlan {
             return this;
         }
 
+        /**
+         * <p>This is the secret for the HMAC access key. Here is the guide on how to create: https://cloud.google.com/storage/docs/authentication/managing-hmackeys#console</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If <code>credential.type</code> is <code>gcp</code>, then this is required.</li>
+         * <li>If <code>credential.type</code> is <code>aws</code>, then this is not required since credential.awsSecretAccessKey is used instead.</li>
+         * </ul>
+         * <p>Note: This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hmacSecret", nulls = Nulls.SKIP)
         public _FinalStage hmacSecret(Optional<String> hmacSecret) {
@@ -245,6 +294,14 @@ public final class BucketPlan {
             return this;
         }
 
+        /**
+         * <p>This is the HMAC access key offered by GCP for interoperability with S3 clients. Here is the guide on how to create: https://cloud.google.com/storage/docs/authentication/managing-hmackeys#console</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If <code>credential.type</code> is <code>gcp</code>, then this is required.</li>
+         * <li>If <code>credential.type</code> is <code>aws</code>, then this is not required since credential.awsAccessKeyId is used instead.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "hmacAccessKey", nulls = Nulls.SKIP)
         public _FinalStage hmacAccessKey(Optional<String> hmacAccessKey) {
@@ -268,6 +325,15 @@ public final class BucketPlan {
             return this;
         }
 
+        /**
+         * <p>This is the path where call artifacts will be stored.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To store call artifacts in a specific folder, set this to the full path. Eg. &quot;/folder-name1/folder-name2&quot;.</li>
+         * <li>To store call artifacts in the root of the bucket, leave this blank.</li>
+         * </ul>
+         * <p>@default &quot;/&quot;</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "path", nulls = Nulls.SKIP)
         public _FinalStage path(Optional<String> path) {
@@ -282,6 +348,7 @@ public final class BucketPlan {
          * <li>If <code>credential.type</code> is <code>aws</code>, then this is required.</li>
          * <li>If <code>credential.type</code> is <code>gcp</code>, then this is optional since GCP allows buckets to be accessed without a region but region is required for data residency requirements. Read here: https://cloud.google.com/storage/docs/request-endpoints</li>
          * </ul>
+         * <p>This overrides the <code>credential.region</code> field if it is provided.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -290,6 +357,15 @@ public final class BucketPlan {
             return this;
         }
 
+        /**
+         * <p>This is the region of the bucket.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If <code>credential.type</code> is <code>aws</code>, then this is required.</li>
+         * <li>If <code>credential.type</code> is <code>gcp</code>, then this is optional since GCP allows buckets to be accessed without a region but region is required for data residency requirements. Read here: https://cloud.google.com/storage/docs/request-endpoints</li>
+         * </ul>
+         * <p>This overrides the <code>credential.region</code> field if it is provided.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "region", nulls = Nulls.SKIP)
         public _FinalStage region(Optional<String> region) {

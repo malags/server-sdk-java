@@ -358,6 +358,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This is the page number to return. Defaults to 1.</p>
+         */
         @JsonSetter(value = "page", nulls = Nulls.SKIP)
         public Builder page(Optional<Double> page) {
             this.page = page;
@@ -380,6 +383,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This is the sort order for pagination. Defaults to 'DESC'.</p>
+         */
         @JsonSetter(value = "sortOrder", nulls = Nulls.SKIP)
         public Builder sortOrder(Optional<TestSuiteControllerFindAllPaginatedRequestSortOrder> sortOrder) {
             this.sortOrder = sortOrder;
@@ -402,6 +408,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This is the maximum number of items to return. Defaults to 100.</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Double> limit) {
             this.limit = limit;
@@ -424,6 +433,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the createdAt is greater than the specified value.</p>
+         */
         @JsonSetter(value = "createdAtGt", nulls = Nulls.SKIP)
         public Builder createdAtGt(Optional<OffsetDateTime> createdAtGt) {
             this.createdAtGt = createdAtGt;
@@ -446,6 +458,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the createdAt is less than the specified value.</p>
+         */
         @JsonSetter(value = "createdAtLt", nulls = Nulls.SKIP)
         public Builder createdAtLt(Optional<OffsetDateTime> createdAtLt) {
             this.createdAtLt = createdAtLt;
@@ -468,6 +483,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the createdAt is greater than or equal to the specified value.</p>
+         */
         @JsonSetter(value = "createdAtGe", nulls = Nulls.SKIP)
         public Builder createdAtGe(Optional<OffsetDateTime> createdAtGe) {
             this.createdAtGe = createdAtGe;
@@ -490,6 +508,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the createdAt is less than or equal to the specified value.</p>
+         */
         @JsonSetter(value = "createdAtLe", nulls = Nulls.SKIP)
         public Builder createdAtLe(Optional<OffsetDateTime> createdAtLe) {
             this.createdAtLe = createdAtLe;
@@ -512,6 +533,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the updatedAt is greater than the specified value.</p>
+         */
         @JsonSetter(value = "updatedAtGt", nulls = Nulls.SKIP)
         public Builder updatedAtGt(Optional<OffsetDateTime> updatedAtGt) {
             this.updatedAtGt = updatedAtGt;
@@ -534,6 +558,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the updatedAt is less than the specified value.</p>
+         */
         @JsonSetter(value = "updatedAtLt", nulls = Nulls.SKIP)
         public Builder updatedAtLt(Optional<OffsetDateTime> updatedAtLt) {
             this.updatedAtLt = updatedAtLt;
@@ -556,6 +583,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the updatedAt is greater than or equal to the specified value.</p>
+         */
         @JsonSetter(value = "updatedAtGe", nulls = Nulls.SKIP)
         public Builder updatedAtGe(Optional<OffsetDateTime> updatedAtGe) {
             this.updatedAtGe = updatedAtGe;
@@ -578,6 +608,9 @@ public final class TestSuiteControllerFindAllPaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the updatedAt is less than or equal to the specified value.</p>
+         */
         @JsonSetter(value = "updatedAtLe", nulls = Nulls.SKIP)
         public Builder updatedAtLe(Optional<OffsetDateTime> updatedAtLe) {
             this.updatedAtLe = updatedAtLe;

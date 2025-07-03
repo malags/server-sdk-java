@@ -80,6 +80,9 @@ public final class CreateTestSuiteRunDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the test suite run.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

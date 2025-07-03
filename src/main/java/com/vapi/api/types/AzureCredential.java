@@ -28,6 +28,8 @@ public final class AzureCredential {
 
     private final Optional<String> apiKey;
 
+    private final Optional<Double> fallbackIndex;
+
     private final String id;
 
     private final String orgId;
@@ -46,6 +48,7 @@ public final class AzureCredential {
             AzureCredentialService service,
             Optional<AzureCredentialRegion> region,
             Optional<String> apiKey,
+            Optional<Double> fallbackIndex,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -56,6 +59,7 @@ public final class AzureCredential {
         this.service = service;
         this.region = region;
         this.apiKey = apiKey;
+        this.fallbackIndex = fallbackIndex;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -92,6 +96,14 @@ public final class AzureCredential {
     @JsonProperty("apiKey")
     public Optional<String> getApiKey() {
         return apiKey;
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -157,6 +169,7 @@ public final class AzureCredential {
         return service.equals(other.service)
                 && region.equals(other.region)
                 && apiKey.equals(other.apiKey)
+                && fallbackIndex.equals(other.fallbackIndex)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
@@ -171,6 +184,7 @@ public final class AzureCredential {
                 this.service,
                 this.region,
                 this.apiKey,
+                this.fallbackIndex,
                 this.id,
                 this.orgId,
                 this.createdAt,
@@ -189,42 +203,76 @@ public final class AzureCredential {
     }
 
     public interface ServiceStage {
+        /**
+         * <p>This is the service being used in Azure.</p>
+         */
         IdStage service(@NotNull AzureCredentialService service);
 
         Builder from(AzureCredential other);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         AzureCredential build();
 
+        /**
+         * <p>This is the region of the Azure resource.</p>
+         */
         _FinalStage region(Optional<AzureCredentialRegion> region);
 
         _FinalStage region(AzureCredentialRegion region);
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiKey(Optional<String> apiKey);
 
         _FinalStage apiKey(String apiKey);
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        _FinalStage fallbackIndex(Optional<Double> fallbackIndex);
+
+        _FinalStage fallbackIndex(Double fallbackIndex);
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.</p>
+         */
         _FinalStage bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan);
 
         _FinalStage bucketPlan(AzureBlobStorageBucketPlan bucketPlan);
@@ -247,6 +295,8 @@ public final class AzureCredential {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         private Optional<String> apiKey = Optional.empty();
 
         private Optional<AzureCredentialRegion> region = Optional.empty();
@@ -261,6 +311,7 @@ public final class AzureCredential {
             service(other.getService());
             region(other.getRegion());
             apiKey(other.getApiKey());
+            fallbackIndex(other.getFallbackIndex());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -271,6 +322,7 @@ public final class AzureCredential {
         }
 
         /**
+         * <p>This is the service being used in Azure.</p>
          * <p>This is the service being used in Azure.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -283,6 +335,7 @@ public final class AzureCredential {
 
         /**
          * <p>This is the unique identifier for the credential.</p>
+         * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -293,6 +346,7 @@ public final class AzureCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -305,6 +359,7 @@ public final class AzureCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -315,6 +370,7 @@ public final class AzureCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -335,6 +391,9 @@ public final class AzureCredential {
             return this;
         }
 
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "bucketPlan", nulls = Nulls.SKIP)
         public _FinalStage bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan) {
@@ -352,10 +411,33 @@ public final class AzureCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
             this.name = name;
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public _FinalStage fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
             return this;
         }
 
@@ -369,6 +451,9 @@ public final class AzureCredential {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public _FinalStage apiKey(Optional<String> apiKey) {
@@ -386,6 +471,9 @@ public final class AzureCredential {
             return this;
         }
 
+        /**
+         * <p>This is the region of the Azure resource.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "region", nulls = Nulls.SKIP)
         public _FinalStage region(Optional<AzureCredentialRegion> region) {
@@ -396,7 +484,17 @@ public final class AzureCredential {
         @java.lang.Override
         public AzureCredential build() {
             return new AzureCredential(
-                    service, region, apiKey, id, orgId, createdAt, updatedAt, name, bucketPlan, additionalProperties);
+                    service,
+                    region,
+                    apiKey,
+                    fallbackIndex,
+                    id,
+                    orgId,
+                    createdAt,
+                    updatedAt,
+                    name,
+                    bucketPlan,
+                    additionalProperties);
         }
     }
 }

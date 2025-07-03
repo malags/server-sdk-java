@@ -127,18 +127,30 @@ public final class CreateTwilioCredentialDto {
     public interface _FinalStage {
         CreateTwilioCredentialDto build();
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage authToken(Optional<String> authToken);
 
         _FinalStage authToken(String authToken);
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiKey(Optional<String> apiKey);
 
         _FinalStage apiKey(String apiKey);
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiSecret(Optional<String> apiSecret);
 
         _FinalStage apiSecret(String apiSecret);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -188,6 +200,9 @@ public final class CreateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -205,6 +220,9 @@ public final class CreateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "apiSecret", nulls = Nulls.SKIP)
         public _FinalStage apiSecret(Optional<String> apiSecret) {
@@ -222,6 +240,9 @@ public final class CreateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public _FinalStage apiKey(Optional<String> apiKey) {
@@ -239,6 +260,9 @@ public final class CreateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "authToken", nulls = Nulls.SKIP)
         public _FinalStage authToken(Optional<String> authToken) {

@@ -109,22 +109,34 @@ public final class CreateLangfuseCredentialDto {
     }
 
     public interface PublicKeyStage {
+        /**
+         * <p>The public key for Langfuse project. Eg: pk-lf-...</p>
+         */
         ApiKeyStage publicKey(@NotNull String publicKey);
 
         Builder from(CreateLangfuseCredentialDto other);
     }
 
     public interface ApiKeyStage {
+        /**
+         * <p>The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.</p>
+         */
         ApiUrlStage apiKey(@NotNull String apiKey);
     }
 
     public interface ApiUrlStage {
+        /**
+         * <p>The host URL for Langfuse project. Eg: https://cloud.langfuse.com</p>
+         */
         _FinalStage apiUrl(@NotNull String apiUrl);
     }
 
     public interface _FinalStage {
         CreateLangfuseCredentialDto build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -156,6 +168,7 @@ public final class CreateLangfuseCredentialDto {
 
         /**
          * <p>The public key for Langfuse project. Eg: pk-lf-...</p>
+         * <p>The public key for Langfuse project. Eg: pk-lf-...</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -167,6 +180,7 @@ public final class CreateLangfuseCredentialDto {
 
         /**
          * <p>The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.</p>
+         * <p>The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -177,6 +191,7 @@ public final class CreateLangfuseCredentialDto {
         }
 
         /**
+         * <p>The host URL for Langfuse project. Eg: https://cloud.langfuse.com</p>
          * <p>The host URL for Langfuse project. Eg: https://cloud.langfuse.com</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -197,6 +212,9 @@ public final class CreateLangfuseCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

@@ -211,6 +211,9 @@ public final class FallbackPlayHtVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the provider-specific ID that will be used.</p>
+         */
         _FinalStage voiceId(@NotNull FallbackPlayHtVoiceId voiceId);
 
         Builder from(FallbackPlayHtVoice other);
@@ -219,42 +222,72 @@ public final class FallbackPlayHtVoice {
     public interface _FinalStage {
         FallbackPlayHtVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         */
         _FinalStage speed(Optional<Double> speed);
 
         _FinalStage speed(Double speed);
 
+        /**
+         * <p>A floating point number between 0, exclusive, and 2, inclusive. If equal to null or not provided, the model's default temperature will be used. The temperature parameter controls variance. Lower temperatures result in more predictable results, higher temperatures allow each run to vary more, so the voice may sound less like the baseline voice.</p>
+         */
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
 
+        /**
+         * <p>An emotion to be applied to the speech.</p>
+         */
         _FinalStage emotion(Optional<FallbackPlayHtVoiceEmotion> emotion);
 
         _FinalStage emotion(FallbackPlayHtVoiceEmotion emotion);
 
+        /**
+         * <p>A number between 1 and 6. Use lower numbers to reduce how unique your chosen voice will be compared to other voices.</p>
+         */
         _FinalStage voiceGuidance(Optional<Double> voiceGuidance);
 
         _FinalStage voiceGuidance(Double voiceGuidance);
 
+        /**
+         * <p>A number between 1 and 30. Use lower numbers to to reduce how strong your chosen emotion will be. Higher numbers will create a very emotional performance.</p>
+         */
         _FinalStage styleGuidance(Optional<Double> styleGuidance);
 
         _FinalStage styleGuidance(Double styleGuidance);
 
+        /**
+         * <p>A number between 1 and 2. This number influences how closely the generated speech adheres to the input text. Use lower values to create more fluid speech, but with a higher chance of deviating from the input text. Higher numbers will make the generated speech more accurate to the input text, ensuring that the words spoken align closely with the provided text.</p>
+         */
         _FinalStage textGuidance(Optional<Double> textGuidance);
 
         _FinalStage textGuidance(Double textGuidance);
 
+        /**
+         * <p>Playht voice model/engine to use.</p>
+         */
         _FinalStage model(Optional<FallbackPlayHtVoiceModel> model);
 
         _FinalStage model(FallbackPlayHtVoiceModel model);
 
+        /**
+         * <p>The language to use for the speech.</p>
+         */
         _FinalStage language(Optional<FallbackPlayHtVoiceLanguage> language);
 
         _FinalStage language(FallbackPlayHtVoiceLanguage language);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -307,6 +340,7 @@ public final class FallbackPlayHtVoice {
 
         /**
          * <p>This is the provider-specific ID that will be used.</p>
+         * <p>This is the provider-specific ID that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -326,6 +360,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -343,6 +380,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>The language to use for the speech.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public _FinalStage language(Optional<FallbackPlayHtVoiceLanguage> language) {
@@ -360,6 +400,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>Playht voice model/engine to use.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<FallbackPlayHtVoiceModel> model) {
@@ -377,6 +420,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>A number between 1 and 2. This number influences how closely the generated speech adheres to the input text. Use lower values to create more fluid speech, but with a higher chance of deviating from the input text. Higher numbers will make the generated speech more accurate to the input text, ensuring that the words spoken align closely with the provided text.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "textGuidance", nulls = Nulls.SKIP)
         public _FinalStage textGuidance(Optional<Double> textGuidance) {
@@ -394,6 +440,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>A number between 1 and 30. Use lower numbers to to reduce how strong your chosen emotion will be. Higher numbers will create a very emotional performance.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "styleGuidance", nulls = Nulls.SKIP)
         public _FinalStage styleGuidance(Optional<Double> styleGuidance) {
@@ -411,6 +460,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>A number between 1 and 6. Use lower numbers to reduce how unique your chosen voice will be compared to other voices.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "voiceGuidance", nulls = Nulls.SKIP)
         public _FinalStage voiceGuidance(Optional<Double> voiceGuidance) {
@@ -428,6 +480,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>An emotion to be applied to the speech.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "emotion", nulls = Nulls.SKIP)
         public _FinalStage emotion(Optional<FallbackPlayHtVoiceEmotion> emotion) {
@@ -445,6 +500,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>A floating point number between 0, exclusive, and 2, inclusive. If equal to null or not provided, the model's default temperature will be used. The temperature parameter controls variance. Lower temperatures result in more predictable results, higher temperatures allow each run to vary more, so the voice may sound less like the baseline voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
@@ -462,6 +520,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "speed", nulls = Nulls.SKIP)
         public _FinalStage speed(Optional<Double> speed) {
@@ -479,6 +540,9 @@ public final class FallbackPlayHtVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

@@ -271,20 +271,32 @@ public final class File {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the file.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(File other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this file belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the file was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the file was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
@@ -299,6 +311,9 @@ public final class File {
 
         _FinalStage status(FileStatus status);
 
+        /**
+         * <p>This is the name of the file. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -416,6 +431,7 @@ public final class File {
 
         /**
          * <p>This is the unique identifier for the file.</p>
+         * <p>This is the unique identifier for the file.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -426,6 +442,7 @@ public final class File {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this file belongs to.</p>
          * <p>This is the unique identifier for the org that this file belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -438,6 +455,7 @@ public final class File {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the file was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the file was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -448,6 +466,7 @@ public final class File {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the file was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the file was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -611,6 +630,9 @@ public final class File {
             return this;
         }
 
+        /**
+         * <p>This is the name of the file. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

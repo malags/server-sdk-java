@@ -109,6 +109,52 @@ public final class FallbackCustomTranscriber {
     }
 
     public interface ServerStage {
+        /**
+         * <p>This is where the transcription request will be sent.</p>
+         * <p>Usage:</p>
+         * <ol>
+         * <li>
+         * <p>Vapi will initiate a websocket connection with <code>server.url</code>.</p>
+         * </li>
+         * <li>
+         * <p>Vapi will send an initial text frame with the sample rate. Format:</p>
+         * </li>
+         * </ol>
+         * <pre><code>    {
+         *       &quot;type&quot;: &quot;start&quot;,
+         *       &quot;encoding&quot;: &quot;linear16&quot;, // 16-bit raw PCM format
+         *       &quot;container&quot;: &quot;raw&quot;,
+         *       &quot;sampleRate&quot;: {{sampleRate}},
+         *       &quot;channels&quot;: 2 // customer is channel 0, assistant is channel 1
+         *     }
+         * </code></pre>
+         * <ol start="3">
+         * <li>
+         * <p>Vapi will send the audio data in 16-bit raw PCM format as binary frames.</p>
+         * </li>
+         * <li>
+         * <p>You can read the messages something like this:</p>
+         * </li>
+         * </ol>
+         * <pre><code>ws.on('message', (data, isBinary) =&gt; {
+         *   if (isBinary) {
+         *     pcmBuffer = Buffer.concat([pcmBuffer, data]);
+         *     console.log(`Received PCM data, buffer size: ${pcmBuffer.length}`);
+         *   } else {
+         *     console.log('Received message:', JSON.parse(data.toString()));
+         *   }
+         * });
+         * </code></pre>
+         * <ol start="5">
+         * <li>You will respond with transcriptions as you have them. Format:</li>
+         * </ol>
+         * <pre><code> {
+         *     &quot;type&quot;: &quot;transcriber-response&quot;,
+         *     &quot;transcription&quot;: &quot;Hello, world!&quot;,
+         *     &quot;channel&quot;: &quot;customer&quot; | &quot;assistant&quot;
+         *  }
+         * </code></pre>
+         */
         _FinalStage server(@NotNull Server server);
 
         Builder from(FallbackCustomTranscriber other);
@@ -134,6 +180,50 @@ public final class FallbackCustomTranscriber {
         }
 
         /**
+         * <p>This is where the transcription request will be sent.</p>
+         * <p>Usage:</p>
+         * <ol>
+         * <li>
+         * <p>Vapi will initiate a websocket connection with <code>server.url</code>.</p>
+         * </li>
+         * <li>
+         * <p>Vapi will send an initial text frame with the sample rate. Format:</p>
+         * </li>
+         * </ol>
+         * <pre><code>    {
+         *       &quot;type&quot;: &quot;start&quot;,
+         *       &quot;encoding&quot;: &quot;linear16&quot;, // 16-bit raw PCM format
+         *       &quot;container&quot;: &quot;raw&quot;,
+         *       &quot;sampleRate&quot;: {{sampleRate}},
+         *       &quot;channels&quot;: 2 // customer is channel 0, assistant is channel 1
+         *     }
+         * </code></pre>
+         * <ol start="3">
+         * <li>
+         * <p>Vapi will send the audio data in 16-bit raw PCM format as binary frames.</p>
+         * </li>
+         * <li>
+         * <p>You can read the messages something like this:</p>
+         * </li>
+         * </ol>
+         * <pre><code>ws.on('message', (data, isBinary) =&gt; {
+         *   if (isBinary) {
+         *     pcmBuffer = Buffer.concat([pcmBuffer, data]);
+         *     console.log(`Received PCM data, buffer size: ${pcmBuffer.length}`);
+         *   } else {
+         *     console.log('Received message:', JSON.parse(data.toString()));
+         *   }
+         * });
+         * </code></pre>
+         * <ol start="5">
+         * <li>You will respond with transcriptions as you have them. Format:</li>
+         * </ol>
+         * <pre><code> {
+         *     &quot;type&quot;: &quot;transcriber-response&quot;,
+         *     &quot;transcription&quot;: &quot;Hello, world!&quot;,
+         *     &quot;channel&quot;: &quot;customer&quot; | &quot;assistant&quot;
+         *  }
+         * </code></pre>
          * <p>This is where the transcription request will be sent.</p>
          * <p>Usage:</p>
          * <ol>

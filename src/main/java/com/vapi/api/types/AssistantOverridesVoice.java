@@ -86,6 +86,10 @@ public final class AssistantOverridesVoice {
         return new AssistantOverridesVoice(new SesameValue(value));
     }
 
+    public static AssistantOverridesVoice inworld(InworldVoice value) {
+        return new AssistantOverridesVoice(new InworldValue(value));
+    }
+
     public boolean isAzure() {
         return value instanceof AzureValue;
     }
@@ -144,6 +148,10 @@ public final class AssistantOverridesVoice {
 
     public boolean isSesame() {
         return value instanceof SesameValue;
+    }
+
+    public boolean isInworld() {
+        return value instanceof InworldValue;
     }
 
     public boolean _isUnknown() {
@@ -255,6 +263,13 @@ public final class AssistantOverridesVoice {
         return Optional.empty();
     }
 
+    public Optional<InworldVoice> getInworld() {
+        if (isInworld()) {
+            return Optional.of(((InworldValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -298,6 +313,8 @@ public final class AssistantOverridesVoice {
 
         T visitSesame(SesameVoice sesame);
 
+        T visitInworld(InworldVoice inworld);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -317,7 +334,8 @@ public final class AssistantOverridesVoice {
         @JsonSubTypes.Type(SmallestAiValue.class),
         @JsonSubTypes.Type(TavusValue.class),
         @JsonSubTypes.Type(VapiValue.class),
-        @JsonSubTypes.Type(SesameValue.class)
+        @JsonSubTypes.Type(SesameValue.class),
+        @JsonSubTypes.Type(InworldValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -895,6 +913,45 @@ public final class AssistantOverridesVoice {
         }
 
         private boolean equalTo(SesameValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "AssistantOverridesVoice{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("inworld")
+    @JsonIgnoreProperties("provider")
+    private static final class InworldValue implements Value {
+        @JsonUnwrapped
+        private InworldVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private InworldValue() {}
+
+        private InworldValue(InworldVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitInworld(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof InworldValue && equalTo((InworldValue) other);
+        }
+
+        private boolean equalTo(InworldValue other) {
             return value.equals(other.value);
         }
 

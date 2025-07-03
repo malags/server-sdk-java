@@ -129,6 +129,9 @@ public final class TransferDestinationSip {
     }
 
     public interface SipUriStage {
+        /**
+         * <p>This is the SIP URI to transfer the call to.</p>
+         */
         _FinalStage sipUri(@NotNull String sipUri);
 
         Builder from(TransferDestinationSip other);
@@ -137,18 +140,37 @@ public final class TransferDestinationSip {
     public interface _FinalStage {
         TransferDestinationSip build();
 
+        /**
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+         */
         _FinalStage message(Optional<TransferDestinationSipMessage> message);
 
         _FinalStage message(TransferDestinationSipMessage message);
 
+        /**
+         * <p>This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to <code>blind-transfer</code>.</p>
+         * <p>@default <code>transferPlan.mode='blind-transfer'</code></p>
+         */
         _FinalStage transferPlan(Optional<TransferPlan> transferPlan);
 
         _FinalStage transferPlan(TransferPlan transferPlan);
 
+        /**
+         * <p>These are custom headers to be added to SIP refer during transfer call.</p>
+         */
         _FinalStage sipHeaders(Optional<Map<String, Object>> sipHeaders);
 
         _FinalStage sipHeaders(Map<String, Object> sipHeaders);
 
+        /**
+         * <p>This is the description of the destination, used by the AI to choose when and how to transfer the call.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
@@ -183,6 +205,7 @@ public final class TransferDestinationSip {
 
         /**
          * <p>This is the SIP URI to transfer the call to.</p>
+         * <p>This is the SIP URI to transfer the call to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -202,6 +225,9 @@ public final class TransferDestinationSip {
             return this;
         }
 
+        /**
+         * <p>This is the description of the destination, used by the AI to choose when and how to transfer the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
@@ -219,6 +245,9 @@ public final class TransferDestinationSip {
             return this;
         }
 
+        /**
+         * <p>These are custom headers to be added to SIP refer during transfer call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "sipHeaders", nulls = Nulls.SKIP)
         public _FinalStage sipHeaders(Optional<Map<String, Object>> sipHeaders) {
@@ -237,6 +266,10 @@ public final class TransferDestinationSip {
             return this;
         }
 
+        /**
+         * <p>This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to <code>blind-transfer</code>.</p>
+         * <p>@default <code>transferPlan.mode='blind-transfer'</code></p>
+         */
         @java.lang.Override
         @JsonSetter(value = "transferPlan", nulls = Nulls.SKIP)
         public _FinalStage transferPlan(Optional<TransferPlan> transferPlan) {
@@ -260,6 +293,15 @@ public final class TransferDestinationSip {
             return this;
         }
 
+        /**
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
         public _FinalStage message(Optional<TransferDestinationSipMessage> message) {

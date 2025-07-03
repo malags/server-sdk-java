@@ -86,6 +86,9 @@ public final class ClientInboundMessageAddMessage {
     }
 
     public interface MessageStage {
+        /**
+         * <p>This is the message to add to the conversation.</p>
+         */
         _FinalStage message(@NotNull OpenAiMessage message);
 
         Builder from(ClientInboundMessageAddMessage other);
@@ -94,6 +97,15 @@ public final class ClientInboundMessageAddMessage {
     public interface _FinalStage {
         ClientInboundMessageAddMessage build();
 
+        /**
+         * <p>This is the flag to trigger a response, or to insert the message into the conversation history silently. Defaults to <code>true</code>.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Use <code>true</code> to trigger a response.</li>
+         * <li>Use <code>false</code> to insert the message into the conversation history silently.</li>
+         * </ul>
+         * <p>@default true</p>
+         */
         _FinalStage triggerResponseEnabled(Optional<Boolean> triggerResponseEnabled);
 
         _FinalStage triggerResponseEnabled(Boolean triggerResponseEnabled);
@@ -118,6 +130,7 @@ public final class ClientInboundMessageAddMessage {
         }
 
         /**
+         * <p>This is the message to add to the conversation.</p>
          * <p>This is the message to add to the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -144,6 +157,15 @@ public final class ClientInboundMessageAddMessage {
             return this;
         }
 
+        /**
+         * <p>This is the flag to trigger a response, or to insert the message into the conversation history silently. Defaults to <code>true</code>.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Use <code>true</code> to trigger a response.</li>
+         * <li>Use <code>false</code> to insert the message into the conversation history silently.</li>
+         * </ul>
+         * <p>@default true</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "triggerResponseEnabled", nulls = Nulls.SKIP)
         public _FinalStage triggerResponseEnabled(Optional<Boolean> triggerResponseEnabled) {

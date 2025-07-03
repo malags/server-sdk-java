@@ -87,6 +87,9 @@ public final class TransferFallbackPlan {
     }
 
     public interface MessageStage {
+        /**
+         * <p>This is the message the assistant will deliver to the customer if the transfer fails.</p>
+         */
         _FinalStage message(@NotNull TransferFallbackPlanMessage message);
 
         Builder from(TransferFallbackPlan other);
@@ -95,6 +98,14 @@ public final class TransferFallbackPlan {
     public interface _FinalStage {
         TransferFallbackPlan build();
 
+        /**
+         * <p>This controls what happens after delivering the failure message to the customer.</p>
+         * <ul>
+         * <li>true: End the call after delivering the failure message (default)</li>
+         * <li>false: Keep the assistant on the call to continue handling the customer's request</li>
+         * </ul>
+         * <p>@default true</p>
+         */
         _FinalStage endCallEnabled(Optional<Boolean> endCallEnabled);
 
         _FinalStage endCallEnabled(Boolean endCallEnabled);
@@ -120,6 +131,7 @@ public final class TransferFallbackPlan {
 
         /**
          * <p>This is the message the assistant will deliver to the customer if the transfer fails.</p>
+         * <p>This is the message the assistant will deliver to the customer if the transfer fails.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -144,6 +156,14 @@ public final class TransferFallbackPlan {
             return this;
         }
 
+        /**
+         * <p>This controls what happens after delivering the failure message to the customer.</p>
+         * <ul>
+         * <li>true: End the call after delivering the failure message (default)</li>
+         * <li>false: Keep the assistant on the call to continue handling the customer's request</li>
+         * </ul>
+         * <p>@default true</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "endCallEnabled", nulls = Nulls.SKIP)
         public _FinalStage endCallEnabled(Optional<Boolean> endCallEnabled) {

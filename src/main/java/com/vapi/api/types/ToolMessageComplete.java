@@ -169,6 +169,15 @@ public final class ToolMessageComplete {
             return this;
         }
 
+        /**
+         * <p>This is an alternative to the <code>content</code> property. It allows to specify variants of the same content, one per language.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If your assistants are multilingual, you can provide content for each language.</li>
+         * <li>If you don't provide content for a language, the first item in the array will be automatically translated to the active language at that moment.</li>
+         * </ul>
+         * <p>This will override the <code>content</code> property.</p>
+         */
         @JsonSetter(value = "contents", nulls = Nulls.SKIP)
         public Builder contents(Optional<List<TextContent>> contents) {
             this.contents = contents;
@@ -180,6 +189,23 @@ public final class ToolMessageComplete {
             return this;
         }
 
+        /**
+         * <p>This is optional and defaults to &quot;assistant&quot;.</p>
+         * <p>When role=assistant, <code>content</code> is said out loud.</p>
+         * <p>When role=system, <code>content</code> is passed to the model in a system message. Example:
+         * system: default one
+         * assistant:
+         * user:
+         * assistant:
+         * user:
+         * assistant:
+         * user:
+         * assistant: tool called
+         * tool: your server response
+         * &lt;--- system prompt as hint
+         * ---&gt; model generates response which is spoken
+         * This is useful when you want to provide a hint to the model about what to say next.</p>
+         */
         @JsonSetter(value = "role", nulls = Nulls.SKIP)
         public Builder role(Optional<ToolMessageCompleteRole> role) {
             this.role = role;
@@ -191,6 +217,11 @@ public final class ToolMessageComplete {
             return this;
         }
 
+        /**
+         * <p>This is an optional boolean that if true, the call will end after the message is spoken. Default is false.</p>
+         * <p>This is ignored if <code>role</code> is set to <code>system</code>.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "endCallAfterSpokenEnabled", nulls = Nulls.SKIP)
         public Builder endCallAfterSpokenEnabled(Optional<Boolean> endCallAfterSpokenEnabled) {
             this.endCallAfterSpokenEnabled = endCallAfterSpokenEnabled;
@@ -202,6 +233,9 @@ public final class ToolMessageComplete {
             return this;
         }
 
+        /**
+         * <p>This is the content that the assistant says when this message is triggered.</p>
+         */
         @JsonSetter(value = "content", nulls = Nulls.SKIP)
         public Builder content(Optional<String> content) {
             this.content = content;
@@ -213,6 +247,9 @@ public final class ToolMessageComplete {
             return this;
         }
 
+        /**
+         * <p>This is an optional array of conditions that the tool call arguments must meet in order for this message to be triggered.</p>
+         */
         @JsonSetter(value = "conditions", nulls = Nulls.SKIP)
         public Builder conditions(Optional<List<Condition>> conditions) {
             this.conditions = conditions;

@@ -155,6 +155,9 @@ public final class CartesiaVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>The ID of the particular voice you want to use.</p>
+         */
         _FinalStage voiceId(@NotNull String voiceId);
 
         Builder from(CartesiaVoice other);
@@ -163,26 +166,44 @@ public final class CartesiaVoice {
     public interface _FinalStage {
         CartesiaVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the model that will be used. This is optional and will default to the correct model for the voiceId.</p>
+         */
         _FinalStage model(Optional<CartesiaVoiceModel> model);
 
         _FinalStage model(CartesiaVoiceModel model);
 
+        /**
+         * <p>This is the language that will be used. This is optional and will default to the correct language for the voiceId.</p>
+         */
         _FinalStage language(Optional<CartesiaVoiceLanguage> language);
 
         _FinalStage language(CartesiaVoiceLanguage language);
 
+        /**
+         * <p>Experimental controls for Cartesia voice generation</p>
+         */
         _FinalStage experimentalControls(Optional<CartesiaExperimentalControls> experimentalControls);
 
         _FinalStage experimentalControls(CartesiaExperimentalControls experimentalControls);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
 
         _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
@@ -223,6 +244,7 @@ public final class CartesiaVoice {
 
         /**
          * <p>The ID of the particular voice you want to use.</p>
+         * <p>The ID of the particular voice you want to use.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -242,6 +264,9 @@ public final class CartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
@@ -259,6 +284,9 @@ public final class CartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -276,6 +304,9 @@ public final class CartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>Experimental controls for Cartesia voice generation</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "experimentalControls", nulls = Nulls.SKIP)
         public _FinalStage experimentalControls(Optional<CartesiaExperimentalControls> experimentalControls) {
@@ -293,6 +324,9 @@ public final class CartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be used. This is optional and will default to the correct language for the voiceId.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public _FinalStage language(Optional<CartesiaVoiceLanguage> language) {
@@ -310,6 +344,9 @@ public final class CartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used. This is optional and will default to the correct model for the voiceId.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<CartesiaVoiceModel> model) {
@@ -327,6 +364,9 @@ public final class CartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

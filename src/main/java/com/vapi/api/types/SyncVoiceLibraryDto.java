@@ -82,6 +82,9 @@ public final class SyncVoiceLibraryDto {
             return this;
         }
 
+        /**
+         * <p>List of providers you want to sync.</p>
+         */
         @JsonSetter(value = "providers", nulls = Nulls.SKIP)
         public Builder providers(Optional<List<SyncVoiceLibraryDtoProvidersItem>> providers) {
             this.providers = providers;

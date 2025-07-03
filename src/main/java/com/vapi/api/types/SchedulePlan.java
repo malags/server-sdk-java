@@ -81,6 +81,9 @@ public final class SchedulePlan {
     }
 
     public interface EarliestAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of the earliest time the call can be scheduled.</p>
+         */
         _FinalStage earliestAt(@NotNull OffsetDateTime earliestAt);
 
         Builder from(SchedulePlan other);
@@ -89,6 +92,9 @@ public final class SchedulePlan {
     public interface _FinalStage {
         SchedulePlan build();
 
+        /**
+         * <p>This is the ISO 8601 date-time string of the latest time the call can be scheduled.</p>
+         */
         _FinalStage latestAt(Optional<OffsetDateTime> latestAt);
 
         _FinalStage latestAt(OffsetDateTime latestAt);
@@ -114,6 +120,7 @@ public final class SchedulePlan {
 
         /**
          * <p>This is the ISO 8601 date-time string of the earliest time the call can be scheduled.</p>
+         * <p>This is the ISO 8601 date-time string of the earliest time the call can be scheduled.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -133,6 +140,9 @@ public final class SchedulePlan {
             return this;
         }
 
+        /**
+         * <p>This is the ISO 8601 date-time string of the latest time the call can be scheduled.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "latestAt", nulls = Nulls.SKIP)
         public _FinalStage latestAt(Optional<OffsetDateTime> latestAt) {

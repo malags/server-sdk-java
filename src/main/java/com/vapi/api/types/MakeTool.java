@@ -23,8 +23,6 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MakeTool.Builder.class)
 public final class MakeTool {
-    private final Optional<Boolean> async;
-
     private final Optional<List<MakeToolMessagesItem>> messages;
 
     private final String id;
@@ -37,44 +35,27 @@ public final class MakeTool {
 
     private final Optional<OpenAiFunction> function;
 
-    private final Optional<Server> server;
-
     private final MakeToolMetadata metadata;
 
     private final Map<String, Object> additionalProperties;
 
     private MakeTool(
-            Optional<Boolean> async,
             Optional<List<MakeToolMessagesItem>> messages,
             String id,
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             Optional<OpenAiFunction> function,
-            Optional<Server> server,
             MakeToolMetadata metadata,
             Map<String, Object> additionalProperties) {
-        this.async = async;
         this.messages = messages;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.function = function;
-        this.server = server;
         this.metadata = metadata;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This determines if the tool is async.
-     * <p>If async, the assistant will move forward without waiting for your server to respond. This is useful if you just want to trigger something on your server.</p>
-     * <p>If sync, the assistant will wait for your server to respond. This is useful if want assistant to respond with the result from your server.</p>
-     * <p>Defaults to synchronous (<code>false</code>).</p>
-     */
-    @JsonProperty("async")
-    public Optional<Boolean> getAsync() {
-        return async;
     }
 
     /**
@@ -128,16 +109,6 @@ public final class MakeTool {
         return function;
     }
 
-    /**
-     * @return This is the server that will be hit when this tool is requested by the model.
-     * <p>All requests will be sent with the call object among other things. You can find more details in the Server URL documentation.</p>
-     * <p>This overrides the serverUrl set on the org and the phoneNumber. Order of precedence: highest tool.server.url, then assistant.serverUrl, then phoneNumber.serverUrl, then org.serverUrl.</p>
-     */
-    @JsonProperty("server")
-    public Optional<Server> getServer() {
-        return server;
-    }
-
     @JsonProperty("metadata")
     public MakeToolMetadata getMetadata() {
         return metadata;
@@ -155,29 +126,19 @@ public final class MakeTool {
     }
 
     private boolean equalTo(MakeTool other) {
-        return async.equals(other.async)
-                && messages.equals(other.messages)
+        return messages.equals(other.messages)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && function.equals(other.function)
-                && server.equals(other.server)
                 && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.async,
-                this.messages,
-                this.id,
-                this.orgId,
-                this.createdAt,
-                this.updatedAt,
-                this.function,
-                this.server,
-                this.metadata);
+                this.messages, this.id, this.orgId, this.createdAt, this.updatedAt, this.function, this.metadata);
     }
 
     @java.lang.Override
@@ -190,20 +151,32 @@ public final class MakeTool {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the tool.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(MakeTool other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the organization that this tool belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the tool was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the tool was last updated.</p>
+         */
         MetadataStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
@@ -214,21 +187,22 @@ public final class MakeTool {
     public interface _FinalStage {
         MakeTool build();
 
-        _FinalStage async(Optional<Boolean> async);
-
-        _FinalStage async(Boolean async);
-
+        /**
+         * <p>These are the messages that will be spoken to the user as the tool is running.</p>
+         * <p>For some tools, this is auto-filled based on special fields like <code>tool.destinations</code>. For others like the function tool, these can be custom configured.</p>
+         */
         _FinalStage messages(Optional<List<MakeToolMessagesItem>> messages);
 
         _FinalStage messages(List<MakeToolMessagesItem> messages);
 
+        /**
+         * <p>This is the function definition of the tool.</p>
+         * <p>For <code>endCall</code>, <code>transferCall</code>, and <code>dtmf</code> tools, this is auto-filled based on tool-specific fields like <code>tool.destinations</code>. But, even in those cases, you can provide a custom function definition for advanced use cases.</p>
+         * <p>An example of an advanced use case is if you want to customize the message that's spoken for <code>endCall</code> tool. You can specify a function where it returns an argument &quot;reason&quot;. Then, in <code>messages</code> array, you can have many &quot;request-complete&quot; messages. One of these messages will be triggered if the <code>messages[].conditions</code> matches the &quot;reason&quot; argument.</p>
+         */
         _FinalStage function(Optional<OpenAiFunction> function);
 
         _FinalStage function(OpenAiFunction function);
-
-        _FinalStage server(Optional<Server> server);
-
-        _FinalStage server(Server server);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -244,13 +218,9 @@ public final class MakeTool {
 
         private MakeToolMetadata metadata;
 
-        private Optional<Server> server = Optional.empty();
-
         private Optional<OpenAiFunction> function = Optional.empty();
 
         private Optional<List<MakeToolMessagesItem>> messages = Optional.empty();
-
-        private Optional<Boolean> async = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -259,19 +229,18 @@ public final class MakeTool {
 
         @java.lang.Override
         public Builder from(MakeTool other) {
-            async(other.getAsync());
             messages(other.getMessages());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             function(other.getFunction());
-            server(other.getServer());
             metadata(other.getMetadata());
             return this;
         }
 
         /**
+         * <p>This is the unique identifier for the tool.</p>
          * <p>This is the unique identifier for the tool.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -284,6 +253,7 @@ public final class MakeTool {
 
         /**
          * <p>This is the unique identifier for the organization that this tool belongs to.</p>
+         * <p>This is the unique identifier for the organization that this tool belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -295,6 +265,7 @@ public final class MakeTool {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the tool was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the tool was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -305,6 +276,7 @@ public final class MakeTool {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the tool was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the tool was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -323,25 +295,6 @@ public final class MakeTool {
         }
 
         /**
-         * <p>This is the server that will be hit when this tool is requested by the model.</p>
-         * <p>All requests will be sent with the call object among other things. You can find more details in the Server URL documentation.</p>
-         * <p>This overrides the serverUrl set on the org and the phoneNumber. Order of precedence: highest tool.server.url, then assistant.serverUrl, then phoneNumber.serverUrl, then org.serverUrl.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage server(Server server) {
-            this.server = Optional.ofNullable(server);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "server", nulls = Nulls.SKIP)
-        public _FinalStage server(Optional<Server> server) {
-            this.server = server;
-            return this;
-        }
-
-        /**
          * <p>This is the function definition of the tool.</p>
          * <p>For <code>endCall</code>, <code>transferCall</code>, and <code>dtmf</code> tools, this is auto-filled based on tool-specific fields like <code>tool.destinations</code>. But, even in those cases, you can provide a custom function definition for advanced use cases.</p>
          * <p>An example of an advanced use case is if you want to customize the message that's spoken for <code>endCall</code> tool. You can specify a function where it returns an argument &quot;reason&quot;. Then, in <code>messages</code> array, you can have many &quot;request-complete&quot; messages. One of these messages will be triggered if the <code>messages[].conditions</code> matches the &quot;reason&quot; argument.</p>
@@ -353,6 +306,11 @@ public final class MakeTool {
             return this;
         }
 
+        /**
+         * <p>This is the function definition of the tool.</p>
+         * <p>For <code>endCall</code>, <code>transferCall</code>, and <code>dtmf</code> tools, this is auto-filled based on tool-specific fields like <code>tool.destinations</code>. But, even in those cases, you can provide a custom function definition for advanced use cases.</p>
+         * <p>An example of an advanced use case is if you want to customize the message that's spoken for <code>endCall</code> tool. You can specify a function where it returns an argument &quot;reason&quot;. Then, in <code>messages</code> array, you can have many &quot;request-complete&quot; messages. One of these messages will be triggered if the <code>messages[].conditions</code> matches the &quot;reason&quot; argument.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "function", nulls = Nulls.SKIP)
         public _FinalStage function(Optional<OpenAiFunction> function) {
@@ -371,6 +329,10 @@ public final class MakeTool {
             return this;
         }
 
+        /**
+         * <p>These are the messages that will be spoken to the user as the tool is running.</p>
+         * <p>For some tools, this is auto-filled based on special fields like <code>tool.destinations</code>. For others like the function tool, these can be custom configured.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public _FinalStage messages(Optional<List<MakeToolMessagesItem>> messages) {
@@ -378,30 +340,9 @@ public final class MakeTool {
             return this;
         }
 
-        /**
-         * <p>This determines if the tool is async.</p>
-         * <p>If async, the assistant will move forward without waiting for your server to respond. This is useful if you just want to trigger something on your server.</p>
-         * <p>If sync, the assistant will wait for your server to respond. This is useful if want assistant to respond with the result from your server.</p>
-         * <p>Defaults to synchronous (<code>false</code>).</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage async(Boolean async) {
-            this.async = Optional.ofNullable(async);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "async", nulls = Nulls.SKIP)
-        public _FinalStage async(Optional<Boolean> async) {
-            this.async = async;
-            return this;
-        }
-
         @java.lang.Override
         public MakeTool build() {
-            return new MakeTool(
-                    async, messages, id, orgId, createdAt, updatedAt, function, server, metadata, additionalProperties);
+            return new MakeTool(messages, id, orgId, createdAt, updatedAt, function, metadata, additionalProperties);
         }
     }
 }

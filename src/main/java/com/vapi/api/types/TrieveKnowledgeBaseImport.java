@@ -74,6 +74,9 @@ public final class TrieveKnowledgeBaseImport {
     }
 
     public interface ProviderIdStage {
+        /**
+         * <p>This is the <code>datasetId</code> of the dataset on your Trieve account.</p>
+         */
         _FinalStage providerId(@NotNull String providerId);
 
         Builder from(TrieveKnowledgeBaseImport other);
@@ -99,6 +102,7 @@ public final class TrieveKnowledgeBaseImport {
         }
 
         /**
+         * <p>This is the <code>datasetId</code> of the dataset on your Trieve account.</p>
          * <p>This is the <code>datasetId</code> of the dataset on your Trieve account.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

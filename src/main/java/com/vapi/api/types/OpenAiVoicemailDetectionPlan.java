@@ -108,6 +108,20 @@ public final class OpenAiVoicemailDetectionPlan {
             return this;
         }
 
+        /**
+         * <p>This is the maximum duration from the start of the call that we will wait for a voicemail beep, before speaking our message</p>
+         * <ul>
+         * <li>
+         * <p>If we detect a voicemail beep before this, we will speak the message at that point.</p>
+         * </li>
+         * <li>
+         * <p>Setting too low a value means that the bot will start speaking its voicemail message too early. If it does so before the actual beep, it will get cut off. You should definitely tune this to your use case.</p>
+         * </li>
+         * </ul>
+         * <p>@default 30
+         * @min 0
+         * @max 60</p>
+         */
         @JsonSetter(value = "beepMaxAwaitSeconds", nulls = Nulls.SKIP)
         public Builder beepMaxAwaitSeconds(Optional<Double> beepMaxAwaitSeconds) {
             this.beepMaxAwaitSeconds = beepMaxAwaitSeconds;
@@ -119,6 +133,9 @@ public final class OpenAiVoicemailDetectionPlan {
             return this;
         }
 
+        /**
+         * <p>This is the backoff plan for the voicemail detection.</p>
+         */
         @JsonSetter(value = "backoffPlan", nulls = Nulls.SKIP)
         public Builder backoffPlan(Optional<VoicemailDetectionBackoffPlan> backoffPlan) {
             this.backoffPlan = backoffPlan;

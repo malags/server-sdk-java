@@ -41,7 +41,9 @@ public final class WorkflowOpenAiModel {
     }
 
     /**
-     * @return This is the specific OpenAI model that will be used.
+     * @return This is the OpenAI model that will be used.
+     * <p>When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
+     * This is helpful when you are required to comply with Data Residency rules. Learn more about Azure regions here https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/.</p>
      */
     @JsonProperty("model")
     public WorkflowOpenAiModelModel getModel() {
@@ -94,6 +96,11 @@ public final class WorkflowOpenAiModel {
     }
 
     public interface ModelStage {
+        /**
+         * <p>This is the OpenAI model that will be used.</p>
+         * <p>When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
+         * This is helpful when you are required to comply with Data Residency rules. Learn more about Azure regions here https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/.</p>
+         */
         _FinalStage model(@NotNull WorkflowOpenAiModelModel model);
 
         Builder from(WorkflowOpenAiModel other);
@@ -102,10 +109,16 @@ public final class WorkflowOpenAiModel {
     public interface _FinalStage {
         WorkflowOpenAiModel build();
 
+        /**
+         * <p>This is the temperature of the model.</p>
+         */
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
 
+        /**
+         * <p>This is the max tokens of the model.</p>
+         */
         _FinalStage maxTokens(Optional<Double> maxTokens);
 
         _FinalStage maxTokens(Double maxTokens);
@@ -133,7 +146,12 @@ public final class WorkflowOpenAiModel {
         }
 
         /**
-         * <p>This is the specific OpenAI model that will be used.</p>
+         * <p>This is the OpenAI model that will be used.</p>
+         * <p>When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
+         * This is helpful when you are required to comply with Data Residency rules. Learn more about Azure regions here https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/.</p>
+         * <p>This is the OpenAI model that will be used.</p>
+         * <p>When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
+         * This is helpful when you are required to comply with Data Residency rules. Learn more about Azure regions here https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -153,6 +171,9 @@ public final class WorkflowOpenAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the max tokens of the model.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "maxTokens", nulls = Nulls.SKIP)
         public _FinalStage maxTokens(Optional<Double> maxTokens) {
@@ -170,6 +191,9 @@ public final class WorkflowOpenAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the temperature of the model.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {

@@ -195,6 +195,9 @@ public final class TransferDestinationAssistant {
     }
 
     public interface AssistantNameStage {
+        /**
+         * <p>This is the assistant to transfer the call to.</p>
+         */
         _FinalStage assistantName(@NotNull String assistantName);
 
         Builder from(TransferDestinationAssistant other);
@@ -203,14 +206,109 @@ public final class TransferDestinationAssistant {
     public interface _FinalStage {
         TransferDestinationAssistant build();
 
+        /**
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+         */
         _FinalStage message(Optional<TransferDestinationAssistantMessage> message);
 
         _FinalStage message(TransferDestinationAssistantMessage message);
 
+        /**
+         * <p>This is the mode to use for the transfer. Defaults to <code>rolling-history</code>.</p>
+         * <ul>
+         * <li>
+         * <p><code>rolling-history</code>: This is the default mode. It keeps the entire conversation history and appends the new assistant's system message on transfer.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)
+         * system: assistant2 system message
+         * assistant: assistant2 first message (or model generated if firstMessageMode is set to <code>assistant-speaks-first-with-model-generated-message</code>)</p>
+         * </li>
+         * <li>
+         * <p><code>swap-system-message-in-history</code>: This replaces the original system message with the new assistant's system message on transfer.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant2 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)
+         * assistant: assistant2 first message (or model generated if firstMessageMode is set to <code>assistant-speaks-first-with-model-generated-message</code>)</p>
+         * </li>
+         * <li>
+         * <p><code>delete-history</code>: This deletes the entire conversation history on transfer.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant2 system message
+         * assistant: assistant2 first message
+         * user: Yes, please
+         * assistant: how can i help?
+         * user: i need help with my account</p>
+         * </li>
+         * <li>
+         * <p><code>swap-system-message-in-history-and-remove-transfer-tool-messages</code>: This replaces the original system message with the new assistant's system message on transfer and removes transfer tool messages from conversation history sent to the LLM.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * transfer-tool
+         * transfer-tool-result
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant2 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)
+         * assistant: assistant2 first message (or model generated if firstMessageMode is set to <code>assistant-speaks-first-with-model-generated-message</code>)</p>
+         * </li>
+         * </ul>
+         * <p>@default 'rolling-history'</p>
+         */
         _FinalStage transferMode(Optional<TransferMode> transferMode);
 
         _FinalStage transferMode(TransferMode transferMode);
 
+        /**
+         * <p>This is the description of the destination, used by the AI to choose when and how to transfer the call.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
@@ -242,6 +340,7 @@ public final class TransferDestinationAssistant {
 
         /**
          * <p>This is the assistant to transfer the call to.</p>
+         * <p>This is the assistant to transfer the call to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -261,6 +360,9 @@ public final class TransferDestinationAssistant {
             return this;
         }
 
+        /**
+         * <p>This is the description of the destination, used by the AI to choose when and how to transfer the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
@@ -358,6 +460,89 @@ public final class TransferDestinationAssistant {
             return this;
         }
 
+        /**
+         * <p>This is the mode to use for the transfer. Defaults to <code>rolling-history</code>.</p>
+         * <ul>
+         * <li>
+         * <p><code>rolling-history</code>: This is the default mode. It keeps the entire conversation history and appends the new assistant's system message on transfer.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)
+         * system: assistant2 system message
+         * assistant: assistant2 first message (or model generated if firstMessageMode is set to <code>assistant-speaks-first-with-model-generated-message</code>)</p>
+         * </li>
+         * <li>
+         * <p><code>swap-system-message-in-history</code>: This replaces the original system message with the new assistant's system message on transfer.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant2 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)
+         * assistant: assistant2 first message (or model generated if firstMessageMode is set to <code>assistant-speaks-first-with-model-generated-message</code>)</p>
+         * </li>
+         * <li>
+         * <p><code>delete-history</code>: This deletes the entire conversation history on transfer.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant2 system message
+         * assistant: assistant2 first message
+         * user: Yes, please
+         * assistant: how can i help?
+         * user: i need help with my account</p>
+         * </li>
+         * <li>
+         * <p><code>swap-system-message-in-history-and-remove-transfer-tool-messages</code>: This replaces the original system message with the new assistant's system message on transfer and removes transfer tool messages from conversation history sent to the LLM.</p>
+         * <p>Example:</p>
+         * <p>Pre-transfer:
+         * system: assistant1 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * transfer-tool
+         * transfer-tool-result
+         * assistant: (destination.message)</p>
+         * <p>Post-transfer:
+         * system: assistant2 system message
+         * assistant: assistant1 first message
+         * user: hey, good morning
+         * assistant: how can i help?
+         * user: i need help with my account
+         * assistant: (destination.message)
+         * assistant: assistant2 first message (or model generated if firstMessageMode is set to <code>assistant-speaks-first-with-model-generated-message</code>)</p>
+         * </li>
+         * </ul>
+         * <p>@default 'rolling-history'</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "transferMode", nulls = Nulls.SKIP)
         public _FinalStage transferMode(Optional<TransferMode> transferMode) {
@@ -381,6 +566,15 @@ public final class TransferDestinationAssistant {
             return this;
         }
 
+        /**
+         * <p>This is spoken to the customer before connecting them to the destination.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If this is not provided and transfer tool messages is not provided, default is &quot;Transferring the call now&quot;.</li>
+         * <li>If set to &quot;&quot;, nothing is spoken. This is useful when you want to silently transfer. This is especially useful when transferring between assistants in a squad. In this scenario, you likely also want to set <code>assistant.firstMessageMode=assistant-speaks-first-with-model-generated-message</code> for the destination assistant.</li>
+         * </ul>
+         * <p>This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the <code>contents</code> field.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
         public _FinalStage message(Optional<TransferDestinationAssistantMessage> message) {

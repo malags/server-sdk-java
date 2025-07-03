@@ -97,6 +97,9 @@ public final class FallbackGoogleTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used for the transcription.</p>
+         */
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public Builder model(Optional<FallbackGoogleTranscriberModel> model) {
             this.model = model;
@@ -108,6 +111,9 @@ public final class FallbackGoogleTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription.</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<FallbackGoogleTranscriberLanguage> language) {
             this.language = language;

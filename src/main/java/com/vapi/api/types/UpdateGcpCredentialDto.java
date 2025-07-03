@@ -20,23 +20,39 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateGcpCredentialDto.Builder.class)
 public final class UpdateGcpCredentialDto {
+    private final Optional<Double> fallbackIndex;
+
     private final Optional<String> name;
 
     private final Optional<GcpKey> gcpKey;
+
+    private final Optional<String> region;
 
     private final Optional<BucketPlan> bucketPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateGcpCredentialDto(
+            Optional<Double> fallbackIndex,
             Optional<String> name,
             Optional<GcpKey> gcpKey,
+            Optional<String> region,
             Optional<BucketPlan> bucketPlan,
             Map<String, Object> additionalProperties) {
+        this.fallbackIndex = fallbackIndex;
         this.name = name;
         this.gcpKey = gcpKey;
+        this.region = region;
         this.bucketPlan = bucketPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -57,8 +73,13 @@ public final class UpdateGcpCredentialDto {
     }
 
     /**
-     * @return This is the bucket plan that can be provided to store call artifacts in GCP.
+     * @return This is the region of the GCP resource.
      */
+    @JsonProperty("region")
+    public Optional<String> getRegion() {
+        return region;
+    }
+
     @JsonProperty("bucketPlan")
     public Optional<BucketPlan> getBucketPlan() {
         return bucketPlan;
@@ -76,12 +97,16 @@ public final class UpdateGcpCredentialDto {
     }
 
     private boolean equalTo(UpdateGcpCredentialDto other) {
-        return name.equals(other.name) && gcpKey.equals(other.gcpKey) && bucketPlan.equals(other.bucketPlan);
+        return fallbackIndex.equals(other.fallbackIndex)
+                && name.equals(other.name)
+                && gcpKey.equals(other.gcpKey)
+                && region.equals(other.region)
+                && bucketPlan.equals(other.bucketPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.gcpKey, this.bucketPlan);
+        return Objects.hash(this.fallbackIndex, this.name, this.gcpKey, this.region, this.bucketPlan);
     }
 
     @java.lang.Override
@@ -95,9 +120,13 @@ public final class UpdateGcpCredentialDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<GcpKey> gcpKey = Optional.empty();
+
+        private Optional<String> region = Optional.empty();
 
         private Optional<BucketPlan> bucketPlan = Optional.empty();
 
@@ -107,12 +136,31 @@ public final class UpdateGcpCredentialDto {
         private Builder() {}
 
         public Builder from(UpdateGcpCredentialDto other) {
+            fallbackIndex(other.getFallbackIndex());
             name(other.getName());
             gcpKey(other.getGcpKey());
+            region(other.getRegion());
             bucketPlan(other.getBucketPlan());
             return this;
         }
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public Builder fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
+            return this;
+        }
+
+        public Builder fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -124,6 +172,10 @@ public final class UpdateGcpCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.</p>
+         * <p>The schema is identical to the JSON that GCP outputs.</p>
+         */
         @JsonSetter(value = "gcpKey", nulls = Nulls.SKIP)
         public Builder gcpKey(Optional<GcpKey> gcpKey) {
             this.gcpKey = gcpKey;
@@ -132,6 +184,20 @@ public final class UpdateGcpCredentialDto {
 
         public Builder gcpKey(GcpKey gcpKey) {
             this.gcpKey = Optional.ofNullable(gcpKey);
+            return this;
+        }
+
+        /**
+         * <p>This is the region of the GCP resource.</p>
+         */
+        @JsonSetter(value = "region", nulls = Nulls.SKIP)
+        public Builder region(Optional<String> region) {
+            this.region = region;
+            return this;
+        }
+
+        public Builder region(String region) {
+            this.region = Optional.ofNullable(region);
             return this;
         }
 
@@ -147,7 +213,7 @@ public final class UpdateGcpCredentialDto {
         }
 
         public UpdateGcpCredentialDto build() {
-            return new UpdateGcpCredentialDto(name, gcpKey, bucketPlan, additionalProperties);
+            return new UpdateGcpCredentialDto(fallbackIndex, name, gcpKey, region, bucketPlan, additionalProperties);
         }
     }
 }

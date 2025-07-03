@@ -175,38 +175,62 @@ public final class CustomLlmCredential {
     }
 
     public interface ApiKeyStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         IdStage apiKey(@NotNull String apiKey);
 
         Builder from(CustomLlmCredential other);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         CustomLlmCredential build();
 
+        /**
+         * <p>This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey</p>
+         */
         _FinalStage authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan);
 
         _FinalStage authenticationPlan(OAuth2AuthenticationPlan authenticationPlan);
 
+        /**
+         * <p>This is the authentication session for the credential. Available for credentials that have an authentication plan.</p>
+         */
         _FinalStage authenticationSession(Optional<Oauth2AuthenticationSession> authenticationSession);
 
         _FinalStage authenticationSession(Oauth2AuthenticationSession authenticationSession);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -251,6 +275,7 @@ public final class CustomLlmCredential {
 
         /**
          * <p>This is not returned in the API.</p>
+         * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -261,6 +286,7 @@ public final class CustomLlmCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the credential.</p>
          * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -273,6 +299,7 @@ public final class CustomLlmCredential {
 
         /**
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -284,6 +311,7 @@ public final class CustomLlmCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -294,6 +322,7 @@ public final class CustomLlmCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -314,6 +343,9 @@ public final class CustomLlmCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -331,6 +363,9 @@ public final class CustomLlmCredential {
             return this;
         }
 
+        /**
+         * <p>This is the authentication session for the credential. Available for credentials that have an authentication plan.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "authenticationSession", nulls = Nulls.SKIP)
         public _FinalStage authenticationSession(Optional<Oauth2AuthenticationSession> authenticationSession) {
@@ -348,6 +383,9 @@ public final class CustomLlmCredential {
             return this;
         }
 
+        /**
+         * <p>This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "authenticationPlan", nulls = Nulls.SKIP)
         public _FinalStage authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan) {

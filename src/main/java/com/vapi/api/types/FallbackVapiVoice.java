@@ -27,8 +27,6 @@ public final class FallbackVapiVoice {
 
     private final Optional<Double> speed;
 
-    private final Optional<FallbackVapiVoiceLanguage> language;
-
     private final Optional<ChunkPlan> chunkPlan;
 
     private final Map<String, Object> additionalProperties;
@@ -37,13 +35,11 @@ public final class FallbackVapiVoice {
             Optional<Boolean> cachingEnabled,
             FallbackVapiVoiceVoiceId voiceId,
             Optional<Double> speed,
-            Optional<FallbackVapiVoiceLanguage> language,
             Optional<ChunkPlan> chunkPlan,
             Map<String, Object> additionalProperties) {
         this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.speed = speed;
-        this.language = language;
         this.chunkPlan = chunkPlan;
         this.additionalProperties = additionalProperties;
     }
@@ -74,15 +70,6 @@ public final class FallbackVapiVoice {
     }
 
     /**
-     * @return This is the language code (ISO 639-1) that will be used.
-     * <p>@default 'en-US'</p>
-     */
-    @JsonProperty("language")
-    public Optional<FallbackVapiVoiceLanguage> getLanguage() {
-        return language;
-    }
-
-    /**
      * @return This is the plan for chunking the model output before it is sent to the voice provider.
      */
     @JsonProperty("chunkPlan")
@@ -105,13 +92,12 @@ public final class FallbackVapiVoice {
         return cachingEnabled.equals(other.cachingEnabled)
                 && voiceId.equals(other.voiceId)
                 && speed.equals(other.speed)
-                && language.equals(other.language)
                 && chunkPlan.equals(other.chunkPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.cachingEnabled, this.voiceId, this.speed, this.language, this.chunkPlan);
+        return Objects.hash(this.cachingEnabled, this.voiceId, this.speed, this.chunkPlan);
     }
 
     @java.lang.Override
@@ -124,6 +110,9 @@ public final class FallbackVapiVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>The voices provided by Vapi</p>
+         */
         _FinalStage voiceId(@NotNull FallbackVapiVoiceVoiceId voiceId);
 
         Builder from(FallbackVapiVoice other);
@@ -132,18 +121,24 @@ public final class FallbackVapiVoice {
     public interface _FinalStage {
         FallbackVapiVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         * <p>@default 1</p>
+         */
         _FinalStage speed(Optional<Double> speed);
 
         _FinalStage speed(Double speed);
 
-        _FinalStage language(Optional<FallbackVapiVoiceLanguage> language);
-
-        _FinalStage language(FallbackVapiVoiceLanguage language);
-
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -154,8 +149,6 @@ public final class FallbackVapiVoice {
         private FallbackVapiVoiceVoiceId voiceId;
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
-
-        private Optional<FallbackVapiVoiceLanguage> language = Optional.empty();
 
         private Optional<Double> speed = Optional.empty();
 
@@ -171,12 +164,12 @@ public final class FallbackVapiVoice {
             cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             speed(other.getSpeed());
-            language(other.getLanguage());
             chunkPlan(other.getChunkPlan());
             return this;
         }
 
         /**
+         * <p>The voices provided by Vapi</p>
          * <p>The voices provided by Vapi</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -197,28 +190,13 @@ public final class FallbackVapiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
             this.chunkPlan = chunkPlan;
-            return this;
-        }
-
-        /**
-         * <p>This is the language code (ISO 639-1) that will be used.</p>
-         * <p>@default 'en-US'</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage language(FallbackVapiVoiceLanguage language) {
-            this.language = Optional.ofNullable(language);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "language", nulls = Nulls.SKIP)
-        public _FinalStage language(Optional<FallbackVapiVoiceLanguage> language) {
-            this.language = language;
             return this;
         }
 
@@ -233,6 +211,10 @@ public final class FallbackVapiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         * <p>@default 1</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "speed", nulls = Nulls.SKIP)
         public _FinalStage speed(Optional<Double> speed) {
@@ -250,6 +232,9 @@ public final class FallbackVapiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
@@ -259,7 +244,7 @@ public final class FallbackVapiVoice {
 
         @java.lang.Override
         public FallbackVapiVoice build() {
-            return new FallbackVapiVoice(cachingEnabled, voiceId, speed, language, chunkPlan, additionalProperties);
+            return new FallbackVapiVoice(cachingEnabled, voiceId, speed, chunkPlan, additionalProperties);
         }
     }
 }

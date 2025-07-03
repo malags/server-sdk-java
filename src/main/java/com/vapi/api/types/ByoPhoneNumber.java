@@ -292,66 +292,134 @@ public final class ByoPhoneNumber {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the phone number.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(ByoPhoneNumber other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this phone number belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
+         */
         CredentialIdStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface CredentialIdStage {
+        /**
+         * <p>This is the credential of your own SIP trunk or Carrier (type <code>byo-sip-trunk</code>) which can be used to make calls to this phone number.</p>
+         * <p>You can add the SIP trunk or Carrier credential in the Provider Credentials page on the Dashboard to get the credentialId.</p>
+         */
         _FinalStage credentialId(@NotNull String credentialId);
     }
 
     public interface _FinalStage {
         ByoPhoneNumber build();
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         _FinalStage fallbackDestination(Optional<ByoPhoneNumberFallbackDestination> fallbackDestination);
 
         _FinalStage fallbackDestination(ByoPhoneNumberFallbackDestination fallbackDestination);
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks);
 
         _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks);
 
+        /**
+         * <p>This is the flag to toggle the E164 check for the <code>number</code> field. This is an advanced property which should be used if you know your use case requires it.</p>
+         * <p>Use cases:</p>
+         * <ul>
+         * <li><code>false</code>: To allow non-E164 numbers like <code>+001234567890</code>, <code>1234</code>, or <code>abc</code>. This is useful for dialing out to non-E164 numbers on your SIP trunks.</li>
+         * <li><code>true</code> (default): To allow only E164 numbers like <code>+14155551234</code>. This is standard for PSTN calls.</li>
+         * </ul>
+         * <p>If <code>false</code>, the <code>number</code> is still required to only contain alphanumeric characters (regex: <code>/^\+?[a-zA-Z0-9]+$/</code>).</p>
+         * <p>@default true (E164 check is enabled)</p>
+         */
         _FinalStage numberE164CheckEnabled(Optional<Boolean> numberE164CheckEnabled);
 
         _FinalStage numberE164CheckEnabled(Boolean numberE164CheckEnabled);
 
+        /**
+         * <p>This is the status of the phone number.</p>
+         */
         _FinalStage status(Optional<ByoPhoneNumberStatus> status);
 
         _FinalStage status(ByoPhoneNumberStatus status);
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage workflowId(Optional<String> workflowId);
 
         _FinalStage workflowId(String workflowId);
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage squadId(Optional<String> squadId);
 
         _FinalStage squadId(String squadId);
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         _FinalStage server(Optional<Server> server);
 
         _FinalStage server(Server server);
 
+        /**
+         * <p>This is the number of the customer.</p>
+         */
         _FinalStage number(Optional<String> number);
 
         _FinalStage number(String number);
@@ -417,6 +485,7 @@ public final class ByoPhoneNumber {
 
         /**
          * <p>This is the unique identifier for the phone number.</p>
+         * <p>This is the unique identifier for the phone number.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -427,6 +496,7 @@ public final class ByoPhoneNumber {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this phone number belongs to.</p>
          * <p>This is the unique identifier for the org that this phone number belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -439,6 +509,7 @@ public final class ByoPhoneNumber {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -450,6 +521,7 @@ public final class ByoPhoneNumber {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
+         * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -460,6 +532,8 @@ public final class ByoPhoneNumber {
         }
 
         /**
+         * <p>This is the credential of your own SIP trunk or Carrier (type <code>byo-sip-trunk</code>) which can be used to make calls to this phone number.</p>
+         * <p>You can add the SIP trunk or Carrier credential in the Provider Credentials page on the Dashboard to get the credentialId.</p>
          * <p>This is the credential of your own SIP trunk or Carrier (type <code>byo-sip-trunk</code>) which can be used to make calls to this phone number.</p>
          * <p>You can add the SIP trunk or Carrier credential in the Provider Credentials page on the Dashboard to get the credentialId.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -481,6 +555,9 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the number of the customer.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "number", nulls = Nulls.SKIP)
         public _FinalStage number(Optional<String> number) {
@@ -504,6 +581,15 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @java.lang.Override
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public _FinalStage server(Optional<Server> server) {
@@ -522,6 +608,10 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public _FinalStage squadId(Optional<String> squadId) {
@@ -540,6 +630,10 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public _FinalStage workflowId(Optional<String> workflowId) {
@@ -558,6 +652,10 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public _FinalStage assistantId(Optional<String> assistantId) {
@@ -575,6 +673,9 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -592,6 +693,9 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the status of the phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
         public _FinalStage status(Optional<ByoPhoneNumberStatus> status) {
@@ -616,6 +720,16 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle the E164 check for the <code>number</code> field. This is an advanced property which should be used if you know your use case requires it.</p>
+         * <p>Use cases:</p>
+         * <ul>
+         * <li><code>false</code>: To allow non-E164 numbers like <code>+001234567890</code>, <code>1234</code>, or <code>abc</code>. This is useful for dialing out to non-E164 numbers on your SIP trunks.</li>
+         * <li><code>true</code> (default): To allow only E164 numbers like <code>+14155551234</code>. This is standard for PSTN calls.</li>
+         * </ul>
+         * <p>If <code>false</code>, the <code>number</code> is still required to only contain alphanumeric characters (regex: <code>/^\+?[a-zA-Z0-9]+$/</code>).</p>
+         * <p>@default true (E164 check is enabled)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "numberE164CheckEnabled", nulls = Nulls.SKIP)
         public _FinalStage numberE164CheckEnabled(Optional<Boolean> numberE164CheckEnabled) {
@@ -633,6 +747,9 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
@@ -656,6 +773,15 @@ public final class ByoPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
         public _FinalStage fallbackDestination(Optional<ByoPhoneNumberFallbackDestination> fallbackDestination) {

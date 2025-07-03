@@ -36,6 +36,8 @@ public final class ServerMessageResponseAssistantRequest {
 
     private final Optional<CreateWorkflowDto> workflow;
 
+    private final Optional<WorkflowOverrides> workflowOverrides;
+
     private final Optional<String> error;
 
     private final Map<String, Object> additionalProperties;
@@ -49,6 +51,7 @@ public final class ServerMessageResponseAssistantRequest {
             Optional<CreateSquadDto> squad,
             Optional<String> workflowId,
             Optional<CreateWorkflowDto> workflow,
+            Optional<WorkflowOverrides> workflowOverrides,
             Optional<String> error,
             Map<String, Object> additionalProperties) {
         this.destination = destination;
@@ -59,6 +62,7 @@ public final class ServerMessageResponseAssistantRequest {
         this.squad = squad;
         this.workflowId = workflowId;
         this.workflow = workflow;
+        this.workflowOverrides = workflowOverrides;
         this.error = error;
         this.additionalProperties = additionalProperties;
     }
@@ -137,8 +141,7 @@ public final class ServerMessageResponseAssistantRequest {
     }
 
     /**
-     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
-     * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+     * @return This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.
      * <p>To start a call with:</p>
      * <ul>
      * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
@@ -152,8 +155,7 @@ public final class ServerMessageResponseAssistantRequest {
     }
 
     /**
-     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
-     * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+     * @return This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.
      * <p>To start a call with:</p>
      * <ul>
      * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
@@ -164,6 +166,14 @@ public final class ServerMessageResponseAssistantRequest {
     @JsonProperty("workflow")
     public Optional<CreateWorkflowDto> getWorkflow() {
         return workflow;
+    }
+
+    /**
+     * @return These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.
+     */
+    @JsonProperty("workflowOverrides")
+    public Optional<WorkflowOverrides> getWorkflowOverrides() {
+        return workflowOverrides;
     }
 
     /**
@@ -196,6 +206,7 @@ public final class ServerMessageResponseAssistantRequest {
                 && squad.equals(other.squad)
                 && workflowId.equals(other.workflowId)
                 && workflow.equals(other.workflow)
+                && workflowOverrides.equals(other.workflowOverrides)
                 && error.equals(other.error);
     }
 
@@ -210,6 +221,7 @@ public final class ServerMessageResponseAssistantRequest {
                 this.squad,
                 this.workflowId,
                 this.workflow,
+                this.workflowOverrides,
                 this.error);
     }
 
@@ -240,6 +252,8 @@ public final class ServerMessageResponseAssistantRequest {
 
         private Optional<CreateWorkflowDto> workflow = Optional.empty();
 
+        private Optional<WorkflowOverrides> workflowOverrides = Optional.empty();
+
         private Optional<String> error = Optional.empty();
 
         @JsonAnySetter
@@ -256,10 +270,15 @@ public final class ServerMessageResponseAssistantRequest {
             squad(other.getSquad());
             workflowId(other.getWorkflowId());
             workflow(other.getWorkflow());
+            workflowOverrides(other.getWorkflowOverrides());
             error(other.getError());
             return this;
         }
 
+        /**
+         * <p>This is the destination to transfer the inbound call to. This will immediately transfer without using any assistants.</p>
+         * <p>If this is sent, <code>assistantId</code>, <code>assistant</code>, <code>squadId</code>, and <code>squad</code> are ignored.</p>
+         */
         @JsonSetter(value = "destination", nulls = Nulls.SKIP)
         public Builder destination(Optional<ServerMessageResponseAssistantRequestDestination> destination) {
             this.destination = destination;
@@ -271,6 +290,15 @@ public final class ServerMessageResponseAssistantRequest {
             return this;
         }
 
+        /**
+         * <p>This is the assistant ID that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistantId</code> or <code>assistant</code></li>
+         * <li>Squad, use <code>squadId</code> or <code>squad</code></li>
+         * <li>Workflow, use <code>workflowId</code> or <code>workflow</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -282,6 +310,15 @@ public final class ServerMessageResponseAssistantRequest {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for the call. To use an existing assistant, use <code>assistantId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code></li>
+         * <li>Squad, use <code>squad</code></li>
+         * <li>Workflow, use <code>workflow</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -293,6 +330,9 @@ public final class ServerMessageResponseAssistantRequest {
             return this;
         }
 
+        /**
+         * <p>These are the overrides for the <code>assistant</code> or <code>assistantId</code>'s settings and template variables.</p>
+         */
         @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
         public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
             this.assistantOverrides = assistantOverrides;
@@ -304,6 +344,15 @@ public final class ServerMessageResponseAssistantRequest {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for the call. To use a transient squad, use <code>squad</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -315,6 +364,15 @@ public final class ServerMessageResponseAssistantRequest {
             return this;
         }
 
+        /**
+         * <p>This is a squad that will be used for the call. To use an existing squad, use <code>squadId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "squad", nulls = Nulls.SKIP)
         public Builder squad(Optional<CreateSquadDto> squad) {
             this.squad = squad;
@@ -326,6 +384,15 @@ public final class ServerMessageResponseAssistantRequest {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public Builder workflowId(Optional<String> workflowId) {
             this.workflowId = workflowId;
@@ -337,6 +404,15 @@ public final class ServerMessageResponseAssistantRequest {
             return this;
         }
 
+        /**
+         * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "workflow", nulls = Nulls.SKIP)
         public Builder workflow(Optional<CreateWorkflowDto> workflow) {
             this.workflow = workflow;
@@ -348,6 +424,24 @@ public final class ServerMessageResponseAssistantRequest {
             return this;
         }
 
+        /**
+         * <p>These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.</p>
+         */
+        @JsonSetter(value = "workflowOverrides", nulls = Nulls.SKIP)
+        public Builder workflowOverrides(Optional<WorkflowOverrides> workflowOverrides) {
+            this.workflowOverrides = workflowOverrides;
+            return this;
+        }
+
+        public Builder workflowOverrides(WorkflowOverrides workflowOverrides) {
+            this.workflowOverrides = Optional.ofNullable(workflowOverrides);
+            return this;
+        }
+
+        /**
+         * <p>This is the error if the call shouldn't be accepted. This is spoken to the customer.</p>
+         * <p>If this is sent, <code>assistantId</code>, <code>assistant</code>, <code>squadId</code>, <code>squad</code>, and <code>destination</code> are ignored.</p>
+         */
         @JsonSetter(value = "error", nulls = Nulls.SKIP)
         public Builder error(Optional<String> error) {
             this.error = error;
@@ -369,6 +463,7 @@ public final class ServerMessageResponseAssistantRequest {
                     squad,
                     workflowId,
                     workflow,
+                    workflowOverrides,
                     error,
                     additionalProperties);
         }

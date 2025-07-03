@@ -34,12 +34,28 @@ public final class ConversationNodeModel {
         return new ConversationNodeModel(new AnthropicValue(value));
     }
 
+    public static ConversationNodeModel google(WorkflowGoogleModel value) {
+        return new ConversationNodeModel(new GoogleValue(value));
+    }
+
+    public static ConversationNodeModel customLlm(WorkflowCustomModel value) {
+        return new ConversationNodeModel(new CustomLlmValue(value));
+    }
+
     public boolean isOpenai() {
         return value instanceof OpenaiValue;
     }
 
     public boolean isAnthropic() {
         return value instanceof AnthropicValue;
+    }
+
+    public boolean isGoogle() {
+        return value instanceof GoogleValue;
+    }
+
+    public boolean isCustomLlm() {
+        return value instanceof CustomLlmValue;
     }
 
     public boolean _isUnknown() {
@@ -56,6 +72,20 @@ public final class ConversationNodeModel {
     public Optional<WorkflowAnthropicModel> getAnthropic() {
         if (isAnthropic()) {
             return Optional.of(((AnthropicValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<WorkflowGoogleModel> getGoogle() {
+        if (isGoogle()) {
+            return Optional.of(((GoogleValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<WorkflowCustomModel> getCustomLlm() {
+        if (isCustomLlm()) {
+            return Optional.of(((CustomLlmValue) value).value);
         }
         return Optional.empty();
     }
@@ -77,11 +107,20 @@ public final class ConversationNodeModel {
 
         T visitAnthropic(WorkflowAnthropicModel anthropic);
 
+        T visitGoogle(WorkflowGoogleModel google);
+
+        T visitCustomLlm(WorkflowCustomModel customLlm);
+
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "provider", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(OpenaiValue.class), @JsonSubTypes.Type(AnthropicValue.class)})
+    @JsonSubTypes({
+        @JsonSubTypes.Type(OpenaiValue.class),
+        @JsonSubTypes.Type(AnthropicValue.class),
+        @JsonSubTypes.Type(GoogleValue.class),
+        @JsonSubTypes.Type(CustomLlmValue.class)
+    })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -151,6 +190,84 @@ public final class ConversationNodeModel {
         }
 
         private boolean equalTo(AnthropicValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationNodeModel{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("google")
+    @JsonIgnoreProperties("provider")
+    private static final class GoogleValue implements Value {
+        @JsonUnwrapped
+        private WorkflowGoogleModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private GoogleValue() {}
+
+        private GoogleValue(WorkflowGoogleModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitGoogle(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof GoogleValue && equalTo((GoogleValue) other);
+        }
+
+        private boolean equalTo(GoogleValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationNodeModel{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("custom-llm")
+    @JsonIgnoreProperties("provider")
+    private static final class CustomLlmValue implements Value {
+        @JsonUnwrapped
+        private WorkflowCustomModel value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private CustomLlmValue() {}
+
+        private CustomLlmValue(WorkflowCustomModel value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCustomLlm(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof CustomLlmValue && equalTo((CustomLlmValue) other);
+        }
+
+        private boolean equalTo(CustomLlmValue other) {
             return value.equals(other.value);
         }
 

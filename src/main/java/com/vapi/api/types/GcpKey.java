@@ -210,48 +210,82 @@ public final class GcpKey {
     }
 
     public interface TypeStage {
+        /**
+         * <p>This is the type of the key. Most likely, this is &quot;service_account&quot;.</p>
+         */
         ProjectIdStage type(@NotNull String type);
 
         Builder from(GcpKey other);
     }
 
     public interface ProjectIdStage {
+        /**
+         * <p>This is the ID of the Google Cloud project associated with this key.</p>
+         */
         PrivateKeyIdStage projectId(@NotNull String projectId);
     }
 
     public interface PrivateKeyIdStage {
+        /**
+         * <p>This is the unique identifier for the private key.</p>
+         */
         PrivateKeyStage privateKeyId(@NotNull String privateKeyId);
     }
 
     public interface PrivateKeyStage {
+        /**
+         * <p>This is the private key in PEM format.</p>
+         * <p>Note: This is not returned in the API.</p>
+         */
         ClientEmailStage privateKey(@NotNull String privateKey);
     }
 
     public interface ClientEmailStage {
+        /**
+         * <p>This is the email address associated with the service account.</p>
+         */
         ClientIdStage clientEmail(@NotNull String clientEmail);
     }
 
     public interface ClientIdStage {
+        /**
+         * <p>This is the unique identifier for the client.</p>
+         */
         AuthUriStage clientId(@NotNull String clientId);
     }
 
     public interface AuthUriStage {
+        /**
+         * <p>This is the URI for the auth provider's authorization endpoint.</p>
+         */
         TokenUriStage authUri(@NotNull String authUri);
     }
 
     public interface TokenUriStage {
+        /**
+         * <p>This is the URI for the auth provider's token endpoint.</p>
+         */
         AuthProviderX509CertUrlStage tokenUri(@NotNull String tokenUri);
     }
 
     public interface AuthProviderX509CertUrlStage {
+        /**
+         * <p>This is the URL of the public x509 certificate for the auth provider.</p>
+         */
         ClientX509CertUrlStage authProviderX509CertUrl(@NotNull String authProviderX509CertUrl);
     }
 
     public interface ClientX509CertUrlStage {
+        /**
+         * <p>This is the URL of the public x509 certificate for the client.</p>
+         */
         UniverseDomainStage clientX509CertUrl(@NotNull String clientX509CertUrl);
     }
 
     public interface UniverseDomainStage {
+        /**
+         * <p>This is the domain associated with the universe this service account belongs to.</p>
+         */
         _FinalStage universeDomain(@NotNull String universeDomain);
     }
 
@@ -318,6 +352,7 @@ public final class GcpKey {
 
         /**
          * <p>This is the type of the key. Most likely, this is &quot;service_account&quot;.</p>
+         * <p>This is the type of the key. Most likely, this is &quot;service_account&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -329,6 +364,7 @@ public final class GcpKey {
 
         /**
          * <p>This is the ID of the Google Cloud project associated with this key.</p>
+         * <p>This is the ID of the Google Cloud project associated with this key.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -339,6 +375,7 @@ public final class GcpKey {
         }
 
         /**
+         * <p>This is the unique identifier for the private key.</p>
          * <p>This is the unique identifier for the private key.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -352,6 +389,8 @@ public final class GcpKey {
         /**
          * <p>This is the private key in PEM format.</p>
          * <p>Note: This is not returned in the API.</p>
+         * <p>This is the private key in PEM format.</p>
+         * <p>Note: This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -362,6 +401,7 @@ public final class GcpKey {
         }
 
         /**
+         * <p>This is the email address associated with the service account.</p>
          * <p>This is the email address associated with the service account.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -374,6 +414,7 @@ public final class GcpKey {
 
         /**
          * <p>This is the unique identifier for the client.</p>
+         * <p>This is the unique identifier for the client.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -384,6 +425,7 @@ public final class GcpKey {
         }
 
         /**
+         * <p>This is the URI for the auth provider's authorization endpoint.</p>
          * <p>This is the URI for the auth provider's authorization endpoint.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -396,6 +438,7 @@ public final class GcpKey {
 
         /**
          * <p>This is the URI for the auth provider's token endpoint.</p>
+         * <p>This is the URI for the auth provider's token endpoint.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -406,6 +449,7 @@ public final class GcpKey {
         }
 
         /**
+         * <p>This is the URL of the public x509 certificate for the auth provider.</p>
          * <p>This is the URL of the public x509 certificate for the auth provider.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -419,6 +463,7 @@ public final class GcpKey {
 
         /**
          * <p>This is the URL of the public x509 certificate for the client.</p>
+         * <p>This is the URL of the public x509 certificate for the client.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -429,6 +474,7 @@ public final class GcpKey {
         }
 
         /**
+         * <p>This is the domain associated with the universe this service account belongs to.</p>
          * <p>This is the domain associated with the universe this service account belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

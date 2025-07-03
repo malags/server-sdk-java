@@ -66,6 +66,9 @@ public final class SayPhoneNumberHookAction {
     }
 
     public interface ExactStage {
+        /**
+         * <p>This is the message to say</p>
+         */
         _FinalStage exact(@NotNull String exact);
 
         Builder from(SayPhoneNumberHookAction other);
@@ -91,6 +94,7 @@ public final class SayPhoneNumberHookAction {
         }
 
         /**
+         * <p>This is the message to say</p>
          * <p>This is the message to say</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

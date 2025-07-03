@@ -94,18 +94,27 @@ public final class AnalyticsOperation {
     }
 
     public interface OperationStage {
+        /**
+         * <p>This is the aggregation operation you want to perform.</p>
+         */
         ColumnStage operation(@NotNull AnalyticsOperationOperation operation);
 
         Builder from(AnalyticsOperation other);
     }
 
     public interface ColumnStage {
+        /**
+         * <p>This is the columns you want to perform the aggregation operation on.</p>
+         */
         _FinalStage column(@NotNull AnalyticsOperationColumn column);
     }
 
     public interface _FinalStage {
         AnalyticsOperation build();
 
+        /**
+         * <p>This is the alias for column name returned. Defaults to <code>${operation}${column}</code>.</p>
+         */
         _FinalStage alias(Optional<String> alias);
 
         _FinalStage alias(String alias);
@@ -134,6 +143,7 @@ public final class AnalyticsOperation {
 
         /**
          * <p>This is the aggregation operation you want to perform.</p>
+         * <p>This is the aggregation operation you want to perform.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -144,6 +154,7 @@ public final class AnalyticsOperation {
         }
 
         /**
+         * <p>This is the columns you want to perform the aggregation operation on.</p>
          * <p>This is the columns you want to perform the aggregation operation on.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -164,6 +175,9 @@ public final class AnalyticsOperation {
             return this;
         }
 
+        /**
+         * <p>This is the alias for column name returned. Defaults to <code>${operation}${column}</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "alias", nulls = Nulls.SKIP)
         public _FinalStage alias(Optional<String> alias) {

@@ -39,6 +39,10 @@ public final class Artifact {
 
     private final Optional<String> pcapUrl;
 
+    private final Optional<List<NodeArtifact>> nodes;
+
+    private final Optional<Map<String, Object>> variableValues;
+
     private final Map<String, Object> additionalProperties;
 
     private Artifact(
@@ -51,6 +55,8 @@ public final class Artifact {
             Optional<Recording> recording,
             Optional<String> transcript,
             Optional<String> pcapUrl,
+            Optional<List<NodeArtifact>> nodes,
+            Optional<Map<String, Object>> variableValues,
             Map<String, Object> additionalProperties) {
         this.messages = messages;
         this.messagesOpenAiFormatted = messagesOpenAiFormatted;
@@ -61,6 +67,8 @@ public final class Artifact {
         this.recording = recording;
         this.transcript = transcript;
         this.pcapUrl = pcapUrl;
+        this.nodes = nodes;
+        this.variableValues = variableValues;
         this.additionalProperties = additionalProperties;
     }
 
@@ -136,6 +144,22 @@ public final class Artifact {
         return pcapUrl;
     }
 
+    /**
+     * @return This is the history of workflow nodes that were executed during the call.
+     */
+    @JsonProperty("nodes")
+    public Optional<List<NodeArtifact>> getNodes() {
+        return nodes;
+    }
+
+    /**
+     * @return These are the variable values at the end of the workflow execution.
+     */
+    @JsonProperty("variableValues")
+    public Optional<Map<String, Object>> getVariableValues() {
+        return variableValues;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -156,7 +180,9 @@ public final class Artifact {
                 && videoRecordingStartDelaySeconds.equals(other.videoRecordingStartDelaySeconds)
                 && recording.equals(other.recording)
                 && transcript.equals(other.transcript)
-                && pcapUrl.equals(other.pcapUrl);
+                && pcapUrl.equals(other.pcapUrl)
+                && nodes.equals(other.nodes)
+                && variableValues.equals(other.variableValues);
     }
 
     @java.lang.Override
@@ -170,7 +196,9 @@ public final class Artifact {
                 this.videoRecordingStartDelaySeconds,
                 this.recording,
                 this.transcript,
-                this.pcapUrl);
+                this.pcapUrl,
+                this.nodes,
+                this.variableValues);
     }
 
     @java.lang.Override
@@ -202,6 +230,10 @@ public final class Artifact {
 
         private Optional<String> pcapUrl = Optional.empty();
 
+        private Optional<List<NodeArtifact>> nodes = Optional.empty();
+
+        private Optional<Map<String, Object>> variableValues = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -217,9 +249,14 @@ public final class Artifact {
             recording(other.getRecording());
             transcript(other.getTranscript());
             pcapUrl(other.getPcapUrl());
+            nodes(other.getNodes());
+            variableValues(other.getVariableValues());
             return this;
         }
 
+        /**
+         * <p>These are the messages that were spoken during the call.</p>
+         */
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public Builder messages(Optional<List<ArtifactMessagesItem>> messages) {
             this.messages = messages;
@@ -231,6 +268,9 @@ public final class Artifact {
             return this;
         }
 
+        /**
+         * <p>These are the messages that were spoken during the call, formatted for OpenAI.</p>
+         */
         @JsonSetter(value = "messagesOpenAIFormatted", nulls = Nulls.SKIP)
         public Builder messagesOpenAiFormatted(Optional<List<OpenAiMessage>> messagesOpenAiFormatted) {
             this.messagesOpenAiFormatted = messagesOpenAiFormatted;
@@ -242,6 +282,9 @@ public final class Artifact {
             return this;
         }
 
+        /**
+         * <p>This is the recording url for the call. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "recordingUrl", nulls = Nulls.SKIP)
         public Builder recordingUrl(Optional<String> recordingUrl) {
             this.recordingUrl = recordingUrl;
@@ -253,6 +296,9 @@ public final class Artifact {
             return this;
         }
 
+        /**
+         * <p>This is the stereo recording url for the call. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "stereoRecordingUrl", nulls = Nulls.SKIP)
         public Builder stereoRecordingUrl(Optional<String> stereoRecordingUrl) {
             this.stereoRecordingUrl = stereoRecordingUrl;
@@ -264,6 +310,9 @@ public final class Artifact {
             return this;
         }
 
+        /**
+         * <p>This is video recording url for the call. To enable, set <code>assistant.artifactPlan.videoRecordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "videoRecordingUrl", nulls = Nulls.SKIP)
         public Builder videoRecordingUrl(Optional<String> videoRecordingUrl) {
             this.videoRecordingUrl = videoRecordingUrl;
@@ -275,6 +324,9 @@ public final class Artifact {
             return this;
         }
 
+        /**
+         * <p>This is video recording start delay in ms. To enable, set <code>assistant.artifactPlan.videoRecordingEnabled</code>. This can be used to align the playback of the recording with artifact.messages timestamps.</p>
+         */
         @JsonSetter(value = "videoRecordingStartDelaySeconds", nulls = Nulls.SKIP)
         public Builder videoRecordingStartDelaySeconds(Optional<Double> videoRecordingStartDelaySeconds) {
             this.videoRecordingStartDelaySeconds = videoRecordingStartDelaySeconds;
@@ -286,6 +338,9 @@ public final class Artifact {
             return this;
         }
 
+        /**
+         * <p>This is the recording url for the call. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "recording", nulls = Nulls.SKIP)
         public Builder recording(Optional<Recording> recording) {
             this.recording = recording;
@@ -297,6 +352,9 @@ public final class Artifact {
             return this;
         }
 
+        /**
+         * <p>This is the transcript of the call. This is derived from <code>artifact.messages</code> but provided for convenience.</p>
+         */
         @JsonSetter(value = "transcript", nulls = Nulls.SKIP)
         public Builder transcript(Optional<String> transcript) {
             this.transcript = transcript;
@@ -308,6 +366,9 @@ public final class Artifact {
             return this;
         }
 
+        /**
+         * <p>This is the packet capture url for the call. This is only available for <code>phone</code> type calls where phone number's provider is <code>vapi</code> or <code>byo-phone-number</code>.</p>
+         */
         @JsonSetter(value = "pcapUrl", nulls = Nulls.SKIP)
         public Builder pcapUrl(Optional<String> pcapUrl) {
             this.pcapUrl = pcapUrl;
@@ -316,6 +377,34 @@ public final class Artifact {
 
         public Builder pcapUrl(String pcapUrl) {
             this.pcapUrl = Optional.ofNullable(pcapUrl);
+            return this;
+        }
+
+        /**
+         * <p>This is the history of workflow nodes that were executed during the call.</p>
+         */
+        @JsonSetter(value = "nodes", nulls = Nulls.SKIP)
+        public Builder nodes(Optional<List<NodeArtifact>> nodes) {
+            this.nodes = nodes;
+            return this;
+        }
+
+        public Builder nodes(List<NodeArtifact> nodes) {
+            this.nodes = Optional.ofNullable(nodes);
+            return this;
+        }
+
+        /**
+         * <p>These are the variable values at the end of the workflow execution.</p>
+         */
+        @JsonSetter(value = "variableValues", nulls = Nulls.SKIP)
+        public Builder variableValues(Optional<Map<String, Object>> variableValues) {
+            this.variableValues = variableValues;
+            return this;
+        }
+
+        public Builder variableValues(Map<String, Object> variableValues) {
+            this.variableValues = Optional.ofNullable(variableValues);
             return this;
         }
 
@@ -330,6 +419,8 @@ public final class Artifact {
                     recording,
                     transcript,
                     pcapUrl,
+                    nodes,
+                    variableValues,
                     additionalProperties);
         }
     }

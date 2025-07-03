@@ -141,30 +141,48 @@ public final class GoHighLevelMcpCredential {
     }
 
     public interface AuthenticationSessionStage {
+        /**
+         * <p>This is the authentication session for the credential.</p>
+         */
         IdStage authenticationSession(@NotNull Oauth2AuthenticationSession authenticationSession);
 
         Builder from(GoHighLevelMcpCredential other);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         GoHighLevelMcpCredential build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -203,6 +221,7 @@ public final class GoHighLevelMcpCredential {
 
         /**
          * <p>This is the authentication session for the credential.</p>
+         * <p>This is the authentication session for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -215,6 +234,7 @@ public final class GoHighLevelMcpCredential {
 
         /**
          * <p>This is the unique identifier for the credential.</p>
+         * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -225,6 +245,7 @@ public final class GoHighLevelMcpCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -237,6 +258,7 @@ public final class GoHighLevelMcpCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -247,6 +269,7 @@ public final class GoHighLevelMcpCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -267,6 +290,9 @@ public final class GoHighLevelMcpCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

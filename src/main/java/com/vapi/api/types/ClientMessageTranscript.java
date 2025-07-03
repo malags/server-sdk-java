@@ -183,42 +183,69 @@ public final class ClientMessageTranscript {
     }
 
     public interface TypeStage {
+        /**
+         * <p>This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.</p>
+         */
         RoleStage type(@NotNull ClientMessageTranscriptType type);
 
         Builder from(ClientMessageTranscript other);
     }
 
     public interface RoleStage {
+        /**
+         * <p>This is the role for which the transcript is for.</p>
+         */
         TranscriptTypeStage role(@NotNull ClientMessageTranscriptRole role);
     }
 
     public interface TranscriptTypeStage {
+        /**
+         * <p>This is the type of the transcript.</p>
+         */
         TranscriptStage transcriptType(@NotNull ClientMessageTranscriptTranscriptType transcriptType);
     }
 
     public interface TranscriptStage {
+        /**
+         * <p>This is the transcript content.</p>
+         */
         _FinalStage transcript(@NotNull String transcript);
     }
 
     public interface _FinalStage {
         ClientMessageTranscript build();
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         _FinalStage phoneNumber(Optional<ClientMessageTranscriptPhoneNumber> phoneNumber);
 
         _FinalStage phoneNumber(ClientMessageTranscriptPhoneNumber phoneNumber);
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         _FinalStage timestamp(Optional<Double> timestamp);
 
         _FinalStage timestamp(Double timestamp);
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         _FinalStage call(Optional<Call> call);
 
         _FinalStage call(Call call);
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
@@ -266,6 +293,7 @@ public final class ClientMessageTranscript {
 
         /**
          * <p>This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.</p>
+         * <p>This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -276,6 +304,7 @@ public final class ClientMessageTranscript {
         }
 
         /**
+         * <p>This is the role for which the transcript is for.</p>
          * <p>This is the role for which the transcript is for.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -288,6 +317,7 @@ public final class ClientMessageTranscript {
 
         /**
          * <p>This is the type of the transcript.</p>
+         * <p>This is the type of the transcript.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -298,6 +328,7 @@ public final class ClientMessageTranscript {
         }
 
         /**
+         * <p>This is the transcript content.</p>
          * <p>This is the transcript content.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -318,6 +349,9 @@ public final class ClientMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -335,6 +369,9 @@ public final class ClientMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -352,6 +389,9 @@ public final class ClientMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public _FinalStage call(Optional<Call> call) {
@@ -369,6 +409,9 @@ public final class ClientMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public _FinalStage timestamp(Optional<Double> timestamp) {
@@ -386,6 +429,9 @@ public final class ClientMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ClientMessageTranscriptPhoneNumber> phoneNumber) {

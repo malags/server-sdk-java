@@ -82,6 +82,9 @@ public final class FallbackOpenAiTranscriber {
     }
 
     public interface ModelStage {
+        /**
+         * <p>This is the model that will be used for the transcription.</p>
+         */
         _FinalStage model(@NotNull FallbackOpenAiTranscriberModel model);
 
         Builder from(FallbackOpenAiTranscriber other);
@@ -90,6 +93,9 @@ public final class FallbackOpenAiTranscriber {
     public interface _FinalStage {
         FallbackOpenAiTranscriber build();
 
+        /**
+         * <p>This is the language that will be set for the transcription.</p>
+         */
         _FinalStage language(Optional<FallbackOpenAiTranscriberLanguage> language);
 
         _FinalStage language(FallbackOpenAiTranscriberLanguage language);
@@ -115,6 +121,7 @@ public final class FallbackOpenAiTranscriber {
 
         /**
          * <p>This is the model that will be used for the transcription.</p>
+         * <p>This is the model that will be used for the transcription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -134,6 +141,9 @@ public final class FallbackOpenAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public _FinalStage language(Optional<FallbackOpenAiTranscriberLanguage> language) {

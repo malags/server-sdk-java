@@ -135,6 +135,9 @@ public final class TokenRestrictions {
             return this;
         }
 
+        /**
+         * <p>This determines whether the token is enabled or disabled. Default is true, it's enabled.</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -146,6 +149,10 @@ public final class TokenRestrictions {
             return this;
         }
 
+        /**
+         * <p>This determines the allowed origins for this token. Validates the <code>Origin</code> header. Default is any origin.</p>
+         * <p>Only relevant for <code>public</code> tokens.</p>
+         */
         @JsonSetter(value = "allowedOrigins", nulls = Nulls.SKIP)
         public Builder allowedOrigins(Optional<List<String>> allowedOrigins) {
             this.allowedOrigins = allowedOrigins;
@@ -157,6 +164,10 @@ public final class TokenRestrictions {
             return this;
         }
 
+        /**
+         * <p>This determines which assistantIds can be used when creating a call. Default is any assistantId.</p>
+         * <p>Only relevant for <code>public</code> tokens.</p>
+         */
         @JsonSetter(value = "allowedAssistantIds", nulls = Nulls.SKIP)
         public Builder allowedAssistantIds(Optional<List<String>> allowedAssistantIds) {
             this.allowedAssistantIds = allowedAssistantIds;
@@ -168,6 +179,11 @@ public final class TokenRestrictions {
             return this;
         }
 
+        /**
+         * <p>This determines whether transient assistants can be used when creating a call. Default is true.</p>
+         * <p>If <code>allowedAssistantIds</code> is provided, this is automatically false.</p>
+         * <p>Only relevant for <code>public</code> tokens.</p>
+         */
         @JsonSetter(value = "allowTransientAssistant", nulls = Nulls.SKIP)
         public Builder allowTransientAssistant(Optional<Boolean> allowTransientAssistant) {
             this.allowTransientAssistant = allowTransientAssistant;

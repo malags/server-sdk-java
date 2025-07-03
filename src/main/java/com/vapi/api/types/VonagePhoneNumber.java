@@ -270,62 +270,119 @@ public final class VonagePhoneNumber {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the phone number.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(VonagePhoneNumber other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this phone number belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
+         */
         NumberStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface NumberStage {
+        /**
+         * <p>These are the digits of the phone number you own on your Vonage.</p>
+         */
         CredentialIdStage number(@NotNull String number);
     }
 
     public interface CredentialIdStage {
+        /**
+         * <p>This is the credential you added in dashboard.vapi.ai/keys. This is used to configure the number to send inbound calls to Vapi, make outbound calls and do live call updates like transfers and hangups.</p>
+         */
         _FinalStage credentialId(@NotNull String credentialId);
     }
 
     public interface _FinalStage {
         VonagePhoneNumber build();
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         _FinalStage fallbackDestination(Optional<VonagePhoneNumberFallbackDestination> fallbackDestination);
 
         _FinalStage fallbackDestination(VonagePhoneNumberFallbackDestination fallbackDestination);
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks);
 
         _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks);
 
+        /**
+         * <p>This is the status of the phone number.</p>
+         */
         _FinalStage status(Optional<VonagePhoneNumberStatus> status);
 
         _FinalStage status(VonagePhoneNumberStatus status);
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage workflowId(Optional<String> workflowId);
 
         _FinalStage workflowId(String workflowId);
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage squadId(Optional<String> squadId);
 
         _FinalStage squadId(String squadId);
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         _FinalStage server(Optional<Server> server);
 
         _FinalStage server(Server server);
@@ -394,6 +451,7 @@ public final class VonagePhoneNumber {
 
         /**
          * <p>This is the unique identifier for the phone number.</p>
+         * <p>This is the unique identifier for the phone number.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -404,6 +462,7 @@ public final class VonagePhoneNumber {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this phone number belongs to.</p>
          * <p>This is the unique identifier for the org that this phone number belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -416,6 +475,7 @@ public final class VonagePhoneNumber {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -426,6 +486,7 @@ public final class VonagePhoneNumber {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -438,6 +499,7 @@ public final class VonagePhoneNumber {
 
         /**
          * <p>These are the digits of the phone number you own on your Vonage.</p>
+         * <p>These are the digits of the phone number you own on your Vonage.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -448,6 +510,7 @@ public final class VonagePhoneNumber {
         }
 
         /**
+         * <p>This is the credential you added in dashboard.vapi.ai/keys. This is used to configure the number to send inbound calls to Vapi, make outbound calls and do live call updates like transfers and hangups.</p>
          * <p>This is the credential you added in dashboard.vapi.ai/keys. This is used to configure the number to send inbound calls to Vapi, make outbound calls and do live call updates like transfers and hangups.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -474,6 +537,15 @@ public final class VonagePhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @java.lang.Override
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public _FinalStage server(Optional<Server> server) {
@@ -492,6 +564,10 @@ public final class VonagePhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public _FinalStage squadId(Optional<String> squadId) {
@@ -510,6 +586,10 @@ public final class VonagePhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public _FinalStage workflowId(Optional<String> workflowId) {
@@ -528,6 +608,10 @@ public final class VonagePhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public _FinalStage assistantId(Optional<String> assistantId) {
@@ -545,6 +629,9 @@ public final class VonagePhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -562,6 +649,9 @@ public final class VonagePhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the status of the phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
         public _FinalStage status(Optional<VonagePhoneNumberStatus> status) {
@@ -579,6 +669,9 @@ public final class VonagePhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
@@ -602,6 +695,15 @@ public final class VonagePhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
         public _FinalStage fallbackDestination(Optional<VonagePhoneNumberFallbackDestination> fallbackDestination) {

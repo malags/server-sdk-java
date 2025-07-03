@@ -103,6 +103,9 @@ public final class LangfuseObservabilityPlan {
             return this;
         }
 
+        /**
+         * <p>This is an array of tags to be added to the Langfuse trace. Tags allow you to categorize and filter traces. https://langfuse.com/docs/tracing-features/tags</p>
+         */
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
         public Builder tags(List<String> tags) {
             this.tags.clear();
@@ -120,6 +123,10 @@ public final class LangfuseObservabilityPlan {
             return this;
         }
 
+        /**
+         * <p>This is a JSON object that will be added to the Langfuse trace. Traces can be enriched with metadata to better understand your users, application, and experiments. https://langfuse.com/docs/tracing-features/metadata
+         * By default it includes the call metadata, assistant metadata, and assistant overrides.</p>
+         */
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public Builder metadata(Optional<Map<String, Object>> metadata) {
             this.metadata = metadata;

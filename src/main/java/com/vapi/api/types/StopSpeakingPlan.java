@@ -169,6 +169,14 @@ public final class StopSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>This is the number of words that the customer has to say before the assistant will stop talking.</p>
+         * <p>Words like &quot;stop&quot;, &quot;actually&quot;, &quot;no&quot;, etc. will always interrupt immediately regardless of this value.</p>
+         * <p>Words like &quot;okay&quot;, &quot;yeah&quot;, &quot;right&quot; will never interrupt.</p>
+         * <p>When set to 0, <code>voiceSeconds</code> is used in addition to the transcriptions to determine the customer has started speaking.</p>
+         * <p>Defaults to 0.</p>
+         * <p>@default 0</p>
+         */
         @JsonSetter(value = "numWords", nulls = Nulls.SKIP)
         public Builder numWords(Optional<Double> numWords) {
             this.numWords = numWords;
@@ -180,6 +188,17 @@ public final class StopSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>This is the seconds customer has to speak before the assistant stops talking. This uses the VAD (Voice Activity Detection) spike to determine if the customer has started speaking.</p>
+         * <p>Considerations:</p>
+         * <ul>
+         * <li>A lower value might be more responsive but could potentially pick up non-speech sounds.</li>
+         * <li>A higher value reduces false positives but might slightly delay the detection of speech onset.</li>
+         * </ul>
+         * <p>This is only used if <code>numWords</code> is set to 0.</p>
+         * <p>Defaults to 0.2</p>
+         * <p>@default 0.2</p>
+         */
         @JsonSetter(value = "voiceSeconds", nulls = Nulls.SKIP)
         public Builder voiceSeconds(Optional<Double> voiceSeconds) {
             this.voiceSeconds = voiceSeconds;
@@ -191,6 +210,11 @@ public final class StopSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>This is the seconds to wait before the assistant will start talking again after being interrupted.</p>
+         * <p>Defaults to 1.</p>
+         * <p>@default 1</p>
+         */
         @JsonSetter(value = "backoffSeconds", nulls = Nulls.SKIP)
         public Builder backoffSeconds(Optional<Double> backoffSeconds) {
             this.backoffSeconds = backoffSeconds;
@@ -202,6 +226,10 @@ public final class StopSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>These are the phrases that will never interrupt the assistant, even if numWords threshold is met.
+         * These are typically acknowledgement or backchanneling phrases.</p>
+         */
         @JsonSetter(value = "acknowledgementPhrases", nulls = Nulls.SKIP)
         public Builder acknowledgementPhrases(Optional<List<String>> acknowledgementPhrases) {
             this.acknowledgementPhrases = acknowledgementPhrases;
@@ -213,6 +241,10 @@ public final class StopSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>These are the phrases that will always interrupt the assistant immediately, regardless of numWords.
+         * These are typically phrases indicating disagreement or desire to stop.</p>
+         */
         @JsonSetter(value = "interruptionPhrases", nulls = Nulls.SKIP)
         public Builder interruptionPhrases(Optional<List<String>> interruptionPhrases) {
             this.interruptionPhrases = interruptionPhrases;

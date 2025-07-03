@@ -97,18 +97,33 @@ public final class ExactReplacement {
     }
 
     public interface KeyStage {
+        /**
+         * <p>This is the key to replace.</p>
+         */
         ValueStage key(@NotNull String key);
 
         Builder from(ExactReplacement other);
     }
 
     public interface ValueStage {
+        /**
+         * <p>This is the value that will replace the match.</p>
+         */
         _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
         ExactReplacement build();
 
+        /**
+         * <p>This option let's you control whether to replace all instances of the key or only the first one. By default, it only replaces the first instance.
+         * Examples:</p>
+         * <ul>
+         * <li>For { type: 'exact', key: 'hello', value: 'hi', replaceAllEnabled: false }. Before: &quot;hello world, hello universe&quot; | After: &quot;hi world, hello universe&quot;</li>
+         * <li>For { type: 'exact', key: 'hello', value: 'hi', replaceAllEnabled: true }. Before: &quot;hello world, hello universe&quot; | After: &quot;hi world, hi universe&quot;
+         * @default false</li>
+         * </ul>
+         */
         _FinalStage replaceAllEnabled(Optional<Boolean> replaceAllEnabled);
 
         _FinalStage replaceAllEnabled(Boolean replaceAllEnabled);
@@ -137,6 +152,7 @@ public final class ExactReplacement {
 
         /**
          * <p>This is the key to replace.</p>
+         * <p>This is the key to replace.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -147,6 +163,7 @@ public final class ExactReplacement {
         }
 
         /**
+         * <p>This is the value that will replace the match.</p>
          * <p>This is the value that will replace the match.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -173,6 +190,15 @@ public final class ExactReplacement {
             return this;
         }
 
+        /**
+         * <p>This option let's you control whether to replace all instances of the key or only the first one. By default, it only replaces the first instance.
+         * Examples:</p>
+         * <ul>
+         * <li>For { type: 'exact', key: 'hello', value: 'hi', replaceAllEnabled: false }. Before: &quot;hello world, hello universe&quot; | After: &quot;hi world, hello universe&quot;</li>
+         * <li>For { type: 'exact', key: 'hello', value: 'hi', replaceAllEnabled: true }. Before: &quot;hello world, hello universe&quot; | After: &quot;hi world, hi universe&quot;
+         * @default false</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "replaceAllEnabled", nulls = Nulls.SKIP)
         public _FinalStage replaceAllEnabled(Optional<Boolean> replaceAllEnabled) {

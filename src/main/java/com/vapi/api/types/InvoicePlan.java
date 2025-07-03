@@ -130,6 +130,9 @@ public final class InvoicePlan {
             return this;
         }
 
+        /**
+         * <p>This is the name of the company.</p>
+         */
         @JsonSetter(value = "companyName", nulls = Nulls.SKIP)
         public Builder companyName(Optional<String> companyName) {
             this.companyName = companyName;
@@ -141,6 +144,9 @@ public final class InvoicePlan {
             return this;
         }
 
+        /**
+         * <p>This is the address of the company.</p>
+         */
         @JsonSetter(value = "companyAddress", nulls = Nulls.SKIP)
         public Builder companyAddress(Optional<String> companyAddress) {
             this.companyAddress = companyAddress;
@@ -152,6 +158,9 @@ public final class InvoicePlan {
             return this;
         }
 
+        /**
+         * <p>This is the tax ID of the company.</p>
+         */
         @JsonSetter(value = "companyTaxId", nulls = Nulls.SKIP)
         public Builder companyTaxId(Optional<String> companyTaxId) {
             this.companyTaxId = companyTaxId;
@@ -163,6 +172,9 @@ public final class InvoicePlan {
             return this;
         }
 
+        /**
+         * <p>This is the preferred invoicing email of the company. If not specified, defaults to the subscription's email.</p>
+         */
         @JsonSetter(value = "companyEmail", nulls = Nulls.SKIP)
         public Builder companyEmail(Optional<String> companyEmail) {
             this.companyEmail = companyEmail;

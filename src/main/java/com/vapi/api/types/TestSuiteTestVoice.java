@@ -186,44 +186,71 @@ public final class TestSuiteTestVoice {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the test.</p>
+         */
         TestSuiteIdStage id(@NotNull String id);
 
         Builder from(TestSuiteTestVoice other);
     }
 
     public interface TestSuiteIdStage {
+        /**
+         * <p>This is the unique identifier for the test suite this test belongs to.</p>
+         */
         OrgIdStage testSuiteId(@NotNull String testSuiteId);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the organization this test belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the test was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the test was last updated.</p>
+         */
         ScriptStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface ScriptStage {
+        /**
+         * <p>This is the script to be used for the voice test.</p>
+         */
         _FinalStage script(@NotNull String script);
     }
 
     public interface _FinalStage {
         TestSuiteTestVoice build();
 
+        /**
+         * <p>These are the scorers used to evaluate the test.</p>
+         */
         _FinalStage scorers(List<TestSuiteTestScorerAi> scorers);
 
         _FinalStage addScorers(TestSuiteTestScorerAi scorers);
 
         _FinalStage addAllScorers(List<TestSuiteTestScorerAi> scorers);
 
+        /**
+         * <p>This is the name of the test.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the number of attempts allowed for the test.</p>
+         */
         _FinalStage numAttempts(Optional<Double> numAttempts);
 
         _FinalStage numAttempts(Double numAttempts);
@@ -271,6 +298,7 @@ public final class TestSuiteTestVoice {
 
         /**
          * <p>This is the unique identifier for the test.</p>
+         * <p>This is the unique identifier for the test.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -281,6 +309,7 @@ public final class TestSuiteTestVoice {
         }
 
         /**
+         * <p>This is the unique identifier for the test suite this test belongs to.</p>
          * <p>This is the unique identifier for the test suite this test belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -293,6 +322,7 @@ public final class TestSuiteTestVoice {
 
         /**
          * <p>This is the unique identifier for the organization this test belongs to.</p>
+         * <p>This is the unique identifier for the organization this test belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -303,6 +333,7 @@ public final class TestSuiteTestVoice {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the test was created.</p>
          * <p>This is the ISO 8601 date-time string of when the test was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -315,6 +346,7 @@ public final class TestSuiteTestVoice {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the test was last updated.</p>
+         * <p>This is the ISO 8601 date-time string of when the test was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -325,6 +357,7 @@ public final class TestSuiteTestVoice {
         }
 
         /**
+         * <p>This is the script to be used for the voice test.</p>
          * <p>This is the script to be used for the voice test.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -345,6 +378,9 @@ public final class TestSuiteTestVoice {
             return this;
         }
 
+        /**
+         * <p>This is the number of attempts allowed for the test.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "numAttempts", nulls = Nulls.SKIP)
         public _FinalStage numAttempts(Optional<Double> numAttempts) {
@@ -362,6 +398,9 @@ public final class TestSuiteTestVoice {
             return this;
         }
 
+        /**
+         * <p>This is the name of the test.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -389,6 +428,9 @@ public final class TestSuiteTestVoice {
             return this;
         }
 
+        /**
+         * <p>These are the scorers used to evaluate the test.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "scorers", nulls = Nulls.SKIP)
         public _FinalStage scorers(List<TestSuiteTestScorerAi> scorers) {

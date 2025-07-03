@@ -26,6 +26,8 @@ public final class CreateCloudflareCredentialDto {
 
     private final Optional<String> accountEmail;
 
+    private final Optional<Double> fallbackIndex;
+
     private final Optional<CloudflareR2BucketPlan> bucketPlan;
 
     private final Optional<String> name;
@@ -36,12 +38,14 @@ public final class CreateCloudflareCredentialDto {
             Optional<String> accountId,
             Optional<String> apiKey,
             Optional<String> accountEmail,
+            Optional<Double> fallbackIndex,
             Optional<CloudflareR2BucketPlan> bucketPlan,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.accountId = accountId;
         this.apiKey = apiKey;
         this.accountEmail = accountEmail;
+        this.fallbackIndex = fallbackIndex;
         this.bucketPlan = bucketPlan;
         this.name = name;
         this.additionalProperties = additionalProperties;
@@ -69,6 +73,14 @@ public final class CreateCloudflareCredentialDto {
     @JsonProperty("accountEmail")
     public Optional<String> getAccountEmail() {
         return accountEmail;
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -102,13 +114,15 @@ public final class CreateCloudflareCredentialDto {
         return accountId.equals(other.accountId)
                 && apiKey.equals(other.apiKey)
                 && accountEmail.equals(other.accountEmail)
+                && fallbackIndex.equals(other.fallbackIndex)
                 && bucketPlan.equals(other.bucketPlan)
                 && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.accountId, this.apiKey, this.accountEmail, this.bucketPlan, this.name);
+        return Objects.hash(
+                this.accountId, this.apiKey, this.accountEmail, this.fallbackIndex, this.bucketPlan, this.name);
     }
 
     @java.lang.Override
@@ -128,6 +142,8 @@ public final class CreateCloudflareCredentialDto {
 
         private Optional<String> accountEmail = Optional.empty();
 
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         private Optional<CloudflareR2BucketPlan> bucketPlan = Optional.empty();
 
         private Optional<String> name = Optional.empty();
@@ -141,11 +157,15 @@ public final class CreateCloudflareCredentialDto {
             accountId(other.getAccountId());
             apiKey(other.getApiKey());
             accountEmail(other.getAccountEmail());
+            fallbackIndex(other.getFallbackIndex());
             bucketPlan(other.getBucketPlan());
             name(other.getName());
             return this;
         }
 
+        /**
+         * <p>Cloudflare Account Id.</p>
+         */
         @JsonSetter(value = "accountId", nulls = Nulls.SKIP)
         public Builder accountId(Optional<String> accountId) {
             this.accountId = accountId;
@@ -157,6 +177,9 @@ public final class CreateCloudflareCredentialDto {
             return this;
         }
 
+        /**
+         * <p>Cloudflare API Key / Token.</p>
+         */
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public Builder apiKey(Optional<String> apiKey) {
             this.apiKey = apiKey;
@@ -168,6 +191,9 @@ public final class CreateCloudflareCredentialDto {
             return this;
         }
 
+        /**
+         * <p>Cloudflare Account Email.</p>
+         */
         @JsonSetter(value = "accountEmail", nulls = Nulls.SKIP)
         public Builder accountEmail(Optional<String> accountEmail) {
             this.accountEmail = accountEmail;
@@ -179,6 +205,23 @@ public final class CreateCloudflareCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public Builder fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
+            return this;
+        }
+
+        public Builder fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in R2</p>
+         */
         @JsonSetter(value = "bucketPlan", nulls = Nulls.SKIP)
         public Builder bucketPlan(Optional<CloudflareR2BucketPlan> bucketPlan) {
             this.bucketPlan = bucketPlan;
@@ -190,6 +233,9 @@ public final class CreateCloudflareCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -203,7 +249,7 @@ public final class CreateCloudflareCredentialDto {
 
         public CreateCloudflareCredentialDto build() {
             return new CreateCloudflareCredentialDto(
-                    accountId, apiKey, accountEmail, bucketPlan, name, additionalProperties);
+                    accountId, apiKey, accountEmail, fallbackIndex, bucketPlan, name, additionalProperties);
         }
     }
 }

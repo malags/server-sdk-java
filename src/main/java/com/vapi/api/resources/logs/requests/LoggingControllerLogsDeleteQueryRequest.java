@@ -219,6 +219,9 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
+        /**
+         * <p>This is the type of the log.</p>
+         */
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
         public Builder type(Optional<LoggingControllerLogsDeleteQueryRequestType> type) {
             this.type = type;
@@ -263,6 +266,9 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the phone number.</p>
+         */
         @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
         public Builder phoneNumberId(Optional<String> phoneNumberId) {
             this.phoneNumberId = phoneNumberId;
@@ -285,6 +291,9 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the customer.</p>
+         */
         @JsonSetter(value = "customerId", nulls = Nulls.SKIP)
         public Builder customerId(Optional<String> customerId) {
             this.customerId = customerId;
@@ -307,6 +316,9 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the squad.</p>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -329,6 +341,9 @@ public final class LoggingControllerLogsDeleteQueryRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the call.</p>
+         */
         @JsonSetter(value = "callId", nulls = Nulls.SKIP)
         public Builder callId(Optional<String> callId) {
             this.callId = callId;

@@ -120,6 +120,9 @@ public final class UpdateSquadDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the squad.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -131,6 +134,10 @@ public final class UpdateSquadDto {
             return this;
         }
 
+        /**
+         * <p>This is the list of assistants that make up the squad.</p>
+         * <p>The call will start with the first assistant in the list.</p>
+         */
         @JsonSetter(value = "members", nulls = Nulls.SKIP)
         public Builder members(List<SquadMemberDto> members) {
             this.members.clear();
@@ -148,6 +155,10 @@ public final class UpdateSquadDto {
             return this;
         }
 
+        /**
+         * <p>This can be used to override all the assistants' settings and provide values for their template variables.</p>
+         * <p>Both <code>membersOverrides</code> and <code>members[n].assistantOverrides</code> can be used together. First, <code>members[n].assistantOverrides</code> is applied. Then, <code>membersOverrides</code> is applied as a global override.</p>
+         */
         @JsonSetter(value = "membersOverrides", nulls = Nulls.SKIP)
         public Builder membersOverrides(Optional<AssistantOverrides> membersOverrides) {
             this.membersOverrides = membersOverrides;

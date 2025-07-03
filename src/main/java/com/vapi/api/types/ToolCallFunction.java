@@ -9,11 +9,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -21,32 +19,32 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ToolCallFunction.Builder.class)
 public final class ToolCallFunction {
-    private final String name;
+    private final String arguments;
 
-    private final Map<String, Object> arguments;
+    private final String name;
 
     private final Map<String, Object> additionalProperties;
 
-    private ToolCallFunction(String name, Map<String, Object> arguments, Map<String, Object> additionalProperties) {
-        this.name = name;
+    private ToolCallFunction(String arguments, String name, Map<String, Object> additionalProperties) {
         this.arguments = arguments;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return This is the name of the function the model called.
+     * @return This is the arguments to call the function with
+     */
+    @JsonProperty("arguments")
+    public String getArguments() {
+        return arguments;
+    }
+
+    /**
+     * @return This is the name of the function to call
      */
     @JsonProperty("name")
     public String getName() {
         return name;
-    }
-
-    /**
-     * @return These are the arguments that the function was called with.
-     */
-    @JsonProperty("arguments")
-    public Map<String, Object> getArguments() {
-        return arguments;
     }
 
     @java.lang.Override
@@ -61,12 +59,12 @@ public final class ToolCallFunction {
     }
 
     private boolean equalTo(ToolCallFunction other) {
-        return name.equals(other.name) && arguments.equals(other.arguments);
+        return arguments.equals(other.arguments) && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.arguments);
+        return Objects.hash(this.arguments, this.name);
     }
 
     @java.lang.Override
@@ -74,31 +72,35 @@ public final class ToolCallFunction {
         return ObjectMappers.stringify(this);
     }
 
-    public static NameStage builder() {
+    public static ArgumentsStage builder() {
         return new Builder();
     }
 
-    public interface NameStage {
-        _FinalStage name(@NotNull String name);
+    public interface ArgumentsStage {
+        /**
+         * <p>This is the arguments to call the function with</p>
+         */
+        NameStage arguments(@NotNull String arguments);
 
         Builder from(ToolCallFunction other);
     }
 
+    public interface NameStage {
+        /**
+         * <p>This is the name of the function to call</p>
+         */
+        _FinalStage name(@NotNull String name);
+    }
+
     public interface _FinalStage {
         ToolCallFunction build();
-
-        _FinalStage arguments(Map<String, Object> arguments);
-
-        _FinalStage putAllArguments(Map<String, Object> arguments);
-
-        _FinalStage arguments(String key, Object value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, _FinalStage {
-        private String name;
+    public static final class Builder implements ArgumentsStage, NameStage, _FinalStage {
+        private String arguments;
 
-        private Map<String, Object> arguments = new LinkedHashMap<>();
+        private String name;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -107,13 +109,26 @@ public final class ToolCallFunction {
 
         @java.lang.Override
         public Builder from(ToolCallFunction other) {
-            name(other.getName());
             arguments(other.getArguments());
+            name(other.getName());
             return this;
         }
 
         /**
-         * <p>This is the name of the function the model called.</p>
+         * <p>This is the arguments to call the function with</p>
+         * <p>This is the arguments to call the function with</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("arguments")
+        public NameStage arguments(@NotNull String arguments) {
+            this.arguments = Objects.requireNonNull(arguments, "arguments must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the name of the function to call</p>
+         * <p>This is the name of the function to call</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -123,37 +138,9 @@ public final class ToolCallFunction {
             return this;
         }
 
-        /**
-         * <p>These are the arguments that the function was called with.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage arguments(String key, Object value) {
-            this.arguments.put(key, value);
-            return this;
-        }
-
-        /**
-         * <p>These are the arguments that the function was called with.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage putAllArguments(Map<String, Object> arguments) {
-            this.arguments.putAll(arguments);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "arguments", nulls = Nulls.SKIP)
-        public _FinalStage arguments(Map<String, Object> arguments) {
-            this.arguments.clear();
-            this.arguments.putAll(arguments);
-            return this;
-        }
-
         @java.lang.Override
         public ToolCallFunction build() {
-            return new ToolCallFunction(name, arguments, additionalProperties);
+            return new ToolCallFunction(arguments, name, additionalProperties);
         }
     }
 }

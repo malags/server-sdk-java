@@ -109,6 +109,9 @@ public final class TrieveKnowledgeBaseSearchPlan {
     }
 
     public interface SearchTypeStage {
+        /**
+         * <p>This is the search method used when searching for relevant chunks from the vector store.</p>
+         */
         _FinalStage searchType(@NotNull TrieveKnowledgeBaseSearchPlanSearchType searchType);
 
         Builder from(TrieveKnowledgeBaseSearchPlan other);
@@ -117,14 +120,23 @@ public final class TrieveKnowledgeBaseSearchPlan {
     public interface _FinalStage {
         TrieveKnowledgeBaseSearchPlan build();
 
+        /**
+         * <p>Specifies the number of top chunks to return. This corresponds to the <code>page_size</code> parameter in Trieve.</p>
+         */
         _FinalStage topK(Optional<Double> topK);
 
         _FinalStage topK(Double topK);
 
+        /**
+         * <p>If true, stop words (specified in server/src/stop-words.txt in the git repo) will be removed. This will preserve queries that are entirely stop words.</p>
+         */
         _FinalStage removeStopWords(Optional<Boolean> removeStopWords);
 
         _FinalStage removeStopWords(Boolean removeStopWords);
 
+        /**
+         * <p>This is the score threshold to filter out chunks with a score below the threshold for cosine distance metric. For Manhattan Distance, Euclidean Distance, and Dot Product, it will filter out scores above the threshold distance. This threshold applies before weight and bias modifications. If not specified, this defaults to no threshold. A threshold of 0 will default to no threshold.</p>
+         */
         _FinalStage scoreThreshold(Optional<Double> scoreThreshold);
 
         _FinalStage scoreThreshold(Double scoreThreshold);
@@ -156,6 +168,7 @@ public final class TrieveKnowledgeBaseSearchPlan {
 
         /**
          * <p>This is the search method used when searching for relevant chunks from the vector store.</p>
+         * <p>This is the search method used when searching for relevant chunks from the vector store.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -175,6 +188,9 @@ public final class TrieveKnowledgeBaseSearchPlan {
             return this;
         }
 
+        /**
+         * <p>This is the score threshold to filter out chunks with a score below the threshold for cosine distance metric. For Manhattan Distance, Euclidean Distance, and Dot Product, it will filter out scores above the threshold distance. This threshold applies before weight and bias modifications. If not specified, this defaults to no threshold. A threshold of 0 will default to no threshold.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "scoreThreshold", nulls = Nulls.SKIP)
         public _FinalStage scoreThreshold(Optional<Double> scoreThreshold) {
@@ -192,6 +208,9 @@ public final class TrieveKnowledgeBaseSearchPlan {
             return this;
         }
 
+        /**
+         * <p>If true, stop words (specified in server/src/stop-words.txt in the git repo) will be removed. This will preserve queries that are entirely stop words.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "removeStopWords", nulls = Nulls.SKIP)
         public _FinalStage removeStopWords(Optional<Boolean> removeStopWords) {
@@ -209,6 +228,9 @@ public final class TrieveKnowledgeBaseSearchPlan {
             return this;
         }
 
+        /**
+         * <p>Specifies the number of top chunks to return. This corresponds to the <code>page_size</code> parameter in Trieve.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "topK", nulls = Nulls.SKIP)
         public _FinalStage topK(Optional<Double> topK) {

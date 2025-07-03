@@ -112,6 +112,9 @@ public final class TalkscriberTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used for the transcription.</p>
+         */
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public Builder model(Optional<String> model) {
             this.model = model;
@@ -123,6 +126,9 @@ public final class TalkscriberTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription. The list of languages Whisper supports can be found here: https://github.com/openai/whisper/blob/main/whisper/tokenizer.py</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<TalkscriberTranscriberLanguage> language) {
             this.language = language;
@@ -134,6 +140,9 @@ public final class TalkscriberTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public Builder fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
             this.fallbackPlan = fallbackPlan;

@@ -188,20 +188,32 @@ public final class Template {
     }
 
     public interface IdStage {
+        /**
+         * <p>The unique identifier for the template.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(Template other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>The unique identifier for the organization that this template belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>The ISO 8601 date-time string of when the template was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>The ISO 8601 date-time string of when the template was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
@@ -224,6 +236,9 @@ public final class Template {
 
         _FinalStage visibility(TemplateVisibility visibility);
 
+        /**
+         * <p>The name of the template. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -277,6 +292,7 @@ public final class Template {
 
         /**
          * <p>The unique identifier for the template.</p>
+         * <p>The unique identifier for the template.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -287,6 +303,7 @@ public final class Template {
         }
 
         /**
+         * <p>The unique identifier for the organization that this template belongs to.</p>
          * <p>The unique identifier for the organization that this template belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -299,6 +316,7 @@ public final class Template {
 
         /**
          * <p>The ISO 8601 date-time string of when the template was created.</p>
+         * <p>The ISO 8601 date-time string of when the template was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -309,6 +327,7 @@ public final class Template {
         }
 
         /**
+         * <p>The ISO 8601 date-time string of when the template was last updated.</p>
          * <p>The ISO 8601 date-time string of when the template was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -342,6 +361,9 @@ public final class Template {
             return this;
         }
 
+        /**
+         * <p>The name of the template. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

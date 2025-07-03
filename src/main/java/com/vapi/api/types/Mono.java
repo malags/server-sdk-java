@@ -114,6 +114,9 @@ public final class Mono {
             return this;
         }
 
+        /**
+         * <p>This is the combined recording url for the call. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "combinedUrl", nulls = Nulls.SKIP)
         public Builder combinedUrl(Optional<String> combinedUrl) {
             this.combinedUrl = combinedUrl;
@@ -125,6 +128,9 @@ public final class Mono {
             return this;
         }
 
+        /**
+         * <p>This is the mono recording url for the assistant. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "assistantUrl", nulls = Nulls.SKIP)
         public Builder assistantUrl(Optional<String> assistantUrl) {
             this.assistantUrl = assistantUrl;
@@ -136,6 +142,9 @@ public final class Mono {
             return this;
         }
 
+        /**
+         * <p>This is the mono recording url for the customer. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "customerUrl", nulls = Nulls.SKIP)
         public Builder customerUrl(Optional<String> customerUrl) {
             this.customerUrl = customerUrl;

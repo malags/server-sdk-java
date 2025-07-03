@@ -28,6 +28,8 @@ public final class CloudflareCredential {
 
     private final Optional<String> accountEmail;
 
+    private final Optional<Double> fallbackIndex;
+
     private final String id;
 
     private final String orgId;
@@ -46,6 +48,7 @@ public final class CloudflareCredential {
             Optional<String> accountId,
             Optional<String> apiKey,
             Optional<String> accountEmail,
+            Optional<Double> fallbackIndex,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -56,6 +59,7 @@ public final class CloudflareCredential {
         this.accountId = accountId;
         this.apiKey = apiKey;
         this.accountEmail = accountEmail;
+        this.fallbackIndex = fallbackIndex;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -95,6 +99,14 @@ public final class CloudflareCredential {
     @JsonProperty("accountEmail")
     public Optional<String> getAccountEmail() {
         return accountEmail;
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -160,6 +172,7 @@ public final class CloudflareCredential {
         return accountId.equals(other.accountId)
                 && apiKey.equals(other.apiKey)
                 && accountEmail.equals(other.accountEmail)
+                && fallbackIndex.equals(other.fallbackIndex)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
@@ -174,6 +187,7 @@ public final class CloudflareCredential {
                 this.accountId,
                 this.apiKey,
                 this.accountEmail,
+                this.fallbackIndex,
                 this.id,
                 this.orgId,
                 this.createdAt,
@@ -192,42 +206,76 @@ public final class CloudflareCredential {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(CloudflareCredential other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         CloudflareCredential build();
 
+        /**
+         * <p>Cloudflare Account Id.</p>
+         */
         _FinalStage accountId(Optional<String> accountId);
 
         _FinalStage accountId(String accountId);
 
+        /**
+         * <p>Cloudflare API Key / Token.</p>
+         */
         _FinalStage apiKey(Optional<String> apiKey);
 
         _FinalStage apiKey(String apiKey);
 
+        /**
+         * <p>Cloudflare Account Email.</p>
+         */
         _FinalStage accountEmail(Optional<String> accountEmail);
 
         _FinalStage accountEmail(String accountEmail);
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        _FinalStage fallbackIndex(Optional<Double> fallbackIndex);
+
+        _FinalStage fallbackIndex(Double fallbackIndex);
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in R2</p>
+         */
         _FinalStage bucketPlan(Optional<CloudflareR2BucketPlan> bucketPlan);
 
         _FinalStage bucketPlan(CloudflareR2BucketPlan bucketPlan);
@@ -247,6 +295,8 @@ public final class CloudflareCredential {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         private Optional<String> accountEmail = Optional.empty();
 
         private Optional<String> apiKey = Optional.empty();
@@ -263,6 +313,7 @@ public final class CloudflareCredential {
             accountId(other.getAccountId());
             apiKey(other.getApiKey());
             accountEmail(other.getAccountEmail());
+            fallbackIndex(other.getFallbackIndex());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -273,6 +324,7 @@ public final class CloudflareCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the credential.</p>
          * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -285,6 +337,7 @@ public final class CloudflareCredential {
 
         /**
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -296,6 +349,7 @@ public final class CloudflareCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -306,6 +360,7 @@ public final class CloudflareCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -326,6 +381,9 @@ public final class CloudflareCredential {
             return this;
         }
 
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in R2</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "bucketPlan", nulls = Nulls.SKIP)
         public _FinalStage bucketPlan(Optional<CloudflareR2BucketPlan> bucketPlan) {
@@ -343,10 +401,33 @@ public final class CloudflareCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
             this.name = name;
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public _FinalStage fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
             return this;
         }
 
@@ -360,6 +441,9 @@ public final class CloudflareCredential {
             return this;
         }
 
+        /**
+         * <p>Cloudflare Account Email.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "accountEmail", nulls = Nulls.SKIP)
         public _FinalStage accountEmail(Optional<String> accountEmail) {
@@ -377,6 +461,9 @@ public final class CloudflareCredential {
             return this;
         }
 
+        /**
+         * <p>Cloudflare API Key / Token.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public _FinalStage apiKey(Optional<String> apiKey) {
@@ -394,6 +481,9 @@ public final class CloudflareCredential {
             return this;
         }
 
+        /**
+         * <p>Cloudflare Account Id.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "accountId", nulls = Nulls.SKIP)
         public _FinalStage accountId(Optional<String> accountId) {
@@ -407,6 +497,7 @@ public final class CloudflareCredential {
                     accountId,
                     apiKey,
                     accountEmail,
+                    fallbackIndex,
                     id,
                     orgId,
                     createdAt,

@@ -191,6 +191,9 @@ public final class UpdateByoSipTrunkCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -202,6 +205,9 @@ public final class UpdateByoSipTrunkCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the list of SIP trunk's gateways.</p>
+         */
         @JsonSetter(value = "gateways", nulls = Nulls.SKIP)
         public Builder gateways(Optional<List<SipTrunkGateway>> gateways) {
             this.gateways = gateways;
@@ -213,6 +219,9 @@ public final class UpdateByoSipTrunkCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This can be used to configure the outbound authentication if required by the SIP trunk.</p>
+         */
         @JsonSetter(value = "outboundAuthenticationPlan", nulls = Nulls.SKIP)
         public Builder outboundAuthenticationPlan(
                 Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan) {
@@ -225,6 +234,14 @@ public final class UpdateByoSipTrunkCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This ensures the outbound origination attempts have a leading plus. Defaults to false to match conventional telecom behavior.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Vonage/Twilio requires leading plus for all outbound calls. Set this to true.</li>
+         * </ul>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "outboundLeadingPlusEnabled", nulls = Nulls.SKIP)
         public Builder outboundLeadingPlusEnabled(Optional<Boolean> outboundLeadingPlusEnabled) {
             this.outboundLeadingPlusEnabled = outboundLeadingPlusEnabled;
@@ -236,6 +253,9 @@ public final class UpdateByoSipTrunkCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This can be used to configure the tech prefix on outbound calls. This is an advanced property.</p>
+         */
         @JsonSetter(value = "techPrefix", nulls = Nulls.SKIP)
         public Builder techPrefix(Optional<String> techPrefix) {
             this.techPrefix = techPrefix;
@@ -247,6 +267,9 @@ public final class UpdateByoSipTrunkCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This can be used to enable the SIP diversion header for authenticating the calling number if the SIP trunk supports it. This is an advanced property.</p>
+         */
         @JsonSetter(value = "sipDiversionHeader", nulls = Nulls.SKIP)
         public Builder sipDiversionHeader(Optional<String> sipDiversionHeader) {
             this.sipDiversionHeader = sipDiversionHeader;
@@ -258,6 +281,9 @@ public final class UpdateByoSipTrunkCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is an advanced configuration for enterprise deployments. This uses the onprem SBC to trunk into the SIP trunk's <code>gateways</code>, rather than the managed SBC provided by Vapi.</p>
+         */
         @JsonSetter(value = "sbcConfiguration", nulls = Nulls.SKIP)
         public Builder sbcConfiguration(Optional<SbcConfiguration> sbcConfiguration) {
             this.sbcConfiguration = sbcConfiguration;

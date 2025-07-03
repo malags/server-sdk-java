@@ -88,6 +88,9 @@ public final class CreateVonageCredentialDto {
     }
 
     public interface ApiSecretStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         ApiKeyStage apiSecret(@NotNull String apiSecret);
 
         Builder from(CreateVonageCredentialDto other);
@@ -100,6 +103,9 @@ public final class CreateVonageCredentialDto {
     public interface _FinalStage {
         CreateVonageCredentialDto build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -128,6 +134,7 @@ public final class CreateVonageCredentialDto {
 
         /**
          * <p>This is not returned in the API.</p>
+         * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -154,6 +161,9 @@ public final class CreateVonageCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

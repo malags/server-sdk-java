@@ -130,6 +130,9 @@ public final class UpdateLangfuseCredentialDto {
             return this;
         }
 
+        /**
+         * <p>The public key for Langfuse project. Eg: pk-lf-...</p>
+         */
         @JsonSetter(value = "publicKey", nulls = Nulls.SKIP)
         public Builder publicKey(Optional<String> publicKey) {
             this.publicKey = publicKey;
@@ -141,6 +144,9 @@ public final class UpdateLangfuseCredentialDto {
             return this;
         }
 
+        /**
+         * <p>The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.</p>
+         */
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public Builder apiKey(Optional<String> apiKey) {
             this.apiKey = apiKey;
@@ -152,6 +158,9 @@ public final class UpdateLangfuseCredentialDto {
             return this;
         }
 
+        /**
+         * <p>The host URL for Langfuse project. Eg: https://cloud.langfuse.com</p>
+         */
         @JsonSetter(value = "apiUrl", nulls = Nulls.SKIP)
         public Builder apiUrl(Optional<String> apiUrl) {
             this.apiUrl = apiUrl;
@@ -163,6 +172,9 @@ public final class UpdateLangfuseCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

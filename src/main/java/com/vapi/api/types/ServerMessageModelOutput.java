@@ -33,6 +33,8 @@ public final class ServerMessageModelOutput {
 
     private final Optional<Call> call;
 
+    private final Optional<Chat> chat;
+
     private final Map<String, Object> output;
 
     private final Map<String, Object> additionalProperties;
@@ -44,6 +46,7 @@ public final class ServerMessageModelOutput {
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
             Optional<Call> call,
+            Optional<Chat> chat,
             Map<String, Object> output,
             Map<String, Object> additionalProperties) {
         this.phoneNumber = phoneNumber;
@@ -52,6 +55,7 @@ public final class ServerMessageModelOutput {
         this.assistant = assistant;
         this.customer = customer;
         this.call = call;
+        this.chat = chat;
         this.output = output;
         this.additionalProperties = additionalProperties;
     }
@@ -114,6 +118,14 @@ public final class ServerMessageModelOutput {
     }
 
     /**
+     * @return This is the chat object.
+     */
+    @JsonProperty("chat")
+    public Optional<Chat> getChat() {
+        return chat;
+    }
+
+    /**
      * @return This is the output of the model. It can be a token or tool call.
      */
     @JsonProperty("output")
@@ -139,13 +151,21 @@ public final class ServerMessageModelOutput {
                 && assistant.equals(other.assistant)
                 && customer.equals(other.customer)
                 && call.equals(other.call)
+                && chat.equals(other.chat)
                 && output.equals(other.output);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.phoneNumber, this.timestamp, this.artifact, this.assistant, this.customer, this.call, this.output);
+                this.phoneNumber,
+                this.timestamp,
+                this.artifact,
+                this.assistant,
+                this.customer,
+                this.call,
+                this.chat,
+                this.output);
     }
 
     @java.lang.Override
@@ -171,6 +191,8 @@ public final class ServerMessageModelOutput {
 
         private Optional<Call> call = Optional.empty();
 
+        private Optional<Chat> chat = Optional.empty();
+
         private Map<String, Object> output = new LinkedHashMap<>();
 
         @JsonAnySetter
@@ -185,10 +207,14 @@ public final class ServerMessageModelOutput {
             assistant(other.getAssistant());
             customer(other.getCustomer());
             call(other.getCall());
+            chat(other.getChat());
             output(other.getOutput());
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public Builder phoneNumber(Optional<ServerMessageModelOutputPhoneNumber> phoneNumber) {
             this.phoneNumber = phoneNumber;
@@ -200,6 +226,9 @@ public final class ServerMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public Builder timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
@@ -211,6 +240,10 @@ public final class ServerMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is a live version of the <code>call.artifact</code>.</p>
+         * <p>This matches what is stored on <code>call.artifact</code> after the call.</p>
+         */
         @JsonSetter(value = "artifact", nulls = Nulls.SKIP)
         public Builder artifact(Optional<Artifact> artifact) {
             this.artifact = artifact;
@@ -222,6 +255,9 @@ public final class ServerMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -233,6 +269,9 @@ public final class ServerMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public Builder customer(Optional<CreateCustomerDto> customer) {
             this.customer = customer;
@@ -244,6 +283,9 @@ public final class ServerMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public Builder call(Optional<Call> call) {
             this.call = call;
@@ -255,6 +297,23 @@ public final class ServerMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the chat object.</p>
+         */
+        @JsonSetter(value = "chat", nulls = Nulls.SKIP)
+        public Builder chat(Optional<Chat> chat) {
+            this.chat = chat;
+            return this;
+        }
+
+        public Builder chat(Chat chat) {
+            this.chat = Optional.ofNullable(chat);
+            return this;
+        }
+
+        /**
+         * <p>This is the output of the model. It can be a token or tool call.</p>
+         */
         @JsonSetter(value = "output", nulls = Nulls.SKIP)
         public Builder output(Map<String, Object> output) {
             this.output.clear();
@@ -274,7 +333,7 @@ public final class ServerMessageModelOutput {
 
         public ServerMessageModelOutput build() {
             return new ServerMessageModelOutput(
-                    phoneNumber, timestamp, artifact, assistant, customer, call, output, additionalProperties);
+                    phoneNumber, timestamp, artifact, assistant, customer, call, chat, output, additionalProperties);
         }
     }
 }

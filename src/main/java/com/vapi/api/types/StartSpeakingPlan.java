@@ -180,6 +180,20 @@ public final class StartSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>This is how long assistant waits before speaking. Defaults to 0.4.</p>
+         * <p>This is the minimum it will wait but if there is latency is the pipeline, this minimum will be exceeded. This is intended as a stopgap in case the pipeline is moving too fast.</p>
+         * <p>Example:</p>
+         * <ul>
+         * <li>If model generates tokens and voice generates bytes within 100ms, the pipeline still waits 300ms before outputting speech.</li>
+         * </ul>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If the customer is taking long pauses, set this to a higher value.</li>
+         * <li>If the assistant is accidentally jumping in too much, set this to a higher value.</li>
+         * </ul>
+         * <p>@default 0.4</p>
+         */
         @JsonSetter(value = "waitSeconds", nulls = Nulls.SKIP)
         public Builder waitSeconds(Optional<Double> waitSeconds) {
             this.waitSeconds = waitSeconds;
@@ -203,6 +217,11 @@ public final class StartSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>This is the plan for smart endpointing. Pick between Vapi smart endpointing or LiveKit smart endpointing (or nothing). We strongly recommend using livekit endpointing when working in English. LiveKit endpointing is not supported in other languages, yet.</p>
+         * <p>If this is set, it will override and take precedence over <code>transcriptionEndpointingPlan</code>.
+         * This plan will still be overridden by any matching <code>customEndpointingRules</code>.</p>
+         */
         @JsonSetter(value = "smartEndpointingPlan", nulls = Nulls.SKIP)
         public Builder smartEndpointingPlan(Optional<StartSpeakingPlanSmartEndpointingPlan> smartEndpointingPlan) {
             this.smartEndpointingPlan = smartEndpointingPlan;
@@ -214,6 +233,24 @@ public final class StartSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>These are the custom endpointing rules to set an endpointing timeout based on a regex on the customer's speech or the assistant's last message.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you have yes/no questions like &quot;are you interested in a loan?&quot;, you can set a shorter timeout.</li>
+         * <li>If you have questions where the customer may pause to look up information like &quot;what's my account number?&quot;, you can set a longer timeout.</li>
+         * <li>If you want to wait longer while customer is enumerating a list of numbers, you can set a longer timeout.</li>
+         * </ul>
+         * <p>These rules have the highest precedence and will override both <code>smartEndpointingPlan</code> and <code>transcriptionEndpointingPlan</code> when a rule is matched.</p>
+         * <p>The rules are evaluated in order and the first one that matches will be used.</p>
+         * <p>Order of precedence for endpointing:</p>
+         * <ol>
+         * <li>customEndpointingRules (if any match)</li>
+         * <li>smartEndpointingPlan (if set)</li>
+         * <li>transcriptionEndpointingPlan</li>
+         * </ol>
+         * <p>@default []</p>
+         */
         @JsonSetter(value = "customEndpointingRules", nulls = Nulls.SKIP)
         public Builder customEndpointingRules(
                 Optional<List<StartSpeakingPlanCustomEndpointingRulesItem>> customEndpointingRules) {
@@ -227,6 +264,12 @@ public final class StartSpeakingPlan {
             return this;
         }
 
+        /**
+         * <p>This determines how a customer speech is considered done (endpointing) using the transcription of customer's speech.</p>
+         * <p>Once an endpoint is triggered, the request is sent to <code>assistant.model</code>.</p>
+         * <p>Note: This plan is only used if <code>smartEndpointingPlan</code> is not set. If both are provided, <code>smartEndpointingPlan</code> takes precedence.
+         * This plan will also be overridden by any matching <code>customEndpointingRules</code>.</p>
+         */
         @JsonSetter(value = "transcriptionEndpointingPlan", nulls = Nulls.SKIP)
         public Builder transcriptionEndpointingPlan(
                 Optional<TranscriptionEndpointingPlan> transcriptionEndpointingPlan) {

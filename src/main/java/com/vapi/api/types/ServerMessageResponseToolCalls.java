@@ -96,6 +96,9 @@ public final class ServerMessageResponseToolCalls {
             return this;
         }
 
+        /**
+         * <p>These are the results of the &quot;tool-calls&quot; message.</p>
+         */
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public Builder results(Optional<List<ToolCallResult>> results) {
             this.results = results;
@@ -107,6 +110,9 @@ public final class ServerMessageResponseToolCalls {
             return this;
         }
 
+        /**
+         * <p>This is the error message if the tool call was not successful.</p>
+         */
         @JsonSetter(value = "error", nulls = Nulls.SKIP)
         public Builder error(Optional<String> error) {
             this.error = error;

@@ -118,6 +118,10 @@ public final class TesterPlan {
             return this;
         }
 
+        /**
+         * <p>Pass a transient assistant to use for the test assistant.</p>
+         * <p>Make sure to write a detailed system prompt for a test assistant, and use the {{test.script}} variable to access the test script.</p>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -129,6 +133,10 @@ public final class TesterPlan {
             return this;
         }
 
+        /**
+         * <p>Pass an assistant id that can be access</p>
+         * <p>Make sure to write a detailed system prompt for the test assistant, and use the {{test.script}} variable to access the test script.</p>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -140,6 +148,11 @@ public final class TesterPlan {
             return this;
         }
 
+        /**
+         * <p>Add any assistant overrides to the test assistant.</p>
+         * <p>One use case is if you want to pass custom variables into the test using variableValues, that you can then access in the script
+         * and rubric using {{varName}}.</p>
+         */
         @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
         public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
             this.assistantOverrides = assistantOverrides;

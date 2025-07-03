@@ -170,38 +170,62 @@ public final class Token {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the token.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(Token other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is unique identifier for the org that this token belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the token was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the token was last updated.</p>
+         */
         ValueStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface ValueStage {
+        /**
+         * <p>This is the token key.</p>
+         */
         _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
         Token build();
 
+        /**
+         * <p>This is the tag for the token. It represents its scope.</p>
+         */
         _FinalStage tag(Optional<TokenTag> tag);
 
         _FinalStage tag(TokenTag tag);
 
+        /**
+         * <p>This is the name of the token. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This are the restrictions for the token.</p>
+         */
         _FinalStage restrictions(Optional<TokenRestrictions> restrictions);
 
         _FinalStage restrictions(TokenRestrictions restrictions);
@@ -246,6 +270,7 @@ public final class Token {
 
         /**
          * <p>This is the unique identifier for the token.</p>
+         * <p>This is the unique identifier for the token.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -256,6 +281,7 @@ public final class Token {
         }
 
         /**
+         * <p>This is unique identifier for the org that this token belongs to.</p>
          * <p>This is unique identifier for the org that this token belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -268,6 +294,7 @@ public final class Token {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the token was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the token was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -279,6 +306,7 @@ public final class Token {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the token was last updated.</p>
+         * <p>This is the ISO 8601 date-time string of when the token was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -289,6 +317,7 @@ public final class Token {
         }
 
         /**
+         * <p>This is the token key.</p>
          * <p>This is the token key.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -309,6 +338,9 @@ public final class Token {
             return this;
         }
 
+        /**
+         * <p>This are the restrictions for the token.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "restrictions", nulls = Nulls.SKIP)
         public _FinalStage restrictions(Optional<TokenRestrictions> restrictions) {
@@ -326,6 +358,9 @@ public final class Token {
             return this;
         }
 
+        /**
+         * <p>This is the name of the token. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -343,6 +378,9 @@ public final class Token {
             return this;
         }
 
+        /**
+         * <p>This is the tag for the token. It represents its scope.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "tag", nulls = Nulls.SKIP)
         public _FinalStage tag(Optional<TokenTag> tag) {

@@ -67,6 +67,9 @@ public final class ClientInboundMessageControl {
     }
 
     public interface ControlStage {
+        /**
+         * <p>This is the control action</p>
+         */
         _FinalStage control(@NotNull ClientInboundMessageControlControl control);
 
         Builder from(ClientInboundMessageControl other);
@@ -92,6 +95,7 @@ public final class ClientInboundMessageControl {
         }
 
         /**
+         * <p>This is the control action</p>
          * <p>This is the control action</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

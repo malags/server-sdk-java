@@ -76,12 +76,18 @@ public final class AutoReloadPlan {
     }
 
     public interface CreditsStage {
+        /**
+         * <p>This the amount of credits to reload.</p>
+         */
         ThresholdStage credits(double credits);
 
         Builder from(AutoReloadPlan other);
     }
 
     public interface ThresholdStage {
+        /**
+         * <p>This is the limit at which the reload is triggered.</p>
+         */
         _FinalStage threshold(double threshold);
     }
 
@@ -109,6 +115,7 @@ public final class AutoReloadPlan {
 
         /**
          * <p>This the amount of credits to reload.</p>
+         * <p>This the amount of credits to reload.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -119,6 +126,7 @@ public final class AutoReloadPlan {
         }
 
         /**
+         * <p>This is the limit at which the reload is triggered.</p>
          * <p>This is the limit at which the reload is triggered.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

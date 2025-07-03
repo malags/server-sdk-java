@@ -159,6 +159,21 @@ public final class SuccessEvaluationPlan {
             return this;
         }
 
+        /**
+         * <p>This enforces the rubric of the evaluation. The output is stored in <code>call.analysis.successEvaluation</code>.</p>
+         * <p>Options include:</p>
+         * <ul>
+         * <li>'NumericScale': A scale of 1 to 10.</li>
+         * <li>'DescriptiveScale': A scale of Excellent, Good, Fair, Poor.</li>
+         * <li>'Checklist': A checklist of criteria and their status.</li>
+         * <li>'Matrix': A grid that evaluates multiple criteria across different performance levels.</li>
+         * <li>'PercentageScale': A scale of 0% to 100%.</li>
+         * <li>'LikertScale': A scale of Strongly Agree, Agree, Neutral, Disagree, Strongly Disagree.</li>
+         * <li>'AutomaticRubric': Automatically break down evaluation into several criteria, each with its own score.</li>
+         * <li>'PassFail': A simple 'true' if call passed, 'false' if not.</li>
+         * </ul>
+         * <p>Default is 'PassFail'.</p>
+         */
         @JsonSetter(value = "rubric", nulls = Nulls.SKIP)
         public Builder rubric(Optional<SuccessEvaluationPlanRubric> rubric) {
             this.rubric = rubric;
@@ -170,6 +185,15 @@ public final class SuccessEvaluationPlan {
             return this;
         }
 
+        /**
+         * <p>These are the messages used to generate the success evaluation.</p>
+         * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert call evaluator. You will be given a transcript of a call and the system prompt of the AI participant. Determine if the call was successful based on the objectives inferred from the system prompt. DO NOT return anything except the result.\n\nRubric:\\n{{rubric}}\n\nOnly respond with the result.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here was the system prompt of the call:\n\n{{systemPrompt}}\n\n. Here is the ended reason of the call:\n\n{{endedReason}}\n\n&quot; } ]</code></p>
+         * <p>You can customize by providing any messages you want.</p>
+         * <p>Here are the template variables available:</p>
+         * <ul>
+         * <li>{{transcript}}: the transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: the system prompt of the call from <code>assistant.model.messages[type=system].content</code>- {{rubric}}: the rubric of the success evaluation from <code>successEvaluationPlan.rubric</code>- {{endedReason}}: the ended reason of the call from <code>call.endedReason</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public Builder messages(Optional<List<Map<String, Object>>> messages) {
             this.messages = messages;
@@ -181,6 +205,14 @@ public final class SuccessEvaluationPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether a success evaluation is generated and stored in <code>call.analysis.successEvaluation</code>. Defaults to true.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you want to disable the success evaluation, set this to false.</li>
+         * </ul>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -192,6 +224,14 @@ public final class SuccessEvaluationPlan {
             return this;
         }
 
+        /**
+         * <p>This is how long the request is tried before giving up. When request times out, <code>call.analysis.successEvaluation</code> will be empty.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To guarantee the success evaluation is generated, set this value high. Note, this will delay the end of call report in cases where model is slow to respond.</li>
+         * </ul>
+         * <p>@default 5 seconds</p>
+         */
         @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
         public Builder timeoutSeconds(Optional<Double> timeoutSeconds) {
             this.timeoutSeconds = timeoutSeconds;

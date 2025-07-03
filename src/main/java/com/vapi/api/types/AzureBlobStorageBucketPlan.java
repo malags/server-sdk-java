@@ -102,18 +102,33 @@ public final class AzureBlobStorageBucketPlan {
     }
 
     public interface ConnectionStringStage {
+        /**
+         * <p>This is the blob storage connection string for the Azure resource.</p>
+         */
         ContainerNameStage connectionString(@NotNull String connectionString);
 
         Builder from(AzureBlobStorageBucketPlan other);
     }
 
     public interface ContainerNameStage {
+        /**
+         * <p>This is the container name for the Azure blob storage.</p>
+         */
         _FinalStage containerName(@NotNull String containerName);
     }
 
     public interface _FinalStage {
         AzureBlobStorageBucketPlan build();
 
+        /**
+         * <p>This is the path where call artifacts will be stored.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To store call artifacts in a specific folder, set this to the full path. Eg. &quot;/folder-name1/folder-name2&quot;.</li>
+         * <li>To store call artifacts in the root of the bucket, leave this blank.</li>
+         * </ul>
+         * <p>@default &quot;/&quot;</p>
+         */
         _FinalStage path(Optional<String> path);
 
         _FinalStage path(String path);
@@ -142,6 +157,7 @@ public final class AzureBlobStorageBucketPlan {
 
         /**
          * <p>This is the blob storage connection string for the Azure resource.</p>
+         * <p>This is the blob storage connection string for the Azure resource.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -152,6 +168,7 @@ public final class AzureBlobStorageBucketPlan {
         }
 
         /**
+         * <p>This is the container name for the Azure blob storage.</p>
          * <p>This is the container name for the Azure blob storage.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -178,6 +195,15 @@ public final class AzureBlobStorageBucketPlan {
             return this;
         }
 
+        /**
+         * <p>This is the path where call artifacts will be stored.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To store call artifacts in a specific folder, set this to the full path. Eg. &quot;/folder-name1/folder-name2&quot;.</li>
+         * <li>To store call artifacts in the root of the bucket, leave this blank.</li>
+         * </ul>
+         * <p>@default &quot;/&quot;</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "path", nulls = Nulls.SKIP)
         public _FinalStage path(Optional<String> path) {

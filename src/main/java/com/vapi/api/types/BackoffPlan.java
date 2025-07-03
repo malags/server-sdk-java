@@ -95,18 +95,29 @@ public final class BackoffPlan {
     }
 
     public interface MaxRetriesStage {
+        /**
+         * <p>This is the maximum number of retries to attempt if the request fails. Defaults to 0 (no retries).</p>
+         * <p>@default 0</p>
+         */
         BaseDelaySecondsStage maxRetries(double maxRetries);
 
         Builder from(BackoffPlan other);
     }
 
     public interface BaseDelaySecondsStage {
+        /**
+         * <p>This is the base delay in seconds. For linear backoff, this is the delay between each retry. For exponential backoff, this is the initial delay.</p>
+         */
         _FinalStage baseDelaySeconds(double baseDelaySeconds);
     }
 
     public interface _FinalStage {
         BackoffPlan build();
 
+        /**
+         * <p>This is the type of backoff plan to use. Defaults to fixed.</p>
+         * <p>@default fixed</p>
+         */
         _FinalStage type(Map<String, Object> type);
 
         _FinalStage putAllType(Map<String, Object> type);
@@ -138,6 +149,8 @@ public final class BackoffPlan {
         /**
          * <p>This is the maximum number of retries to attempt if the request fails. Defaults to 0 (no retries).</p>
          * <p>@default 0</p>
+         * <p>This is the maximum number of retries to attempt if the request fails. Defaults to 0 (no retries).</p>
+         * <p>@default 0</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -148,6 +161,7 @@ public final class BackoffPlan {
         }
 
         /**
+         * <p>This is the base delay in seconds. For linear backoff, this is the delay between each retry. For exponential backoff, this is the initial delay.</p>
          * <p>This is the base delay in seconds. For linear backoff, this is the delay between each retry. For exponential backoff, this is the initial delay.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -180,6 +194,10 @@ public final class BackoffPlan {
             return this;
         }
 
+        /**
+         * <p>This is the type of backoff plan to use. Defaults to fixed.</p>
+         * <p>@default fixed</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
         public _FinalStage type(Map<String, Object> type) {

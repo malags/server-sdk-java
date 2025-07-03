@@ -27,6 +27,8 @@ public final class CreateAzureCredentialDto {
 
     private final Optional<String> apiKey;
 
+    private final Optional<Double> fallbackIndex;
+
     private final Optional<AzureBlobStorageBucketPlan> bucketPlan;
 
     private final Optional<String> name;
@@ -37,12 +39,14 @@ public final class CreateAzureCredentialDto {
             CreateAzureCredentialDtoService service,
             Optional<CreateAzureCredentialDtoRegion> region,
             Optional<String> apiKey,
+            Optional<Double> fallbackIndex,
             Optional<AzureBlobStorageBucketPlan> bucketPlan,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.service = service;
         this.region = region;
         this.apiKey = apiKey;
+        this.fallbackIndex = fallbackIndex;
         this.bucketPlan = bucketPlan;
         this.name = name;
         this.additionalProperties = additionalProperties;
@@ -70,6 +74,14 @@ public final class CreateAzureCredentialDto {
     @JsonProperty("apiKey")
     public Optional<String> getApiKey() {
         return apiKey;
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -103,13 +115,14 @@ public final class CreateAzureCredentialDto {
         return service.equals(other.service)
                 && region.equals(other.region)
                 && apiKey.equals(other.apiKey)
+                && fallbackIndex.equals(other.fallbackIndex)
                 && bucketPlan.equals(other.bucketPlan)
                 && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.service, this.region, this.apiKey, this.bucketPlan, this.name);
+        return Objects.hash(this.service, this.region, this.apiKey, this.fallbackIndex, this.bucketPlan, this.name);
     }
 
     @java.lang.Override
@@ -122,6 +135,9 @@ public final class CreateAzureCredentialDto {
     }
 
     public interface ServiceStage {
+        /**
+         * <p>This is the service being used in Azure.</p>
+         */
         _FinalStage service(@NotNull CreateAzureCredentialDtoService service);
 
         Builder from(CreateAzureCredentialDto other);
@@ -130,18 +146,37 @@ public final class CreateAzureCredentialDto {
     public interface _FinalStage {
         CreateAzureCredentialDto build();
 
+        /**
+         * <p>This is the region of the Azure resource.</p>
+         */
         _FinalStage region(Optional<CreateAzureCredentialDtoRegion> region);
 
         _FinalStage region(CreateAzureCredentialDtoRegion region);
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiKey(Optional<String> apiKey);
 
         _FinalStage apiKey(String apiKey);
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        _FinalStage fallbackIndex(Optional<Double> fallbackIndex);
+
+        _FinalStage fallbackIndex(Double fallbackIndex);
+
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.</p>
+         */
         _FinalStage bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan);
 
         _FinalStage bucketPlan(AzureBlobStorageBucketPlan bucketPlan);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -154,6 +189,8 @@ public final class CreateAzureCredentialDto {
         private Optional<String> name = Optional.empty();
 
         private Optional<AzureBlobStorageBucketPlan> bucketPlan = Optional.empty();
+
+        private Optional<Double> fallbackIndex = Optional.empty();
 
         private Optional<String> apiKey = Optional.empty();
 
@@ -169,12 +206,14 @@ public final class CreateAzureCredentialDto {
             service(other.getService());
             region(other.getRegion());
             apiKey(other.getApiKey());
+            fallbackIndex(other.getFallbackIndex());
             bucketPlan(other.getBucketPlan());
             name(other.getName());
             return this;
         }
 
         /**
+         * <p>This is the service being used in Azure.</p>
          * <p>This is the service being used in Azure.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -195,6 +234,9 @@ public final class CreateAzureCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -212,10 +254,33 @@ public final class CreateAzureCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the bucket plan that can be provided to store call artifacts in Azure Blob Storage.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "bucketPlan", nulls = Nulls.SKIP)
         public _FinalStage bucketPlan(Optional<AzureBlobStorageBucketPlan> bucketPlan) {
             this.bucketPlan = bucketPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public _FinalStage fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
             return this;
         }
 
@@ -229,6 +294,9 @@ public final class CreateAzureCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public _FinalStage apiKey(Optional<String> apiKey) {
@@ -246,6 +314,9 @@ public final class CreateAzureCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the region of the Azure resource.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "region", nulls = Nulls.SKIP)
         public _FinalStage region(Optional<CreateAzureCredentialDtoRegion> region) {
@@ -255,7 +326,8 @@ public final class CreateAzureCredentialDto {
 
         @java.lang.Override
         public CreateAzureCredentialDto build() {
-            return new CreateAzureCredentialDto(service, region, apiKey, bucketPlan, name, additionalProperties);
+            return new CreateAzureCredentialDto(
+                    service, region, apiKey, fallbackIndex, bucketPlan, name, additionalProperties);
         }
     }
 }

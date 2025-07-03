@@ -27,8 +27,6 @@ public final class FallbackDeepgramTranscriber {
 
     private final Optional<Boolean> smartFormat;
 
-    private final Optional<Boolean> codeSwitchingEnabled;
-
     private final Optional<Boolean> mipOptOut;
 
     private final Optional<Boolean> numerals;
@@ -47,7 +45,6 @@ public final class FallbackDeepgramTranscriber {
             Optional<DeepgramTranscriberModel> model,
             Optional<DeepgramTranscriberLanguage> language,
             Optional<Boolean> smartFormat,
-            Optional<Boolean> codeSwitchingEnabled,
             Optional<Boolean> mipOptOut,
             Optional<Boolean> numerals,
             Optional<Double> confidenceThreshold,
@@ -58,7 +55,6 @@ public final class FallbackDeepgramTranscriber {
         this.model = model;
         this.language = language;
         this.smartFormat = smartFormat;
-        this.codeSwitchingEnabled = codeSwitchingEnabled;
         this.mipOptOut = mipOptOut;
         this.numerals = numerals;
         this.confidenceThreshold = confidenceThreshold;
@@ -90,48 +86,6 @@ public final class FallbackDeepgramTranscriber {
     @JsonProperty("smartFormat")
     public Optional<Boolean> getSmartFormat() {
         return smartFormat;
-    }
-
-    /**
-     * @return This automatically switches the transcriber's language when the customer's language changes. Defaults to false.
-     * <p>Usage:</p>
-     * <ul>
-     * <li>If your customers switch languages mid-call, you can set this to true.</li>
-     * </ul>
-     * <p>Note:</p>
-     * <ul>
-     * <li>To detect language changes, Vapi uses a custom trained model. Languages supported (X = limited support):
-     * <ol>
-     * <li>Arabic</li>
-     * <li>Bengali</li>
-     * <li>Cantonese</li>
-     * <li>Chinese</li>
-     * <li>Chinese Simplified (X)</li>
-     * <li>Chinese Traditional (X)</li>
-     * <li>English</li>
-     * <li>Farsi (X)</li>
-     * <li>French</li>
-     * <li>German</li>
-     * <li>Haitian Creole (X)</li>
-     * <li>Hindi</li>
-     * <li>Italian</li>
-     * <li>Japanese</li>
-     * <li>Korean</li>
-     * <li>Portuguese</li>
-     * <li>Russian</li>
-     * <li>Spanish</li>
-     * <li>Thai</li>
-     * <li>Urdu</li>
-     * <li>Vietnamese</li>
-     * </ol>
-     * </li>
-     * <li>To receive <code>language-change-detected</code> webhook events, add it to <code>assistant.serverMessages</code>.</li>
-     * </ul>
-     * <p>@default false</p>
-     */
-    @JsonProperty("codeSwitchingEnabled")
-    public Optional<Boolean> getCodeSwitchingEnabled() {
-        return codeSwitchingEnabled;
     }
 
     /**
@@ -208,7 +162,6 @@ public final class FallbackDeepgramTranscriber {
         return model.equals(other.model)
                 && language.equals(other.language)
                 && smartFormat.equals(other.smartFormat)
-                && codeSwitchingEnabled.equals(other.codeSwitchingEnabled)
                 && mipOptOut.equals(other.mipOptOut)
                 && numerals.equals(other.numerals)
                 && confidenceThreshold.equals(other.confidenceThreshold)
@@ -223,7 +176,6 @@ public final class FallbackDeepgramTranscriber {
                 this.model,
                 this.language,
                 this.smartFormat,
-                this.codeSwitchingEnabled,
                 this.mipOptOut,
                 this.numerals,
                 this.confidenceThreshold,
@@ -249,8 +201,6 @@ public final class FallbackDeepgramTranscriber {
 
         private Optional<Boolean> smartFormat = Optional.empty();
 
-        private Optional<Boolean> codeSwitchingEnabled = Optional.empty();
-
         private Optional<Boolean> mipOptOut = Optional.empty();
 
         private Optional<Boolean> numerals = Optional.empty();
@@ -272,7 +222,6 @@ public final class FallbackDeepgramTranscriber {
             model(other.getModel());
             language(other.getLanguage());
             smartFormat(other.getSmartFormat());
-            codeSwitchingEnabled(other.getCodeSwitchingEnabled());
             mipOptOut(other.getMipOptOut());
             numerals(other.getNumerals());
             confidenceThreshold(other.getConfidenceThreshold());
@@ -282,6 +231,9 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the Deepgram model that will be used. A list of models can be found here: https://developers.deepgram.com/docs/models-languages-overview</p>
+         */
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public Builder model(Optional<DeepgramTranscriberModel> model) {
             this.model = model;
@@ -293,6 +245,9 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription. The list of languages Deepgram supports can be found here: https://developers.deepgram.com/docs/models-languages-overview</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<DeepgramTranscriberLanguage> language) {
             this.language = language;
@@ -304,6 +259,9 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
+        /**
+         * <p>This will be use smart format option provided by Deepgram. It's default disabled because it can sometimes format numbers as times but it's getting better.</p>
+         */
         @JsonSetter(value = "smartFormat", nulls = Nulls.SKIP)
         public Builder smartFormat(Optional<Boolean> smartFormat) {
             this.smartFormat = smartFormat;
@@ -315,17 +273,11 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
-        @JsonSetter(value = "codeSwitchingEnabled", nulls = Nulls.SKIP)
-        public Builder codeSwitchingEnabled(Optional<Boolean> codeSwitchingEnabled) {
-            this.codeSwitchingEnabled = codeSwitchingEnabled;
-            return this;
-        }
-
-        public Builder codeSwitchingEnabled(Boolean codeSwitchingEnabled) {
-            this.codeSwitchingEnabled = Optional.ofNullable(codeSwitchingEnabled);
-            return this;
-        }
-
+        /**
+         * <p>If set to true, this will add mip_opt_out=true as a query parameter of all API requests. See https://developers.deepgram.com/docs/the-deepgram-model-improvement-partnership-program#want-to-opt-out</p>
+         * <p>This will only be used if you are using your own Deepgram API key.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "mipOptOut", nulls = Nulls.SKIP)
         public Builder mipOptOut(Optional<Boolean> mipOptOut) {
             this.mipOptOut = mipOptOut;
@@ -337,6 +289,10 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
+        /**
+         * <p>If set to true, this will cause deepgram to convert spoken numbers to literal numerals. For example, &quot;my phone number is nine-seven-two...&quot; would become &quot;my phone number is 972...&quot;</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "numerals", nulls = Nulls.SKIP)
         public Builder numerals(Optional<Boolean> numerals) {
             this.numerals = numerals;
@@ -348,6 +304,10 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
+        /**
+         * <p>Transcripts below this confidence threshold will be discarded.</p>
+         * <p>@default 0.4</p>
+         */
         @JsonSetter(value = "confidenceThreshold", nulls = Nulls.SKIP)
         public Builder confidenceThreshold(Optional<Double> confidenceThreshold) {
             this.confidenceThreshold = confidenceThreshold;
@@ -359,6 +319,9 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
+        /**
+         * <p>These keywords are passed to the transcription model to help it pick up use-case specific words. Anything that may not be a common word, like your company name, should be added here.</p>
+         */
         @JsonSetter(value = "keywords", nulls = Nulls.SKIP)
         public Builder keywords(Optional<List<String>> keywords) {
             this.keywords = keywords;
@@ -370,6 +333,9 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
+        /**
+         * <p>Keyterm Prompting allows you improve Keyword Recall Rate (KRR) for important keyterms or phrases up to 90%.</p>
+         */
         @JsonSetter(value = "keyterm", nulls = Nulls.SKIP)
         public Builder keyterm(Optional<List<String>> keyterm) {
             this.keyterm = keyterm;
@@ -381,6 +347,16 @@ public final class FallbackDeepgramTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the timeout after which Deepgram will send transcription on user silence. You can read in-depth documentation here: https://developers.deepgram.com/docs/endpointing.</p>
+         * <p>Here are the most important bits:</p>
+         * <ul>
+         * <li>Defaults to 10. This is recommended for most use cases to optimize for latency.</li>
+         * <li>10 can cause some missing transcriptions since because of the shorter context. This mostly happens for one-word utterances. For those uses cases, it's recommended to try 300. It will add a bit of latency but the quality and reliability of the experience will be better.</li>
+         * <li>If neither 10 nor 300 work, contact support@vapi.ai and we'll find another solution.</li>
+         * </ul>
+         * <p>@default 10</p>
+         */
         @JsonSetter(value = "endpointing", nulls = Nulls.SKIP)
         public Builder endpointing(Optional<Double> endpointing) {
             this.endpointing = endpointing;
@@ -397,7 +373,6 @@ public final class FallbackDeepgramTranscriber {
                     model,
                     language,
                     smartFormat,
-                    codeSwitchingEnabled,
                     mipOptOut,
                     numerals,
                     confidenceThreshold,

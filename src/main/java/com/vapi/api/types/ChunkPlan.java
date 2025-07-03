@@ -150,6 +150,16 @@ public final class ChunkPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether the model output is chunked before being sent to the voice provider. Default <code>true</code>.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To rely on the voice provider's audio generation logic, set this to <code>false</code>.</li>
+         * <li>If seeing issues with quality, set this to <code>true</code>.</li>
+         * </ul>
+         * <p>If disabled, Vapi-provided audio control tokens like &lt;flush /&gt; will not work.</p>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -161,6 +171,15 @@ public final class ChunkPlan {
             return this;
         }
 
+        /**
+         * <p>This is the minimum number of characters in a chunk.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To increase quality, set this to a higher value.</li>
+         * <li>To decrease latency, set this to a lower value.</li>
+         * </ul>
+         * <p>@default 30</p>
+         */
         @JsonSetter(value = "minCharacters", nulls = Nulls.SKIP)
         public Builder minCharacters(Optional<Double> minCharacters) {
             this.minCharacters = minCharacters;
@@ -172,6 +191,15 @@ public final class ChunkPlan {
             return this;
         }
 
+        /**
+         * <p>These are the punctuations that are considered valid boundaries for a chunk to be created.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To increase quality, constrain to fewer boundaries.</li>
+         * <li>To decrease latency, enable all.</li>
+         * </ul>
+         * <p>Default is automatically set to balance the trade-off between quality and latency based on the provider.</p>
+         */
         @JsonSetter(value = "punctuationBoundaries", nulls = Nulls.SKIP)
         public Builder punctuationBoundaries(Optional<List<PunctuationBoundary>> punctuationBoundaries) {
             this.punctuationBoundaries = punctuationBoundaries;
@@ -183,6 +211,9 @@ public final class ChunkPlan {
             return this;
         }
 
+        /**
+         * <p>This is the plan for formatting the chunk before it is sent to the voice provider.</p>
+         */
         @JsonSetter(value = "formatPlan", nulls = Nulls.SKIP)
         public Builder formatPlan(Optional<FormatPlan> formatPlan) {
             this.formatPlan = formatPlan;

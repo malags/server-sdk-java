@@ -540,6 +540,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the type of the log.</p>
+         */
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
         public Builder type(Optional<LogsGetRequestType> type) {
             this.type = type;
@@ -562,6 +565,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the type of the webhook, given the log is from a webhook.</p>
+         */
         @JsonSetter(value = "webhookType", nulls = Nulls.SKIP)
         public Builder webhookType(Optional<String> webhookType) {
             this.webhookType = webhookType;
@@ -584,6 +590,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the assistant.</p>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -606,6 +615,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the phone number.</p>
+         */
         @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
         public Builder phoneNumberId(Optional<String> phoneNumberId) {
             this.phoneNumberId = phoneNumberId;
@@ -628,6 +640,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the customer.</p>
+         */
         @JsonSetter(value = "customerId", nulls = Nulls.SKIP)
         public Builder customerId(Optional<String> customerId) {
             this.customerId = customerId;
@@ -650,6 +665,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the squad.</p>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -672,6 +690,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the call.</p>
+         */
         @JsonSetter(value = "callId", nulls = Nulls.SKIP)
         public Builder callId(Optional<String> callId) {
             this.callId = callId;
@@ -694,6 +715,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the page number to return. Defaults to 1.</p>
+         */
         @JsonSetter(value = "page", nulls = Nulls.SKIP)
         public Builder page(Optional<Double> page) {
             this.page = page;
@@ -716,6 +740,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the sort order for pagination. Defaults to 'DESC'.</p>
+         */
         @JsonSetter(value = "sortOrder", nulls = Nulls.SKIP)
         public Builder sortOrder(Optional<LogsGetRequestSortOrder> sortOrder) {
             this.sortOrder = sortOrder;
@@ -738,6 +765,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This is the maximum number of items to return. Defaults to 100.</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Double> limit) {
             this.limit = limit;
@@ -760,6 +790,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the createdAt is greater than the specified value.</p>
+         */
         @JsonSetter(value = "createdAtGt", nulls = Nulls.SKIP)
         public Builder createdAtGt(Optional<OffsetDateTime> createdAtGt) {
             this.createdAtGt = createdAtGt;
@@ -782,6 +815,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the createdAt is less than the specified value.</p>
+         */
         @JsonSetter(value = "createdAtLt", nulls = Nulls.SKIP)
         public Builder createdAtLt(Optional<OffsetDateTime> createdAtLt) {
             this.createdAtLt = createdAtLt;
@@ -804,6 +840,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the createdAt is greater than or equal to the specified value.</p>
+         */
         @JsonSetter(value = "createdAtGe", nulls = Nulls.SKIP)
         public Builder createdAtGe(Optional<OffsetDateTime> createdAtGe) {
             this.createdAtGe = createdAtGe;
@@ -826,6 +865,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the createdAt is less than or equal to the specified value.</p>
+         */
         @JsonSetter(value = "createdAtLe", nulls = Nulls.SKIP)
         public Builder createdAtLe(Optional<OffsetDateTime> createdAtLe) {
             this.createdAtLe = createdAtLe;
@@ -848,6 +890,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the updatedAt is greater than the specified value.</p>
+         */
         @JsonSetter(value = "updatedAtGt", nulls = Nulls.SKIP)
         public Builder updatedAtGt(Optional<OffsetDateTime> updatedAtGt) {
             this.updatedAtGt = updatedAtGt;
@@ -870,6 +915,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the updatedAt is less than the specified value.</p>
+         */
         @JsonSetter(value = "updatedAtLt", nulls = Nulls.SKIP)
         public Builder updatedAtLt(Optional<OffsetDateTime> updatedAtLt) {
             this.updatedAtLt = updatedAtLt;
@@ -892,6 +940,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the updatedAt is greater than or equal to the specified value.</p>
+         */
         @JsonSetter(value = "updatedAtGe", nulls = Nulls.SKIP)
         public Builder updatedAtGe(Optional<OffsetDateTime> updatedAtGe) {
             this.updatedAtGe = updatedAtGe;
@@ -914,6 +965,9 @@ public final class LogsGetRequest {
             return this;
         }
 
+        /**
+         * <p>This will return items where the updatedAt is less than or equal to the specified value.</p>
+         */
         @JsonSetter(value = "updatedAtLe", nulls = Nulls.SKIP)
         public Builder updatedAtLe(Optional<OffsetDateTime> updatedAtLe) {
             this.updatedAtLe = updatedAtLe;

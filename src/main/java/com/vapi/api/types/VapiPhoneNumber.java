@@ -300,70 +300,135 @@ public final class VapiPhoneNumber {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the phone number.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(VapiPhoneNumber other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this phone number belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         VapiPhoneNumber build();
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         _FinalStage fallbackDestination(Optional<VapiPhoneNumberFallbackDestination> fallbackDestination);
 
         _FinalStage fallbackDestination(VapiPhoneNumberFallbackDestination fallbackDestination);
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks);
 
         _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks);
 
+        /**
+         * <p>This is the status of the phone number.</p>
+         */
         _FinalStage status(Optional<VapiPhoneNumberStatus> status);
 
         _FinalStage status(VapiPhoneNumberStatus status);
 
+        /**
+         * <p>These are the digits of the phone number you purchased from Vapi.</p>
+         */
         _FinalStage number(Optional<String> number);
 
         _FinalStage number(String number);
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage workflowId(Optional<String> workflowId);
 
         _FinalStage workflowId(String workflowId);
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage squadId(Optional<String> squadId);
 
         _FinalStage squadId(String squadId);
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         _FinalStage server(Optional<Server> server);
 
         _FinalStage server(Server server);
 
+        /**
+         * <p>This is the area code of the phone number to purchase.</p>
+         */
         _FinalStage numberDesiredAreaCode(Optional<String> numberDesiredAreaCode);
 
         _FinalStage numberDesiredAreaCode(String numberDesiredAreaCode);
 
+        /**
+         * <p>This is the SIP URI of the phone number. You can SIP INVITE this. The assistant attached to this number will answer.</p>
+         * <p>This is case-insensitive.</p>
+         */
         _FinalStage sipUri(Optional<String> sipUri);
 
         _FinalStage sipUri(String sipUri);
 
+        /**
+         * <p>This enables authentication for incoming SIP INVITE requests to the <code>sipUri</code>.</p>
+         * <p>If not set, any username/password to the 401 challenge of the SIP INVITE will be accepted.</p>
+         */
         _FinalStage authentication(Optional<SipAuthentication> authentication);
 
         _FinalStage authentication(SipAuthentication authentication);
@@ -431,6 +496,7 @@ public final class VapiPhoneNumber {
 
         /**
          * <p>This is the unique identifier for the phone number.</p>
+         * <p>This is the unique identifier for the phone number.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -441,6 +507,7 @@ public final class VapiPhoneNumber {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this phone number belongs to.</p>
          * <p>This is the unique identifier for the org that this phone number belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -453,6 +520,7 @@ public final class VapiPhoneNumber {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -463,6 +531,7 @@ public final class VapiPhoneNumber {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -484,6 +553,10 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This enables authentication for incoming SIP INVITE requests to the <code>sipUri</code>.</p>
+         * <p>If not set, any username/password to the 401 challenge of the SIP INVITE will be accepted.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
         public _FinalStage authentication(Optional<SipAuthentication> authentication) {
@@ -502,6 +575,10 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the SIP URI of the phone number. You can SIP INVITE this. The assistant attached to this number will answer.</p>
+         * <p>This is case-insensitive.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "sipUri", nulls = Nulls.SKIP)
         public _FinalStage sipUri(Optional<String> sipUri) {
@@ -519,6 +596,9 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the area code of the phone number to purchase.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "numberDesiredAreaCode", nulls = Nulls.SKIP)
         public _FinalStage numberDesiredAreaCode(Optional<String> numberDesiredAreaCode) {
@@ -542,6 +622,15 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @java.lang.Override
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public _FinalStage server(Optional<Server> server) {
@@ -560,6 +649,10 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public _FinalStage squadId(Optional<String> squadId) {
@@ -578,6 +671,10 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public _FinalStage workflowId(Optional<String> workflowId) {
@@ -596,6 +693,10 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public _FinalStage assistantId(Optional<String> assistantId) {
@@ -613,6 +714,9 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -630,6 +734,9 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>These are the digits of the phone number you purchased from Vapi.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "number", nulls = Nulls.SKIP)
         public _FinalStage number(Optional<String> number) {
@@ -647,6 +754,9 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the status of the phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
         public _FinalStage status(Optional<VapiPhoneNumberStatus> status) {
@@ -664,6 +774,9 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
@@ -687,6 +800,15 @@ public final class VapiPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
         public _FinalStage fallbackDestination(Optional<VapiPhoneNumberFallbackDestination> fallbackDestination) {

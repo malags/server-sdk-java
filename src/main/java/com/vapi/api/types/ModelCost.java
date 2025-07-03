@@ -117,22 +117,43 @@ public final class ModelCost {
     }
 
     public interface PromptTokensStage {
+        /**
+         * <p>This is the number of prompt tokens used in the call. These should be total prompt tokens used in the call for single assistant calls, while squad calls will have multiple model costs one for each assistant that was used.</p>
+         */
         CompletionTokensStage promptTokens(double promptTokens);
 
         Builder from(ModelCost other);
     }
 
     public interface CompletionTokensStage {
+        /**
+         * <p>This is the number of completion tokens generated in the call. These should be total completion tokens used in the call for single assistant calls, while squad calls will have multiple model costs one for each assistant that was used.</p>
+         */
         CostStage completionTokens(double completionTokens);
     }
 
     public interface CostStage {
+        /**
+         * <p>This is the cost of the component in USD.</p>
+         */
         _FinalStage cost(double cost);
     }
 
     public interface _FinalStage {
         ModelCost build();
 
+        /**
+         * <p>This is the model that was used during the call.</p>
+         * <p>This matches one of the following:</p>
+         * <ul>
+         * <li><code>call.assistant.model</code>,</li>
+         * <li><code>call.assistantId-&gt;model</code>,</li>
+         * <li><code>call.squad[n].assistant.model</code>,</li>
+         * <li><code>call.squad[n].assistantId-&gt;model</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistant.model</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistantId-&gt;model</code>.</li>
+         * </ul>
+         */
         _FinalStage model(Map<String, Object> model);
 
         _FinalStage putAllModel(Map<String, Object> model);
@@ -166,6 +187,7 @@ public final class ModelCost {
 
         /**
          * <p>This is the number of prompt tokens used in the call. These should be total prompt tokens used in the call for single assistant calls, while squad calls will have multiple model costs one for each assistant that was used.</p>
+         * <p>This is the number of prompt tokens used in the call. These should be total prompt tokens used in the call for single assistant calls, while squad calls will have multiple model costs one for each assistant that was used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -177,6 +199,7 @@ public final class ModelCost {
 
         /**
          * <p>This is the number of completion tokens generated in the call. These should be total completion tokens used in the call for single assistant calls, while squad calls will have multiple model costs one for each assistant that was used.</p>
+         * <p>This is the number of completion tokens generated in the call. These should be total completion tokens used in the call for single assistant calls, while squad calls will have multiple model costs one for each assistant that was used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -187,6 +210,7 @@ public final class ModelCost {
         }
 
         /**
+         * <p>This is the cost of the component in USD.</p>
          * <p>This is the cost of the component in USD.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -235,6 +259,18 @@ public final class ModelCost {
             return this;
         }
 
+        /**
+         * <p>This is the model that was used during the call.</p>
+         * <p>This matches one of the following:</p>
+         * <ul>
+         * <li><code>call.assistant.model</code>,</li>
+         * <li><code>call.assistantId-&gt;model</code>,</li>
+         * <li><code>call.squad[n].assistant.model</code>,</li>
+         * <li><code>call.squad[n].assistantId-&gt;model</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistant.model</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistantId-&gt;model</code>.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Map<String, Object> model) {

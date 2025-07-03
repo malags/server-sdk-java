@@ -71,6 +71,8 @@ public final class Assistant {
 
     private final Optional<Map<String, Object>> metadata;
 
+    private final Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan;
+
     private final Optional<AnalysisPlan> analysisPlan;
 
     private final Optional<ArtifactPlan> artifactPlan;
@@ -124,6 +126,7 @@ public final class Assistant {
             Optional<List<String>> endCallPhrases,
             Optional<CompliancePlan> compliancePlan,
             Optional<Map<String, Object>> metadata,
+            Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan,
             Optional<AnalysisPlan> analysisPlan,
             Optional<ArtifactPlan> artifactPlan,
             Optional<MessagePlan> messagePlan,
@@ -162,6 +165,7 @@ public final class Assistant {
         this.endCallPhrases = endCallPhrases;
         this.compliancePlan = compliancePlan;
         this.metadata = metadata;
+        this.backgroundSpeechDenoisingPlan = backgroundSpeechDenoisingPlan;
         this.analysisPlan = analysisPlan;
         this.artifactPlan = artifactPlan;
         this.messagePlan = messagePlan;
@@ -313,8 +317,8 @@ public final class Assistant {
     }
 
     /**
-     * @return This is the plan for observability configuration of assistant's calls.
-     * Currently supports Langfuse for tracing and monitoring.
+     * @return This is the plan for observability of assistant's calls.
+     * <p>Currently, only Langfuse is supported.</p>
      */
     @JsonProperty("observabilityPlan")
     public Optional<LangfuseObservabilityPlan> getObservabilityPlan() {
@@ -386,6 +390,25 @@ public final class Assistant {
     }
 
     /**
+     * @return This enables filtering of noise and background speech while the user is talking.
+     * <p>Features:</p>
+     * <ul>
+     * <li>Smart denoising using Krisp</li>
+     * <li>Fourier denoising</li>
+     * </ul>
+     * <p>Smart denoising can be combined with or used independently of Fourier denoising.</p>
+     * <p>Order of precedence:</p>
+     * <ul>
+     * <li>Smart denoising</li>
+     * <li>Fourier denoising</li>
+     * </ul>
+     */
+    @JsonProperty("backgroundSpeechDenoisingPlan")
+    public Optional<BackgroundSpeechDenoisingPlan> getBackgroundSpeechDenoisingPlan() {
+        return backgroundSpeechDenoisingPlan;
+    }
+
+    /**
      * @return This is the plan for analysis of assistant's calls. Stored in <code>call.analysis</code>.
      */
     @JsonProperty("analysisPlan")
@@ -395,7 +418,6 @@ public final class Assistant {
 
     /**
      * @return This is the plan for artifacts generated during assistant's calls. Stored in <code>call.artifact</code>.
-     * <p>Note: <code>recordingEnabled</code> is currently at the root level. It will be moved to <code>artifactPlan</code> in the future, but will remain backwards compatible.</p>
      */
     @JsonProperty("artifactPlan")
     public Optional<ArtifactPlan> getArtifactPlan() {
@@ -448,7 +470,6 @@ public final class Assistant {
      * <li>To enable live listening of the assistant's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
      * <li>To enable live control of the assistant's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
      * </ul>
-     * <p>Note, <code>serverMessages</code>, <code>clientMessages</code>, <code>serverUrl</code> and <code>serverUrlSecret</code> are currently at the root level but will be moved to <code>monitorPlan</code> in the future. Will remain backwards compatible</p>
      */
     @JsonProperty("monitorPlan")
     public Optional<MonitorPlan> getMonitorPlan() {
@@ -550,6 +571,7 @@ public final class Assistant {
                 && endCallPhrases.equals(other.endCallPhrases)
                 && compliancePlan.equals(other.compliancePlan)
                 && metadata.equals(other.metadata)
+                && backgroundSpeechDenoisingPlan.equals(other.backgroundSpeechDenoisingPlan)
                 && analysisPlan.equals(other.analysisPlan)
                 && artifactPlan.equals(other.artifactPlan)
                 && messagePlan.equals(other.messagePlan)
@@ -592,6 +614,7 @@ public final class Assistant {
                 this.endCallPhrases,
                 this.compliancePlan,
                 this.metadata,
+                this.backgroundSpeechDenoisingPlan,
                 this.analysisPlan,
                 this.artifactPlan,
                 this.messagePlan,
@@ -617,38 +640,63 @@ public final class Assistant {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the assistant.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(Assistant other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this assistant belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         Assistant build();
 
+        /**
+         * <p>These are the options for the assistant's transcriber.</p>
+         */
         _FinalStage transcriber(Optional<AssistantTranscriber> transcriber);
 
         _FinalStage transcriber(AssistantTranscriber transcriber);
 
+        /**
+         * <p>These are the options for the assistant's LLM.</p>
+         */
         _FinalStage model(Optional<AssistantModel> model);
 
         _FinalStage model(AssistantModel model);
 
+        /**
+         * <p>These are the options for the assistant's voice.</p>
+         */
         _FinalStage voice(Optional<AssistantVoice> voice);
 
         _FinalStage voice(AssistantVoice voice);
 
+        /**
+         * <p>This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).</p>
+         * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
+         */
         _FinalStage firstMessage(Optional<String> firstMessage);
 
         _FinalStage firstMessage(String firstMessage);
@@ -657,70 +705,141 @@ public final class Assistant {
 
         _FinalStage firstMessageInterruptionsEnabled(Boolean firstMessageInterruptionsEnabled);
 
+        /**
+         * <p>This is the mode for the first message. Default is 'assistant-speaks-first'.</p>
+         * <p>Use:</p>
+         * <ul>
+         * <li>'assistant-speaks-first' to have the assistant speak first.</li>
+         * <li>'assistant-waits-for-user' to have the assistant wait for the user to speak first.</li>
+         * <li>'assistant-speaks-first-with-model-generated-message' to have the assistant speak first with a message generated by the model based on the conversation state. (<code>assistant.model.messages</code> at call start, <code>call.messages</code> at squad transfer points).</li>
+         * </ul>
+         * <p>@default 'assistant-speaks-first'</p>
+         */
         _FinalStage firstMessageMode(Optional<AssistantFirstMessageMode> firstMessageMode);
 
         _FinalStage firstMessageMode(AssistantFirstMessageMode firstMessageMode);
 
+        /**
+         * <p>These are the settings to configure or disable voicemail detection. Alternatively, voicemail detection can be configured using the model.tools=[VoicemailTool].
+         * This uses Twilio's built-in detection while the VoicemailTool relies on the model to detect if a voicemail was reached.
+         * You can use neither of them, one of them, or both of them. By default, Twilio built-in detection is enabled while VoicemailTool is not.</p>
+         */
         _FinalStage voicemailDetection(Optional<AssistantVoicemailDetection> voicemailDetection);
 
         _FinalStage voicemailDetection(AssistantVoicemailDetection voicemailDetection);
 
+        /**
+         * <p>These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input,workflow.node.started. You can check the shape of the messages in ClientMessage schema.</p>
+         */
         _FinalStage clientMessages(Optional<List<AssistantClientMessagesItem>> clientMessages);
 
         _FinalStage clientMessages(List<AssistantClientMessagesItem> clientMessages);
 
+        /**
+         * <p>These are the messages that will be sent to your Server URL. Default is conversation-update,end-of-call-report,function-call,hang,speech-update,status-update,tool-calls,transfer-destination-request,user-interrupted. You can check the shape of the messages in ServerMessage schema.</p>
+         */
         _FinalStage serverMessages(Optional<List<AssistantServerMessagesItem>> serverMessages);
 
         _FinalStage serverMessages(List<AssistantServerMessagesItem> serverMessages);
 
+        /**
+         * <p>How many seconds of silence to wait before ending the call. Defaults to 30.</p>
+         * <p>@default 30</p>
+         */
         _FinalStage silenceTimeoutSeconds(Optional<Double> silenceTimeoutSeconds);
 
         _FinalStage silenceTimeoutSeconds(Double silenceTimeoutSeconds);
 
+        /**
+         * <p>This is the maximum number of seconds that the call will last. When the call reaches this duration, it will be ended.</p>
+         * <p>@default 600 (10 minutes)</p>
+         */
         _FinalStage maxDurationSeconds(Optional<Double> maxDurationSeconds);
 
         _FinalStage maxDurationSeconds(Double maxDurationSeconds);
 
+        /**
+         * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+         * You can also provide a custom sound by providing a URL to an audio file.</p>
+         */
         _FinalStage backgroundSound(Optional<AssistantBackgroundSound> backgroundSound);
 
         _FinalStage backgroundSound(AssistantBackgroundSound backgroundSound);
 
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Default <code>false</code> while in beta.</p>
+         * <p>@default false</p>
+         */
         _FinalStage backgroundDenoisingEnabled(Optional<Boolean> backgroundDenoisingEnabled);
 
         _FinalStage backgroundDenoisingEnabled(Boolean backgroundDenoisingEnabled);
 
+        /**
+         * <p>This determines whether the model's output is used in conversation history rather than the transcription of assistant's speech.</p>
+         * <p>Default <code>false</code> while in beta.</p>
+         * <p>@default false</p>
+         */
         _FinalStage modelOutputInMessagesEnabled(Optional<Boolean> modelOutputInMessagesEnabled);
 
         _FinalStage modelOutputInMessagesEnabled(Boolean modelOutputInMessagesEnabled);
 
+        /**
+         * <p>These are the configurations to be passed to the transport providers of assistant's calls, like Twilio. You can store multiple configurations for different transport providers. For a call, only the configuration matching the call transport provider is used.</p>
+         */
         _FinalStage transportConfigurations(Optional<List<TransportConfigurationTwilio>> transportConfigurations);
 
         _FinalStage transportConfigurations(List<TransportConfigurationTwilio> transportConfigurations);
 
+        /**
+         * <p>This is the plan for observability of assistant's calls.</p>
+         * <p>Currently, only Langfuse is supported.</p>
+         */
         _FinalStage observabilityPlan(Optional<LangfuseObservabilityPlan> observabilityPlan);
 
         _FinalStage observabilityPlan(LangfuseObservabilityPlan observabilityPlan);
 
+        /**
+         * <p>These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.</p>
+         */
         _FinalStage credentials(Optional<List<AssistantCredentialsItem>> credentials);
 
         _FinalStage credentials(List<AssistantCredentialsItem> credentials);
 
+        /**
+         * <p>This is a set of actions that will be performed on certain events.</p>
+         */
         _FinalStage hooks(Optional<List<AssistantHooksItem>> hooks);
 
         _FinalStage hooks(List<AssistantHooksItem> hooks);
 
+        /**
+         * <p>This is the name of the assistant.</p>
+         * <p>This is required when you want to transfer between assistants in a call.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the message that the assistant will say if the call is forwarded to voicemail.</p>
+         * <p>If unspecified, it will hang up.</p>
+         */
         _FinalStage voicemailMessage(Optional<String> voicemailMessage);
 
         _FinalStage voicemailMessage(String voicemailMessage);
 
+        /**
+         * <p>This is the message that the assistant will say if it ends the call.</p>
+         * <p>If unspecified, it will hang up without saying anything.</p>
+         */
         _FinalStage endCallMessage(Optional<String> endCallMessage);
 
         _FinalStage endCallMessage(String endCallMessage);
 
+        /**
+         * <p>This list contains phrases that, if spoken by the assistant, will trigger the call to be hung up. Case insensitive.</p>
+         */
         _FinalStage endCallPhrases(Optional<List<String>> endCallPhrases);
 
         _FinalStage endCallPhrases(List<String> endCallPhrases);
@@ -729,38 +848,110 @@ public final class Assistant {
 
         _FinalStage compliancePlan(CompliancePlan compliancePlan);
 
+        /**
+         * <p>This is for metadata you want to store on the assistant.</p>
+         */
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
         _FinalStage metadata(Map<String, Object> metadata);
 
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Features:</p>
+         * <ul>
+         * <li>Smart denoising using Krisp</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * <p>Smart denoising can be combined with or used independently of Fourier denoising.</p>
+         * <p>Order of precedence:</p>
+         * <ul>
+         * <li>Smart denoising</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         */
+        _FinalStage backgroundSpeechDenoisingPlan(
+                Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan);
+
+        _FinalStage backgroundSpeechDenoisingPlan(BackgroundSpeechDenoisingPlan backgroundSpeechDenoisingPlan);
+
+        /**
+         * <p>This is the plan for analysis of assistant's calls. Stored in <code>call.analysis</code>.</p>
+         */
         _FinalStage analysisPlan(Optional<AnalysisPlan> analysisPlan);
 
         _FinalStage analysisPlan(AnalysisPlan analysisPlan);
 
+        /**
+         * <p>This is the plan for artifacts generated during assistant's calls. Stored in <code>call.artifact</code>.</p>
+         */
         _FinalStage artifactPlan(Optional<ArtifactPlan> artifactPlan);
 
         _FinalStage artifactPlan(ArtifactPlan artifactPlan);
 
+        /**
+         * <p>This is the plan for static predefined messages that can be spoken by the assistant during the call, like <code>idleMessages</code>.</p>
+         * <p>Note: <code>firstMessage</code>, <code>voicemailMessage</code>, and <code>endCallMessage</code> are currently at the root level. They will be moved to <code>messagePlan</code> in the future, but will remain backwards compatible.</p>
+         */
         _FinalStage messagePlan(Optional<MessagePlan> messagePlan);
 
         _FinalStage messagePlan(MessagePlan messagePlan);
 
+        /**
+         * <p>This is the plan for when the assistant should start talking.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to start talking after the customer is done speaking.</li>
+         * <li>The assistant is too fast to start talking after the customer is done speaking.</li>
+         * <li>The assistant is so fast that it's actually interrupting the customer.</li>
+         * </ul>
+         */
         _FinalStage startSpeakingPlan(Optional<StartSpeakingPlan> startSpeakingPlan);
 
         _FinalStage startSpeakingPlan(StartSpeakingPlan startSpeakingPlan);
 
+        /**
+         * <p>This is the plan for when assistant should stop talking on customer interruption.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to recognize customer's interruption.</li>
+         * <li>The assistant is too fast to recognize customer's interruption.</li>
+         * <li>The assistant is getting interrupted by phrases that are just acknowledgments.</li>
+         * <li>The assistant is getting interrupted by background noises.</li>
+         * <li>The assistant is not properly stopping -- it starts talking right after getting interrupted.</li>
+         * </ul>
+         */
         _FinalStage stopSpeakingPlan(Optional<StopSpeakingPlan> stopSpeakingPlan);
 
         _FinalStage stopSpeakingPlan(StopSpeakingPlan stopSpeakingPlan);
 
+        /**
+         * <p>This is the plan for real-time monitoring of the assistant's calls.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To enable live listening of the assistant's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
+         * <li>To enable live control of the assistant's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
+         * </ul>
+         */
         _FinalStage monitorPlan(Optional<MonitorPlan> monitorPlan);
 
         _FinalStage monitorPlan(MonitorPlan monitorPlan);
 
+        /**
+         * <p>These are the credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can provide a subset using this.</p>
+         */
         _FinalStage credentialIds(Optional<List<String>> credentialIds);
 
         _FinalStage credentialIds(List<String> credentialIds);
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server.url</li>
+         * <li>phoneNumber.serverUrl</li>
+         * <li>org.serverUrl</li>
+         * </ol>
+         */
         _FinalStage server(Optional<Server> server);
 
         _FinalStage server(Server server);
@@ -797,6 +988,8 @@ public final class Assistant {
         private Optional<ArtifactPlan> artifactPlan = Optional.empty();
 
         private Optional<AnalysisPlan> analysisPlan = Optional.empty();
+
+        private Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan = Optional.empty();
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
@@ -877,6 +1070,7 @@ public final class Assistant {
             endCallPhrases(other.getEndCallPhrases());
             compliancePlan(other.getCompliancePlan());
             metadata(other.getMetadata());
+            backgroundSpeechDenoisingPlan(other.getBackgroundSpeechDenoisingPlan());
             analysisPlan(other.getAnalysisPlan());
             artifactPlan(other.getArtifactPlan());
             messagePlan(other.getMessagePlan());
@@ -895,6 +1089,7 @@ public final class Assistant {
 
         /**
          * <p>This is the unique identifier for the assistant.</p>
+         * <p>This is the unique identifier for the assistant.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -905,6 +1100,7 @@ public final class Assistant {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this assistant belongs to.</p>
          * <p>This is the unique identifier for the org that this assistant belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -917,6 +1113,7 @@ public final class Assistant {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the assistant was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the assistant was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -927,6 +1124,7 @@ public final class Assistant {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -966,6 +1164,15 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server.url</li>
+         * <li>phoneNumber.serverUrl</li>
+         * <li>org.serverUrl</li>
+         * </ol>
+         */
         @java.lang.Override
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public _FinalStage server(Optional<Server> server) {
@@ -983,6 +1190,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are the credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can provide a subset using this.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "credentialIds", nulls = Nulls.SKIP)
         public _FinalStage credentialIds(Optional<List<String>> credentialIds) {
@@ -997,7 +1207,6 @@ public final class Assistant {
          * <li>To enable live listening of the assistant's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
          * <li>To enable live control of the assistant's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
          * </ul>
-         * <p>Note, <code>serverMessages</code>, <code>clientMessages</code>, <code>serverUrl</code> and <code>serverUrlSecret</code> are currently at the root level but will be moved to <code>monitorPlan</code> in the future. Will remain backwards compatible</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1006,6 +1215,14 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the plan for real-time monitoring of the assistant's calls.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To enable live listening of the assistant's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
+         * <li>To enable live control of the assistant's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "monitorPlan", nulls = Nulls.SKIP)
         public _FinalStage monitorPlan(Optional<MonitorPlan> monitorPlan) {
@@ -1031,6 +1248,17 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the plan for when assistant should stop talking on customer interruption.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to recognize customer's interruption.</li>
+         * <li>The assistant is too fast to recognize customer's interruption.</li>
+         * <li>The assistant is getting interrupted by phrases that are just acknowledgments.</li>
+         * <li>The assistant is getting interrupted by background noises.</li>
+         * <li>The assistant is not properly stopping -- it starts talking right after getting interrupted.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "stopSpeakingPlan", nulls = Nulls.SKIP)
         public _FinalStage stopSpeakingPlan(Optional<StopSpeakingPlan> stopSpeakingPlan) {
@@ -1054,6 +1282,15 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the plan for when the assistant should start talking.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to start talking after the customer is done speaking.</li>
+         * <li>The assistant is too fast to start talking after the customer is done speaking.</li>
+         * <li>The assistant is so fast that it's actually interrupting the customer.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "startSpeakingPlan", nulls = Nulls.SKIP)
         public _FinalStage startSpeakingPlan(Optional<StartSpeakingPlan> startSpeakingPlan) {
@@ -1072,6 +1309,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the plan for static predefined messages that can be spoken by the assistant during the call, like <code>idleMessages</code>.</p>
+         * <p>Note: <code>firstMessage</code>, <code>voicemailMessage</code>, and <code>endCallMessage</code> are currently at the root level. They will be moved to <code>messagePlan</code> in the future, but will remain backwards compatible.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "messagePlan", nulls = Nulls.SKIP)
         public _FinalStage messagePlan(Optional<MessagePlan> messagePlan) {
@@ -1081,7 +1322,6 @@ public final class Assistant {
 
         /**
          * <p>This is the plan for artifacts generated during assistant's calls. Stored in <code>call.artifact</code>.</p>
-         * <p>Note: <code>recordingEnabled</code> is currently at the root level. It will be moved to <code>artifactPlan</code> in the future, but will remain backwards compatible.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1090,6 +1330,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the plan for artifacts generated during assistant's calls. Stored in <code>call.artifact</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "artifactPlan", nulls = Nulls.SKIP)
         public _FinalStage artifactPlan(Optional<ArtifactPlan> artifactPlan) {
@@ -1107,10 +1350,56 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the plan for analysis of assistant's calls. Stored in <code>call.analysis</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "analysisPlan", nulls = Nulls.SKIP)
         public _FinalStage analysisPlan(Optional<AnalysisPlan> analysisPlan) {
             this.analysisPlan = analysisPlan;
+            return this;
+        }
+
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Features:</p>
+         * <ul>
+         * <li>Smart denoising using Krisp</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * <p>Smart denoising can be combined with or used independently of Fourier denoising.</p>
+         * <p>Order of precedence:</p>
+         * <ul>
+         * <li>Smart denoising</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage backgroundSpeechDenoisingPlan(BackgroundSpeechDenoisingPlan backgroundSpeechDenoisingPlan) {
+            this.backgroundSpeechDenoisingPlan = Optional.ofNullable(backgroundSpeechDenoisingPlan);
+            return this;
+        }
+
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Features:</p>
+         * <ul>
+         * <li>Smart denoising using Krisp</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * <p>Smart denoising can be combined with or used independently of Fourier denoising.</p>
+         * <p>Order of precedence:</p>
+         * <ul>
+         * <li>Smart denoising</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "backgroundSpeechDenoisingPlan", nulls = Nulls.SKIP)
+        public _FinalStage backgroundSpeechDenoisingPlan(
+                Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan) {
+            this.backgroundSpeechDenoisingPlan = backgroundSpeechDenoisingPlan;
             return this;
         }
 
@@ -1124,6 +1413,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is for metadata you want to store on the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
@@ -1154,6 +1446,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This list contains phrases that, if spoken by the assistant, will trigger the call to be hung up. Case insensitive.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "endCallPhrases", nulls = Nulls.SKIP)
         public _FinalStage endCallPhrases(Optional<List<String>> endCallPhrases) {
@@ -1172,6 +1467,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the message that the assistant will say if it ends the call.</p>
+         * <p>If unspecified, it will hang up without saying anything.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "endCallMessage", nulls = Nulls.SKIP)
         public _FinalStage endCallMessage(Optional<String> endCallMessage) {
@@ -1190,6 +1489,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the message that the assistant will say if the call is forwarded to voicemail.</p>
+         * <p>If unspecified, it will hang up.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "voicemailMessage", nulls = Nulls.SKIP)
         public _FinalStage voicemailMessage(Optional<String> voicemailMessage) {
@@ -1208,6 +1511,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the name of the assistant.</p>
+         * <p>This is required when you want to transfer between assistants in a call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -1225,6 +1532,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is a set of actions that will be performed on certain events.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public _FinalStage hooks(Optional<List<AssistantHooksItem>> hooks) {
@@ -1242,6 +1552,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "credentials", nulls = Nulls.SKIP)
         public _FinalStage credentials(Optional<List<AssistantCredentialsItem>> credentials) {
@@ -1250,8 +1563,8 @@ public final class Assistant {
         }
 
         /**
-         * <p>This is the plan for observability configuration of assistant's calls.
-         * Currently supports Langfuse for tracing and monitoring.</p>
+         * <p>This is the plan for observability of assistant's calls.</p>
+         * <p>Currently, only Langfuse is supported.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -1260,6 +1573,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the plan for observability of assistant's calls.</p>
+         * <p>Currently, only Langfuse is supported.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "observabilityPlan", nulls = Nulls.SKIP)
         public _FinalStage observabilityPlan(Optional<LangfuseObservabilityPlan> observabilityPlan) {
@@ -1277,6 +1594,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are the configurations to be passed to the transport providers of assistant's calls, like Twilio. You can store multiple configurations for different transport providers. For a call, only the configuration matching the call transport provider is used.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "transportConfigurations", nulls = Nulls.SKIP)
         public _FinalStage transportConfigurations(
@@ -1297,6 +1617,11 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This determines whether the model's output is used in conversation history rather than the transcription of assistant's speech.</p>
+         * <p>Default <code>false</code> while in beta.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "modelOutputInMessagesEnabled", nulls = Nulls.SKIP)
         public _FinalStage modelOutputInMessagesEnabled(Optional<Boolean> modelOutputInMessagesEnabled) {
@@ -1316,6 +1641,11 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Default <code>false</code> while in beta.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "backgroundDenoisingEnabled", nulls = Nulls.SKIP)
         public _FinalStage backgroundDenoisingEnabled(Optional<Boolean> backgroundDenoisingEnabled) {
@@ -1334,6 +1664,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+         * You can also provide a custom sound by providing a URL to an audio file.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "backgroundSound", nulls = Nulls.SKIP)
         public _FinalStage backgroundSound(Optional<AssistantBackgroundSound> backgroundSound) {
@@ -1352,6 +1686,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the maximum number of seconds that the call will last. When the call reaches this duration, it will be ended.</p>
+         * <p>@default 600 (10 minutes)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "maxDurationSeconds", nulls = Nulls.SKIP)
         public _FinalStage maxDurationSeconds(Optional<Double> maxDurationSeconds) {
@@ -1370,6 +1708,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>How many seconds of silence to wait before ending the call. Defaults to 30.</p>
+         * <p>@default 30</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "silenceTimeoutSeconds", nulls = Nulls.SKIP)
         public _FinalStage silenceTimeoutSeconds(Optional<Double> silenceTimeoutSeconds) {
@@ -1387,6 +1729,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are the messages that will be sent to your Server URL. Default is conversation-update,end-of-call-report,function-call,hang,speech-update,status-update,tool-calls,transfer-destination-request,user-interrupted. You can check the shape of the messages in ServerMessage schema.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "serverMessages", nulls = Nulls.SKIP)
         public _FinalStage serverMessages(Optional<List<AssistantServerMessagesItem>> serverMessages) {
@@ -1404,6 +1749,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input,workflow.node.started. You can check the shape of the messages in ClientMessage schema.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "clientMessages", nulls = Nulls.SKIP)
         public _FinalStage clientMessages(Optional<List<AssistantClientMessagesItem>> clientMessages) {
@@ -1423,6 +1771,11 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are the settings to configure or disable voicemail detection. Alternatively, voicemail detection can be configured using the model.tools=[VoicemailTool].
+         * This uses Twilio's built-in detection while the VoicemailTool relies on the model to detect if a voicemail was reached.
+         * You can use neither of them, one of them, or both of them. By default, Twilio built-in detection is enabled while VoicemailTool is not.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "voicemailDetection", nulls = Nulls.SKIP)
         public _FinalStage voicemailDetection(Optional<AssistantVoicemailDetection> voicemailDetection) {
@@ -1447,6 +1800,16 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the mode for the first message. Default is 'assistant-speaks-first'.</p>
+         * <p>Use:</p>
+         * <ul>
+         * <li>'assistant-speaks-first' to have the assistant speak first.</li>
+         * <li>'assistant-waits-for-user' to have the assistant wait for the user to speak first.</li>
+         * <li>'assistant-speaks-first-with-model-generated-message' to have the assistant speak first with a message generated by the model based on the conversation state. (<code>assistant.model.messages</code> at call start, <code>call.messages</code> at squad transfer points).</li>
+         * </ul>
+         * <p>@default 'assistant-speaks-first'</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "firstMessageMode", nulls = Nulls.SKIP)
         public _FinalStage firstMessageMode(Optional<AssistantFirstMessageMode> firstMessageMode) {
@@ -1478,6 +1841,10 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).</p>
+         * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "firstMessage", nulls = Nulls.SKIP)
         public _FinalStage firstMessage(Optional<String> firstMessage) {
@@ -1495,6 +1862,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are the options for the assistant's voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "voice", nulls = Nulls.SKIP)
         public _FinalStage voice(Optional<AssistantVoice> voice) {
@@ -1512,6 +1882,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are the options for the assistant's LLM.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<AssistantModel> model) {
@@ -1529,6 +1902,9 @@ public final class Assistant {
             return this;
         }
 
+        /**
+         * <p>These are the options for the assistant's transcriber.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "transcriber", nulls = Nulls.SKIP)
         public _FinalStage transcriber(Optional<AssistantTranscriber> transcriber) {
@@ -1563,6 +1939,7 @@ public final class Assistant {
                     endCallPhrases,
                     compliancePlan,
                     metadata,
+                    backgroundSpeechDenoisingPlan,
                     analysisPlan,
                     artifactPlan,
                     messagePlan,

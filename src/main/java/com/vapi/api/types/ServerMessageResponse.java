@@ -68,6 +68,10 @@ public final class ServerMessageResponse {
     }
 
     public interface MessageResponseStage {
+        /**
+         * <p>This is the response that is expected from the server to the message.</p>
+         * <p>Note: Most messages don't expect a response. Only &quot;assistant-request&quot;, &quot;tool-calls&quot; and &quot;transfer-destination-request&quot; do.</p>
+         */
         _FinalStage messageResponse(@NotNull ServerMessageResponseMessageResponse messageResponse);
 
         Builder from(ServerMessageResponse other);
@@ -93,6 +97,8 @@ public final class ServerMessageResponse {
         }
 
         /**
+         * <p>This is the response that is expected from the server to the message.</p>
+         * <p>Note: Most messages don't expect a response. Only &quot;assistant-request&quot;, &quot;tool-calls&quot; and &quot;transfer-destination-request&quot; do.</p>
          * <p>This is the response that is expected from the server to the message.</p>
          * <p>Note: Most messages don't expect a response. Only &quot;assistant-request&quot;, &quot;tool-calls&quot; and &quot;transfer-destination-request&quot; do.</p>
          * @return Reference to {@code this} so that method calls can be chained together.

@@ -234,6 +234,9 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the starting state for the conversation.</p>
+         */
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public Builder messages(Optional<List<OpenAiMessage>> messages) {
             this.messages = messages;
@@ -245,6 +248,10 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use existing tools, use <code>toolIds</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         @JsonSetter(value = "tools", nulls = Nulls.SKIP)
         public Builder tools(Optional<List<InflectionAiModelToolsItem>> tools) {
             this.tools = tools;
@@ -256,6 +263,10 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use transient tools, use <code>tools</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         @JsonSetter(value = "toolIds", nulls = Nulls.SKIP)
         public Builder toolIds(Optional<List<String>> toolIds) {
             this.toolIds = toolIds;
@@ -267,6 +278,9 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         */
         @JsonSetter(value = "knowledgeBase", nulls = Nulls.SKIP)
         public Builder knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase) {
             this.knowledgeBase = knowledgeBase;
@@ -278,6 +292,9 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         */
         @JsonSetter(value = "knowledgeBaseId", nulls = Nulls.SKIP)
         public Builder knowledgeBaseId(Optional<String> knowledgeBaseId) {
             this.knowledgeBaseId = knowledgeBaseId;
@@ -289,6 +306,9 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
+         */
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public Builder temperature(Optional<Double> temperature) {
             this.temperature = temperature;
@@ -300,6 +320,9 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.</p>
+         */
         @JsonSetter(value = "maxTokens", nulls = Nulls.SKIP)
         public Builder maxTokens(Optional<Double> maxTokens) {
             this.maxTokens = maxTokens;
@@ -311,6 +334,11 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>This determines whether we detect user's emotion while they speak and send it as an additional info to model.</p>
+         * <p>Default <code>false</code> because the model is usually are good at understanding the user's emotion from text.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "emotionRecognitionEnabled", nulls = Nulls.SKIP)
         public Builder emotionRecognitionEnabled(Optional<Boolean> emotionRecognitionEnabled) {
             this.emotionRecognitionEnabled = emotionRecognitionEnabled;
@@ -322,6 +350,11 @@ public final class InflectionAiModel {
             return this;
         }
 
+        /**
+         * <p>This sets how many turns at the start of the conversation to use a smaller, faster model from the same provider before switching to the primary model. Example, gpt-3.5-turbo if provider is openai.</p>
+         * <p>Default is 0.</p>
+         * <p>@default 0</p>
+         */
         @JsonSetter(value = "numFastTurns", nulls = Nulls.SKIP)
         public Builder numFastTurns(Optional<Double> numFastTurns) {
             this.numFastTurns = numFastTurns;

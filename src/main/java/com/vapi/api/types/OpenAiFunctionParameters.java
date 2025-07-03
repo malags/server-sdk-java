@@ -109,6 +109,11 @@ public final class OpenAiFunctionParameters {
             return this;
         }
 
+        /**
+         * <p>This provides a description of the properties required by the function.
+         * JSON Schema can be used to specify expectations for each property.
+         * Refer to <a href="https://ajv.js.org/json-schema.html#json-data-type">this doc</a> for a comprehensive guide on JSON Schema.</p>
+         */
         @JsonSetter(value = "properties", nulls = Nulls.SKIP)
         public Builder properties(Map<String, JsonSchema> properties) {
             this.properties.clear();
@@ -126,6 +131,9 @@ public final class OpenAiFunctionParameters {
             return this;
         }
 
+        /**
+         * <p>This specifies the properties that are required by the function.</p>
+         */
         @JsonSetter(value = "required", nulls = Nulls.SKIP)
         public Builder required(Optional<List<String>> required) {
             this.required = required;

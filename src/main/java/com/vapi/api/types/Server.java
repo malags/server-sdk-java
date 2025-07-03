@@ -133,6 +133,10 @@ public final class Server {
             return this;
         }
 
+        /**
+         * <p>This is the timeout in seconds for the request. Defaults to 20 seconds.</p>
+         * <p>@default 20</p>
+         */
         @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
         public Builder timeoutSeconds(Optional<Double> timeoutSeconds) {
             this.timeoutSeconds = timeoutSeconds;
@@ -144,6 +148,9 @@ public final class Server {
             return this;
         }
 
+        /**
+         * <p>This is where the request will be sent.</p>
+         */
         @JsonSetter(value = "url", nulls = Nulls.SKIP)
         public Builder url(Optional<String> url) {
             this.url = url;
@@ -155,6 +162,10 @@ public final class Server {
             return this;
         }
 
+        /**
+         * <p>These are the headers to include in the request.</p>
+         * <p>Each key-value pair represents a header name and its value.</p>
+         */
         @JsonSetter(value = "headers", nulls = Nulls.SKIP)
         public Builder headers(Optional<Map<String, Object>> headers) {
             this.headers = headers;
@@ -166,6 +177,10 @@ public final class Server {
             return this;
         }
 
+        /**
+         * <p>This is the backoff plan if the request fails. Defaults to undefined (the request will not be retried).</p>
+         * <p>@default undefined (the request will not be retried)</p>
+         */
         @JsonSetter(value = "backoffPlan", nulls = Nulls.SKIP)
         public Builder backoffPlan(Optional<BackoffPlan> backoffPlan) {
             this.backoffPlan = backoffPlan;

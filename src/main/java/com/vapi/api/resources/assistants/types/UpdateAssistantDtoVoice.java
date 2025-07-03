@@ -17,6 +17,7 @@ import com.vapi.api.types.CustomVoice;
 import com.vapi.api.types.DeepgramVoice;
 import com.vapi.api.types.ElevenLabsVoice;
 import com.vapi.api.types.HumeVoice;
+import com.vapi.api.types.InworldVoice;
 import com.vapi.api.types.LmntVoice;
 import com.vapi.api.types.NeuphonicVoice;
 import com.vapi.api.types.OpenAiVoice;
@@ -101,6 +102,10 @@ public final class UpdateAssistantDtoVoice {
         return new UpdateAssistantDtoVoice(new SesameValue(value));
     }
 
+    public static UpdateAssistantDtoVoice inworld(InworldVoice value) {
+        return new UpdateAssistantDtoVoice(new InworldValue(value));
+    }
+
     public boolean isAzure() {
         return value instanceof AzureValue;
     }
@@ -159,6 +164,10 @@ public final class UpdateAssistantDtoVoice {
 
     public boolean isSesame() {
         return value instanceof SesameValue;
+    }
+
+    public boolean isInworld() {
+        return value instanceof InworldValue;
     }
 
     public boolean _isUnknown() {
@@ -270,6 +279,13 @@ public final class UpdateAssistantDtoVoice {
         return Optional.empty();
     }
 
+    public Optional<InworldVoice> getInworld() {
+        if (isInworld()) {
+            return Optional.of(((InworldValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -313,6 +329,8 @@ public final class UpdateAssistantDtoVoice {
 
         T visitSesame(SesameVoice sesame);
 
+        T visitInworld(InworldVoice inworld);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -332,7 +350,8 @@ public final class UpdateAssistantDtoVoice {
         @JsonSubTypes.Type(SmallestAiValue.class),
         @JsonSubTypes.Type(TavusValue.class),
         @JsonSubTypes.Type(VapiValue.class),
-        @JsonSubTypes.Type(SesameValue.class)
+        @JsonSubTypes.Type(SesameValue.class),
+        @JsonSubTypes.Type(InworldValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -910,6 +929,45 @@ public final class UpdateAssistantDtoVoice {
         }
 
         private boolean equalTo(SesameValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoVoice{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("inworld")
+    @JsonIgnoreProperties("provider")
+    private static final class InworldValue implements Value {
+        @JsonUnwrapped
+        private InworldVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private InworldValue() {}
+
+        private InworldValue(InworldVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitInworld(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof InworldValue && equalTo((InworldValue) other);
+        }
+
+        private boolean equalTo(InworldValue other) {
             return value.equals(other.value);
         }
 

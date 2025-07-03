@@ -162,6 +162,15 @@ public final class MessagePlan {
             return this;
         }
 
+        /**
+         * <p>This are the messages that the assistant will speak when the user hasn't responded for <code>idleTimeoutSeconds</code>. Each time the timeout is triggered, a random message will be chosen from this array.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If user gets distracted and doesn't respond for a while, this can be used to grab their attention.</li>
+         * <li>If the transcriber doesn't pick up what the user said, this can be used to ask the user to repeat themselves. (From the perspective of the assistant, the conversation is idle since it didn't &quot;hear&quot; any user messages.)</li>
+         * </ul>
+         * <p>@default null (no idle message is spoken)</p>
+         */
         @JsonSetter(value = "idleMessages", nulls = Nulls.SKIP)
         public Builder idleMessages(Optional<List<String>> idleMessages) {
             this.idleMessages = idleMessages;
@@ -173,6 +182,10 @@ public final class MessagePlan {
             return this;
         }
 
+        /**
+         * <p>This determines the maximum number of times <code>idleMessages</code> can be spoken during the call.</p>
+         * <p>@default 3</p>
+         */
         @JsonSetter(value = "idleMessageMaxSpokenCount", nulls = Nulls.SKIP)
         public Builder idleMessageMaxSpokenCount(Optional<Double> idleMessageMaxSpokenCount) {
             this.idleMessageMaxSpokenCount = idleMessageMaxSpokenCount;
@@ -184,6 +197,10 @@ public final class MessagePlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether the idle message count is reset whenever the user speaks.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "idleMessageResetCountOnUserSpeechEnabled", nulls = Nulls.SKIP)
         public Builder idleMessageResetCountOnUserSpeechEnabled(
                 Optional<Boolean> idleMessageResetCountOnUserSpeechEnabled) {
@@ -197,6 +214,10 @@ public final class MessagePlan {
             return this;
         }
 
+        /**
+         * <p>This is the timeout in seconds before a message from <code>idleMessages</code> is spoken. The clock starts when the assistant finishes speaking and remains active until the user speaks.</p>
+         * <p>@default 10</p>
+         */
         @JsonSetter(value = "idleTimeoutSeconds", nulls = Nulls.SKIP)
         public Builder idleTimeoutSeconds(Optional<Double> idleTimeoutSeconds) {
             this.idleTimeoutSeconds = idleTimeoutSeconds;
@@ -208,6 +229,10 @@ public final class MessagePlan {
             return this;
         }
 
+        /**
+         * <p>This is the message that the assistant will say if the call ends due to silence.</p>
+         * <p>If unspecified, it will hang up without saying anything.</p>
+         */
         @JsonSetter(value = "silenceTimeoutMessage", nulls = Nulls.SKIP)
         public Builder silenceTimeoutMessage(Optional<String> silenceTimeoutMessage) {
             this.silenceTimeoutMessage = silenceTimeoutMessage;

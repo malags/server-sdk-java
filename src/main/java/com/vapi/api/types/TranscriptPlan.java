@@ -135,6 +135,10 @@ public final class TranscriptPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether the transcript is stored in <code>call.artifact.transcript</code>. Defaults to true.</p>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -146,6 +150,19 @@ public final class TranscriptPlan {
             return this;
         }
 
+        /**
+         * <p>This is the name of the assistant in the transcript. Defaults to 'AI'.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you want to change the name of the assistant in the transcript, set this. Example, here is what the transcript would look like with <code>assistantName</code> set to 'Buyer':</li>
+         * </ul>
+         * <pre><code>User: Hello, how are you?
+         * Buyer: I'm fine.
+         * User: Do you want to buy a car?
+         * Buyer: No.
+         * </code></pre>
+         * <p>@default 'AI'</p>
+         */
         @JsonSetter(value = "assistantName", nulls = Nulls.SKIP)
         public Builder assistantName(Optional<String> assistantName) {
             this.assistantName = assistantName;
@@ -157,6 +174,19 @@ public final class TranscriptPlan {
             return this;
         }
 
+        /**
+         * <p>This is the name of the user in the transcript. Defaults to 'User'.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you want to change the name of the user in the transcript, set this. Example, here is what the transcript would look like with <code>userName</code> set to 'Seller':</li>
+         * </ul>
+         * <pre><code>Seller: Hello, how are you?
+         * AI: I'm fine.
+         * Seller: Do you want to buy a car?
+         * AI: No.
+         * </code></pre>
+         * <p>@default 'User'</p>
+         */
         @JsonSetter(value = "userName", nulls = Nulls.SKIP)
         public Builder userName(Optional<String> userName) {
             this.userName = userName;

@@ -81,6 +81,9 @@ public final class FallbackAzureSpeechTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription. The list of languages Azure supports can be found here: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=stt</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<FallbackAzureSpeechTranscriberLanguage> language) {
             this.language = language;

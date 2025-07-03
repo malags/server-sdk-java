@@ -6,9 +6,89 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum LmntVoiceIdEnum {
+    AMY("amy"),
+
+    ANSEL("ansel"),
+
+    AUTUMN("autumn"),
+
+    AVA("ava"),
+
+    BRANDON("brandon"),
+
+    CALEB("caleb"),
+
+    CASSIAN("cassian"),
+
+    CHLOE("chloe"),
+
+    DALTON("dalton"),
+
+    DANIEL("daniel"),
+
+    DUSTIN("dustin"),
+
+    ELOWEN("elowen"),
+
+    EVANDER("evander"),
+
+    HUXLEY("huxley"),
+
+    JAMES("james"),
+
+    JUNIPER("juniper"),
+
+    KENNEDY("kennedy"),
+
+    LAUREN("lauren"),
+
+    LEAH("leah"),
+
     LILY("lily"),
 
-    DANIEL("daniel");
+    LUCAS("lucas"),
+
+    MAGNUS("magnus"),
+
+    MILES("miles"),
+
+    MORGAN("morgan"),
+
+    NATALIE("natalie"),
+
+    NATHAN("nathan"),
+
+    NOAH("noah"),
+
+    NYSSA("nyssa"),
+
+    OLIVER("oliver"),
+
+    PAIGE("paige"),
+
+    RYAN("ryan"),
+
+    SADIE("sadie"),
+
+    SOPHIE("sophie"),
+
+    STELLA("stella"),
+
+    TERRENCE("terrence"),
+
+    TYLER("tyler"),
+
+    VESPER("vesper"),
+
+    VIOLET("violet"),
+
+    WARRICK("warrick"),
+
+    ZAIN("zain"),
+
+    ZEKE("zeke"),
+
+    ZOE("zoe");
 
     private final String value;
 

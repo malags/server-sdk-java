@@ -21,38 +21,23 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateBashToolDto.Builder.class)
 public final class CreateBashToolDto {
-    private final Optional<Boolean> async;
-
     private final Optional<List<CreateBashToolDtoMessagesItem>> messages;
 
-    private final Optional<OpenAiFunction> function;
-
     private final Optional<Server> server;
+
+    private final Optional<OpenAiFunction> function;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateBashToolDto(
-            Optional<Boolean> async,
             Optional<List<CreateBashToolDtoMessagesItem>> messages,
-            Optional<OpenAiFunction> function,
             Optional<Server> server,
+            Optional<OpenAiFunction> function,
             Map<String, Object> additionalProperties) {
-        this.async = async;
         this.messages = messages;
-        this.function = function;
         this.server = server;
+        this.function = function;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This determines if the tool is async.
-     * <p>If async, the assistant will move forward without waiting for your server to respond. This is useful if you just want to trigger something on your server.</p>
-     * <p>If sync, the assistant will wait for your server to respond. This is useful if want assistant to respond with the result from your server.</p>
-     * <p>Defaults to synchronous (<code>false</code>).</p>
-     */
-    @JsonProperty("async")
-    public Optional<Boolean> getAsync() {
-        return async;
     }
 
     /**
@@ -73,6 +58,22 @@ public final class CreateBashToolDto {
     }
 
     /**
+     * @return This is the server where a <code>tool-calls</code> webhook will be sent.
+     * <p>Notes:</p>
+     * <ul>
+     * <li>Webhook is sent to this server when a tool call is made.</li>
+     * <li>Webhook contains the call, assistant, and phone number objects.</li>
+     * <li>Webhook contains the variables set on the assistant.</li>
+     * <li>Webhook is sent to the first available URL in this order: {{tool.server.url}}, {{assistant.server.url}}, {{phoneNumber.server.url}}, {{org.server.url}}.</li>
+     * <li>Webhook expects a response with tool call result.</li>
+     * </ul>
+     */
+    @JsonProperty("server")
+    public Optional<Server> getServer() {
+        return server;
+    }
+
+    /**
      * @return The name of the tool, fixed to 'bash'
      */
     @JsonProperty("name")
@@ -90,16 +91,6 @@ public final class CreateBashToolDto {
         return function;
     }
 
-    /**
-     * @return This is the server that will be hit when this tool is requested by the model.
-     * <p>All requests will be sent with the call object among other things. You can find more details in the Server URL documentation.</p>
-     * <p>This overrides the serverUrl set on the org and the phoneNumber. Order of precedence: highest tool.server.url, then assistant.serverUrl, then phoneNumber.serverUrl, then org.serverUrl.</p>
-     */
-    @JsonProperty("server")
-    public Optional<Server> getServer() {
-        return server;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -112,15 +103,12 @@ public final class CreateBashToolDto {
     }
 
     private boolean equalTo(CreateBashToolDto other) {
-        return async.equals(other.async)
-                && messages.equals(other.messages)
-                && function.equals(other.function)
-                && server.equals(other.server);
+        return messages.equals(other.messages) && server.equals(other.server) && function.equals(other.function);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.async, this.messages, this.function, this.server);
+        return Objects.hash(this.messages, this.server, this.function);
     }
 
     @java.lang.Override
@@ -134,13 +122,11 @@ public final class CreateBashToolDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<Boolean> async = Optional.empty();
-
         private Optional<List<CreateBashToolDtoMessagesItem>> messages = Optional.empty();
 
-        private Optional<OpenAiFunction> function = Optional.empty();
-
         private Optional<Server> server = Optional.empty();
+
+        private Optional<OpenAiFunction> function = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -148,24 +134,16 @@ public final class CreateBashToolDto {
         private Builder() {}
 
         public Builder from(CreateBashToolDto other) {
-            async(other.getAsync());
             messages(other.getMessages());
-            function(other.getFunction());
             server(other.getServer());
+            function(other.getFunction());
             return this;
         }
 
-        @JsonSetter(value = "async", nulls = Nulls.SKIP)
-        public Builder async(Optional<Boolean> async) {
-            this.async = async;
-            return this;
-        }
-
-        public Builder async(Boolean async) {
-            this.async = Optional.ofNullable(async);
-            return this;
-        }
-
+        /**
+         * <p>These are the messages that will be spoken to the user as the tool is running.</p>
+         * <p>For some tools, this is auto-filled based on special fields like <code>tool.destinations</code>. For others like the function tool, these can be custom configured.</p>
+         */
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public Builder messages(Optional<List<CreateBashToolDtoMessagesItem>> messages) {
             this.messages = messages;
@@ -177,17 +155,17 @@ public final class CreateBashToolDto {
             return this;
         }
 
-        @JsonSetter(value = "function", nulls = Nulls.SKIP)
-        public Builder function(Optional<OpenAiFunction> function) {
-            this.function = function;
-            return this;
-        }
-
-        public Builder function(OpenAiFunction function) {
-            this.function = Optional.ofNullable(function);
-            return this;
-        }
-
+        /**
+         * <p>This is the server where a <code>tool-calls</code> webhook will be sent.</p>
+         * <p>Notes:</p>
+         * <ul>
+         * <li>Webhook is sent to this server when a tool call is made.</li>
+         * <li>Webhook contains the call, assistant, and phone number objects.</li>
+         * <li>Webhook contains the variables set on the assistant.</li>
+         * <li>Webhook is sent to the first available URL in this order: {{tool.server.url}}, {{assistant.server.url}}, {{phoneNumber.server.url}}, {{org.server.url}}.</li>
+         * <li>Webhook expects a response with tool call result.</li>
+         * </ul>
+         */
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public Builder server(Optional<Server> server) {
             this.server = server;
@@ -199,8 +177,24 @@ public final class CreateBashToolDto {
             return this;
         }
 
+        /**
+         * <p>This is the function definition of the tool.</p>
+         * <p>For <code>endCall</code>, <code>transferCall</code>, and <code>dtmf</code> tools, this is auto-filled based on tool-specific fields like <code>tool.destinations</code>. But, even in those cases, you can provide a custom function definition for advanced use cases.</p>
+         * <p>An example of an advanced use case is if you want to customize the message that's spoken for <code>endCall</code> tool. You can specify a function where it returns an argument &quot;reason&quot;. Then, in <code>messages</code> array, you can have many &quot;request-complete&quot; messages. One of these messages will be triggered if the <code>messages[].conditions</code> matches the &quot;reason&quot; argument.</p>
+         */
+        @JsonSetter(value = "function", nulls = Nulls.SKIP)
+        public Builder function(Optional<OpenAiFunction> function) {
+            this.function = function;
+            return this;
+        }
+
+        public Builder function(OpenAiFunction function) {
+            this.function = Optional.ofNullable(function);
+            return this;
+        }
+
         public CreateBashToolDto build() {
-            return new CreateBashToolDto(async, messages, function, server, additionalProperties);
+            return new CreateBashToolDto(messages, server, function, additionalProperties);
         }
     }
 }

@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GcpCredential.Builder.class)
 public final class GcpCredential {
+    private final Optional<Double> fallbackIndex;
+
     private final String id;
 
     private final String orgId;
@@ -34,25 +36,31 @@ public final class GcpCredential {
 
     private final GcpKey gcpKey;
 
+    private final Optional<String> region;
+
     private final Optional<BucketPlan> bucketPlan;
 
     private final Map<String, Object> additionalProperties;
 
     private GcpCredential(
+            Optional<Double> fallbackIndex,
             String id,
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             Optional<String> name,
             GcpKey gcpKey,
+            Optional<String> region,
             Optional<BucketPlan> bucketPlan,
             Map<String, Object> additionalProperties) {
+        this.fallbackIndex = fallbackIndex;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.name = name;
         this.gcpKey = gcpKey;
+        this.region = region;
         this.bucketPlan = bucketPlan;
         this.additionalProperties = additionalProperties;
     }
@@ -60,6 +68,14 @@ public final class GcpCredential {
     @JsonProperty("provider")
     public String getProvider() {
         return "gcp";
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -112,8 +128,13 @@ public final class GcpCredential {
     }
 
     /**
-     * @return This is the bucket plan that can be provided to store call artifacts in GCP.
+     * @return This is the region of the GCP resource.
      */
+    @JsonProperty("region")
+    public Optional<String> getRegion() {
+        return region;
+    }
+
     @JsonProperty("bucketPlan")
     public Optional<BucketPlan> getBucketPlan() {
         return bucketPlan;
@@ -131,19 +152,29 @@ public final class GcpCredential {
     }
 
     private boolean equalTo(GcpCredential other) {
-        return id.equals(other.id)
+        return fallbackIndex.equals(other.fallbackIndex)
+                && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && name.equals(other.name)
                 && gcpKey.equals(other.gcpKey)
+                && region.equals(other.region)
                 && bucketPlan.equals(other.bucketPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.gcpKey, this.bucketPlan);
+                this.fallbackIndex,
+                this.id,
+                this.orgId,
+                this.createdAt,
+                this.updatedAt,
+                this.name,
+                this.gcpKey,
+                this.region,
+                this.bucketPlan);
     }
 
     @java.lang.Override
@@ -156,33 +187,66 @@ public final class GcpCredential {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(GcpCredential other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         GcpKeyStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface GcpKeyStage {
+        /**
+         * <p>This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.</p>
+         * <p>The schema is identical to the JSON that GCP outputs.</p>
+         */
         _FinalStage gcpKey(@NotNull GcpKey gcpKey);
     }
 
     public interface _FinalStage {
         GcpCredential build();
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        _FinalStage fallbackIndex(Optional<Double> fallbackIndex);
+
+        _FinalStage fallbackIndex(Double fallbackIndex);
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
+
+        /**
+         * <p>This is the region of the GCP resource.</p>
+         */
+        _FinalStage region(Optional<String> region);
+
+        _FinalStage region(String region);
 
         _FinalStage bucketPlan(Optional<BucketPlan> bucketPlan);
 
@@ -204,7 +268,11 @@ public final class GcpCredential {
 
         private Optional<BucketPlan> bucketPlan = Optional.empty();
 
+        private Optional<String> region = Optional.empty();
+
         private Optional<String> name = Optional.empty();
+
+        private Optional<Double> fallbackIndex = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -213,17 +281,20 @@ public final class GcpCredential {
 
         @java.lang.Override
         public Builder from(GcpCredential other) {
+            fallbackIndex(other.getFallbackIndex());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             name(other.getName());
             gcpKey(other.getGcpKey());
+            region(other.getRegion());
             bucketPlan(other.getBucketPlan());
             return this;
         }
 
         /**
+         * <p>This is the unique identifier for the credential.</p>
          * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -236,6 +307,7 @@ public final class GcpCredential {
 
         /**
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -247,6 +319,7 @@ public final class GcpCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -257,6 +330,7 @@ public final class GcpCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -270,6 +344,8 @@ public final class GcpCredential {
         /**
          * <p>This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.</p>
          * <p>The schema is identical to the JSON that GCP outputs.</p>
+         * <p>This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.</p>
+         * <p>The schema is identical to the JSON that GCP outputs.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -279,10 +355,6 @@ public final class GcpCredential {
             return this;
         }
 
-        /**
-         * <p>This is the bucket plan that can be provided to store call artifacts in GCP.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage bucketPlan(BucketPlan bucketPlan) {
             this.bucketPlan = Optional.ofNullable(bucketPlan);
@@ -297,6 +369,26 @@ public final class GcpCredential {
         }
 
         /**
+         * <p>This is the region of the GCP resource.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage region(String region) {
+            this.region = Optional.ofNullable(region);
+            return this;
+        }
+
+        /**
+         * <p>This is the region of the GCP resource.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "region", nulls = Nulls.SKIP)
+        public _FinalStage region(Optional<String> region) {
+            this.region = region;
+            return this;
+        }
+
+        /**
          * <p>This is the name of credential. This is just for your reference.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -306,6 +398,9 @@ public final class GcpCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -313,9 +408,39 @@ public final class GcpCredential {
             return this;
         }
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public _FinalStage fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
+            return this;
+        }
+
         @java.lang.Override
         public GcpCredential build() {
-            return new GcpCredential(id, orgId, createdAt, updatedAt, name, gcpKey, bucketPlan, additionalProperties);
+            return new GcpCredential(
+                    fallbackIndex,
+                    id,
+                    orgId,
+                    createdAt,
+                    updatedAt,
+                    name,
+                    gcpKey,
+                    region,
+                    bucketPlan,
+                    additionalProperties);
         }
     }
 }

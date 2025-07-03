@@ -66,6 +66,9 @@ public final class TestSuiteRunTestAttemptCall {
     }
 
     public interface ArtifactStage {
+        /**
+         * <p>This is the artifact of the call.</p>
+         */
         _FinalStage artifact(@NotNull Artifact artifact);
 
         Builder from(TestSuiteRunTestAttemptCall other);
@@ -91,6 +94,7 @@ public final class TestSuiteRunTestAttemptCall {
         }
 
         /**
+         * <p>This is the artifact of the call.</p>
          * <p>This is the artifact of the call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

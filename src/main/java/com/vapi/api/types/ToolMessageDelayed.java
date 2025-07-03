@@ -137,6 +137,15 @@ public final class ToolMessageDelayed {
             return this;
         }
 
+        /**
+         * <p>This is an alternative to the <code>content</code> property. It allows to specify variants of the same content, one per language.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If your assistants are multilingual, you can provide content for each language.</li>
+         * <li>If you don't provide content for a language, the first item in the array will be automatically translated to the active language at that moment.</li>
+         * </ul>
+         * <p>This will override the <code>content</code> property.</p>
+         */
         @JsonSetter(value = "contents", nulls = Nulls.SKIP)
         public Builder contents(Optional<List<TextContent>> contents) {
             this.contents = contents;
@@ -148,6 +157,9 @@ public final class ToolMessageDelayed {
             return this;
         }
 
+        /**
+         * <p>The number of milliseconds to wait for the server response before saying this message.</p>
+         */
         @JsonSetter(value = "timingMilliseconds", nulls = Nulls.SKIP)
         public Builder timingMilliseconds(Optional<Double> timingMilliseconds) {
             this.timingMilliseconds = timingMilliseconds;
@@ -159,6 +171,9 @@ public final class ToolMessageDelayed {
             return this;
         }
 
+        /**
+         * <p>This is the content that the assistant says when this message is triggered.</p>
+         */
         @JsonSetter(value = "content", nulls = Nulls.SKIP)
         public Builder content(Optional<String> content) {
             this.content = content;
@@ -170,6 +185,9 @@ public final class ToolMessageDelayed {
             return this;
         }
 
+        /**
+         * <p>This is an optional array of conditions that the tool call arguments must meet in order for this message to be triggered.</p>
+         */
         @JsonSetter(value = "conditions", nulls = Nulls.SKIP)
         public Builder conditions(Optional<List<Condition>> conditions) {
             this.conditions = conditions;

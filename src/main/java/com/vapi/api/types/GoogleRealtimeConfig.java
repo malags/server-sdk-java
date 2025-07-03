@@ -151,6 +151,10 @@ public final class GoogleRealtimeConfig {
             return this;
         }
 
+        /**
+         * <p>This is the nucleus sampling parameter that controls the cumulative probability of tokens considered during text generation.
+         * Only applicable with the Gemini Flash 2.0 Multimodal Live API.</p>
+         */
         @JsonSetter(value = "topP", nulls = Nulls.SKIP)
         public Builder topP(Optional<Double> topP) {
             this.topP = topP;
@@ -162,6 +166,10 @@ public final class GoogleRealtimeConfig {
             return this;
         }
 
+        /**
+         * <p>This is the top-k sampling parameter that limits the number of highest probability tokens considered during text generation.
+         * Only applicable with the Gemini Flash 2.0 Multimodal Live API.</p>
+         */
         @JsonSetter(value = "topK", nulls = Nulls.SKIP)
         public Builder topK(Optional<Double> topK) {
             this.topK = topK;
@@ -173,6 +181,10 @@ public final class GoogleRealtimeConfig {
             return this;
         }
 
+        /**
+         * <p>This is the presence penalty parameter that influences the model's likelihood to repeat information by penalizing tokens based on their presence in the text.
+         * Only applicable with the Gemini Flash 2.0 Multimodal Live API.</p>
+         */
         @JsonSetter(value = "presencePenalty", nulls = Nulls.SKIP)
         public Builder presencePenalty(Optional<Double> presencePenalty) {
             this.presencePenalty = presencePenalty;
@@ -184,6 +196,10 @@ public final class GoogleRealtimeConfig {
             return this;
         }
 
+        /**
+         * <p>This is the frequency penalty parameter that influences the model's likelihood to repeat tokens by penalizing them based on their frequency in the text.
+         * Only applicable with the Gemini Flash 2.0 Multimodal Live API.</p>
+         */
         @JsonSetter(value = "frequencyPenalty", nulls = Nulls.SKIP)
         public Builder frequencyPenalty(Optional<Double> frequencyPenalty) {
             this.frequencyPenalty = frequencyPenalty;
@@ -195,6 +211,10 @@ public final class GoogleRealtimeConfig {
             return this;
         }
 
+        /**
+         * <p>This is the speech configuration object that defines the voice settings to be used for the model's speech output.
+         * Only applicable with the Gemini Flash 2.0 Multimodal Live API.</p>
+         */
         @JsonSetter(value = "speechConfig", nulls = Nulls.SKIP)
         public Builder speechConfig(Optional<GeminiMultimodalLiveSpeechConfig> speechConfig) {
             this.speechConfig = speechConfig;

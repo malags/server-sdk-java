@@ -12,27 +12,148 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vapi.api.core.ObjectMappers;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = VariableExtractionPlan.Builder.class)
 public final class VariableExtractionPlan {
-    private final List<VariableExtractionSchema> output;
+    private final Optional<JsonSchema> schema;
+
+    private final Optional<List<VariableExtractionAlias>> aliases;
 
     private final Map<String, Object> additionalProperties;
 
-    private VariableExtractionPlan(List<VariableExtractionSchema> output, Map<String, Object> additionalProperties) {
-        this.output = output;
+    private VariableExtractionPlan(
+            Optional<JsonSchema> schema,
+            Optional<List<VariableExtractionAlias>> aliases,
+            Map<String, Object> additionalProperties) {
+        this.schema = schema;
+        this.aliases = aliases;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("output")
-    public List<VariableExtractionSchema> getOutput() {
-        return output;
+    /**
+     * @return This is the schema to extract.
+     * <p>Examples:</p>
+     * <ol>
+     * <li>To extract object properties, you can use the following schema:</li>
+     * </ol>
+     * <pre><code class="language-json">{
+     *   &quot;type&quot;: &quot;object&quot;,
+     *   &quot;properties&quot;: {
+     *     &quot;name&quot;: {
+     *       &quot;type&quot;: &quot;string&quot;
+     *     },
+     *     &quot;age&quot;: {
+     *       &quot;type&quot;: &quot;number&quot;
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>These will be extracted as <code>{{ name }}</code> and <code>{{ age }}</code> respectively. To emphasize, object properties are extracted as direct global variables.</p>
+     * <ol start="2">
+     * <li>To extract nested properties, you can use the following schema:</li>
+     * </ol>
+     * <pre><code class="language-json">{
+     *   &quot;type&quot;: &quot;object&quot;,
+     *   &quot;properties&quot;: {
+     *     &quot;name&quot;: {
+     *       &quot;type&quot;: &quot;object&quot;,
+     *       &quot;properties&quot;: {
+     *         &quot;first&quot;: {
+     *           &quot;type&quot;: &quot;string&quot;
+     *         },
+     *         &quot;last&quot;: {
+     *           &quot;type&quot;: &quot;string&quot;
+     *         }
+     *       }
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>These will be extracted as <code>{{ name }}</code>. And, <code>{{ name.first }}</code> and <code>{{ name.last }}</code> will be accessible.</p>
+     * <ol start="3">
+     * <li>To extract array items, you can use the following schema:</li>
+     * </ol>
+     * <pre><code class="language-json">{
+     *   &quot;type&quot;: &quot;array&quot;,
+     *   &quot;title&quot;: &quot;zipCodes&quot;,
+     *   &quot;items&quot;: {
+     *     &quot;type&quot;: &quot;string&quot;
+     *   }
+     * }
+     * </code></pre>
+     * <p>This will be extracted as <code>{{ zipCodes }}</code>. To access the array items, you can use <code>{{ zipCodes[0] }}</code> and <code>{{ zipCodes[1] }}</code>.</p>
+     * <ol start="4">
+     * <li>To extract array of objects, you can use the following schema:</li>
+     * </ol>
+     * <pre><code class="language-json">{
+     *   &quot;type&quot;: &quot;array&quot;,
+     *   &quot;name&quot;: &quot;people&quot;,
+     *   &quot;items&quot;: {
+     *     &quot;type&quot;: &quot;object&quot;,
+     *     &quot;properties&quot;: {
+     *       &quot;name&quot;: {
+     *         &quot;type&quot;: &quot;string&quot;
+     *       },
+     *       &quot;age&quot;: {
+     *         &quot;type&quot;: &quot;number&quot;
+     *       },
+     *       &quot;zipCodes&quot;: {
+     *         &quot;type&quot;: &quot;array&quot;,
+     *         &quot;items&quot;: {
+     *           &quot;type&quot;: &quot;string&quot;
+     *         }
+     *       }
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>This will be extracted as <code>{{ people }}</code>. To access the array items, you can use <code>{{ people[n].name }}</code>, <code>{{ people[n].age }}</code>, <code>{{ people[n].zipCodes }}</code>, <code>{{ people[n].zipCodes[0] }}</code> and <code>{{ people[n].zipCodes[1] }}</code>.</p>
+     */
+    @JsonProperty("schema")
+    public Optional<JsonSchema> getSchema() {
+        return schema;
+    }
+
+    /**
+     * @return These are additional variables to create.
+     * <p>These will be accessible during the call as <code>{{key}}</code> and stored in <code>call.artifact.variableValues</code> after the call.</p>
+     * <p>Example:</p>
+     * <pre><code class="language-json">{
+     *   &quot;aliases&quot;: [
+     *     {
+     *       &quot;key&quot;: &quot;customerName&quot;,
+     *       &quot;value&quot;: &quot;{{name}}&quot;
+     *     },
+     *     {
+     *       &quot;key&quot;: &quot;fullName&quot;,
+     *       &quot;value&quot;: &quot;{{firstName}} {{lastName}}&quot;
+     *     },
+     *     {
+     *       &quot;key&quot;: &quot;greeting&quot;,
+     *       &quot;value&quot;: &quot;Hello {{name}}, welcome to {{company}}!&quot;
+     *     },
+     *     {
+     *       &quot;key&quot;: &quot;customerEmail&quot;,
+     *       &quot;value&quot;: &quot;{{addresses[0].city}}&quot;
+     *     },
+     *     {
+     *       &quot;key&quot;: &quot;something&quot;,
+     *       &quot;value&quot;: &quot;{{any liquid}}&quot;
+     *     }
+     *   ]
+     * }
+     * </code></pre>
+     * <p>This will create variables <code>customerName</code>, <code>fullName</code>, <code>customerEmail</code>, <code>greeting</code>, and <code>something</code>. To access these variables, you can reference them as <code>{{customerName}}</code>, <code>{{fullName}}</code>, <code>{{customerEmail}}</code>, <code>{{greeting}}</code>, and <code>{{something}}</code>.</p>
+     */
+    @JsonProperty("aliases")
+    public Optional<List<VariableExtractionAlias>> getAliases() {
+        return aliases;
     }
 
     @java.lang.Override
@@ -47,12 +168,12 @@ public final class VariableExtractionPlan {
     }
 
     private boolean equalTo(VariableExtractionPlan other) {
-        return output.equals(other.output);
+        return schema.equals(other.schema) && aliases.equals(other.aliases);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.output);
+        return Objects.hash(this.schema, this.aliases);
     }
 
     @java.lang.Override
@@ -66,7 +187,9 @@ public final class VariableExtractionPlan {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private List<VariableExtractionSchema> output = new ArrayList<>();
+        private Optional<JsonSchema> schema = Optional.empty();
+
+        private Optional<List<VariableExtractionAlias>> aliases = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -74,29 +197,145 @@ public final class VariableExtractionPlan {
         private Builder() {}
 
         public Builder from(VariableExtractionPlan other) {
-            output(other.getOutput());
+            schema(other.getSchema());
+            aliases(other.getAliases());
             return this;
         }
 
-        @JsonSetter(value = "output", nulls = Nulls.SKIP)
-        public Builder output(List<VariableExtractionSchema> output) {
-            this.output.clear();
-            this.output.addAll(output);
+        /**
+         * <p>This is the schema to extract.</p>
+         * <p>Examples:</p>
+         * <ol>
+         * <li>To extract object properties, you can use the following schema:</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;type&quot;: &quot;object&quot;,
+         *   &quot;properties&quot;: {
+         *     &quot;name&quot;: {
+         *       &quot;type&quot;: &quot;string&quot;
+         *     },
+         *     &quot;age&quot;: {
+         *       &quot;type&quot;: &quot;number&quot;
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>These will be extracted as <code>{{ name }}</code> and <code>{{ age }}</code> respectively. To emphasize, object properties are extracted as direct global variables.</p>
+         * <ol start="2">
+         * <li>To extract nested properties, you can use the following schema:</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;type&quot;: &quot;object&quot;,
+         *   &quot;properties&quot;: {
+         *     &quot;name&quot;: {
+         *       &quot;type&quot;: &quot;object&quot;,
+         *       &quot;properties&quot;: {
+         *         &quot;first&quot;: {
+         *           &quot;type&quot;: &quot;string&quot;
+         *         },
+         *         &quot;last&quot;: {
+         *           &quot;type&quot;: &quot;string&quot;
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>These will be extracted as <code>{{ name }}</code>. And, <code>{{ name.first }}</code> and <code>{{ name.last }}</code> will be accessible.</p>
+         * <ol start="3">
+         * <li>To extract array items, you can use the following schema:</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;type&quot;: &quot;array&quot;,
+         *   &quot;title&quot;: &quot;zipCodes&quot;,
+         *   &quot;items&quot;: {
+         *     &quot;type&quot;: &quot;string&quot;
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ zipCodes }}</code>. To access the array items, you can use <code>{{ zipCodes[0] }}</code> and <code>{{ zipCodes[1] }}</code>.</p>
+         * <ol start="4">
+         * <li>To extract array of objects, you can use the following schema:</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;type&quot;: &quot;array&quot;,
+         *   &quot;name&quot;: &quot;people&quot;,
+         *   &quot;items&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;string&quot;
+         *       },
+         *       &quot;age&quot;: {
+         *         &quot;type&quot;: &quot;number&quot;
+         *       },
+         *       &quot;zipCodes&quot;: {
+         *         &quot;type&quot;: &quot;array&quot;,
+         *         &quot;items&quot;: {
+         *           &quot;type&quot;: &quot;string&quot;
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ people }}</code>. To access the array items, you can use <code>{{ people[n].name }}</code>, <code>{{ people[n].age }}</code>, <code>{{ people[n].zipCodes }}</code>, <code>{{ people[n].zipCodes[0] }}</code> and <code>{{ people[n].zipCodes[1] }}</code>.</p>
+         */
+        @JsonSetter(value = "schema", nulls = Nulls.SKIP)
+        public Builder schema(Optional<JsonSchema> schema) {
+            this.schema = schema;
             return this;
         }
 
-        public Builder addOutput(VariableExtractionSchema output) {
-            this.output.add(output);
+        public Builder schema(JsonSchema schema) {
+            this.schema = Optional.ofNullable(schema);
             return this;
         }
 
-        public Builder addAllOutput(List<VariableExtractionSchema> output) {
-            this.output.addAll(output);
+        /**
+         * <p>These are additional variables to create.</p>
+         * <p>These will be accessible during the call as <code>{{key}}</code> and stored in <code>call.artifact.variableValues</code> after the call.</p>
+         * <p>Example:</p>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;fullName&quot;,
+         *       &quot;value&quot;: &quot;{{firstName}} {{lastName}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;greeting&quot;,
+         *       &quot;value&quot;: &quot;Hello {{name}}, welcome to {{company}}!&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerEmail&quot;,
+         *       &quot;value&quot;: &quot;{{addresses[0].city}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;something&quot;,
+         *       &quot;value&quot;: &quot;{{any liquid}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>This will create variables <code>customerName</code>, <code>fullName</code>, <code>customerEmail</code>, <code>greeting</code>, and <code>something</code>. To access these variables, you can reference them as <code>{{customerName}}</code>, <code>{{fullName}}</code>, <code>{{customerEmail}}</code>, <code>{{greeting}}</code>, and <code>{{something}}</code>.</p>
+         */
+        @JsonSetter(value = "aliases", nulls = Nulls.SKIP)
+        public Builder aliases(Optional<List<VariableExtractionAlias>> aliases) {
+            this.aliases = aliases;
+            return this;
+        }
+
+        public Builder aliases(List<VariableExtractionAlias> aliases) {
+            this.aliases = Optional.ofNullable(aliases);
             return this;
         }
 
         public VariableExtractionPlan build() {
-            return new VariableExtractionPlan(output, additionalProperties);
+            return new VariableExtractionPlan(schema, aliases, additionalProperties);
         }
     }
 }

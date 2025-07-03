@@ -81,6 +81,9 @@ public final class CreateGoogleCalendarOAuth2AuthorizationCredentialDto {
     }
 
     public interface AuthorizationIdStage {
+        /**
+         * <p>The authorization ID for the OAuth2 authorization</p>
+         */
         _FinalStage authorizationId(@NotNull String authorizationId);
 
         Builder from(CreateGoogleCalendarOAuth2AuthorizationCredentialDto other);
@@ -89,6 +92,9 @@ public final class CreateGoogleCalendarOAuth2AuthorizationCredentialDto {
     public interface _FinalStage {
         CreateGoogleCalendarOAuth2AuthorizationCredentialDto build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -114,6 +120,7 @@ public final class CreateGoogleCalendarOAuth2AuthorizationCredentialDto {
 
         /**
          * <p>The authorization ID for the OAuth2 authorization</p>
+         * <p>The authorization ID for the OAuth2 authorization</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -133,6 +140,9 @@ public final class CreateGoogleCalendarOAuth2AuthorizationCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

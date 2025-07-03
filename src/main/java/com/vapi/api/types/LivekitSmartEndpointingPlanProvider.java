@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum LivekitSmartEndpointingPlanProvider {
     VAPI("vapi"),
 
-    LIVEKIT("livekit");
+    LIVEKIT("livekit"),
+
+    CUSTOM_ENDPOINTING_MODEL("custom-endpointing-model");
 
     private final String value;
 

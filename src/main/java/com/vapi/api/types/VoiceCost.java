@@ -99,18 +99,36 @@ public final class VoiceCost {
     }
 
     public interface CharactersStage {
+        /**
+         * <p>This is the number of characters that were generated during the call. These should be total characters used in the call for single assistant calls, while squad calls will have multiple voice costs one for each assistant that was used.</p>
+         */
         CostStage characters(double characters);
 
         Builder from(VoiceCost other);
     }
 
     public interface CostStage {
+        /**
+         * <p>This is the cost of the component in USD.</p>
+         */
         _FinalStage cost(double cost);
     }
 
     public interface _FinalStage {
         VoiceCost build();
 
+        /**
+         * <p>This is the voice that was used during the call.</p>
+         * <p>This matches one of the following:</p>
+         * <ul>
+         * <li><code>call.assistant.voice</code>,</li>
+         * <li><code>call.assistantId-&gt;voice</code>,</li>
+         * <li><code>call.squad[n].assistant.voice</code>,</li>
+         * <li><code>call.squad[n].assistantId-&gt;voice</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistant.voice</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistantId-&gt;voice</code>.</li>
+         * </ul>
+         */
         _FinalStage voice(Map<String, Object> voice);
 
         _FinalStage putAllVoice(Map<String, Object> voice);
@@ -141,6 +159,7 @@ public final class VoiceCost {
 
         /**
          * <p>This is the number of characters that were generated during the call. These should be total characters used in the call for single assistant calls, while squad calls will have multiple voice costs one for each assistant that was used.</p>
+         * <p>This is the number of characters that were generated during the call. These should be total characters used in the call for single assistant calls, while squad calls will have multiple voice costs one for each assistant that was used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -151,6 +170,7 @@ public final class VoiceCost {
         }
 
         /**
+         * <p>This is the cost of the component in USD.</p>
          * <p>This is the cost of the component in USD.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -199,6 +219,18 @@ public final class VoiceCost {
             return this;
         }
 
+        /**
+         * <p>This is the voice that was used during the call.</p>
+         * <p>This matches one of the following:</p>
+         * <ul>
+         * <li><code>call.assistant.voice</code>,</li>
+         * <li><code>call.assistantId-&gt;voice</code>,</li>
+         * <li><code>call.squad[n].assistant.voice</code>,</li>
+         * <li><code>call.squad[n].assistantId-&gt;voice</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistant.voice</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistantId-&gt;voice</code>.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "voice", nulls = Nulls.SKIP)
         public _FinalStage voice(Map<String, Object> voice) {

@@ -41,6 +41,8 @@ public final class ServerMessageEndOfCallReport {
 
     private final Optional<Call> call;
 
+    private final Optional<Chat> chat;
+
     private final Analysis analysis;
 
     private final Optional<OffsetDateTime> startedAt;
@@ -59,6 +61,7 @@ public final class ServerMessageEndOfCallReport {
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
             Optional<Call> call,
+            Optional<Chat> chat,
             Analysis analysis,
             Optional<OffsetDateTime> startedAt,
             Optional<OffsetDateTime> endedAt,
@@ -72,6 +75,7 @@ public final class ServerMessageEndOfCallReport {
         this.assistant = assistant;
         this.customer = customer;
         this.call = call;
+        this.chat = chat;
         this.analysis = analysis;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
@@ -159,6 +163,14 @@ public final class ServerMessageEndOfCallReport {
     }
 
     /**
+     * @return This is the chat object.
+     */
+    @JsonProperty("chat")
+    public Optional<Chat> getChat() {
+        return chat;
+    }
+
+    /**
      * @return This is the analysis of the call. This can also be found at <code>call.analysis</code> on GET /call/:id.
      */
     @JsonProperty("analysis")
@@ -203,6 +215,7 @@ public final class ServerMessageEndOfCallReport {
                 && assistant.equals(other.assistant)
                 && customer.equals(other.customer)
                 && call.equals(other.call)
+                && chat.equals(other.chat)
                 && analysis.equals(other.analysis)
                 && startedAt.equals(other.startedAt)
                 && endedAt.equals(other.endedAt);
@@ -220,6 +233,7 @@ public final class ServerMessageEndOfCallReport {
                 this.assistant,
                 this.customer,
                 this.call,
+                this.chat,
                 this.analysis,
                 this.startedAt,
                 this.endedAt);
@@ -235,54 +249,97 @@ public final class ServerMessageEndOfCallReport {
     }
 
     public interface EndedReasonStage {
+        /**
+         * <p>This is the reason the call ended. This can also be found at <code>call.endedReason</code> on GET /call/:id.</p>
+         */
         ArtifactStage endedReason(@NotNull ServerMessageEndOfCallReportEndedReason endedReason);
 
         Builder from(ServerMessageEndOfCallReport other);
     }
 
     public interface ArtifactStage {
+        /**
+         * <p>These are the artifacts from the call. This can also be found at <code>call.artifact</code> on GET /call/:id.</p>
+         */
         AnalysisStage artifact(@NotNull Artifact artifact);
     }
 
     public interface AnalysisStage {
+        /**
+         * <p>This is the analysis of the call. This can also be found at <code>call.analysis</code> on GET /call/:id.</p>
+         */
         _FinalStage analysis(@NotNull Analysis analysis);
     }
 
     public interface _FinalStage {
         ServerMessageEndOfCallReport build();
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         _FinalStage phoneNumber(Optional<ServerMessageEndOfCallReportPhoneNumber> phoneNumber);
 
         _FinalStage phoneNumber(ServerMessageEndOfCallReportPhoneNumber phoneNumber);
 
+        /**
+         * <p>This is the cost of the call in USD. This can also be found at <code>call.cost</code> on GET /call/:id.</p>
+         */
         _FinalStage cost(Optional<Double> cost);
 
         _FinalStage cost(Double cost);
 
+        /**
+         * <p>These are the costs of individual components of the call in USD. This can also be found at <code>call.costs</code> on GET /call/:id.</p>
+         */
         _FinalStage costs(Optional<List<ServerMessageEndOfCallReportCostsItem>> costs);
 
         _FinalStage costs(List<ServerMessageEndOfCallReportCostsItem> costs);
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         _FinalStage timestamp(Optional<Double> timestamp);
 
         _FinalStage timestamp(Double timestamp);
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         _FinalStage call(Optional<Call> call);
 
         _FinalStage call(Call call);
 
+        /**
+         * <p>This is the chat object.</p>
+         */
+        _FinalStage chat(Optional<Chat> chat);
+
+        _FinalStage chat(Chat chat);
+
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call started. This can also be found at <code>call.startedAt</code> on GET /call/:id.</p>
+         */
         _FinalStage startedAt(Optional<OffsetDateTime> startedAt);
 
         _FinalStage startedAt(OffsetDateTime startedAt);
 
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call ended. This can also be found at <code>call.endedAt</code> on GET /call/:id.</p>
+         */
         _FinalStage endedAt(Optional<OffsetDateTime> endedAt);
 
         _FinalStage endedAt(OffsetDateTime endedAt);
@@ -299,6 +356,8 @@ public final class ServerMessageEndOfCallReport {
         private Optional<OffsetDateTime> endedAt = Optional.empty();
 
         private Optional<OffsetDateTime> startedAt = Optional.empty();
+
+        private Optional<Chat> chat = Optional.empty();
 
         private Optional<Call> call = Optional.empty();
 
@@ -330,6 +389,7 @@ public final class ServerMessageEndOfCallReport {
             assistant(other.getAssistant());
             customer(other.getCustomer());
             call(other.getCall());
+            chat(other.getChat());
             analysis(other.getAnalysis());
             startedAt(other.getStartedAt());
             endedAt(other.getEndedAt());
@@ -337,6 +397,7 @@ public final class ServerMessageEndOfCallReport {
         }
 
         /**
+         * <p>This is the reason the call ended. This can also be found at <code>call.endedReason</code> on GET /call/:id.</p>
          * <p>This is the reason the call ended. This can also be found at <code>call.endedReason</code> on GET /call/:id.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -349,6 +410,7 @@ public final class ServerMessageEndOfCallReport {
 
         /**
          * <p>These are the artifacts from the call. This can also be found at <code>call.artifact</code> on GET /call/:id.</p>
+         * <p>These are the artifacts from the call. This can also be found at <code>call.artifact</code> on GET /call/:id.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -359,6 +421,7 @@ public final class ServerMessageEndOfCallReport {
         }
 
         /**
+         * <p>This is the analysis of the call. This can also be found at <code>call.analysis</code> on GET /call/:id.</p>
          * <p>This is the analysis of the call. This can also be found at <code>call.analysis</code> on GET /call/:id.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -379,6 +442,9 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call ended. This can also be found at <code>call.endedAt</code> on GET /call/:id.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "endedAt", nulls = Nulls.SKIP)
         public _FinalStage endedAt(Optional<OffsetDateTime> endedAt) {
@@ -396,10 +462,33 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call started. This can also be found at <code>call.startedAt</code> on GET /call/:id.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "startedAt", nulls = Nulls.SKIP)
         public _FinalStage startedAt(Optional<OffsetDateTime> startedAt) {
             this.startedAt = startedAt;
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage chat(Chat chat) {
+            this.chat = Optional.ofNullable(chat);
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "chat", nulls = Nulls.SKIP)
+        public _FinalStage chat(Optional<Chat> chat) {
+            this.chat = chat;
             return this;
         }
 
@@ -413,6 +502,9 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public _FinalStage call(Optional<Call> call) {
@@ -430,6 +522,9 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -447,6 +542,9 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -464,6 +562,9 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public _FinalStage timestamp(Optional<Double> timestamp) {
@@ -481,6 +582,9 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>These are the costs of individual components of the call in USD. This can also be found at <code>call.costs</code> on GET /call/:id.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "costs", nulls = Nulls.SKIP)
         public _FinalStage costs(Optional<List<ServerMessageEndOfCallReportCostsItem>> costs) {
@@ -498,6 +602,9 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>This is the cost of the call in USD. This can also be found at <code>call.cost</code> on GET /call/:id.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cost", nulls = Nulls.SKIP)
         public _FinalStage cost(Optional<Double> cost) {
@@ -515,6 +622,9 @@ public final class ServerMessageEndOfCallReport {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ServerMessageEndOfCallReportPhoneNumber> phoneNumber) {
@@ -534,6 +644,7 @@ public final class ServerMessageEndOfCallReport {
                     assistant,
                     customer,
                     call,
+                    chat,
                     analysis,
                     startedAt,
                     endedAt,

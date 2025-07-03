@@ -109,6 +109,9 @@ public final class UpdatePlayHtCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public Builder apiKey(Optional<String> apiKey) {
             this.apiKey = apiKey;
@@ -120,6 +123,9 @@ public final class UpdatePlayHtCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

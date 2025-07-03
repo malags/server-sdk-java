@@ -108,22 +108,34 @@ public final class KnowledgeBaseCost {
     }
 
     public interface PromptTokensStage {
+        /**
+         * <p>This is the number of prompt tokens used in the knowledge base query.</p>
+         */
         CompletionTokensStage promptTokens(double promptTokens);
 
         Builder from(KnowledgeBaseCost other);
     }
 
     public interface CompletionTokensStage {
+        /**
+         * <p>This is the number of completion tokens generated in the knowledge base query.</p>
+         */
         CostStage completionTokens(double completionTokens);
     }
 
     public interface CostStage {
+        /**
+         * <p>This is the cost of the component in USD.</p>
+         */
         _FinalStage cost(double cost);
     }
 
     public interface _FinalStage {
         KnowledgeBaseCost build();
 
+        /**
+         * <p>This is the model that was used for processing the knowledge base.</p>
+         */
         _FinalStage model(Map<String, Object> model);
 
         _FinalStage putAllModel(Map<String, Object> model);
@@ -157,6 +169,7 @@ public final class KnowledgeBaseCost {
 
         /**
          * <p>This is the number of prompt tokens used in the knowledge base query.</p>
+         * <p>This is the number of prompt tokens used in the knowledge base query.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -168,6 +181,7 @@ public final class KnowledgeBaseCost {
 
         /**
          * <p>This is the number of completion tokens generated in the knowledge base query.</p>
+         * <p>This is the number of completion tokens generated in the knowledge base query.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -178,6 +192,7 @@ public final class KnowledgeBaseCost {
         }
 
         /**
+         * <p>This is the cost of the component in USD.</p>
          * <p>This is the cost of the component in USD.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -208,6 +223,9 @@ public final class KnowledgeBaseCost {
             return this;
         }
 
+        /**
+         * <p>This is the model that was used for processing the knowledge base.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Map<String, Object> model) {

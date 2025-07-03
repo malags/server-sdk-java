@@ -99,6 +99,9 @@ public final class AssistantHookCallEnding {
             return this;
         }
 
+        /**
+         * <p>This is the set of actions to perform when the hook triggers</p>
+         */
         @JsonSetter(value = "do", nulls = Nulls.SKIP)
         public Builder do_(List<AssistantHookCallEndingDoItem> do_) {
             this.do_.clear();
@@ -116,6 +119,9 @@ public final class AssistantHookCallEnding {
             return this;
         }
 
+        /**
+         * <p>This is the set of filters that must match for the hook to trigger</p>
+         */
         @JsonSetter(value = "filters", nulls = Nulls.SKIP)
         public Builder filters(Optional<List<AssistantHookFilter>> filters) {
             this.filters = filters;

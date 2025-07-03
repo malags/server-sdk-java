@@ -22,8 +22,6 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateApiRequestToolDto.Builder.class)
 public final class CreateApiRequestToolDto {
-    private final Optional<Boolean> async;
-
     private final Optional<List<CreateApiRequestToolDtoMessagesItem>> messages;
 
     private final CreateApiRequestToolDtoMethod method;
@@ -36,33 +34,31 @@ public final class CreateApiRequestToolDto {
 
     private final String url;
 
-    private final JsonSchema body;
+    private final Optional<JsonSchema> body;
 
     private final Optional<JsonSchema> headers;
 
     private final Optional<BackoffPlan> backoffPlan;
 
-    private final Optional<OpenAiFunction> function;
+    private final Optional<VariableExtractionPlan> variableExtractionPlan;
 
-    private final Optional<Server> server;
+    private final Optional<OpenAiFunction> function;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateApiRequestToolDto(
-            Optional<Boolean> async,
             Optional<List<CreateApiRequestToolDtoMessagesItem>> messages,
             CreateApiRequestToolDtoMethod method,
             Optional<Double> timeoutSeconds,
             Optional<String> name,
             Optional<String> description,
             String url,
-            JsonSchema body,
+            Optional<JsonSchema> body,
             Optional<JsonSchema> headers,
             Optional<BackoffPlan> backoffPlan,
+            Optional<VariableExtractionPlan> variableExtractionPlan,
             Optional<OpenAiFunction> function,
-            Optional<Server> server,
             Map<String, Object> additionalProperties) {
-        this.async = async;
         this.messages = messages;
         this.method = method;
         this.timeoutSeconds = timeoutSeconds;
@@ -72,20 +68,9 @@ public final class CreateApiRequestToolDto {
         this.body = body;
         this.headers = headers;
         this.backoffPlan = backoffPlan;
+        this.variableExtractionPlan = variableExtractionPlan;
         this.function = function;
-        this.server = server;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return This determines if the tool is async.
-     * <p>If async, the assistant will move forward without waiting for your server to respond. This is useful if you just want to trigger something on your server.</p>
-     * <p>If sync, the assistant will wait for your server to respond. This is useful if want assistant to respond with the result from your server.</p>
-     * <p>Defaults to synchronous (<code>false</code>).</p>
-     */
-    @JsonProperty("async")
-    public Optional<Boolean> getAsync() {
-        return async;
     }
 
     /**
@@ -113,6 +98,7 @@ public final class CreateApiRequestToolDto {
 
     /**
      * @return This is the name of the tool. This will be passed to the model.
+     * <p>Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.</p>
      */
     @JsonProperty("name")
     public Optional<String> getName() {
@@ -139,7 +125,7 @@ public final class CreateApiRequestToolDto {
      * @return This is the body of the request.
      */
     @JsonProperty("body")
-    public JsonSchema getBody() {
+    public Optional<JsonSchema> getBody() {
         return body;
     }
 
@@ -161,6 +147,165 @@ public final class CreateApiRequestToolDto {
     }
 
     /**
+     * @return This is the plan to extract variables from the tool's response. These will be accessible during the call and stored in <code>call.artifact.variableValues</code> after the call.
+     * <p>Usage:</p>
+     * <ol>
+     * <li>Use <code>aliases</code> to extract variables from the tool's response body. (Most common case)</li>
+     * </ol>
+     * <pre><code class="language-json">{
+     *   &quot;aliases&quot;: [
+     *     {
+     *       &quot;key&quot;: &quot;customerName&quot;,
+     *       &quot;value&quot;: &quot;{{customer.name}}&quot;
+     *     },
+     *     {
+     *       &quot;key&quot;: &quot;customerAge&quot;,
+     *       &quot;value&quot;: &quot;{{customer.age}}&quot;
+     *     }
+     *   ]
+     * }
+     * </code></pre>
+     * <p>The tool response body is made available to the liquid template.</p>
+     * <ol start="2">
+     * <li>Use <code>aliases</code> to extract variables from the tool's response body if the response is an array.</li>
+     * </ol>
+     * <pre><code class="language-json">{
+     *   &quot;aliases&quot;: [
+     *     {
+     *       &quot;key&quot;: &quot;customerName&quot;,
+     *       &quot;value&quot;: &quot;{{$[0].name}}&quot;
+     *     },
+     *     {
+     *       &quot;key&quot;: &quot;customerAge&quot;,
+     *       &quot;value&quot;: &quot;{{$[0].age}}&quot;
+     *     }
+     *   ]
+     * }
+     * </code></pre>
+     * <p>$ is a shorthand for the tool's response body. <code>$[0]</code> is the first item in the array. <code>$[n]</code> is the nth item in the array. Note, $ is available regardless of the response body type (both object and array).</p>
+     * <ol start="3">
+     * <li>Use <code>aliases</code> to extract variables from the tool's response headers.</li>
+     * </ol>
+     * <pre><code class="language-json">{
+     *   &quot;aliases&quot;: [
+     *     {
+     *       &quot;key&quot;: &quot;customerName&quot;,
+     *       &quot;value&quot;: &quot;{{tool.response.headers.customer-name}}&quot;
+     *     },
+     *     {
+     *       &quot;key&quot;: &quot;customerAge&quot;,
+     *       &quot;value&quot;: &quot;{{tool.response.headers.customer-age}}&quot;
+     *     }
+     *   ]
+     * }
+     * </code></pre>
+     * <p><code>tool.response</code> is made available to the liquid template. Particularly, both <code>tool.response.headers</code> and <code>tool.response.body</code> are available. Note, <code>tool.response</code> is available regardless of the response body type (both object and array).</p>
+     * <ol start="4">
+     * <li>Use <code>schema</code> to extract a large portion of the tool's response body.</li>
+     * </ol>
+     * <p>4.1. If you hit example.com and it returns <code>{&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30}</code>, then you can specify the schema as:</p>
+     * <pre><code class="language-json">{
+     *   &quot;schema&quot;: {
+     *     &quot;type&quot;: &quot;object&quot;,
+     *     &quot;properties&quot;: {
+     *       &quot;name&quot;: {
+     *         &quot;type&quot;: &quot;string&quot;
+     *       },
+     *       &quot;age&quot;: {
+     *         &quot;type&quot;: &quot;number&quot;
+     *       }
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>4.2. If you hit example.com and it returns <code>{&quot;name&quot;: {&quot;first&quot;: &quot;John&quot;, &quot;last&quot;: &quot;Doe&quot;}}</code>, then you can specify the schema as:</p>
+     * <pre><code class="language-json">{
+     *   &quot;schema&quot;: {
+     *     &quot;type&quot;: &quot;object&quot;,
+     *     &quot;properties&quot;: {
+     *       &quot;name&quot;: {
+     *         &quot;type&quot;: &quot;object&quot;,
+     *         &quot;properties&quot;: {
+     *           &quot;first&quot;: {
+     *             &quot;type&quot;: &quot;string&quot;
+     *           },
+     *           &quot;last&quot;: {
+     *             &quot;type&quot;: &quot;string&quot;
+     *           }
+     *         }
+     *       }
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>These will be extracted as <code>{{ name }}</code> and <code>{{ age }}</code> respectively. To emphasize, object properties are extracted as direct global variables.</p>
+     * <p>4.3. If you hit example.com and it returns <code>{&quot;name&quot;: {&quot;first&quot;: &quot;John&quot;, &quot;last&quot;: &quot;Doe&quot;}}</code>, then you can specify the schema as:</p>
+     * <pre><code class="language-json">{
+     *   &quot;schema&quot;: {
+     *     &quot;type&quot;: &quot;object&quot;,
+     *     &quot;properties&quot;: {
+     *       &quot;name&quot;: {
+     *         &quot;type&quot;: &quot;object&quot;,
+     *         &quot;properties&quot;: {
+     *           &quot;first&quot;: {
+     *             &quot;type&quot;: &quot;string&quot;
+     *           },
+     *           &quot;last&quot;: {
+     *             &quot;type&quot;: &quot;string&quot;
+     *           }
+     *         }
+     *       }
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>These will be extracted as <code>{{ name }}</code>. And, <code>{{ name.first }}</code> and <code>{{ name.last }}</code> will be accessible.</p>
+     * <p>4.4. If you hit example.com and it returns <code>[&quot;94123&quot;, &quot;94124&quot;]</code>, then you can specify the schema as:</p>
+     * <pre><code class="language-json">{
+     *   &quot;schema&quot;: {
+     *     &quot;type&quot;: &quot;array&quot;,
+     *     &quot;title&quot;: &quot;zipCodes&quot;,
+     *     &quot;items&quot;: {
+     *       &quot;type&quot;: &quot;string&quot;
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>This will be extracted as <code>{{ zipCodes }}</code>. To access the array items, you can use <code>{{ zipCodes[0] }}</code> and <code>{{ zipCodes[1] }}</code>.</p>
+     * <p>4.5. If you hit example.com and it returns <code>[{&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30, &quot;zipCodes&quot;: [&quot;94123&quot;, &quot;94124&quot;]}, {&quot;name&quot;: &quot;Jane&quot;, &quot;age&quot;: 25, &quot;zipCodes&quot;: [&quot;94125&quot;, &quot;94126&quot;]}]</code>, then you can specify the schema as:</p>
+     * <pre><code class="language-json">{
+     *   &quot;schema&quot;: {
+     *     &quot;type&quot;: &quot;array&quot;,
+     *     &quot;title&quot;: &quot;people&quot;,
+     *     &quot;items&quot;: {
+     *       &quot;type&quot;: &quot;object&quot;,
+     *       &quot;properties&quot;: {
+     *         &quot;name&quot;: {
+     *           &quot;type&quot;: &quot;string&quot;
+     *         },
+     *         &quot;age&quot;: {
+     *           &quot;type&quot;: &quot;number&quot;
+     *         },
+     *         &quot;zipCodes&quot;: {
+     *           &quot;type&quot;: &quot;array&quot;,
+     *           &quot;items&quot;: {
+     *             &quot;type&quot;: &quot;string&quot;
+     *           }
+     *         }
+     *       }
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>This will be extracted as <code>{{ people }}</code>. To access the array items, you can use <code>{{ people[n].name }}</code>, <code>{{ people[n].age }}</code>, <code>{{ people[n].zipCodes }}</code>, <code>{{ people[n].zipCodes[0] }}</code> and <code>{{ people[n].zipCodes[1] }}</code>.</p>
+     * <p>Note: Both <code>aliases</code> and <code>schema</code> can be used together.</p>
+     */
+    @JsonProperty("variableExtractionPlan")
+    public Optional<VariableExtractionPlan> getVariableExtractionPlan() {
+        return variableExtractionPlan;
+    }
+
+    /**
      * @return This is the function definition of the tool.
      * <p>For <code>endCall</code>, <code>transferCall</code>, and <code>dtmf</code> tools, this is auto-filled based on tool-specific fields like <code>tool.destinations</code>. But, even in those cases, you can provide a custom function definition for advanced use cases.</p>
      * <p>An example of an advanced use case is if you want to customize the message that's spoken for <code>endCall</code> tool. You can specify a function where it returns an argument &quot;reason&quot;. Then, in <code>messages</code> array, you can have many &quot;request-complete&quot; messages. One of these messages will be triggered if the <code>messages[].conditions</code> matches the &quot;reason&quot; argument.</p>
@@ -168,16 +313,6 @@ public final class CreateApiRequestToolDto {
     @JsonProperty("function")
     public Optional<OpenAiFunction> getFunction() {
         return function;
-    }
-
-    /**
-     * @return This is the server that will be hit when this tool is requested by the model.
-     * <p>All requests will be sent with the call object among other things. You can find more details in the Server URL documentation.</p>
-     * <p>This overrides the serverUrl set on the org and the phoneNumber. Order of precedence: highest tool.server.url, then assistant.serverUrl, then phoneNumber.serverUrl, then org.serverUrl.</p>
-     */
-    @JsonProperty("server")
-    public Optional<Server> getServer() {
-        return server;
     }
 
     @java.lang.Override
@@ -192,8 +327,7 @@ public final class CreateApiRequestToolDto {
     }
 
     private boolean equalTo(CreateApiRequestToolDto other) {
-        return async.equals(other.async)
-                && messages.equals(other.messages)
+        return messages.equals(other.messages)
                 && method.equals(other.method)
                 && timeoutSeconds.equals(other.timeoutSeconds)
                 && name.equals(other.name)
@@ -202,14 +336,13 @@ public final class CreateApiRequestToolDto {
                 && body.equals(other.body)
                 && headers.equals(other.headers)
                 && backoffPlan.equals(other.backoffPlan)
-                && function.equals(other.function)
-                && server.equals(other.server);
+                && variableExtractionPlan.equals(other.variableExtractionPlan)
+                && function.equals(other.function);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.async,
                 this.messages,
                 this.method,
                 this.timeoutSeconds,
@@ -219,8 +352,8 @@ public final class CreateApiRequestToolDto {
                 this.body,
                 this.headers,
                 this.backoffPlan,
-                this.function,
-                this.server);
+                this.variableExtractionPlan,
+                this.function);
     }
 
     @java.lang.Override
@@ -239,68 +372,251 @@ public final class CreateApiRequestToolDto {
     }
 
     public interface UrlStage {
-        BodyStage url(@NotNull String url);
-    }
-
-    public interface BodyStage {
-        _FinalStage body(@NotNull JsonSchema body);
+        /**
+         * <p>This is where the request will be sent.</p>
+         */
+        _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
         CreateApiRequestToolDto build();
 
-        _FinalStage async(Optional<Boolean> async);
-
-        _FinalStage async(Boolean async);
-
+        /**
+         * <p>These are the messages that will be spoken to the user as the tool is running.</p>
+         * <p>For some tools, this is auto-filled based on special fields like <code>tool.destinations</code>. For others like the function tool, these can be custom configured.</p>
+         */
         _FinalStage messages(Optional<List<CreateApiRequestToolDtoMessagesItem>> messages);
 
         _FinalStage messages(List<CreateApiRequestToolDtoMessagesItem> messages);
 
+        /**
+         * <p>This is the timeout in seconds for the request. Defaults to 20 seconds.</p>
+         * <p>@default 20</p>
+         */
         _FinalStage timeoutSeconds(Optional<Double> timeoutSeconds);
 
         _FinalStage timeoutSeconds(Double timeoutSeconds);
 
+        /**
+         * <p>This is the name of the tool. This will be passed to the model.</p>
+         * <p>Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the description of the tool. This will be passed to the model.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
 
+        /**
+         * <p>This is the body of the request.</p>
+         */
+        _FinalStage body(Optional<JsonSchema> body);
+
+        _FinalStage body(JsonSchema body);
+
+        /**
+         * <p>These are the headers to send in the request.</p>
+         */
         _FinalStage headers(Optional<JsonSchema> headers);
 
         _FinalStage headers(JsonSchema headers);
 
+        /**
+         * <p>This is the backoff plan if the request fails. Defaults to undefined (the request will not be retried).</p>
+         * <p>@default undefined (the request will not be retried)</p>
+         */
         _FinalStage backoffPlan(Optional<BackoffPlan> backoffPlan);
 
         _FinalStage backoffPlan(BackoffPlan backoffPlan);
 
+        /**
+         * <p>This is the plan to extract variables from the tool's response. These will be accessible during the call and stored in <code>call.artifact.variableValues</code> after the call.</p>
+         * <p>Usage:</p>
+         * <ol>
+         * <li>Use <code>aliases</code> to extract variables from the tool's response body. (Most common case)</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{customer.name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{customer.age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>The tool response body is made available to the liquid template.</p>
+         * <ol start="2">
+         * <li>Use <code>aliases</code> to extract variables from the tool's response body if the response is an array.</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{$[0].name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{$[0].age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>$ is a shorthand for the tool's response body. <code>$[0]</code> is the first item in the array. <code>$[n]</code> is the nth item in the array. Note, $ is available regardless of the response body type (both object and array).</p>
+         * <ol start="3">
+         * <li>Use <code>aliases</code> to extract variables from the tool's response headers.</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{tool.response.headers.customer-name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{tool.response.headers.customer-age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p><code>tool.response</code> is made available to the liquid template. Particularly, both <code>tool.response.headers</code> and <code>tool.response.body</code> are available. Note, <code>tool.response</code> is available regardless of the response body type (both object and array).</p>
+         * <ol start="4">
+         * <li>Use <code>schema</code> to extract a large portion of the tool's response body.</li>
+         * </ol>
+         * <p>4.1. If you hit example.com and it returns <code>{&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;string&quot;
+         *       },
+         *       &quot;age&quot;: {
+         *         &quot;type&quot;: &quot;number&quot;
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>4.2. If you hit example.com and it returns <code>{&quot;name&quot;: {&quot;first&quot;: &quot;John&quot;, &quot;last&quot;: &quot;Doe&quot;}}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;first&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;last&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>These will be extracted as <code>{{ name }}</code> and <code>{{ age }}</code> respectively. To emphasize, object properties are extracted as direct global variables.</p>
+         * <p>4.3. If you hit example.com and it returns <code>{&quot;name&quot;: {&quot;first&quot;: &quot;John&quot;, &quot;last&quot;: &quot;Doe&quot;}}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;first&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;last&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>These will be extracted as <code>{{ name }}</code>. And, <code>{{ name.first }}</code> and <code>{{ name.last }}</code> will be accessible.</p>
+         * <p>4.4. If you hit example.com and it returns <code>[&quot;94123&quot;, &quot;94124&quot;]</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;array&quot;,
+         *     &quot;title&quot;: &quot;zipCodes&quot;,
+         *     &quot;items&quot;: {
+         *       &quot;type&quot;: &quot;string&quot;
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ zipCodes }}</code>. To access the array items, you can use <code>{{ zipCodes[0] }}</code> and <code>{{ zipCodes[1] }}</code>.</p>
+         * <p>4.5. If you hit example.com and it returns <code>[{&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30, &quot;zipCodes&quot;: [&quot;94123&quot;, &quot;94124&quot;]}, {&quot;name&quot;: &quot;Jane&quot;, &quot;age&quot;: 25, &quot;zipCodes&quot;: [&quot;94125&quot;, &quot;94126&quot;]}]</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;array&quot;,
+         *     &quot;title&quot;: &quot;people&quot;,
+         *     &quot;items&quot;: {
+         *       &quot;type&quot;: &quot;object&quot;,
+         *       &quot;properties&quot;: {
+         *         &quot;name&quot;: {
+         *           &quot;type&quot;: &quot;string&quot;
+         *         },
+         *         &quot;age&quot;: {
+         *           &quot;type&quot;: &quot;number&quot;
+         *         },
+         *         &quot;zipCodes&quot;: {
+         *           &quot;type&quot;: &quot;array&quot;,
+         *           &quot;items&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ people }}</code>. To access the array items, you can use <code>{{ people[n].name }}</code>, <code>{{ people[n].age }}</code>, <code>{{ people[n].zipCodes }}</code>, <code>{{ people[n].zipCodes[0] }}</code> and <code>{{ people[n].zipCodes[1] }}</code>.</p>
+         * <p>Note: Both <code>aliases</code> and <code>schema</code> can be used together.</p>
+         */
+        _FinalStage variableExtractionPlan(Optional<VariableExtractionPlan> variableExtractionPlan);
+
+        _FinalStage variableExtractionPlan(VariableExtractionPlan variableExtractionPlan);
+
+        /**
+         * <p>This is the function definition of the tool.</p>
+         * <p>For <code>endCall</code>, <code>transferCall</code>, and <code>dtmf</code> tools, this is auto-filled based on tool-specific fields like <code>tool.destinations</code>. But, even in those cases, you can provide a custom function definition for advanced use cases.</p>
+         * <p>An example of an advanced use case is if you want to customize the message that's spoken for <code>endCall</code> tool. You can specify a function where it returns an argument &quot;reason&quot;. Then, in <code>messages</code> array, you can have many &quot;request-complete&quot; messages. One of these messages will be triggered if the <code>messages[].conditions</code> matches the &quot;reason&quot; argument.</p>
+         */
         _FinalStage function(Optional<OpenAiFunction> function);
 
         _FinalStage function(OpenAiFunction function);
-
-        _FinalStage server(Optional<Server> server);
-
-        _FinalStage server(Server server);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements MethodStage, UrlStage, BodyStage, _FinalStage {
+    public static final class Builder implements MethodStage, UrlStage, _FinalStage {
         private CreateApiRequestToolDtoMethod method;
 
         private String url;
 
-        private JsonSchema body;
-
-        private Optional<Server> server = Optional.empty();
-
         private Optional<OpenAiFunction> function = Optional.empty();
+
+        private Optional<VariableExtractionPlan> variableExtractionPlan = Optional.empty();
 
         private Optional<BackoffPlan> backoffPlan = Optional.empty();
 
         private Optional<JsonSchema> headers = Optional.empty();
+
+        private Optional<JsonSchema> body = Optional.empty();
 
         private Optional<String> description = Optional.empty();
 
@@ -310,8 +626,6 @@ public final class CreateApiRequestToolDto {
 
         private Optional<List<CreateApiRequestToolDtoMessagesItem>> messages = Optional.empty();
 
-        private Optional<Boolean> async = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -319,7 +633,6 @@ public final class CreateApiRequestToolDto {
 
         @java.lang.Override
         public Builder from(CreateApiRequestToolDto other) {
-            async(other.getAsync());
             messages(other.getMessages());
             method(other.getMethod());
             timeoutSeconds(other.getTimeoutSeconds());
@@ -329,8 +642,8 @@ public final class CreateApiRequestToolDto {
             body(other.getBody());
             headers(other.getHeaders());
             backoffPlan(other.getBackoffPlan());
+            variableExtractionPlan(other.getVariableExtractionPlan());
             function(other.getFunction());
-            server(other.getServer());
             return this;
         }
 
@@ -343,42 +656,13 @@ public final class CreateApiRequestToolDto {
 
         /**
          * <p>This is where the request will be sent.</p>
+         * <p>This is where the request will be sent.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("url")
-        public BodyStage url(@NotNull String url) {
+        public _FinalStage url(@NotNull String url) {
             this.url = Objects.requireNonNull(url, "url must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the body of the request.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("body")
-        public _FinalStage body(@NotNull JsonSchema body) {
-            this.body = Objects.requireNonNull(body, "body must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the server that will be hit when this tool is requested by the model.</p>
-         * <p>All requests will be sent with the call object among other things. You can find more details in the Server URL documentation.</p>
-         * <p>This overrides the serverUrl set on the org and the phoneNumber. Order of precedence: highest tool.server.url, then assistant.serverUrl, then phoneNumber.serverUrl, then org.serverUrl.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage server(Server server) {
-            this.server = Optional.ofNullable(server);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "server", nulls = Nulls.SKIP)
-        public _FinalStage server(Optional<Server> server) {
-            this.server = server;
             return this;
         }
 
@@ -394,10 +678,337 @@ public final class CreateApiRequestToolDto {
             return this;
         }
 
+        /**
+         * <p>This is the function definition of the tool.</p>
+         * <p>For <code>endCall</code>, <code>transferCall</code>, and <code>dtmf</code> tools, this is auto-filled based on tool-specific fields like <code>tool.destinations</code>. But, even in those cases, you can provide a custom function definition for advanced use cases.</p>
+         * <p>An example of an advanced use case is if you want to customize the message that's spoken for <code>endCall</code> tool. You can specify a function where it returns an argument &quot;reason&quot;. Then, in <code>messages</code> array, you can have many &quot;request-complete&quot; messages. One of these messages will be triggered if the <code>messages[].conditions</code> matches the &quot;reason&quot; argument.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "function", nulls = Nulls.SKIP)
         public _FinalStage function(Optional<OpenAiFunction> function) {
             this.function = function;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan to extract variables from the tool's response. These will be accessible during the call and stored in <code>call.artifact.variableValues</code> after the call.</p>
+         * <p>Usage:</p>
+         * <ol>
+         * <li>Use <code>aliases</code> to extract variables from the tool's response body. (Most common case)</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{customer.name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{customer.age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>The tool response body is made available to the liquid template.</p>
+         * <ol start="2">
+         * <li>Use <code>aliases</code> to extract variables from the tool's response body if the response is an array.</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{$[0].name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{$[0].age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>$ is a shorthand for the tool's response body. <code>$[0]</code> is the first item in the array. <code>$[n]</code> is the nth item in the array. Note, $ is available regardless of the response body type (both object and array).</p>
+         * <ol start="3">
+         * <li>Use <code>aliases</code> to extract variables from the tool's response headers.</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{tool.response.headers.customer-name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{tool.response.headers.customer-age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p><code>tool.response</code> is made available to the liquid template. Particularly, both <code>tool.response.headers</code> and <code>tool.response.body</code> are available. Note, <code>tool.response</code> is available regardless of the response body type (both object and array).</p>
+         * <ol start="4">
+         * <li>Use <code>schema</code> to extract a large portion of the tool's response body.</li>
+         * </ol>
+         * <p>4.1. If you hit example.com and it returns <code>{&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;string&quot;
+         *       },
+         *       &quot;age&quot;: {
+         *         &quot;type&quot;: &quot;number&quot;
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>4.2. If you hit example.com and it returns <code>{&quot;name&quot;: {&quot;first&quot;: &quot;John&quot;, &quot;last&quot;: &quot;Doe&quot;}}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;first&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;last&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>These will be extracted as <code>{{ name }}</code> and <code>{{ age }}</code> respectively. To emphasize, object properties are extracted as direct global variables.</p>
+         * <p>4.3. If you hit example.com and it returns <code>{&quot;name&quot;: {&quot;first&quot;: &quot;John&quot;, &quot;last&quot;: &quot;Doe&quot;}}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;first&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;last&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>These will be extracted as <code>{{ name }}</code>. And, <code>{{ name.first }}</code> and <code>{{ name.last }}</code> will be accessible.</p>
+         * <p>4.4. If you hit example.com and it returns <code>[&quot;94123&quot;, &quot;94124&quot;]</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;array&quot;,
+         *     &quot;title&quot;: &quot;zipCodes&quot;,
+         *     &quot;items&quot;: {
+         *       &quot;type&quot;: &quot;string&quot;
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ zipCodes }}</code>. To access the array items, you can use <code>{{ zipCodes[0] }}</code> and <code>{{ zipCodes[1] }}</code>.</p>
+         * <p>4.5. If you hit example.com and it returns <code>[{&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30, &quot;zipCodes&quot;: [&quot;94123&quot;, &quot;94124&quot;]}, {&quot;name&quot;: &quot;Jane&quot;, &quot;age&quot;: 25, &quot;zipCodes&quot;: [&quot;94125&quot;, &quot;94126&quot;]}]</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;array&quot;,
+         *     &quot;title&quot;: &quot;people&quot;,
+         *     &quot;items&quot;: {
+         *       &quot;type&quot;: &quot;object&quot;,
+         *       &quot;properties&quot;: {
+         *         &quot;name&quot;: {
+         *           &quot;type&quot;: &quot;string&quot;
+         *         },
+         *         &quot;age&quot;: {
+         *           &quot;type&quot;: &quot;number&quot;
+         *         },
+         *         &quot;zipCodes&quot;: {
+         *           &quot;type&quot;: &quot;array&quot;,
+         *           &quot;items&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ people }}</code>. To access the array items, you can use <code>{{ people[n].name }}</code>, <code>{{ people[n].age }}</code>, <code>{{ people[n].zipCodes }}</code>, <code>{{ people[n].zipCodes[0] }}</code> and <code>{{ people[n].zipCodes[1] }}</code>.</p>
+         * <p>Note: Both <code>aliases</code> and <code>schema</code> can be used together.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage variableExtractionPlan(VariableExtractionPlan variableExtractionPlan) {
+            this.variableExtractionPlan = Optional.ofNullable(variableExtractionPlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan to extract variables from the tool's response. These will be accessible during the call and stored in <code>call.artifact.variableValues</code> after the call.</p>
+         * <p>Usage:</p>
+         * <ol>
+         * <li>Use <code>aliases</code> to extract variables from the tool's response body. (Most common case)</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{customer.name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{customer.age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>The tool response body is made available to the liquid template.</p>
+         * <ol start="2">
+         * <li>Use <code>aliases</code> to extract variables from the tool's response body if the response is an array.</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{$[0].name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{$[0].age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>$ is a shorthand for the tool's response body. <code>$[0]</code> is the first item in the array. <code>$[n]</code> is the nth item in the array. Note, $ is available regardless of the response body type (both object and array).</p>
+         * <ol start="3">
+         * <li>Use <code>aliases</code> to extract variables from the tool's response headers.</li>
+         * </ol>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;customerName&quot;,
+         *       &quot;value&quot;: &quot;{{tool.response.headers.customer-name}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;customerAge&quot;,
+         *       &quot;value&quot;: &quot;{{tool.response.headers.customer-age}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p><code>tool.response</code> is made available to the liquid template. Particularly, both <code>tool.response.headers</code> and <code>tool.response.body</code> are available. Note, <code>tool.response</code> is available regardless of the response body type (both object and array).</p>
+         * <ol start="4">
+         * <li>Use <code>schema</code> to extract a large portion of the tool's response body.</li>
+         * </ol>
+         * <p>4.1. If you hit example.com and it returns <code>{&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;string&quot;
+         *       },
+         *       &quot;age&quot;: {
+         *         &quot;type&quot;: &quot;number&quot;
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>4.2. If you hit example.com and it returns <code>{&quot;name&quot;: {&quot;first&quot;: &quot;John&quot;, &quot;last&quot;: &quot;Doe&quot;}}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;first&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;last&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>These will be extracted as <code>{{ name }}</code> and <code>{{ age }}</code> respectively. To emphasize, object properties are extracted as direct global variables.</p>
+         * <p>4.3. If you hit example.com and it returns <code>{&quot;name&quot;: {&quot;first&quot;: &quot;John&quot;, &quot;last&quot;: &quot;Doe&quot;}}</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;name&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;first&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;last&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>These will be extracted as <code>{{ name }}</code>. And, <code>{{ name.first }}</code> and <code>{{ name.last }}</code> will be accessible.</p>
+         * <p>4.4. If you hit example.com and it returns <code>[&quot;94123&quot;, &quot;94124&quot;]</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;array&quot;,
+         *     &quot;title&quot;: &quot;zipCodes&quot;,
+         *     &quot;items&quot;: {
+         *       &quot;type&quot;: &quot;string&quot;
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ zipCodes }}</code>. To access the array items, you can use <code>{{ zipCodes[0] }}</code> and <code>{{ zipCodes[1] }}</code>.</p>
+         * <p>4.5. If you hit example.com and it returns <code>[{&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30, &quot;zipCodes&quot;: [&quot;94123&quot;, &quot;94124&quot;]}, {&quot;name&quot;: &quot;Jane&quot;, &quot;age&quot;: 25, &quot;zipCodes&quot;: [&quot;94125&quot;, &quot;94126&quot;]}]</code>, then you can specify the schema as:</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;array&quot;,
+         *     &quot;title&quot;: &quot;people&quot;,
+         *     &quot;items&quot;: {
+         *       &quot;type&quot;: &quot;object&quot;,
+         *       &quot;properties&quot;: {
+         *         &quot;name&quot;: {
+         *           &quot;type&quot;: &quot;string&quot;
+         *         },
+         *         &quot;age&quot;: {
+         *           &quot;type&quot;: &quot;number&quot;
+         *         },
+         *         &quot;zipCodes&quot;: {
+         *           &quot;type&quot;: &quot;array&quot;,
+         *           &quot;items&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ people }}</code>. To access the array items, you can use <code>{{ people[n].name }}</code>, <code>{{ people[n].age }}</code>, <code>{{ people[n].zipCodes }}</code>, <code>{{ people[n].zipCodes[0] }}</code> and <code>{{ people[n].zipCodes[1] }}</code>.</p>
+         * <p>Note: Both <code>aliases</code> and <code>schema</code> can be used together.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "variableExtractionPlan", nulls = Nulls.SKIP)
+        public _FinalStage variableExtractionPlan(Optional<VariableExtractionPlan> variableExtractionPlan) {
+            this.variableExtractionPlan = variableExtractionPlan;
             return this;
         }
 
@@ -412,6 +1023,10 @@ public final class CreateApiRequestToolDto {
             return this;
         }
 
+        /**
+         * <p>This is the backoff plan if the request fails. Defaults to undefined (the request will not be retried).</p>
+         * <p>@default undefined (the request will not be retried)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "backoffPlan", nulls = Nulls.SKIP)
         public _FinalStage backoffPlan(Optional<BackoffPlan> backoffPlan) {
@@ -429,10 +1044,33 @@ public final class CreateApiRequestToolDto {
             return this;
         }
 
+        /**
+         * <p>These are the headers to send in the request.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "headers", nulls = Nulls.SKIP)
         public _FinalStage headers(Optional<JsonSchema> headers) {
             this.headers = headers;
+            return this;
+        }
+
+        /**
+         * <p>This is the body of the request.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage body(JsonSchema body) {
+            this.body = Optional.ofNullable(body);
+            return this;
+        }
+
+        /**
+         * <p>This is the body of the request.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "body", nulls = Nulls.SKIP)
+        public _FinalStage body(Optional<JsonSchema> body) {
+            this.body = body;
             return this;
         }
 
@@ -446,6 +1084,9 @@ public final class CreateApiRequestToolDto {
             return this;
         }
 
+        /**
+         * <p>This is the description of the tool. This will be passed to the model.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
@@ -455,6 +1096,7 @@ public final class CreateApiRequestToolDto {
 
         /**
          * <p>This is the name of the tool. This will be passed to the model.</p>
+         * <p>Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -463,6 +1105,10 @@ public final class CreateApiRequestToolDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the tool. This will be passed to the model.</p>
+         * <p>Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -481,6 +1127,10 @@ public final class CreateApiRequestToolDto {
             return this;
         }
 
+        /**
+         * <p>This is the timeout in seconds for the request. Defaults to 20 seconds.</p>
+         * <p>@default 20</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
         public _FinalStage timeoutSeconds(Optional<Double> timeoutSeconds) {
@@ -499,6 +1149,10 @@ public final class CreateApiRequestToolDto {
             return this;
         }
 
+        /**
+         * <p>These are the messages that will be spoken to the user as the tool is running.</p>
+         * <p>For some tools, this is auto-filled based on special fields like <code>tool.destinations</code>. For others like the function tool, these can be custom configured.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public _FinalStage messages(Optional<List<CreateApiRequestToolDtoMessagesItem>> messages) {
@@ -506,30 +1160,9 @@ public final class CreateApiRequestToolDto {
             return this;
         }
 
-        /**
-         * <p>This determines if the tool is async.</p>
-         * <p>If async, the assistant will move forward without waiting for your server to respond. This is useful if you just want to trigger something on your server.</p>
-         * <p>If sync, the assistant will wait for your server to respond. This is useful if want assistant to respond with the result from your server.</p>
-         * <p>Defaults to synchronous (<code>false</code>).</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage async(Boolean async) {
-            this.async = Optional.ofNullable(async);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "async", nulls = Nulls.SKIP)
-        public _FinalStage async(Optional<Boolean> async) {
-            this.async = async;
-            return this;
-        }
-
         @java.lang.Override
         public CreateApiRequestToolDto build() {
             return new CreateApiRequestToolDto(
-                    async,
                     messages,
                     method,
                     timeoutSeconds,
@@ -539,8 +1172,8 @@ public final class CreateApiRequestToolDto {
                     body,
                     headers,
                     backoffPlan,
+                    variableExtractionPlan,
                     function,
-                    server,
                     additionalProperties);
         }
     }

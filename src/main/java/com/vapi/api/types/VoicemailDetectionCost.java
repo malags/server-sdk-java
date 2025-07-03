@@ -155,34 +155,55 @@ public final class VoicemailDetectionCost {
     }
 
     public interface ProviderStage {
+        /**
+         * <p>This is the provider that was used to detect the voicemail.</p>
+         */
         PromptTextTokensStage provider(@NotNull VoicemailDetectionCostProvider provider);
 
         Builder from(VoicemailDetectionCost other);
     }
 
     public interface PromptTextTokensStage {
+        /**
+         * <p>This is the number of prompt text tokens used in the voicemail detection.</p>
+         */
         PromptAudioTokensStage promptTextTokens(double promptTextTokens);
     }
 
     public interface PromptAudioTokensStage {
+        /**
+         * <p>This is the number of prompt audio tokens used in the voicemail detection.</p>
+         */
         CompletionTextTokensStage promptAudioTokens(double promptAudioTokens);
     }
 
     public interface CompletionTextTokensStage {
+        /**
+         * <p>This is the number of completion text tokens used in the voicemail detection.</p>
+         */
         CompletionAudioTokensStage completionTextTokens(double completionTextTokens);
     }
 
     public interface CompletionAudioTokensStage {
+        /**
+         * <p>This is the number of completion audio tokens used in the voicemail detection.</p>
+         */
         CostStage completionAudioTokens(double completionAudioTokens);
     }
 
     public interface CostStage {
+        /**
+         * <p>This is the cost of the component in USD.</p>
+         */
         _FinalStage cost(double cost);
     }
 
     public interface _FinalStage {
         VoicemailDetectionCost build();
 
+        /**
+         * <p>This is the model that was used to perform the analysis.</p>
+         */
         _FinalStage model(Map<String, Object> model);
 
         _FinalStage putAllModel(Map<String, Object> model);
@@ -232,6 +253,7 @@ public final class VoicemailDetectionCost {
 
         /**
          * <p>This is the provider that was used to detect the voicemail.</p>
+         * <p>This is the provider that was used to detect the voicemail.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -242,6 +264,7 @@ public final class VoicemailDetectionCost {
         }
 
         /**
+         * <p>This is the number of prompt text tokens used in the voicemail detection.</p>
          * <p>This is the number of prompt text tokens used in the voicemail detection.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -254,6 +277,7 @@ public final class VoicemailDetectionCost {
 
         /**
          * <p>This is the number of prompt audio tokens used in the voicemail detection.</p>
+         * <p>This is the number of prompt audio tokens used in the voicemail detection.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -264,6 +288,7 @@ public final class VoicemailDetectionCost {
         }
 
         /**
+         * <p>This is the number of completion text tokens used in the voicemail detection.</p>
          * <p>This is the number of completion text tokens used in the voicemail detection.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -276,6 +301,7 @@ public final class VoicemailDetectionCost {
 
         /**
          * <p>This is the number of completion audio tokens used in the voicemail detection.</p>
+         * <p>This is the number of completion audio tokens used in the voicemail detection.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -286,6 +312,7 @@ public final class VoicemailDetectionCost {
         }
 
         /**
+         * <p>This is the cost of the component in USD.</p>
          * <p>This is the cost of the component in USD.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -316,6 +343,9 @@ public final class VoicemailDetectionCost {
             return this;
         }
 
+        /**
+         * <p>This is the model that was used to perform the analysis.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Map<String, Object> model) {

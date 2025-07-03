@@ -112,6 +112,9 @@ public final class UpdateDeepgramCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public Builder apiKey(Optional<String> apiKey) {
             this.apiKey = apiKey;
@@ -123,6 +126,9 @@ public final class UpdateDeepgramCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -134,6 +140,9 @@ public final class UpdateDeepgramCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This can be used to point to an onprem Deepgram instance. Defaults to api.deepgram.com.</p>
+         */
         @JsonSetter(value = "apiUrl", nulls = Nulls.SKIP)
         public Builder apiUrl(Optional<String> apiUrl) {
             this.apiUrl = apiUrl;

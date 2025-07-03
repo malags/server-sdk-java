@@ -175,38 +175,62 @@ public final class LangfuseCredential {
     }
 
     public interface PublicKeyStage {
+        /**
+         * <p>The public key for Langfuse project. Eg: pk-lf-...</p>
+         */
         ApiKeyStage publicKey(@NotNull String publicKey);
 
         Builder from(LangfuseCredential other);
     }
 
     public interface ApiKeyStage {
+        /**
+         * <p>The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.</p>
+         */
         ApiUrlStage apiKey(@NotNull String apiKey);
     }
 
     public interface ApiUrlStage {
+        /**
+         * <p>The host URL for Langfuse project. Eg: https://cloud.langfuse.com</p>
+         */
         IdStage apiUrl(@NotNull String apiUrl);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         LangfuseCredential build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -258,6 +282,7 @@ public final class LangfuseCredential {
 
         /**
          * <p>The public key for Langfuse project. Eg: pk-lf-...</p>
+         * <p>The public key for Langfuse project. Eg: pk-lf-...</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -268,6 +293,7 @@ public final class LangfuseCredential {
         }
 
         /**
+         * <p>The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.</p>
          * <p>The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -280,6 +306,7 @@ public final class LangfuseCredential {
 
         /**
          * <p>The host URL for Langfuse project. Eg: https://cloud.langfuse.com</p>
+         * <p>The host URL for Langfuse project. Eg: https://cloud.langfuse.com</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -290,6 +317,7 @@ public final class LangfuseCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the credential.</p>
          * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -302,6 +330,7 @@ public final class LangfuseCredential {
 
         /**
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -313,6 +342,7 @@ public final class LangfuseCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -323,6 +353,7 @@ public final class LangfuseCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -343,6 +374,9 @@ public final class LangfuseCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

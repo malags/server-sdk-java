@@ -235,6 +235,15 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
         public Builder fallbackDestination(
                 Optional<UpdateTelnyxPhoneNumberDtoFallbackDestination> fallbackDestination) {
@@ -247,6 +256,9 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public Builder hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
             this.hooks = hooks;
@@ -258,6 +270,9 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -269,6 +284,10 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -280,6 +299,10 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public Builder workflowId(Optional<String> workflowId) {
             this.workflowId = workflowId;
@@ -291,6 +314,10 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -302,6 +329,15 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public Builder server(Optional<Server> server) {
             this.server = server;
@@ -313,6 +349,9 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>These are the digits of the phone number you own on your Telnyx.</p>
+         */
         @JsonSetter(value = "number", nulls = Nulls.SKIP)
         public Builder number(Optional<String> number) {
             this.number = number;
@@ -324,6 +363,9 @@ public final class UpdateTelnyxPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the credential you added in dashboard.vapi.ai/keys. This is used to configure the number to send inbound calls to Vapi, make outbound calls and do live call updates like transfers and hangups.</p>
+         */
         @JsonSetter(value = "credentialId", nulls = Nulls.SKIP)
         public Builder credentialId(Optional<String> credentialId) {
             this.credentialId = credentialId;

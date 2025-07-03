@@ -77,12 +77,18 @@ public final class StructuredDataMultiPlan {
     }
 
     public interface KeyStage {
+        /**
+         * <p>This is the key of the structured data plan in the catalog.</p>
+         */
         PlanStage key(@NotNull String key);
 
         Builder from(StructuredDataMultiPlan other);
     }
 
     public interface PlanStage {
+        /**
+         * <p>This is an individual structured data plan in the catalog.</p>
+         */
         _FinalStage plan(@NotNull StructuredDataPlan plan);
     }
 
@@ -110,6 +116,7 @@ public final class StructuredDataMultiPlan {
 
         /**
          * <p>This is the key of the structured data plan in the catalog.</p>
+         * <p>This is the key of the structured data plan in the catalog.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -120,6 +127,7 @@ public final class StructuredDataMultiPlan {
         }
 
         /**
+         * <p>This is an individual structured data plan in the catalog.</p>
          * <p>This is an individual structured data plan in the catalog.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

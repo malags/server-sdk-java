@@ -117,6 +117,9 @@ public final class UpdateTrieveKnowledgeBaseDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the knowledge base.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -128,6 +131,14 @@ public final class UpdateTrieveKnowledgeBaseDto {
             return this;
         }
 
+        /**
+         * <p>This is the searching plan used when searching for relevant chunks from the vector store.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>Too much unnecessary context is being fed as knowledge base context.</li>
+         * <li>Not enough relevant context is being fed as knowledge base context.</li>
+         * </ul>
+         */
         @JsonSetter(value = "searchPlan", nulls = Nulls.SKIP)
         public Builder searchPlan(Optional<TrieveKnowledgeBaseSearchPlan> searchPlan) {
             this.searchPlan = searchPlan;
@@ -139,6 +150,9 @@ public final class UpdateTrieveKnowledgeBaseDto {
             return this;
         }
 
+        /**
+         * <p>This is the plan if you want us to create/import a new vector store using Trieve.</p>
+         */
         @JsonSetter(value = "createPlan", nulls = Nulls.SKIP)
         public Builder createPlan(Optional<TrieveKnowledgeBaseImport> createPlan) {
             this.createPlan = createPlan;

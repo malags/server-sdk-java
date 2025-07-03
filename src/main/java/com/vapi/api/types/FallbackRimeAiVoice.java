@@ -81,7 +81,7 @@ public final class FallbackRimeAiVoice {
     }
 
     /**
-     * @return This is the model that will be used. Defaults to 'v1' when not specified.
+     * @return This is the model that will be used. Defaults to 'mistv2' when not specified.
      */
     @JsonProperty("model")
     public Optional<FallbackRimeAiVoiceModel> getModel() {
@@ -183,6 +183,9 @@ public final class FallbackRimeAiVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the provider-specific ID that will be used.</p>
+         */
         _FinalStage voiceId(@NotNull FallbackRimeAiVoiceId voiceId);
 
         Builder from(FallbackRimeAiVoice other);
@@ -191,34 +194,58 @@ public final class FallbackRimeAiVoice {
     public interface _FinalStage {
         FallbackRimeAiVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the model that will be used. Defaults to 'mistv2' when not specified.</p>
+         */
         _FinalStage model(Optional<FallbackRimeAiVoiceModel> model);
 
         _FinalStage model(FallbackRimeAiVoiceModel model);
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         */
         _FinalStage speed(Optional<Double> speed);
 
         _FinalStage speed(Double speed);
 
+        /**
+         * <p>This is a flag that controls whether to add slight pauses using angle brackets. Example: &quot;Hi. &lt;200&gt; I'd love to have a conversation with you.&quot; adds a 200ms pause between the first and second sentences.</p>
+         */
         _FinalStage pauseBetweenBrackets(Optional<Boolean> pauseBetweenBrackets);
 
         _FinalStage pauseBetweenBrackets(Boolean pauseBetweenBrackets);
 
+        /**
+         * <p>This is a flag that controls whether text inside brackets should be phonemized (converted to phonetic pronunciation) - Example: &quot;{h'El.o} World&quot; will pronounce &quot;Hello&quot; as expected.</p>
+         */
         _FinalStage phonemizeBetweenBrackets(Optional<Boolean> phonemizeBetweenBrackets);
 
         _FinalStage phonemizeBetweenBrackets(Boolean phonemizeBetweenBrackets);
 
+        /**
+         * <p>This is a flag that controls whether to optimize for reduced latency in streaming. https://docs.rime.ai/api-reference/endpoint/websockets#param-reduce-latency</p>
+         */
         _FinalStage reduceLatency(Optional<Boolean> reduceLatency);
 
         _FinalStage reduceLatency(Boolean reduceLatency);
 
+        /**
+         * <p>This is a string that allows inline speed control using alpha notation. https://docs.rime.ai/api-reference/endpoint/websockets#param-inline-speed-alpha</p>
+         */
         _FinalStage inlineSpeedAlpha(Optional<String> inlineSpeedAlpha);
 
         _FinalStage inlineSpeedAlpha(String inlineSpeedAlpha);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -265,6 +292,7 @@ public final class FallbackRimeAiVoice {
 
         /**
          * <p>This is the provider-specific ID that will be used.</p>
+         * <p>This is the provider-specific ID that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -284,6 +312,9 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -301,6 +332,9 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is a string that allows inline speed control using alpha notation. https://docs.rime.ai/api-reference/endpoint/websockets#param-inline-speed-alpha</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "inlineSpeedAlpha", nulls = Nulls.SKIP)
         public _FinalStage inlineSpeedAlpha(Optional<String> inlineSpeedAlpha) {
@@ -318,6 +352,9 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is a flag that controls whether to optimize for reduced latency in streaming. https://docs.rime.ai/api-reference/endpoint/websockets#param-reduce-latency</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "reduceLatency", nulls = Nulls.SKIP)
         public _FinalStage reduceLatency(Optional<Boolean> reduceLatency) {
@@ -335,6 +372,9 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is a flag that controls whether text inside brackets should be phonemized (converted to phonetic pronunciation) - Example: &quot;{h'El.o} World&quot; will pronounce &quot;Hello&quot; as expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phonemizeBetweenBrackets", nulls = Nulls.SKIP)
         public _FinalStage phonemizeBetweenBrackets(Optional<Boolean> phonemizeBetweenBrackets) {
@@ -352,6 +392,9 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is a flag that controls whether to add slight pauses using angle brackets. Example: &quot;Hi. &lt;200&gt; I'd love to have a conversation with you.&quot; adds a 200ms pause between the first and second sentences.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "pauseBetweenBrackets", nulls = Nulls.SKIP)
         public _FinalStage pauseBetweenBrackets(Optional<Boolean> pauseBetweenBrackets) {
@@ -369,6 +412,9 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "speed", nulls = Nulls.SKIP)
         public _FinalStage speed(Optional<Double> speed) {
@@ -377,7 +423,7 @@ public final class FallbackRimeAiVoice {
         }
 
         /**
-         * <p>This is the model that will be used. Defaults to 'v1' when not specified.</p>
+         * <p>This is the model that will be used. Defaults to 'mistv2' when not specified.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -386,6 +432,9 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used. Defaults to 'mistv2' when not specified.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<FallbackRimeAiVoiceModel> model) {
@@ -403,6 +452,9 @@ public final class FallbackRimeAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

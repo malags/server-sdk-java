@@ -127,18 +127,30 @@ public final class ToolNode {
     public interface _FinalStage {
         ToolNode build();
 
+        /**
+         * <p>This is the tool to call. To use an existing tool, send <code>toolId</code> instead.</p>
+         */
         _FinalStage tool(Optional<ToolNodeTool> tool);
 
         _FinalStage tool(ToolNodeTool tool);
 
+        /**
+         * <p>This is the tool to call. To use a transient tool, send <code>tool</code> instead.</p>
+         */
         _FinalStage toolId(Optional<String> toolId);
 
         _FinalStage toolId(String toolId);
 
+        /**
+         * <p>This is whether or not the node is the start of the workflow.</p>
+         */
         _FinalStage isStart(Optional<Boolean> isStart);
 
         _FinalStage isStart(Boolean isStart);
 
+        /**
+         * <p>This is for metadata you want to store on the task.</p>
+         */
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
         _FinalStage metadata(Map<String, Object> metadata);
@@ -188,6 +200,9 @@ public final class ToolNode {
             return this;
         }
 
+        /**
+         * <p>This is for metadata you want to store on the task.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
@@ -205,6 +220,9 @@ public final class ToolNode {
             return this;
         }
 
+        /**
+         * <p>This is whether or not the node is the start of the workflow.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "isStart", nulls = Nulls.SKIP)
         public _FinalStage isStart(Optional<Boolean> isStart) {
@@ -222,6 +240,9 @@ public final class ToolNode {
             return this;
         }
 
+        /**
+         * <p>This is the tool to call. To use a transient tool, send <code>tool</code> instead.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "toolId", nulls = Nulls.SKIP)
         public _FinalStage toolId(Optional<String> toolId) {
@@ -239,6 +260,9 @@ public final class ToolNode {
             return this;
         }
 
+        /**
+         * <p>This is the tool to call. To use an existing tool, send <code>toolId</code> instead.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "tool", nulls = Nulls.SKIP)
         public _FinalStage tool(Optional<ToolNodeTool> tool) {

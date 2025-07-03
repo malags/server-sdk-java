@@ -71,6 +71,10 @@ public final class AnthropicThinkingConfig {
     }
 
     public interface BudgetTokensStage {
+        /**
+         * <p>The maximum number of tokens to allocate for thinking.
+         * Must be between 1024 and 100000 tokens.</p>
+         */
         _FinalStage budgetTokens(double budgetTokens);
 
         Builder from(AnthropicThinkingConfig other);
@@ -96,6 +100,8 @@ public final class AnthropicThinkingConfig {
         }
 
         /**
+         * <p>The maximum number of tokens to allocate for thinking.
+         * Must be between 1024 and 100000 tokens.</p>
          * <p>The maximum number of tokens to allocate for thinking.
          * Must be between 1024 and 100000 tokens.</p>
          * @return Reference to {@code this} so that method calls can be chained together.

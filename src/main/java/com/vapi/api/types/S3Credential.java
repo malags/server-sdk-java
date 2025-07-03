@@ -32,6 +32,8 @@ public final class S3Credential {
 
     private final String s3PathPrefix;
 
+    private final Optional<Double> fallbackIndex;
+
     private final String id;
 
     private final String orgId;
@@ -50,6 +52,7 @@ public final class S3Credential {
             String region,
             String s3BucketName,
             String s3PathPrefix,
+            Optional<Double> fallbackIndex,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -61,6 +64,7 @@ public final class S3Credential {
         this.region = region;
         this.s3BucketName = s3BucketName;
         this.s3PathPrefix = s3PathPrefix;
+        this.fallbackIndex = fallbackIndex;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -115,6 +119,14 @@ public final class S3Credential {
     @JsonProperty("s3PathPrefix")
     public String getS3PathPrefix() {
         return s3PathPrefix;
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -174,6 +186,7 @@ public final class S3Credential {
                 && region.equals(other.region)
                 && s3BucketName.equals(other.s3BucketName)
                 && s3PathPrefix.equals(other.s3PathPrefix)
+                && fallbackIndex.equals(other.fallbackIndex)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
@@ -189,6 +202,7 @@ public final class S3Credential {
                 this.region,
                 this.s3BucketName,
                 this.s3PathPrefix,
+                this.fallbackIndex,
                 this.id,
                 this.orgId,
                 this.createdAt,
@@ -206,46 +220,83 @@ public final class S3Credential {
     }
 
     public interface AwsAccessKeyIdStage {
+        /**
+         * <p>AWS access key ID.</p>
+         */
         AwsSecretAccessKeyStage awsAccessKeyId(@NotNull String awsAccessKeyId);
 
         Builder from(S3Credential other);
     }
 
     public interface AwsSecretAccessKeyStage {
+        /**
+         * <p>AWS access key secret. This is not returned in the API.</p>
+         */
         RegionStage awsSecretAccessKey(@NotNull String awsSecretAccessKey);
     }
 
     public interface RegionStage {
+        /**
+         * <p>AWS region in which the S3 bucket is located.</p>
+         */
         S3BucketNameStage region(@NotNull String region);
     }
 
     public interface S3BucketNameStage {
+        /**
+         * <p>AWS S3 bucket name.</p>
+         */
         S3PathPrefixStage s3BucketName(@NotNull String s3BucketName);
     }
 
     public interface S3PathPrefixStage {
+        /**
+         * <p>The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;</p>
+         */
         IdStage s3PathPrefix(@NotNull String s3PathPrefix);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         S3Credential build();
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        _FinalStage fallbackIndex(Optional<Double> fallbackIndex);
+
+        _FinalStage fallbackIndex(Double fallbackIndex);
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -283,6 +334,8 @@ public final class S3Credential {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -295,6 +348,7 @@ public final class S3Credential {
             region(other.getRegion());
             s3BucketName(other.getS3BucketName());
             s3PathPrefix(other.getS3PathPrefix());
+            fallbackIndex(other.getFallbackIndex());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -304,6 +358,7 @@ public final class S3Credential {
         }
 
         /**
+         * <p>AWS access key ID.</p>
          * <p>AWS access key ID.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -316,6 +371,7 @@ public final class S3Credential {
 
         /**
          * <p>AWS access key secret. This is not returned in the API.</p>
+         * <p>AWS access key secret. This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -326,6 +382,7 @@ public final class S3Credential {
         }
 
         /**
+         * <p>AWS region in which the S3 bucket is located.</p>
          * <p>AWS region in which the S3 bucket is located.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -338,6 +395,7 @@ public final class S3Credential {
 
         /**
          * <p>AWS S3 bucket name.</p>
+         * <p>AWS S3 bucket name.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -348,6 +406,7 @@ public final class S3Credential {
         }
 
         /**
+         * <p>The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;</p>
          * <p>The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -360,6 +419,7 @@ public final class S3Credential {
 
         /**
          * <p>This is the unique identifier for the credential.</p>
+         * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -370,6 +430,7 @@ public final class S3Credential {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -382,6 +443,7 @@ public final class S3Credential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -392,6 +454,7 @@ public final class S3Credential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -412,10 +475,33 @@ public final class S3Credential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
             this.name = name;
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public _FinalStage fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
             return this;
         }
 
@@ -427,6 +513,7 @@ public final class S3Credential {
                     region,
                     s3BucketName,
                     s3PathPrefix,
+                    fallbackIndex,
                     id,
                     orgId,
                     createdAt,

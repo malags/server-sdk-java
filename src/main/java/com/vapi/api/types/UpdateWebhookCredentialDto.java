@@ -20,14 +20,14 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateWebhookCredentialDto.Builder.class)
 public final class UpdateWebhookCredentialDto {
-    private final Optional<OAuth2AuthenticationPlan> authenticationPlan;
+    private final Optional<UpdateWebhookCredentialDtoAuthenticationPlan> authenticationPlan;
 
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateWebhookCredentialDto(
-            Optional<OAuth2AuthenticationPlan> authenticationPlan,
+            Optional<UpdateWebhookCredentialDtoAuthenticationPlan> authenticationPlan,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.authenticationPlan = authenticationPlan;
@@ -36,10 +36,10 @@ public final class UpdateWebhookCredentialDto {
     }
 
     /**
-     * @return This is the authentication plan. Currently supports OAuth2 RFC 6749.
+     * @return This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.
      */
     @JsonProperty("authenticationPlan")
-    public Optional<OAuth2AuthenticationPlan> getAuthenticationPlan() {
+    public Optional<UpdateWebhookCredentialDtoAuthenticationPlan> getAuthenticationPlan() {
         return authenticationPlan;
     }
 
@@ -82,7 +82,7 @@ public final class UpdateWebhookCredentialDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<OAuth2AuthenticationPlan> authenticationPlan = Optional.empty();
+        private Optional<UpdateWebhookCredentialDtoAuthenticationPlan> authenticationPlan = Optional.empty();
 
         private Optional<String> name = Optional.empty();
 
@@ -97,17 +97,23 @@ public final class UpdateWebhookCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.</p>
+         */
         @JsonSetter(value = "authenticationPlan", nulls = Nulls.SKIP)
-        public Builder authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan) {
+        public Builder authenticationPlan(Optional<UpdateWebhookCredentialDtoAuthenticationPlan> authenticationPlan) {
             this.authenticationPlan = authenticationPlan;
             return this;
         }
 
-        public Builder authenticationPlan(OAuth2AuthenticationPlan authenticationPlan) {
+        public Builder authenticationPlan(UpdateWebhookCredentialDtoAuthenticationPlan authenticationPlan) {
             this.authenticationPlan = Optional.ofNullable(authenticationPlan);
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

@@ -195,6 +195,9 @@ public final class ClientMessageConversationUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public Builder phoneNumber(Optional<ClientMessageConversationUpdatePhoneNumber> phoneNumber) {
             this.phoneNumber = phoneNumber;
@@ -206,6 +209,9 @@ public final class ClientMessageConversationUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the most up-to-date conversation history at the time the message is sent.</p>
+         */
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public Builder messages(Optional<List<ClientMessageConversationUpdateMessagesItem>> messages) {
             this.messages = messages;
@@ -217,6 +223,9 @@ public final class ClientMessageConversationUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the most up-to-date conversation history at the time the message is sent, formatted for OpenAI.</p>
+         */
         @JsonSetter(value = "messagesOpenAIFormatted", nulls = Nulls.SKIP)
         public Builder messagesOpenAiFormatted(List<OpenAiMessage> messagesOpenAiFormatted) {
             this.messagesOpenAiFormatted.clear();
@@ -234,6 +243,9 @@ public final class ClientMessageConversationUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public Builder timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
@@ -245,6 +257,9 @@ public final class ClientMessageConversationUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public Builder call(Optional<Call> call) {
             this.call = call;
@@ -256,6 +271,9 @@ public final class ClientMessageConversationUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public Builder customer(Optional<CreateCustomerDto> customer) {
             this.customer = customer;
@@ -267,6 +285,9 @@ public final class ClientMessageConversationUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;

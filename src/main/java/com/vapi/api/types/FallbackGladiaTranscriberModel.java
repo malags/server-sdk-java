@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum FallbackGladiaTranscriberModel {
     FAST("fast"),
 
-    ACCURATE("accurate");
+    ACCURATE("accurate"),
+
+    SOLARIA_1("solaria-1");
 
     private final String value;
 

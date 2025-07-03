@@ -136,6 +136,11 @@ public final class TargetPlan {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that is being tested.
+         * During the actual test, it'll be called and the assistant attached to it will pick up and be tested.
+         * To test an assistant directly, send assistantId instead.</p>
+         */
         @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
         public Builder phoneNumberId(Optional<String> phoneNumberId) {
             this.phoneNumberId = phoneNumberId;
@@ -147,6 +152,11 @@ public final class TargetPlan {
             return this;
         }
 
+        /**
+         * <p>This can be any phone number (even not on Vapi).
+         * During the actual test, it'll be called.
+         * To test a Vapi number, send phoneNumberId. To test an assistant directly, send assistantId instead.</p>
+         */
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public Builder phoneNumber(Optional<TestSuitePhoneNumber> phoneNumber) {
             this.phoneNumber = phoneNumber;
@@ -158,6 +168,11 @@ public final class TargetPlan {
             return this;
         }
 
+        /**
+         * <p>This is the assistant being tested.
+         * During the actual test, it'll invoked directly.
+         * To test the assistant over phone number, send phoneNumberId instead.</p>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -169,6 +184,9 @@ public final class TargetPlan {
             return this;
         }
 
+        /**
+         * <p>This is the assistant overrides applied to assistantId before it is tested.</p>
+         */
         @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
         public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
             this.assistantOverrides = assistantOverrides;

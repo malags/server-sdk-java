@@ -324,82 +324,139 @@ public final class VoiceLibrary {
     }
 
     public interface IdStage {
+        /**
+         * <p>The unique identifier for the voice library.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(VoiceLibrary other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>The unique identifier for the organization that this voice library belongs to.</p>
+         */
         IsPublicStage orgId(@NotNull String orgId);
     }
 
     public interface IsPublicStage {
+        /**
+         * <p>The Public voice is shared accross all the organizations.</p>
+         */
         IsDeletedStage isPublic(boolean isPublic);
     }
 
     public interface IsDeletedStage {
+        /**
+         * <p>The deletion status of the voice.</p>
+         */
         CreatedAtStage isDeleted(boolean isDeleted);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>The ISO 8601 date-time string of when the voice library was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>The ISO 8601 date-time string of when the voice library was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         VoiceLibrary build();
 
+        /**
+         * <p>This is the voice provider that will be used.</p>
+         */
         _FinalStage provider(Optional<Map<String, Object>> provider);
 
         _FinalStage provider(Map<String, Object> provider);
 
+        /**
+         * <p>The ID of the voice provided by the provider.</p>
+         */
         _FinalStage providerId(Optional<String> providerId);
 
         _FinalStage providerId(String providerId);
 
+        /**
+         * <p>The unique slug of the voice.</p>
+         */
         _FinalStage slug(Optional<String> slug);
 
         _FinalStage slug(String slug);
 
+        /**
+         * <p>The name of the voice.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>The language of the voice.</p>
+         */
         _FinalStage language(Optional<String> language);
 
         _FinalStage language(String language);
 
+        /**
+         * <p>The language code of the voice.</p>
+         */
         _FinalStage languageCode(Optional<String> languageCode);
 
         _FinalStage languageCode(String languageCode);
 
+        /**
+         * <p>The model of the voice.</p>
+         */
         _FinalStage model(Optional<String> model);
 
         _FinalStage model(String model);
 
+        /**
+         * <p>The supported models of the voice.</p>
+         */
         _FinalStage supportedModels(Optional<String> supportedModels);
 
         _FinalStage supportedModels(String supportedModels);
 
+        /**
+         * <p>The gender of the voice.</p>
+         */
         _FinalStage gender(Optional<VoiceLibraryGender> gender);
 
         _FinalStage gender(VoiceLibraryGender gender);
 
+        /**
+         * <p>The accent of the voice.</p>
+         */
         _FinalStage accent(Optional<String> accent);
 
         _FinalStage accent(String accent);
 
+        /**
+         * <p>The preview URL of the voice.</p>
+         */
         _FinalStage previewUrl(Optional<String> previewUrl);
 
         _FinalStage previewUrl(String previewUrl);
 
+        /**
+         * <p>The description of the voice.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
 
+        /**
+         * <p>The credential ID of the voice.</p>
+         */
         _FinalStage credentialId(Optional<String> credentialId);
 
         _FinalStage credentialId(String credentialId);
@@ -477,6 +534,7 @@ public final class VoiceLibrary {
 
         /**
          * <p>The unique identifier for the voice library.</p>
+         * <p>The unique identifier for the voice library.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -487,6 +545,7 @@ public final class VoiceLibrary {
         }
 
         /**
+         * <p>The unique identifier for the organization that this voice library belongs to.</p>
          * <p>The unique identifier for the organization that this voice library belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -499,6 +558,7 @@ public final class VoiceLibrary {
 
         /**
          * <p>The Public voice is shared accross all the organizations.</p>
+         * <p>The Public voice is shared accross all the organizations.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -509,6 +569,7 @@ public final class VoiceLibrary {
         }
 
         /**
+         * <p>The deletion status of the voice.</p>
          * <p>The deletion status of the voice.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -521,6 +582,7 @@ public final class VoiceLibrary {
 
         /**
          * <p>The ISO 8601 date-time string of when the voice library was created.</p>
+         * <p>The ISO 8601 date-time string of when the voice library was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -531,6 +593,7 @@ public final class VoiceLibrary {
         }
 
         /**
+         * <p>The ISO 8601 date-time string of when the voice library was last updated.</p>
          * <p>The ISO 8601 date-time string of when the voice library was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -551,6 +614,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The credential ID of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "credentialId", nulls = Nulls.SKIP)
         public _FinalStage credentialId(Optional<String> credentialId) {
@@ -568,6 +634,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The description of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
@@ -585,6 +654,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The preview URL of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "previewUrl", nulls = Nulls.SKIP)
         public _FinalStage previewUrl(Optional<String> previewUrl) {
@@ -602,6 +674,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The accent of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "accent", nulls = Nulls.SKIP)
         public _FinalStage accent(Optional<String> accent) {
@@ -619,6 +694,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The gender of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "gender", nulls = Nulls.SKIP)
         public _FinalStage gender(Optional<VoiceLibraryGender> gender) {
@@ -636,6 +714,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The supported models of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "supportedModels", nulls = Nulls.SKIP)
         public _FinalStage supportedModels(Optional<String> supportedModels) {
@@ -653,6 +734,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The model of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<String> model) {
@@ -670,6 +754,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The language code of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "languageCode", nulls = Nulls.SKIP)
         public _FinalStage languageCode(Optional<String> languageCode) {
@@ -687,6 +774,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The language of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public _FinalStage language(Optional<String> language) {
@@ -704,6 +794,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The name of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -721,6 +814,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The unique slug of the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "slug", nulls = Nulls.SKIP)
         public _FinalStage slug(Optional<String> slug) {
@@ -738,6 +834,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>The ID of the voice provided by the provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "providerId", nulls = Nulls.SKIP)
         public _FinalStage providerId(Optional<String> providerId) {
@@ -755,6 +854,9 @@ public final class VoiceLibrary {
             return this;
         }
 
+        /**
+         * <p>This is the voice provider that will be used.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "provider", nulls = Nulls.SKIP)
         public _FinalStage provider(Optional<Map<String, Object>> provider) {

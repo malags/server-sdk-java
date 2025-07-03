@@ -127,26 +127,46 @@ public final class TrieveKnowledgeBase {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the id of the knowledge base.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(TrieveKnowledgeBase other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the org id of the knowledge base.</p>
+         */
         _FinalStage orgId(@NotNull String orgId);
     }
 
     public interface _FinalStage {
         TrieveKnowledgeBase build();
 
+        /**
+         * <p>This is the name of the knowledge base.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the searching plan used when searching for relevant chunks from the vector store.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>Too much unnecessary context is being fed as knowledge base context.</li>
+         * <li>Not enough relevant context is being fed as knowledge base context.</li>
+         * </ul>
+         */
         _FinalStage searchPlan(Optional<TrieveKnowledgeBaseSearchPlan> searchPlan);
 
         _FinalStage searchPlan(TrieveKnowledgeBaseSearchPlan searchPlan);
 
+        /**
+         * <p>This is the plan if you want us to create/import a new vector store using Trieve.</p>
+         */
         _FinalStage createPlan(Optional<TrieveKnowledgeBaseImport> createPlan);
 
         _FinalStage createPlan(TrieveKnowledgeBaseImport createPlan);
@@ -181,6 +201,7 @@ public final class TrieveKnowledgeBase {
 
         /**
          * <p>This is the id of the knowledge base.</p>
+         * <p>This is the id of the knowledge base.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -191,6 +212,7 @@ public final class TrieveKnowledgeBase {
         }
 
         /**
+         * <p>This is the org id of the knowledge base.</p>
          * <p>This is the org id of the knowledge base.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -211,6 +233,9 @@ public final class TrieveKnowledgeBase {
             return this;
         }
 
+        /**
+         * <p>This is the plan if you want us to create/import a new vector store using Trieve.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "createPlan", nulls = Nulls.SKIP)
         public _FinalStage createPlan(Optional<TrieveKnowledgeBaseImport> createPlan) {
@@ -233,6 +258,14 @@ public final class TrieveKnowledgeBase {
             return this;
         }
 
+        /**
+         * <p>This is the searching plan used when searching for relevant chunks from the vector store.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>Too much unnecessary context is being fed as knowledge base context.</li>
+         * <li>Not enough relevant context is being fed as knowledge base context.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "searchPlan", nulls = Nulls.SKIP)
         public _FinalStage searchPlan(Optional<TrieveKnowledgeBaseSearchPlan> searchPlan) {
@@ -250,6 +283,9 @@ public final class TrieveKnowledgeBase {
             return this;
         }
 
+        /**
+         * <p>This is the name of the knowledge base.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

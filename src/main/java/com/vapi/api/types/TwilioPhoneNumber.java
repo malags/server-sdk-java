@@ -329,78 +329,150 @@ public final class TwilioPhoneNumber {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the phone number.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(TwilioPhoneNumber other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this phone number belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
+         */
         NumberStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface NumberStage {
+        /**
+         * <p>These are the digits of the phone number you own on your Twilio.</p>
+         */
         TwilioAccountSidStage number(@NotNull String number);
     }
 
     public interface TwilioAccountSidStage {
+        /**
+         * <p>This is the Twilio Account SID for the phone number.</p>
+         */
         _FinalStage twilioAccountSid(@NotNull String twilioAccountSid);
     }
 
     public interface _FinalStage {
         TwilioPhoneNumber build();
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         _FinalStage fallbackDestination(Optional<TwilioPhoneNumberFallbackDestination> fallbackDestination);
 
         _FinalStage fallbackDestination(TwilioPhoneNumberFallbackDestination fallbackDestination);
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks);
 
         _FinalStage hooks(List<PhoneNumberHookCallRinging> hooks);
 
+        /**
+         * <p>Controls whether Vapi sets the messaging webhook URL on the Twilio number during import.</p>
+         * <p>If set to <code>false</code>, Vapi will not update the Twilio messaging URL, leaving it as is.
+         * If <code>true</code> or omitted (default), Vapi will configure both the voice and messaging URLs.</p>
+         * <p>@default true</p>
+         */
         _FinalStage smsEnabled(Optional<Boolean> smsEnabled);
 
         _FinalStage smsEnabled(Boolean smsEnabled);
 
+        /**
+         * <p>This is the status of the phone number.</p>
+         */
         _FinalStage status(Optional<TwilioPhoneNumberStatus> status);
 
         _FinalStage status(TwilioPhoneNumberStatus status);
 
+        /**
+         * <p>This is the Twilio Auth Token for the phone number.</p>
+         */
         _FinalStage twilioAuthToken(Optional<String> twilioAuthToken);
 
         _FinalStage twilioAuthToken(String twilioAuthToken);
 
+        /**
+         * <p>This is the Twilio API Key for the phone number.</p>
+         */
         _FinalStage twilioApiKey(Optional<String> twilioApiKey);
 
         _FinalStage twilioApiKey(String twilioApiKey);
 
+        /**
+         * <p>This is the Twilio API Secret for the phone number.</p>
+         */
         _FinalStage twilioApiSecret(Optional<String> twilioApiSecret);
 
         _FinalStage twilioApiSecret(String twilioApiSecret);
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage workflowId(Optional<String> workflowId);
 
         _FinalStage workflowId(String workflowId);
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         _FinalStage squadId(Optional<String> squadId);
 
         _FinalStage squadId(String squadId);
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         _FinalStage server(Optional<Server> server);
 
         _FinalStage server(Server server);
@@ -481,6 +553,7 @@ public final class TwilioPhoneNumber {
 
         /**
          * <p>This is the unique identifier for the phone number.</p>
+         * <p>This is the unique identifier for the phone number.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -491,6 +564,7 @@ public final class TwilioPhoneNumber {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this phone number belongs to.</p>
          * <p>This is the unique identifier for the org that this phone number belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -503,6 +577,7 @@ public final class TwilioPhoneNumber {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the phone number was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -513,6 +588,7 @@ public final class TwilioPhoneNumber {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the phone number was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -525,6 +601,7 @@ public final class TwilioPhoneNumber {
 
         /**
          * <p>These are the digits of the phone number you own on your Twilio.</p>
+         * <p>These are the digits of the phone number you own on your Twilio.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -535,6 +612,7 @@ public final class TwilioPhoneNumber {
         }
 
         /**
+         * <p>This is the Twilio Account SID for the phone number.</p>
          * <p>This is the Twilio Account SID for the phone number.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -561,6 +639,15 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @java.lang.Override
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public _FinalStage server(Optional<Server> server) {
@@ -579,6 +666,10 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public _FinalStage squadId(Optional<String> squadId) {
@@ -597,6 +688,10 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public _FinalStage workflowId(Optional<String> workflowId) {
@@ -615,6 +710,10 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public _FinalStage assistantId(Optional<String> assistantId) {
@@ -632,6 +731,9 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -649,6 +751,9 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the Twilio API Secret for the phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "twilioApiSecret", nulls = Nulls.SKIP)
         public _FinalStage twilioApiSecret(Optional<String> twilioApiSecret) {
@@ -666,6 +771,9 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the Twilio API Key for the phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "twilioApiKey", nulls = Nulls.SKIP)
         public _FinalStage twilioApiKey(Optional<String> twilioApiKey) {
@@ -683,6 +791,9 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the Twilio Auth Token for the phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "twilioAuthToken", nulls = Nulls.SKIP)
         public _FinalStage twilioAuthToken(Optional<String> twilioAuthToken) {
@@ -700,6 +811,9 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the status of the phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
         public _FinalStage status(Optional<TwilioPhoneNumberStatus> status) {
@@ -720,6 +834,12 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>Controls whether Vapi sets the messaging webhook URL on the Twilio number during import.</p>
+         * <p>If set to <code>false</code>, Vapi will not update the Twilio messaging URL, leaving it as is.
+         * If <code>true</code> or omitted (default), Vapi will configure both the voice and messaging URLs.</p>
+         * <p>@default true</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "smsEnabled", nulls = Nulls.SKIP)
         public _FinalStage smsEnabled(Optional<Boolean> smsEnabled) {
@@ -737,6 +857,9 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public _FinalStage hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
@@ -760,6 +883,15 @@ public final class TwilioPhoneNumber {
             return this;
         }
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
         public _FinalStage fallbackDestination(Optional<TwilioPhoneNumberFallbackDestination> fallbackDestination) {

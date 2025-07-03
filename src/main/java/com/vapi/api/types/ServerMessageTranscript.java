@@ -35,6 +35,8 @@ public final class ServerMessageTranscript {
 
     private final Optional<Call> call;
 
+    private final Optional<Chat> chat;
+
     private final ServerMessageTranscriptRole role;
 
     private final ServerMessageTranscriptTranscriptType transcriptType;
@@ -51,6 +53,7 @@ public final class ServerMessageTranscript {
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
             Optional<Call> call,
+            Optional<Chat> chat,
             ServerMessageTranscriptRole role,
             ServerMessageTranscriptTranscriptType transcriptType,
             String transcript,
@@ -62,6 +65,7 @@ public final class ServerMessageTranscript {
         this.assistant = assistant;
         this.customer = customer;
         this.call = call;
+        this.chat = chat;
         this.role = role;
         this.transcriptType = transcriptType;
         this.transcript = transcript;
@@ -126,6 +130,14 @@ public final class ServerMessageTranscript {
     }
 
     /**
+     * @return This is the chat object.
+     */
+    @JsonProperty("chat")
+    public Optional<Chat> getChat() {
+        return chat;
+    }
+
+    /**
      * @return This is the role for which the transcript is for.
      */
     @JsonProperty("role")
@@ -168,6 +180,7 @@ public final class ServerMessageTranscript {
                 && assistant.equals(other.assistant)
                 && customer.equals(other.customer)
                 && call.equals(other.call)
+                && chat.equals(other.chat)
                 && role.equals(other.role)
                 && transcriptType.equals(other.transcriptType)
                 && transcript.equals(other.transcript);
@@ -183,6 +196,7 @@ public final class ServerMessageTranscript {
                 this.assistant,
                 this.customer,
                 this.call,
+                this.chat,
                 this.role,
                 this.transcriptType,
                 this.transcript);
@@ -198,49 +212,87 @@ public final class ServerMessageTranscript {
     }
 
     public interface TypeStage {
+        /**
+         * <p>This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.</p>
+         */
         RoleStage type(@NotNull ServerMessageTranscriptType type);
 
         Builder from(ServerMessageTranscript other);
     }
 
     public interface RoleStage {
+        /**
+         * <p>This is the role for which the transcript is for.</p>
+         */
         TranscriptTypeStage role(@NotNull ServerMessageTranscriptRole role);
     }
 
     public interface TranscriptTypeStage {
+        /**
+         * <p>This is the type of the transcript.</p>
+         */
         TranscriptStage transcriptType(@NotNull ServerMessageTranscriptTranscriptType transcriptType);
     }
 
     public interface TranscriptStage {
+        /**
+         * <p>This is the transcript content.</p>
+         */
         _FinalStage transcript(@NotNull String transcript);
     }
 
     public interface _FinalStage {
         ServerMessageTranscript build();
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         _FinalStage phoneNumber(Optional<ServerMessageTranscriptPhoneNumber> phoneNumber);
 
         _FinalStage phoneNumber(ServerMessageTranscriptPhoneNumber phoneNumber);
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         _FinalStage timestamp(Optional<Double> timestamp);
 
         _FinalStage timestamp(Double timestamp);
 
+        /**
+         * <p>This is a live version of the <code>call.artifact</code>.</p>
+         * <p>This matches what is stored on <code>call.artifact</code> after the call.</p>
+         */
         _FinalStage artifact(Optional<Artifact> artifact);
 
         _FinalStage artifact(Artifact artifact);
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         _FinalStage call(Optional<Call> call);
 
         _FinalStage call(Call call);
+
+        /**
+         * <p>This is the chat object.</p>
+         */
+        _FinalStage chat(Optional<Chat> chat);
+
+        _FinalStage chat(Chat chat);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -253,6 +305,8 @@ public final class ServerMessageTranscript {
         private ServerMessageTranscriptTranscriptType transcriptType;
 
         private String transcript;
+
+        private Optional<Chat> chat = Optional.empty();
 
         private Optional<Call> call = Optional.empty();
 
@@ -280,6 +334,7 @@ public final class ServerMessageTranscript {
             assistant(other.getAssistant());
             customer(other.getCustomer());
             call(other.getCall());
+            chat(other.getChat());
             role(other.getRole());
             transcriptType(other.getTranscriptType());
             transcript(other.getTranscript());
@@ -287,6 +342,7 @@ public final class ServerMessageTranscript {
         }
 
         /**
+         * <p>This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.</p>
          * <p>This is the type of the message. &quot;transcript&quot; is sent as transcriber outputs partial or final transcript.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -299,6 +355,7 @@ public final class ServerMessageTranscript {
 
         /**
          * <p>This is the role for which the transcript is for.</p>
+         * <p>This is the role for which the transcript is for.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -309,6 +366,7 @@ public final class ServerMessageTranscript {
         }
 
         /**
+         * <p>This is the type of the transcript.</p>
          * <p>This is the type of the transcript.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -321,12 +379,33 @@ public final class ServerMessageTranscript {
 
         /**
          * <p>This is the transcript content.</p>
+         * <p>This is the transcript content.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("transcript")
         public _FinalStage transcript(@NotNull String transcript) {
             this.transcript = Objects.requireNonNull(transcript, "transcript must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage chat(Chat chat) {
+            this.chat = Optional.ofNullable(chat);
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "chat", nulls = Nulls.SKIP)
+        public _FinalStage chat(Optional<Chat> chat) {
+            this.chat = chat;
             return this;
         }
 
@@ -340,6 +419,9 @@ public final class ServerMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public _FinalStage call(Optional<Call> call) {
@@ -357,6 +439,9 @@ public final class ServerMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -374,6 +459,9 @@ public final class ServerMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -392,6 +480,10 @@ public final class ServerMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is a live version of the <code>call.artifact</code>.</p>
+         * <p>This matches what is stored on <code>call.artifact</code> after the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "artifact", nulls = Nulls.SKIP)
         public _FinalStage artifact(Optional<Artifact> artifact) {
@@ -409,6 +501,9 @@ public final class ServerMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public _FinalStage timestamp(Optional<Double> timestamp) {
@@ -426,6 +521,9 @@ public final class ServerMessageTranscript {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ServerMessageTranscriptPhoneNumber> phoneNumber) {
@@ -443,6 +541,7 @@ public final class ServerMessageTranscript {
                     assistant,
                     customer,
                     call,
+                    chat,
                     role,
                     transcriptType,
                     transcript,

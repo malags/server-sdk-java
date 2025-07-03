@@ -25,6 +25,18 @@ public final class FallbackAssemblyAiTranscriber {
 
     private final Optional<Double> confidenceThreshold;
 
+    private final Optional<Boolean> enableUniversalStreamingApi;
+
+    private final Optional<Boolean> formatTurns;
+
+    private final Optional<Double> endOfTurnConfidenceThreshold;
+
+    private final Optional<Double> minEndOfTurnSilenceWhenConfident;
+
+    private final Optional<Double> wordFinalizationMaxWaitTime;
+
+    private final Optional<Double> maxTurnSilence;
+
     private final Optional<String> realtimeUrl;
 
     private final Optional<List<String>> wordBoost;
@@ -38,6 +50,12 @@ public final class FallbackAssemblyAiTranscriber {
     private FallbackAssemblyAiTranscriber(
             Optional<String> language,
             Optional<Double> confidenceThreshold,
+            Optional<Boolean> enableUniversalStreamingApi,
+            Optional<Boolean> formatTurns,
+            Optional<Double> endOfTurnConfidenceThreshold,
+            Optional<Double> minEndOfTurnSilenceWhenConfident,
+            Optional<Double> wordFinalizationMaxWaitTime,
+            Optional<Double> maxTurnSilence,
             Optional<String> realtimeUrl,
             Optional<List<String>> wordBoost,
             Optional<Double> endUtteranceSilenceThreshold,
@@ -45,6 +63,12 @@ public final class FallbackAssemblyAiTranscriber {
             Map<String, Object> additionalProperties) {
         this.language = language;
         this.confidenceThreshold = confidenceThreshold;
+        this.enableUniversalStreamingApi = enableUniversalStreamingApi;
+        this.formatTurns = formatTurns;
+        this.endOfTurnConfidenceThreshold = endOfTurnConfidenceThreshold;
+        this.minEndOfTurnSilenceWhenConfident = minEndOfTurnSilenceWhenConfident;
+        this.wordFinalizationMaxWaitTime = wordFinalizationMaxWaitTime;
+        this.maxTurnSilence = maxTurnSilence;
         this.realtimeUrl = realtimeUrl;
         this.wordBoost = wordBoost;
         this.endUtteranceSilenceThreshold = endUtteranceSilenceThreshold;
@@ -67,6 +91,60 @@ public final class FallbackAssemblyAiTranscriber {
     @JsonProperty("confidenceThreshold")
     public Optional<Double> getConfidenceThreshold() {
         return confidenceThreshold;
+    }
+
+    /**
+     * @return Uses Assembly AI's new Universal Streaming API. See: https://www.assemblyai.com/docs/speech-to-text/universal-streaming
+     * <p>@default false</p>
+     */
+    @JsonProperty("enableUniversalStreamingApi")
+    public Optional<Boolean> getEnableUniversalStreamingApi() {
+        return enableUniversalStreamingApi;
+    }
+
+    /**
+     * @return This enables formatting of transcripts. Only used when <code>enableUniversalStreamingApi</code> is true.
+     * <p>@default false</p>
+     */
+    @JsonProperty("formatTurns")
+    public Optional<Boolean> getFormatTurns() {
+        return formatTurns;
+    }
+
+    /**
+     * @return The confidence threshold to use when determining if the end of a turn has been reached. Only used when <code>enableUniversalStreamingApi</code> is true.
+     * <p>@default 0.7</p>
+     */
+    @JsonProperty("endOfTurnConfidenceThreshold")
+    public Optional<Double> getEndOfTurnConfidenceThreshold() {
+        return endOfTurnConfidenceThreshold;
+    }
+
+    /**
+     * @return The minimum amount of silence in milliseconds required to detect end of turn when confident. Only used when <code>enableUniversalStreamingApi</code> is true.
+     * <p>@default 160</p>
+     */
+    @JsonProperty("minEndOfTurnSilenceWhenConfident")
+    public Optional<Double> getMinEndOfTurnSilenceWhenConfident() {
+        return minEndOfTurnSilenceWhenConfident;
+    }
+
+    /**
+     * @return The maximum wait time for word finalization. Only used when <code>enableUniversalStreamingApi</code> is true.
+     * <p>@default 160</p>
+     */
+    @JsonProperty("wordFinalizationMaxWaitTime")
+    public Optional<Double> getWordFinalizationMaxWaitTime() {
+        return wordFinalizationMaxWaitTime;
+    }
+
+    /**
+     * @return The maximum amount of silence in milliseconds allowed in a turn before end of turn is triggered. Only used when <code>enableUniversalStreamingApi</code> is true.
+     * <p>@default 400</p>
+     */
+    @JsonProperty("maxTurnSilence")
+    public Optional<Double> getMaxTurnSilence() {
+        return maxTurnSilence;
     }
 
     /**
@@ -116,6 +194,12 @@ public final class FallbackAssemblyAiTranscriber {
     private boolean equalTo(FallbackAssemblyAiTranscriber other) {
         return language.equals(other.language)
                 && confidenceThreshold.equals(other.confidenceThreshold)
+                && enableUniversalStreamingApi.equals(other.enableUniversalStreamingApi)
+                && formatTurns.equals(other.formatTurns)
+                && endOfTurnConfidenceThreshold.equals(other.endOfTurnConfidenceThreshold)
+                && minEndOfTurnSilenceWhenConfident.equals(other.minEndOfTurnSilenceWhenConfident)
+                && wordFinalizationMaxWaitTime.equals(other.wordFinalizationMaxWaitTime)
+                && maxTurnSilence.equals(other.maxTurnSilence)
                 && realtimeUrl.equals(other.realtimeUrl)
                 && wordBoost.equals(other.wordBoost)
                 && endUtteranceSilenceThreshold.equals(other.endUtteranceSilenceThreshold)
@@ -127,6 +211,12 @@ public final class FallbackAssemblyAiTranscriber {
         return Objects.hash(
                 this.language,
                 this.confidenceThreshold,
+                this.enableUniversalStreamingApi,
+                this.formatTurns,
+                this.endOfTurnConfidenceThreshold,
+                this.minEndOfTurnSilenceWhenConfident,
+                this.wordFinalizationMaxWaitTime,
+                this.maxTurnSilence,
                 this.realtimeUrl,
                 this.wordBoost,
                 this.endUtteranceSilenceThreshold,
@@ -148,6 +238,18 @@ public final class FallbackAssemblyAiTranscriber {
 
         private Optional<Double> confidenceThreshold = Optional.empty();
 
+        private Optional<Boolean> enableUniversalStreamingApi = Optional.empty();
+
+        private Optional<Boolean> formatTurns = Optional.empty();
+
+        private Optional<Double> endOfTurnConfidenceThreshold = Optional.empty();
+
+        private Optional<Double> minEndOfTurnSilenceWhenConfident = Optional.empty();
+
+        private Optional<Double> wordFinalizationMaxWaitTime = Optional.empty();
+
+        private Optional<Double> maxTurnSilence = Optional.empty();
+
         private Optional<String> realtimeUrl = Optional.empty();
 
         private Optional<List<String>> wordBoost = Optional.empty();
@@ -164,6 +266,12 @@ public final class FallbackAssemblyAiTranscriber {
         public Builder from(FallbackAssemblyAiTranscriber other) {
             language(other.getLanguage());
             confidenceThreshold(other.getConfidenceThreshold());
+            enableUniversalStreamingApi(other.getEnableUniversalStreamingApi());
+            formatTurns(other.getFormatTurns());
+            endOfTurnConfidenceThreshold(other.getEndOfTurnConfidenceThreshold());
+            minEndOfTurnSilenceWhenConfident(other.getMinEndOfTurnSilenceWhenConfident());
+            wordFinalizationMaxWaitTime(other.getWordFinalizationMaxWaitTime());
+            maxTurnSilence(other.getMaxTurnSilence());
             realtimeUrl(other.getRealtimeUrl());
             wordBoost(other.getWordBoost());
             endUtteranceSilenceThreshold(other.getEndUtteranceSilenceThreshold());
@@ -171,6 +279,9 @@ public final class FallbackAssemblyAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription.</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<String> language) {
             this.language = language;
@@ -182,6 +293,10 @@ public final class FallbackAssemblyAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>Transcripts below this confidence threshold will be discarded.</p>
+         * <p>@default 0.4</p>
+         */
         @JsonSetter(value = "confidenceThreshold", nulls = Nulls.SKIP)
         public Builder confidenceThreshold(Optional<Double> confidenceThreshold) {
             this.confidenceThreshold = confidenceThreshold;
@@ -193,6 +308,99 @@ public final class FallbackAssemblyAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>Uses Assembly AI's new Universal Streaming API. See: https://www.assemblyai.com/docs/speech-to-text/universal-streaming</p>
+         * <p>@default false</p>
+         */
+        @JsonSetter(value = "enableUniversalStreamingApi", nulls = Nulls.SKIP)
+        public Builder enableUniversalStreamingApi(Optional<Boolean> enableUniversalStreamingApi) {
+            this.enableUniversalStreamingApi = enableUniversalStreamingApi;
+            return this;
+        }
+
+        public Builder enableUniversalStreamingApi(Boolean enableUniversalStreamingApi) {
+            this.enableUniversalStreamingApi = Optional.ofNullable(enableUniversalStreamingApi);
+            return this;
+        }
+
+        /**
+         * <p>This enables formatting of transcripts. Only used when <code>enableUniversalStreamingApi</code> is true.</p>
+         * <p>@default false</p>
+         */
+        @JsonSetter(value = "formatTurns", nulls = Nulls.SKIP)
+        public Builder formatTurns(Optional<Boolean> formatTurns) {
+            this.formatTurns = formatTurns;
+            return this;
+        }
+
+        public Builder formatTurns(Boolean formatTurns) {
+            this.formatTurns = Optional.ofNullable(formatTurns);
+            return this;
+        }
+
+        /**
+         * <p>The confidence threshold to use when determining if the end of a turn has been reached. Only used when <code>enableUniversalStreamingApi</code> is true.</p>
+         * <p>@default 0.7</p>
+         */
+        @JsonSetter(value = "endOfTurnConfidenceThreshold", nulls = Nulls.SKIP)
+        public Builder endOfTurnConfidenceThreshold(Optional<Double> endOfTurnConfidenceThreshold) {
+            this.endOfTurnConfidenceThreshold = endOfTurnConfidenceThreshold;
+            return this;
+        }
+
+        public Builder endOfTurnConfidenceThreshold(Double endOfTurnConfidenceThreshold) {
+            this.endOfTurnConfidenceThreshold = Optional.ofNullable(endOfTurnConfidenceThreshold);
+            return this;
+        }
+
+        /**
+         * <p>The minimum amount of silence in milliseconds required to detect end of turn when confident. Only used when <code>enableUniversalStreamingApi</code> is true.</p>
+         * <p>@default 160</p>
+         */
+        @JsonSetter(value = "minEndOfTurnSilenceWhenConfident", nulls = Nulls.SKIP)
+        public Builder minEndOfTurnSilenceWhenConfident(Optional<Double> minEndOfTurnSilenceWhenConfident) {
+            this.minEndOfTurnSilenceWhenConfident = minEndOfTurnSilenceWhenConfident;
+            return this;
+        }
+
+        public Builder minEndOfTurnSilenceWhenConfident(Double minEndOfTurnSilenceWhenConfident) {
+            this.minEndOfTurnSilenceWhenConfident = Optional.ofNullable(minEndOfTurnSilenceWhenConfident);
+            return this;
+        }
+
+        /**
+         * <p>The maximum wait time for word finalization. Only used when <code>enableUniversalStreamingApi</code> is true.</p>
+         * <p>@default 160</p>
+         */
+        @JsonSetter(value = "wordFinalizationMaxWaitTime", nulls = Nulls.SKIP)
+        public Builder wordFinalizationMaxWaitTime(Optional<Double> wordFinalizationMaxWaitTime) {
+            this.wordFinalizationMaxWaitTime = wordFinalizationMaxWaitTime;
+            return this;
+        }
+
+        public Builder wordFinalizationMaxWaitTime(Double wordFinalizationMaxWaitTime) {
+            this.wordFinalizationMaxWaitTime = Optional.ofNullable(wordFinalizationMaxWaitTime);
+            return this;
+        }
+
+        /**
+         * <p>The maximum amount of silence in milliseconds allowed in a turn before end of turn is triggered. Only used when <code>enableUniversalStreamingApi</code> is true.</p>
+         * <p>@default 400</p>
+         */
+        @JsonSetter(value = "maxTurnSilence", nulls = Nulls.SKIP)
+        public Builder maxTurnSilence(Optional<Double> maxTurnSilence) {
+            this.maxTurnSilence = maxTurnSilence;
+            return this;
+        }
+
+        public Builder maxTurnSilence(Double maxTurnSilence) {
+            this.maxTurnSilence = Optional.ofNullable(maxTurnSilence);
+            return this;
+        }
+
+        /**
+         * <p>The WebSocket URL that the transcriber connects to.</p>
+         */
         @JsonSetter(value = "realtimeUrl", nulls = Nulls.SKIP)
         public Builder realtimeUrl(Optional<String> realtimeUrl) {
             this.realtimeUrl = realtimeUrl;
@@ -204,6 +412,9 @@ public final class FallbackAssemblyAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>Add up to 2500 characters of custom vocabulary.</p>
+         */
         @JsonSetter(value = "wordBoost", nulls = Nulls.SKIP)
         public Builder wordBoost(Optional<List<String>> wordBoost) {
             this.wordBoost = wordBoost;
@@ -215,6 +426,9 @@ public final class FallbackAssemblyAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>The duration of the end utterance silence threshold in milliseconds.</p>
+         */
         @JsonSetter(value = "endUtteranceSilenceThreshold", nulls = Nulls.SKIP)
         public Builder endUtteranceSilenceThreshold(Optional<Double> endUtteranceSilenceThreshold) {
             this.endUtteranceSilenceThreshold = endUtteranceSilenceThreshold;
@@ -226,6 +440,10 @@ public final class FallbackAssemblyAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>Disable partial transcripts.
+         * Set to <code>true</code> to not receive partial transcripts. Defaults to <code>false</code>.</p>
+         */
         @JsonSetter(value = "disablePartialTranscripts", nulls = Nulls.SKIP)
         public Builder disablePartialTranscripts(Optional<Boolean> disablePartialTranscripts) {
             this.disablePartialTranscripts = disablePartialTranscripts;
@@ -241,6 +459,12 @@ public final class FallbackAssemblyAiTranscriber {
             return new FallbackAssemblyAiTranscriber(
                     language,
                     confidenceThreshold,
+                    enableUniversalStreamingApi,
+                    formatTurns,
+                    endOfTurnConfidenceThreshold,
+                    minEndOfTurnSilenceWhenConfident,
+                    wordFinalizationMaxWaitTime,
+                    maxTurnSilence,
                     realtimeUrl,
                     wordBoost,
                     endUtteranceSilenceThreshold,

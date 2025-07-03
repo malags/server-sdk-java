@@ -4,30 +4,35 @@
 package com.vapi.api;
 
 import com.vapi.api.core.ClientOptions;
-import com.vapi.api.core.RequestOptions;
 import com.vapi.api.core.Suppliers;
 import com.vapi.api.resources.analytics.AsyncAnalyticsClient;
 import com.vapi.api.resources.assistants.AsyncAssistantsClient;
 import com.vapi.api.resources.calls.AsyncCallsClient;
+import com.vapi.api.resources.campaigns.AsyncCampaignsClient;
+import com.vapi.api.resources.chats.AsyncChatsClient;
 import com.vapi.api.resources.files.AsyncFilesClient;
 import com.vapi.api.resources.knowledgebases.AsyncKnowledgeBasesClient;
 import com.vapi.api.resources.logs.AsyncLogsClient;
 import com.vapi.api.resources.phonenumbers.AsyncPhoneNumbersClient;
+import com.vapi.api.resources.sessions.AsyncSessionsClient;
 import com.vapi.api.resources.squads.AsyncSquadsClient;
 import com.vapi.api.resources.testsuiteruns.AsyncTestSuiteRunsClient;
 import com.vapi.api.resources.testsuites.AsyncTestSuitesClient;
 import com.vapi.api.resources.testsuitetests.AsyncTestSuiteTestsClient;
 import com.vapi.api.resources.tools.AsyncToolsClient;
 import com.vapi.api.resources.workflow.AsyncWorkflowClient;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class AsyncVapi {
     protected final ClientOptions clientOptions;
 
-    private final AsyncRawVapi rawClient;
-
     protected final Supplier<AsyncCallsClient> callsClient;
+
+    protected final Supplier<AsyncChatsClient> chatsClient;
+
+    protected final Supplier<AsyncCampaignsClient> campaignsClient;
+
+    protected final Supplier<AsyncSessionsClient> sessionsClient;
 
     protected final Supplier<AsyncAssistantsClient> assistantsClient;
 
@@ -55,8 +60,10 @@ public class AsyncVapi {
 
     public AsyncVapi(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.rawClient = new AsyncRawVapi(clientOptions);
         this.callsClient = Suppliers.memoize(() -> new AsyncCallsClient(clientOptions));
+        this.chatsClient = Suppliers.memoize(() -> new AsyncChatsClient(clientOptions));
+        this.campaignsClient = Suppliers.memoize(() -> new AsyncCampaignsClient(clientOptions));
+        this.sessionsClient = Suppliers.memoize(() -> new AsyncSessionsClient(clientOptions));
         this.assistantsClient = Suppliers.memoize(() -> new AsyncAssistantsClient(clientOptions));
         this.phoneNumbersClient = Suppliers.memoize(() -> new AsyncPhoneNumbersClient(clientOptions));
         this.toolsClient = Suppliers.memoize(() -> new AsyncToolsClient(clientOptions));
@@ -71,23 +78,20 @@ public class AsyncVapi {
         this.logsClient = Suppliers.memoize(() -> new AsyncLogsClient(clientOptions));
     }
 
-    /**
-     * Get responses with HTTP metadata like headers
-     */
-    public AsyncRawVapi withRawResponse() {
-        return this.rawClient;
-    }
-
-    public CompletableFuture<Void> prometheusControllerIndex() {
-        return this.rawClient.prometheusControllerIndex().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Void> prometheusControllerIndex(RequestOptions requestOptions) {
-        return this.rawClient.prometheusControllerIndex(requestOptions).thenApply(response -> response.body());
-    }
-
     public AsyncCallsClient calls() {
         return this.callsClient.get();
+    }
+
+    public AsyncChatsClient chats() {
+        return this.chatsClient.get();
+    }
+
+    public AsyncCampaignsClient campaigns() {
+        return this.campaignsClient.get();
+    }
+
+    public AsyncSessionsClient sessions() {
+        return this.sessionsClient.get();
     }
 
     public AsyncAssistantsClient assistants() {

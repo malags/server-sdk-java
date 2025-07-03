@@ -90,6 +90,9 @@ public final class TrieveKnowledgeBaseCreate {
             return this;
         }
 
+        /**
+         * <p>These are the chunk plans used to create the dataset.</p>
+         */
         @JsonSetter(value = "chunkPlans", nulls = Nulls.SKIP)
         public Builder chunkPlans(List<TrieveKnowledgeBaseChunkPlan> chunkPlans) {
             this.chunkPlans.clear();

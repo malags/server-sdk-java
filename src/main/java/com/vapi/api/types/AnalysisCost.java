@@ -122,26 +122,41 @@ public final class AnalysisCost {
     }
 
     public interface AnalysisTypeStage {
+        /**
+         * <p>This is the type of analysis performed.</p>
+         */
         PromptTokensStage analysisType(@NotNull AnalysisCostAnalysisType analysisType);
 
         Builder from(AnalysisCost other);
     }
 
     public interface PromptTokensStage {
+        /**
+         * <p>This is the number of prompt tokens used in the analysis.</p>
+         */
         CompletionTokensStage promptTokens(double promptTokens);
     }
 
     public interface CompletionTokensStage {
+        /**
+         * <p>This is the number of completion tokens generated in the analysis.</p>
+         */
         CostStage completionTokens(double completionTokens);
     }
 
     public interface CostStage {
+        /**
+         * <p>This is the cost of the component in USD.</p>
+         */
         _FinalStage cost(double cost);
     }
 
     public interface _FinalStage {
         AnalysisCost build();
 
+        /**
+         * <p>This is the model that was used to perform the analysis.</p>
+         */
         _FinalStage model(Map<String, Object> model);
 
         _FinalStage putAllModel(Map<String, Object> model);
@@ -179,6 +194,7 @@ public final class AnalysisCost {
 
         /**
          * <p>This is the type of analysis performed.</p>
+         * <p>This is the type of analysis performed.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -189,6 +205,7 @@ public final class AnalysisCost {
         }
 
         /**
+         * <p>This is the number of prompt tokens used in the analysis.</p>
          * <p>This is the number of prompt tokens used in the analysis.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -201,6 +218,7 @@ public final class AnalysisCost {
 
         /**
          * <p>This is the number of completion tokens generated in the analysis.</p>
+         * <p>This is the number of completion tokens generated in the analysis.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -211,6 +229,7 @@ public final class AnalysisCost {
         }
 
         /**
+         * <p>This is the cost of the component in USD.</p>
          * <p>This is the cost of the component in USD.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -241,6 +260,9 @@ public final class AnalysisCost {
             return this;
         }
 
+        /**
+         * <p>This is the model that was used to perform the analysis.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Map<String, Object> model) {

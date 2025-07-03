@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.vapi.api.types.ApiRequestTool;
 import com.vapi.api.types.BashTool;
 import com.vapi.api.types.ComputerTool;
 import com.vapi.api.types.DtmfTool;
@@ -45,6 +46,10 @@ public final class ToolsGetResponse {
 
     public <T> T visit(Visitor<T> visitor) {
         return value.visit(visitor);
+    }
+
+    public static ToolsGetResponse apiRequest(ApiRequestTool value) {
+        return new ToolsGetResponse(new ApiRequestValue(value));
     }
 
     public static ToolsGetResponse dtmf(DtmfTool value) {
@@ -129,6 +134,10 @@ public final class ToolsGetResponse {
 
     public static ToolsGetResponse gohighlevelContactGet(GoHighLevelContactGetTool value) {
         return new ToolsGetResponse(new GohighlevelContactGetValue(value));
+    }
+
+    public boolean isApiRequest() {
+        return value instanceof ApiRequestValue;
     }
 
     public boolean isDtmf() {
@@ -217,6 +226,13 @@ public final class ToolsGetResponse {
 
     public boolean _isUnknown() {
         return value instanceof _UnknownValue;
+    }
+
+    public Optional<ApiRequestTool> getApiRequest() {
+        if (isApiRequest()) {
+            return Optional.of(((ApiRequestValue) value).value);
+        }
+        return Optional.empty();
     }
 
     public Optional<DtmfTool> getDtmf() {
@@ -379,6 +395,8 @@ public final class ToolsGetResponse {
     }
 
     public interface Visitor<T> {
+        T visitApiRequest(ApiRequestTool apiRequest);
+
         T visitDtmf(DtmfTool dtmf);
 
         T visitEndCall(EndCallTool endCall);
@@ -427,6 +445,7 @@ public final class ToolsGetResponse {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
+        @JsonSubTypes.Type(ApiRequestValue.class),
         @JsonSubTypes.Type(DtmfValue.class),
         @JsonSubTypes.Type(EndCallValue.class),
         @JsonSubTypes.Type(FunctionValue.class),
@@ -452,6 +471,45 @@ public final class ToolsGetResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
+    }
+
+    @JsonTypeName("apiRequest")
+    @JsonIgnoreProperties("type")
+    private static final class ApiRequestValue implements Value {
+        @JsonUnwrapped
+        private ApiRequestTool value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ApiRequestValue() {}
+
+        private ApiRequestValue(ApiRequestTool value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitApiRequest(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ApiRequestValue && equalTo((ApiRequestValue) other);
+        }
+
+        private boolean equalTo(ApiRequestValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ToolsGetResponse{" + "value: " + value + "}";
+        }
     }
 
     @JsonTypeName("dtmf")

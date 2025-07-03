@@ -65,7 +65,8 @@ public final class ConversationNode {
     }
 
     /**
-     * @return This is the model for the Conversation Task.
+     * @return This is the model for the node.
+     * <p>This overrides <code>workflow.model</code>.</p>
      */
     @JsonProperty("model")
     public Optional<ConversationNodeModel> getModel() {
@@ -73,7 +74,8 @@ public final class ConversationNode {
     }
 
     /**
-     * @return These are the options for the assistant's transcriber.
+     * @return This is the transcriber for the node.
+     * <p>This overrides <code>workflow.transcriber</code>.</p>
      */
     @JsonProperty("transcriber")
     public Optional<ConversationNodeTranscriber> getTranscriber() {
@@ -81,7 +83,8 @@ public final class ConversationNode {
     }
 
     /**
-     * @return These are the options for the assistant's voice.
+     * @return This is the voice for the node.
+     * <p>This overrides <code>workflow.voice</code>.</p>
      */
     @JsonProperty("voice")
     public Optional<ConversationNodeVoice> getVoice() {
@@ -102,7 +105,45 @@ public final class ConversationNode {
     }
 
     /**
-     * @return This is the plan that controls the variable extraction from the user's response.
+     * @return This is the plan that controls the variable extraction from the user's responses.
+     * <p>Usage:
+     * Use <code>schema</code> to specify what you want to extract from the user's responses.</p>
+     * <pre><code class="language-json">{
+     *   &quot;schema&quot;: {
+     *     &quot;type&quot;: &quot;object&quot;,
+     *     &quot;properties&quot;: {
+     *       &quot;user&quot;: {
+     *         &quot;type&quot;: &quot;object&quot;,
+     *         &quot;properties&quot;: {
+     *           &quot;name&quot;: {
+     *             &quot;type&quot;: &quot;string&quot;
+     *           },
+     *           &quot;age&quot;: {
+     *             &quot;type&quot;: &quot;number&quot;
+     *           }
+     *         }
+     *       }
+     *     }
+     *   }
+     * }
+     * </code></pre>
+     * <p>This will be extracted as <code>{{ user.name }}</code> and <code>{{ user.age }}</code> respectively.</p>
+     * <p>(Optional) Use <code>aliases</code> to create new variables.</p>
+     * <pre><code class="language-json">{
+     *   &quot;aliases&quot;: [
+     *     {
+     *       &quot;key&quot;: &quot;userAge&quot;,
+     *       &quot;value&quot;: &quot;{{user.age}}&quot;
+     *     },
+     *     {
+     *       &quot;key&quot;: &quot;userName&quot;,
+     *       &quot;value&quot;: &quot;{{user.name}}&quot;
+     *     }
+     *   ]
+     * }
+     * </code></pre>
+     * <p>This will be extracted as <code>{{ userAge }}</code> and <code>{{ userName }}</code> respectively.</p>
+     * <p>Note: The <code>schema</code> field is required for Conversation nodes if you want to extract variables from the user's responses. <code>aliases</code> is just a convenience.</p>
      */
     @JsonProperty("variableExtractionPlan")
     public Optional<VariableExtractionPlan> getVariableExtractionPlan() {
@@ -185,14 +226,26 @@ public final class ConversationNode {
     public interface _FinalStage {
         ConversationNode build();
 
+        /**
+         * <p>This is the model for the node.</p>
+         * <p>This overrides <code>workflow.model</code>.</p>
+         */
         _FinalStage model(Optional<ConversationNodeModel> model);
 
         _FinalStage model(ConversationNodeModel model);
 
+        /**
+         * <p>This is the transcriber for the node.</p>
+         * <p>This overrides <code>workflow.transcriber</code>.</p>
+         */
         _FinalStage transcriber(Optional<ConversationNodeTranscriber> transcriber);
 
         _FinalStage transcriber(ConversationNodeTranscriber transcriber);
 
+        /**
+         * <p>This is the voice for the node.</p>
+         * <p>This overrides <code>workflow.voice</code>.</p>
+         */
         _FinalStage voice(Optional<ConversationNodeVoice> voice);
 
         _FinalStage voice(ConversationNodeVoice voice);
@@ -201,18 +254,68 @@ public final class ConversationNode {
 
         _FinalStage prompt(String prompt);
 
+        /**
+         * <p>This is the plan for the global node.</p>
+         */
         _FinalStage globalNodePlan(Optional<GlobalNodePlan> globalNodePlan);
 
         _FinalStage globalNodePlan(GlobalNodePlan globalNodePlan);
 
+        /**
+         * <p>This is the plan that controls the variable extraction from the user's responses.</p>
+         * <p>Usage:
+         * Use <code>schema</code> to specify what you want to extract from the user's responses.</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;user&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;name&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;age&quot;: {
+         *             &quot;type&quot;: &quot;number&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ user.name }}</code> and <code>{{ user.age }}</code> respectively.</p>
+         * <p>(Optional) Use <code>aliases</code> to create new variables.</p>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;userAge&quot;,
+         *       &quot;value&quot;: &quot;{{user.age}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;userName&quot;,
+         *       &quot;value&quot;: &quot;{{user.name}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ userAge }}</code> and <code>{{ userName }}</code> respectively.</p>
+         * <p>Note: The <code>schema</code> field is required for Conversation nodes if you want to extract variables from the user's responses. <code>aliases</code> is just a convenience.</p>
+         */
         _FinalStage variableExtractionPlan(Optional<VariableExtractionPlan> variableExtractionPlan);
 
         _FinalStage variableExtractionPlan(VariableExtractionPlan variableExtractionPlan);
 
+        /**
+         * <p>This is whether or not the node is the start of the workflow.</p>
+         */
         _FinalStage isStart(Optional<Boolean> isStart);
 
         _FinalStage isStart(Boolean isStart);
 
+        /**
+         * <p>This is for metadata you want to store on the task.</p>
+         */
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
         _FinalStage metadata(Map<String, Object> metadata);
@@ -274,6 +377,9 @@ public final class ConversationNode {
             return this;
         }
 
+        /**
+         * <p>This is for metadata you want to store on the task.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
@@ -291,6 +397,9 @@ public final class ConversationNode {
             return this;
         }
 
+        /**
+         * <p>This is whether or not the node is the start of the workflow.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "isStart", nulls = Nulls.SKIP)
         public _FinalStage isStart(Optional<Boolean> isStart) {
@@ -299,7 +408,45 @@ public final class ConversationNode {
         }
 
         /**
-         * <p>This is the plan that controls the variable extraction from the user's response.</p>
+         * <p>This is the plan that controls the variable extraction from the user's responses.</p>
+         * <p>Usage:
+         * Use <code>schema</code> to specify what you want to extract from the user's responses.</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;user&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;name&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;age&quot;: {
+         *             &quot;type&quot;: &quot;number&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ user.name }}</code> and <code>{{ user.age }}</code> respectively.</p>
+         * <p>(Optional) Use <code>aliases</code> to create new variables.</p>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;userAge&quot;,
+         *       &quot;value&quot;: &quot;{{user.age}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;userName&quot;,
+         *       &quot;value&quot;: &quot;{{user.name}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ userAge }}</code> and <code>{{ userName }}</code> respectively.</p>
+         * <p>Note: The <code>schema</code> field is required for Conversation nodes if you want to extract variables from the user's responses. <code>aliases</code> is just a convenience.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -308,6 +455,47 @@ public final class ConversationNode {
             return this;
         }
 
+        /**
+         * <p>This is the plan that controls the variable extraction from the user's responses.</p>
+         * <p>Usage:
+         * Use <code>schema</code> to specify what you want to extract from the user's responses.</p>
+         * <pre><code class="language-json">{
+         *   &quot;schema&quot;: {
+         *     &quot;type&quot;: &quot;object&quot;,
+         *     &quot;properties&quot;: {
+         *       &quot;user&quot;: {
+         *         &quot;type&quot;: &quot;object&quot;,
+         *         &quot;properties&quot;: {
+         *           &quot;name&quot;: {
+         *             &quot;type&quot;: &quot;string&quot;
+         *           },
+         *           &quot;age&quot;: {
+         *             &quot;type&quot;: &quot;number&quot;
+         *           }
+         *         }
+         *       }
+         *     }
+         *   }
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ user.name }}</code> and <code>{{ user.age }}</code> respectively.</p>
+         * <p>(Optional) Use <code>aliases</code> to create new variables.</p>
+         * <pre><code class="language-json">{
+         *   &quot;aliases&quot;: [
+         *     {
+         *       &quot;key&quot;: &quot;userAge&quot;,
+         *       &quot;value&quot;: &quot;{{user.age}}&quot;
+         *     },
+         *     {
+         *       &quot;key&quot;: &quot;userName&quot;,
+         *       &quot;value&quot;: &quot;{{user.name}}&quot;
+         *     }
+         *   ]
+         * }
+         * </code></pre>
+         * <p>This will be extracted as <code>{{ userAge }}</code> and <code>{{ userName }}</code> respectively.</p>
+         * <p>Note: The <code>schema</code> field is required for Conversation nodes if you want to extract variables from the user's responses. <code>aliases</code> is just a convenience.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "variableExtractionPlan", nulls = Nulls.SKIP)
         public _FinalStage variableExtractionPlan(Optional<VariableExtractionPlan> variableExtractionPlan) {
@@ -325,6 +513,9 @@ public final class ConversationNode {
             return this;
         }
 
+        /**
+         * <p>This is the plan for the global node.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "globalNodePlan", nulls = Nulls.SKIP)
         public _FinalStage globalNodePlan(Optional<GlobalNodePlan> globalNodePlan) {
@@ -346,7 +537,8 @@ public final class ConversationNode {
         }
 
         /**
-         * <p>These are the options for the assistant's voice.</p>
+         * <p>This is the voice for the node.</p>
+         * <p>This overrides <code>workflow.voice</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -355,6 +547,10 @@ public final class ConversationNode {
             return this;
         }
 
+        /**
+         * <p>This is the voice for the node.</p>
+         * <p>This overrides <code>workflow.voice</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "voice", nulls = Nulls.SKIP)
         public _FinalStage voice(Optional<ConversationNodeVoice> voice) {
@@ -363,7 +559,8 @@ public final class ConversationNode {
         }
 
         /**
-         * <p>These are the options for the assistant's transcriber.</p>
+         * <p>This is the transcriber for the node.</p>
+         * <p>This overrides <code>workflow.transcriber</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -372,6 +569,10 @@ public final class ConversationNode {
             return this;
         }
 
+        /**
+         * <p>This is the transcriber for the node.</p>
+         * <p>This overrides <code>workflow.transcriber</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "transcriber", nulls = Nulls.SKIP)
         public _FinalStage transcriber(Optional<ConversationNodeTranscriber> transcriber) {
@@ -380,7 +581,8 @@ public final class ConversationNode {
         }
 
         /**
-         * <p>This is the model for the Conversation Task.</p>
+         * <p>This is the model for the node.</p>
+         * <p>This overrides <code>workflow.model</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -389,6 +591,10 @@ public final class ConversationNode {
             return this;
         }
 
+        /**
+         * <p>This is the model for the node.</p>
+         * <p>This overrides <code>workflow.model</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<ConversationNodeModel> model) {

@@ -97,6 +97,9 @@ public final class ClientInboundMessageTransfer {
             return this;
         }
 
+        /**
+         * <p>This is the destination to transfer the call to.</p>
+         */
         @JsonSetter(value = "destination", nulls = Nulls.SKIP)
         public Builder destination(Optional<ClientInboundMessageTransferDestination> destination) {
             this.destination = destination;
@@ -108,6 +111,9 @@ public final class ClientInboundMessageTransfer {
             return this;
         }
 
+        /**
+         * <p>This is the content to say.</p>
+         */
         @JsonSetter(value = "content", nulls = Nulls.SKIP)
         public Builder content(Optional<String> content) {
             this.content = content;

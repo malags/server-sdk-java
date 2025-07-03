@@ -135,6 +135,10 @@ public final class TimeRange {
             return this;
         }
 
+        /**
+         * <p>This is the time step for aggregations.</p>
+         * <p>If not provided, defaults to returning for the entire time range.</p>
+         */
         @JsonSetter(value = "step", nulls = Nulls.SKIP)
         public Builder step(Optional<TimeRangeStep> step) {
             this.step = step;
@@ -146,6 +150,10 @@ public final class TimeRange {
             return this;
         }
 
+        /**
+         * <p>This is the start date for the time range.</p>
+         * <p>If not provided, defaults to the 7 days ago.</p>
+         */
         @JsonSetter(value = "start", nulls = Nulls.SKIP)
         public Builder start(Optional<OffsetDateTime> start) {
             this.start = start;
@@ -157,6 +165,10 @@ public final class TimeRange {
             return this;
         }
 
+        /**
+         * <p>This is the end date for the time range.</p>
+         * <p>If not provided, defaults to now.</p>
+         */
         @JsonSetter(value = "end", nulls = Nulls.SKIP)
         public Builder end(Optional<OffsetDateTime> end) {
             this.end = end;
@@ -168,6 +180,10 @@ public final class TimeRange {
             return this;
         }
 
+        /**
+         * <p>This is the timezone you want to set for the query.</p>
+         * <p>If not provided, defaults to UTC.</p>
+         */
         @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
         public Builder timezone(Optional<String> timezone) {
             this.timezone = timezone;

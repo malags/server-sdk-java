@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebhookCredential.Builder.class)
 public final class WebhookCredential {
-    private final OAuth2AuthenticationPlan authenticationPlan;
+    private final WebhookCredentialAuthenticationPlan authenticationPlan;
 
     private final String id;
 
@@ -39,7 +39,7 @@ public final class WebhookCredential {
     private final Map<String, Object> additionalProperties;
 
     private WebhookCredential(
-            OAuth2AuthenticationPlan authenticationPlan,
+            WebhookCredentialAuthenticationPlan authenticationPlan,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -63,10 +63,10 @@ public final class WebhookCredential {
     }
 
     /**
-     * @return This is the authentication plan. Currently supports OAuth2 RFC 6749.
+     * @return This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.
      */
     @JsonProperty("authenticationPlan")
-    public OAuth2AuthenticationPlan getAuthenticationPlan() {
+    public WebhookCredentialAuthenticationPlan getAuthenticationPlan() {
         return authenticationPlan;
     }
 
@@ -161,34 +161,55 @@ public final class WebhookCredential {
     }
 
     public interface AuthenticationPlanStage {
-        IdStage authenticationPlan(@NotNull OAuth2AuthenticationPlan authenticationPlan);
+        /**
+         * <p>This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.</p>
+         */
+        IdStage authenticationPlan(@NotNull WebhookCredentialAuthenticationPlan authenticationPlan);
 
         Builder from(WebhookCredential other);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         AuthenticationSessionStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface AuthenticationSessionStage {
+        /**
+         * <p>This is the authentication session for the credential. Available for credentials that have an authentication plan.</p>
+         */
         _FinalStage authenticationSession(@NotNull Oauth2AuthenticationSession authenticationSession);
     }
 
     public interface _FinalStage {
         WebhookCredential build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -203,7 +224,7 @@ public final class WebhookCredential {
                     UpdatedAtStage,
                     AuthenticationSessionStage,
                     _FinalStage {
-        private OAuth2AuthenticationPlan authenticationPlan;
+        private WebhookCredentialAuthenticationPlan authenticationPlan;
 
         private String id;
 
@@ -235,17 +256,19 @@ public final class WebhookCredential {
         }
 
         /**
-         * <p>This is the authentication plan. Currently supports OAuth2 RFC 6749.</p>
+         * <p>This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.</p>
+         * <p>This is the authentication plan. Supports OAuth2 RFC 6749 and HMAC signing.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("authenticationPlan")
-        public IdStage authenticationPlan(@NotNull OAuth2AuthenticationPlan authenticationPlan) {
+        public IdStage authenticationPlan(@NotNull WebhookCredentialAuthenticationPlan authenticationPlan) {
             this.authenticationPlan = Objects.requireNonNull(authenticationPlan, "authenticationPlan must not be null");
             return this;
         }
 
         /**
+         * <p>This is the unique identifier for the credential.</p>
          * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -258,6 +281,7 @@ public final class WebhookCredential {
 
         /**
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -268,6 +292,7 @@ public final class WebhookCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -280,6 +305,7 @@ public final class WebhookCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -290,6 +316,7 @@ public final class WebhookCredential {
         }
 
         /**
+         * <p>This is the authentication session for the credential. Available for credentials that have an authentication plan.</p>
          * <p>This is the authentication session for the credential. Available for credentials that have an authentication plan.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -311,6 +338,9 @@ public final class WebhookCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

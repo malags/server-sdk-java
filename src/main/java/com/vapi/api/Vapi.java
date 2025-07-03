@@ -4,15 +4,17 @@
 package com.vapi.api;
 
 import com.vapi.api.core.ClientOptions;
-import com.vapi.api.core.RequestOptions;
 import com.vapi.api.core.Suppliers;
 import com.vapi.api.resources.analytics.AnalyticsClient;
 import com.vapi.api.resources.assistants.AssistantsClient;
 import com.vapi.api.resources.calls.CallsClient;
+import com.vapi.api.resources.campaigns.CampaignsClient;
+import com.vapi.api.resources.chats.ChatsClient;
 import com.vapi.api.resources.files.FilesClient;
 import com.vapi.api.resources.knowledgebases.KnowledgeBasesClient;
 import com.vapi.api.resources.logs.LogsClient;
 import com.vapi.api.resources.phonenumbers.PhoneNumbersClient;
+import com.vapi.api.resources.sessions.SessionsClient;
 import com.vapi.api.resources.squads.SquadsClient;
 import com.vapi.api.resources.testsuiteruns.TestSuiteRunsClient;
 import com.vapi.api.resources.testsuites.TestSuitesClient;
@@ -24,9 +26,13 @@ import java.util.function.Supplier;
 public class Vapi {
     protected final ClientOptions clientOptions;
 
-    private final RawVapi rawClient;
-
     protected final Supplier<CallsClient> callsClient;
+
+    protected final Supplier<ChatsClient> chatsClient;
+
+    protected final Supplier<CampaignsClient> campaignsClient;
+
+    protected final Supplier<SessionsClient> sessionsClient;
 
     protected final Supplier<AssistantsClient> assistantsClient;
 
@@ -54,8 +60,10 @@ public class Vapi {
 
     public Vapi(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.rawClient = new RawVapi(clientOptions);
         this.callsClient = Suppliers.memoize(() -> new CallsClient(clientOptions));
+        this.chatsClient = Suppliers.memoize(() -> new ChatsClient(clientOptions));
+        this.campaignsClient = Suppliers.memoize(() -> new CampaignsClient(clientOptions));
+        this.sessionsClient = Suppliers.memoize(() -> new SessionsClient(clientOptions));
         this.assistantsClient = Suppliers.memoize(() -> new AssistantsClient(clientOptions));
         this.phoneNumbersClient = Suppliers.memoize(() -> new PhoneNumbersClient(clientOptions));
         this.toolsClient = Suppliers.memoize(() -> new ToolsClient(clientOptions));
@@ -70,23 +78,20 @@ public class Vapi {
         this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
     }
 
-    /**
-     * Get responses with HTTP metadata like headers
-     */
-    public RawVapi withRawResponse() {
-        return this.rawClient;
-    }
-
-    public void prometheusControllerIndex() {
-        this.rawClient.prometheusControllerIndex().body();
-    }
-
-    public void prometheusControllerIndex(RequestOptions requestOptions) {
-        this.rawClient.prometheusControllerIndex(requestOptions).body();
-    }
-
     public CallsClient calls() {
         return this.callsClient.get();
+    }
+
+    public ChatsClient chats() {
+        return this.chatsClient.get();
+    }
+
+    public CampaignsClient campaigns() {
+        return this.campaignsClient.get();
+    }
+
+    public SessionsClient sessions() {
+        return this.sessionsClient.get();
     }
 
     public AssistantsClient assistants() {

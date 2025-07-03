@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Edge.Builder.class)
 public final class Edge {
-    private final Optional<EdgeCondition> condition;
+    private final Optional<AiEdgeCondition> condition;
 
     private final String from;
 
@@ -32,7 +32,7 @@ public final class Edge {
     private final Map<String, Object> additionalProperties;
 
     private Edge(
-            Optional<EdgeCondition> condition,
+            Optional<AiEdgeCondition> condition,
             String from,
             String to,
             Optional<Map<String, Object>> metadata,
@@ -45,7 +45,7 @@ public final class Edge {
     }
 
     @JsonProperty("condition")
-    public Optional<EdgeCondition> getCondition() {
+    public Optional<AiEdgeCondition> getCondition() {
         return condition;
     }
 
@@ -112,10 +112,13 @@ public final class Edge {
     public interface _FinalStage {
         Edge build();
 
-        _FinalStage condition(Optional<EdgeCondition> condition);
+        _FinalStage condition(Optional<AiEdgeCondition> condition);
 
-        _FinalStage condition(EdgeCondition condition);
+        _FinalStage condition(AiEdgeCondition condition);
 
+        /**
+         * <p>This is for metadata you want to store on the edge.</p>
+         */
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
         _FinalStage metadata(Map<String, Object> metadata);
@@ -129,7 +132,7 @@ public final class Edge {
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
-        private Optional<EdgeCondition> condition = Optional.empty();
+        private Optional<AiEdgeCondition> condition = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -169,6 +172,9 @@ public final class Edge {
             return this;
         }
 
+        /**
+         * <p>This is for metadata you want to store on the edge.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<Map<String, Object>> metadata) {
@@ -177,14 +183,14 @@ public final class Edge {
         }
 
         @java.lang.Override
-        public _FinalStage condition(EdgeCondition condition) {
+        public _FinalStage condition(AiEdgeCondition condition) {
             this.condition = Optional.ofNullable(condition);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "condition", nulls = Nulls.SKIP)
-        public _FinalStage condition(Optional<EdgeCondition> condition) {
+        public _FinalStage condition(Optional<AiEdgeCondition> condition) {
             this.condition = condition;
             return this;
         }

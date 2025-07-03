@@ -220,6 +220,9 @@ public final class AnthropicModel {
     }
 
     public interface ModelStage {
+        /**
+         * <p>The specific Anthropic/Claude model that will be used.</p>
+         */
         _FinalStage model(@NotNull AnthropicModelModel model);
 
         Builder from(AnthropicModel other);
@@ -228,42 +231,80 @@ public final class AnthropicModel {
     public interface _FinalStage {
         AnthropicModel build();
 
+        /**
+         * <p>This is the starting state for the conversation.</p>
+         */
         _FinalStage messages(Optional<List<OpenAiMessage>> messages);
 
         _FinalStage messages(List<OpenAiMessage> messages);
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use existing tools, use <code>toolIds</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         _FinalStage tools(Optional<List<AnthropicModelToolsItem>> tools);
 
         _FinalStage tools(List<AnthropicModelToolsItem> tools);
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use transient tools, use <code>tools</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         _FinalStage toolIds(Optional<List<String>> toolIds);
 
         _FinalStage toolIds(List<String> toolIds);
 
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         */
         _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase);
 
         _FinalStage knowledgeBase(CreateCustomKnowledgeBaseDto knowledgeBase);
 
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         */
         _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId);
 
         _FinalStage knowledgeBaseId(String knowledgeBaseId);
 
+        /**
+         * <p>Optional configuration for Anthropic's thinking feature.
+         * Only applicable for claude-3-7-sonnet-20250219 model.
+         * If provided, maxTokens must be greater than thinking.budgetTokens.</p>
+         */
         _FinalStage thinking(Optional<AnthropicThinkingConfig> thinking);
 
         _FinalStage thinking(AnthropicThinkingConfig thinking);
 
+        /**
+         * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
+         */
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
 
+        /**
+         * <p>This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.</p>
+         */
         _FinalStage maxTokens(Optional<Double> maxTokens);
 
         _FinalStage maxTokens(Double maxTokens);
 
+        /**
+         * <p>This determines whether we detect user's emotion while they speak and send it as an additional info to model.</p>
+         * <p>Default <code>false</code> because the model is usually are good at understanding the user's emotion from text.</p>
+         * <p>@default false</p>
+         */
         _FinalStage emotionRecognitionEnabled(Optional<Boolean> emotionRecognitionEnabled);
 
         _FinalStage emotionRecognitionEnabled(Boolean emotionRecognitionEnabled);
 
+        /**
+         * <p>This sets how many turns at the start of the conversation to use a smaller, faster model from the same provider before switching to the primary model. Example, gpt-3.5-turbo if provider is openai.</p>
+         * <p>Default is 0.</p>
+         * <p>@default 0</p>
+         */
         _FinalStage numFastTurns(Optional<Double> numFastTurns);
 
         _FinalStage numFastTurns(Double numFastTurns);
@@ -316,6 +357,7 @@ public final class AnthropicModel {
 
         /**
          * <p>The specific Anthropic/Claude model that will be used.</p>
+         * <p>The specific Anthropic/Claude model that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -337,6 +379,11 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This sets how many turns at the start of the conversation to use a smaller, faster model from the same provider before switching to the primary model. Example, gpt-3.5-turbo if provider is openai.</p>
+         * <p>Default is 0.</p>
+         * <p>@default 0</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "numFastTurns", nulls = Nulls.SKIP)
         public _FinalStage numFastTurns(Optional<Double> numFastTurns) {
@@ -356,6 +403,11 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This determines whether we detect user's emotion while they speak and send it as an additional info to model.</p>
+         * <p>Default <code>false</code> because the model is usually are good at understanding the user's emotion from text.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "emotionRecognitionEnabled", nulls = Nulls.SKIP)
         public _FinalStage emotionRecognitionEnabled(Optional<Boolean> emotionRecognitionEnabled) {
@@ -373,6 +425,9 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "maxTokens", nulls = Nulls.SKIP)
         public _FinalStage maxTokens(Optional<Double> maxTokens) {
@@ -390,6 +445,9 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
@@ -409,6 +467,11 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>Optional configuration for Anthropic's thinking feature.
+         * Only applicable for claude-3-7-sonnet-20250219 model.
+         * If provided, maxTokens must be greater than thinking.budgetTokens.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "thinking", nulls = Nulls.SKIP)
         public _FinalStage thinking(Optional<AnthropicThinkingConfig> thinking) {
@@ -426,6 +489,9 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "knowledgeBaseId", nulls = Nulls.SKIP)
         public _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId) {
@@ -443,6 +509,9 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "knowledgeBase", nulls = Nulls.SKIP)
         public _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase) {
@@ -461,6 +530,10 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use transient tools, use <code>tools</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "toolIds", nulls = Nulls.SKIP)
         public _FinalStage toolIds(Optional<List<String>> toolIds) {
@@ -479,6 +552,10 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use existing tools, use <code>toolIds</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "tools", nulls = Nulls.SKIP)
         public _FinalStage tools(Optional<List<AnthropicModelToolsItem>> tools) {
@@ -496,6 +573,9 @@ public final class AnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This is the starting state for the conversation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public _FinalStage messages(Optional<List<OpenAiMessage>> messages) {

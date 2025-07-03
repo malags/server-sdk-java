@@ -91,18 +91,27 @@ public final class SipAuthentication {
     }
 
     public interface UsernameStage {
+        /**
+         * <p>This will be expected in the <code>username</code> field of the <code>authorization</code> header of the SIP INVITE.</p>
+         */
         PasswordStage username(@NotNull String username);
 
         Builder from(SipAuthentication other);
     }
 
     public interface PasswordStage {
+        /**
+         * <p>This will be expected to generate the <code>response</code> field of the <code>authorization</code> header of the SIP INVITE, through digest authentication.</p>
+         */
         _FinalStage password(@NotNull String password);
     }
 
     public interface _FinalStage {
         SipAuthentication build();
 
+        /**
+         * <p>This will be expected in the <code>realm</code> field of the <code>authorization</code> header of the SIP INVITE. Defaults to sip.vapi.ai.</p>
+         */
         _FinalStage realm(Optional<String> realm);
 
         _FinalStage realm(String realm);
@@ -131,6 +140,7 @@ public final class SipAuthentication {
 
         /**
          * <p>This will be expected in the <code>username</code> field of the <code>authorization</code> header of the SIP INVITE.</p>
+         * <p>This will be expected in the <code>username</code> field of the <code>authorization</code> header of the SIP INVITE.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -141,6 +151,7 @@ public final class SipAuthentication {
         }
 
         /**
+         * <p>This will be expected to generate the <code>response</code> field of the <code>authorization</code> header of the SIP INVITE, through digest authentication.</p>
          * <p>This will be expected to generate the <code>response</code> field of the <code>authorization</code> header of the SIP INVITE, through digest authentication.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -161,6 +172,9 @@ public final class SipAuthentication {
             return this;
         }
 
+        /**
+         * <p>This will be expected in the <code>realm</code> field of the <code>authorization</code> header of the SIP INVITE. Defaults to sip.vapi.ai.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "realm", nulls = Nulls.SKIP)
         public _FinalStage realm(Optional<String> realm) {

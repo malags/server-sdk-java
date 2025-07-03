@@ -82,6 +82,9 @@ public final class AnalyticsQueryDto {
             return this;
         }
 
+        /**
+         * <p>This is the list of metric queries you want to perform.</p>
+         */
         @JsonSetter(value = "queries", nulls = Nulls.SKIP)
         public Builder queries(List<AnalyticsQuery> queries) {
             this.queries.clear();

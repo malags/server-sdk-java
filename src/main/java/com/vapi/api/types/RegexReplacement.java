@@ -101,18 +101,36 @@ public final class RegexReplacement {
     }
 
     public interface RegexStage {
+        /**
+         * <p>This is the regex pattern to replace.</p>
+         * <p>Note:</p>
+         * <ul>
+         * <li>This works by using the <code>string.replace</code> method in Node.JS. Eg. <code>&quot;hello there&quot;.replace(/hello/g, &quot;hi&quot;)</code> will return <code>&quot;hi there&quot;</code>.</li>
+         * </ul>
+         * <p>Hot tip:</p>
+         * <ul>
+         * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
+         * </ul>
+         */
         ValueStage regex(@NotNull String regex);
 
         Builder from(RegexReplacement other);
     }
 
     public interface ValueStage {
+        /**
+         * <p>This is the value that will replace the match.</p>
+         */
         _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
         RegexReplacement build();
 
+        /**
+         * <p>These are the options for the regex replacement. Defaults to all disabled.</p>
+         * <p>@default []</p>
+         */
         _FinalStage options(Optional<List<RegexOption>> options);
 
         _FinalStage options(List<RegexOption> options);
@@ -149,6 +167,15 @@ public final class RegexReplacement {
          * <ul>
          * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
          * </ul>
+         * <p>This is the regex pattern to replace.</p>
+         * <p>Note:</p>
+         * <ul>
+         * <li>This works by using the <code>string.replace</code> method in Node.JS. Eg. <code>&quot;hello there&quot;.replace(/hello/g, &quot;hi&quot;)</code> will return <code>&quot;hi there&quot;</code>.</li>
+         * </ul>
+         * <p>Hot tip:</p>
+         * <ul>
+         * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -159,6 +186,7 @@ public final class RegexReplacement {
         }
 
         /**
+         * <p>This is the value that will replace the match.</p>
          * <p>This is the value that will replace the match.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -180,6 +208,10 @@ public final class RegexReplacement {
             return this;
         }
 
+        /**
+         * <p>These are the options for the regex replacement. Defaults to all disabled.</p>
+         * <p>@default []</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "options", nulls = Nulls.SKIP)
         public _FinalStage options(Optional<List<RegexOption>> options) {

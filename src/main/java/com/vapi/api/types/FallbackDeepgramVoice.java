@@ -124,6 +124,9 @@ public final class FallbackDeepgramVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the provider-specific ID that will be used.</p>
+         */
         _FinalStage voiceId(@NotNull FallbackDeepgramVoiceId voiceId);
 
         Builder from(FallbackDeepgramVoice other);
@@ -132,18 +135,32 @@ public final class FallbackDeepgramVoice {
     public interface _FinalStage {
         FallbackDeepgramVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the model that will be used. Defaults to 'aura-2' when not specified.</p>
+         */
         _FinalStage model(Optional<FallbackDeepgramVoiceModel> model);
 
         _FinalStage model(FallbackDeepgramVoiceModel model);
 
+        /**
+         * <p>If set to true, this will add mip_opt_out=true as a query parameter of all API requests. See https://developers.deepgram.com/docs/the-deepgram-model-improvement-partnership-program#want-to-opt-out</p>
+         * <p>This will only be used if you are using your own Deepgram API key.</p>
+         * <p>@default false</p>
+         */
         _FinalStage mipOptOut(Optional<Boolean> mipOptOut);
 
         _FinalStage mipOptOut(Boolean mipOptOut);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -178,6 +195,7 @@ public final class FallbackDeepgramVoice {
 
         /**
          * <p>This is the provider-specific ID that will be used.</p>
+         * <p>This is the provider-specific ID that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -197,6 +215,9 @@ public final class FallbackDeepgramVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -216,6 +237,11 @@ public final class FallbackDeepgramVoice {
             return this;
         }
 
+        /**
+         * <p>If set to true, this will add mip_opt_out=true as a query parameter of all API requests. See https://developers.deepgram.com/docs/the-deepgram-model-improvement-partnership-program#want-to-opt-out</p>
+         * <p>This will only be used if you are using your own Deepgram API key.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "mipOptOut", nulls = Nulls.SKIP)
         public _FinalStage mipOptOut(Optional<Boolean> mipOptOut) {
@@ -233,6 +259,9 @@ public final class FallbackDeepgramVoice {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used. Defaults to 'aura-2' when not specified.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<FallbackDeepgramVoiceModel> model) {
@@ -250,6 +279,9 @@ public final class FallbackDeepgramVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

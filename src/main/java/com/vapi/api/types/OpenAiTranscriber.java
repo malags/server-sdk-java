@@ -94,6 +94,9 @@ public final class OpenAiTranscriber {
     }
 
     public interface ModelStage {
+        /**
+         * <p>This is the model that will be used for the transcription.</p>
+         */
         _FinalStage model(@NotNull OpenAiTranscriberModel model);
 
         Builder from(OpenAiTranscriber other);
@@ -102,10 +105,16 @@ public final class OpenAiTranscriber {
     public interface _FinalStage {
         OpenAiTranscriber build();
 
+        /**
+         * <p>This is the language that will be set for the transcription.</p>
+         */
         _FinalStage language(Optional<OpenAiTranscriberLanguage> language);
 
         _FinalStage language(OpenAiTranscriberLanguage language);
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         _FinalStage fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan);
 
         _FinalStage fallbackPlan(FallbackTranscriberPlan fallbackPlan);
@@ -134,6 +143,7 @@ public final class OpenAiTranscriber {
 
         /**
          * <p>This is the model that will be used for the transcription.</p>
+         * <p>This is the model that will be used for the transcription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -153,6 +163,9 @@ public final class OpenAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public _FinalStage fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
@@ -170,6 +183,9 @@ public final class OpenAiTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public _FinalStage language(Optional<OpenAiTranscriberLanguage> language) {

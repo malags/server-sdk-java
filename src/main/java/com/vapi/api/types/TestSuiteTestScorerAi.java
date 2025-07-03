@@ -74,6 +74,9 @@ public final class TestSuiteTestScorerAi {
     }
 
     public interface RubricStage {
+        /**
+         * <p>This is the rubric used by the AI scorer.</p>
+         */
         _FinalStage rubric(@NotNull String rubric);
 
         Builder from(TestSuiteTestScorerAi other);
@@ -99,6 +102,7 @@ public final class TestSuiteTestScorerAi {
         }
 
         /**
+         * <p>This is the rubric used by the AI scorer.</p>
          * <p>This is the rubric used by the AI scorer.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

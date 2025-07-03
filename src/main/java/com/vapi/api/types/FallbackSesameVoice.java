@@ -49,14 +49,6 @@ public final class FallbackSesameVoice {
     }
 
     /**
-     * @return This is the voice provider that will be used.
-     */
-    @JsonProperty("provider")
-    public String getProvider() {
-        return "sesame";
-    }
-
-    /**
      * @return This is the provider-specific ID that will be used.
      */
     @JsonProperty("voiceId")
@@ -112,6 +104,9 @@ public final class FallbackSesameVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the provider-specific ID that will be used.</p>
+         */
         _FinalStage voiceId(@NotNull String voiceId);
 
         Builder from(FallbackSesameVoice other);
@@ -120,10 +115,16 @@ public final class FallbackSesameVoice {
     public interface _FinalStage {
         FallbackSesameVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -152,6 +153,7 @@ public final class FallbackSesameVoice {
 
         /**
          * <p>This is the provider-specific ID that will be used.</p>
+         * <p>This is the provider-specific ID that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -171,6 +173,9 @@ public final class FallbackSesameVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -188,6 +193,9 @@ public final class FallbackSesameVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

@@ -82,6 +82,9 @@ public final class CreateGoHighLevelMcpCredentialDto {
     }
 
     public interface AuthenticationSessionStage {
+        /**
+         * <p>This is the authentication session for the credential.</p>
+         */
         _FinalStage authenticationSession(@NotNull Oauth2AuthenticationSession authenticationSession);
 
         Builder from(CreateGoHighLevelMcpCredentialDto other);
@@ -90,6 +93,9 @@ public final class CreateGoHighLevelMcpCredentialDto {
     public interface _FinalStage {
         CreateGoHighLevelMcpCredentialDto build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -115,6 +121,7 @@ public final class CreateGoHighLevelMcpCredentialDto {
 
         /**
          * <p>This is the authentication session for the credential.</p>
+         * <p>This is the authentication session for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -135,6 +142,9 @@ public final class CreateGoHighLevelMcpCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

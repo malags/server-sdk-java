@@ -197,6 +197,9 @@ public final class TavusVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the provider-specific ID that will be used.</p>
+         */
         _FinalStage voiceId(@NotNull TavusVoiceVoiceId voiceId);
 
         Builder from(TavusVoice other);
@@ -205,38 +208,65 @@ public final class TavusVoice {
     public interface _FinalStage {
         TavusVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
 
+        /**
+         * <p>This is the unique identifier for the persona that the replica will use in the conversation.</p>
+         */
         _FinalStage personaId(Optional<String> personaId);
 
         _FinalStage personaId(String personaId);
 
+        /**
+         * <p>This is the url that will receive webhooks with updates regarding the conversation state.</p>
+         */
         _FinalStage callbackUrl(Optional<String> callbackUrl);
 
         _FinalStage callbackUrl(String callbackUrl);
 
+        /**
+         * <p>This is the name for the conversation.</p>
+         */
         _FinalStage conversationName(Optional<String> conversationName);
 
         _FinalStage conversationName(String conversationName);
 
+        /**
+         * <p>This is the context that will be appended to any context provided in the persona, if one is provided.</p>
+         */
         _FinalStage conversationalContext(Optional<String> conversationalContext);
 
         _FinalStage conversationalContext(String conversationalContext);
 
+        /**
+         * <p>This is the custom greeting that the replica will give once a participant joines the conversation.</p>
+         */
         _FinalStage customGreeting(Optional<String> customGreeting);
 
         _FinalStage customGreeting(String customGreeting);
 
+        /**
+         * <p>These are optional properties used to customize the conversation.</p>
+         */
         _FinalStage properties(Optional<TavusConversationProperties> properties);
 
         _FinalStage properties(TavusConversationProperties properties);
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
 
         _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
@@ -286,6 +316,7 @@ public final class TavusVoice {
 
         /**
          * <p>This is the provider-specific ID that will be used.</p>
+         * <p>This is the provider-specific ID that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -305,6 +336,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
@@ -322,6 +356,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>These are optional properties used to customize the conversation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "properties", nulls = Nulls.SKIP)
         public _FinalStage properties(Optional<TavusConversationProperties> properties) {
@@ -339,6 +376,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the custom greeting that the replica will give once a participant joines the conversation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customGreeting", nulls = Nulls.SKIP)
         public _FinalStage customGreeting(Optional<String> customGreeting) {
@@ -356,6 +396,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the context that will be appended to any context provided in the persona, if one is provided.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "conversationalContext", nulls = Nulls.SKIP)
         public _FinalStage conversationalContext(Optional<String> conversationalContext) {
@@ -373,6 +416,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the name for the conversation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "conversationName", nulls = Nulls.SKIP)
         public _FinalStage conversationName(Optional<String> conversationName) {
@@ -390,6 +436,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the url that will receive webhooks with updates regarding the conversation state.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "callbackUrl", nulls = Nulls.SKIP)
         public _FinalStage callbackUrl(Optional<String> callbackUrl) {
@@ -407,6 +456,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the unique identifier for the persona that the replica will use in the conversation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "personaId", nulls = Nulls.SKIP)
         public _FinalStage personaId(Optional<String> personaId) {
@@ -424,6 +476,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -441,6 +496,9 @@ public final class TavusVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

@@ -66,6 +66,9 @@ public final class ClientMessage {
     }
 
     public interface MessageStage {
+        /**
+         * <p>These are all the messages that can be sent to the client-side SDKs during the call. Configure the messages you'd like to receive in <code>assistant.clientMessages</code>.</p>
+         */
         _FinalStage message(@NotNull ClientMessageMessage message);
 
         Builder from(ClientMessage other);
@@ -91,6 +94,7 @@ public final class ClientMessage {
         }
 
         /**
+         * <p>These are all the messages that can be sent to the client-side SDKs during the call. Configure the messages you'd like to receive in <code>assistant.clientMessages</code>.</p>
          * <p>These are all the messages that can be sent to the client-side SDKs during the call. Configure the messages you'd like to receive in <code>assistant.clientMessages</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

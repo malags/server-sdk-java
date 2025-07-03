@@ -90,6 +90,9 @@ public final class PhoneNumberHookCallRinging {
             return this;
         }
 
+        /**
+         * <p>This is the set of actions to perform when the hook triggers</p>
+         */
         @JsonSetter(value = "do", nulls = Nulls.SKIP)
         public Builder do_(List<PhoneNumberHookCallRingingDoItem> do_) {
             this.do_.clear();

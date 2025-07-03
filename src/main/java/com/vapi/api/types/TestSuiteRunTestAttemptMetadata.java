@@ -66,6 +66,9 @@ public final class TestSuiteRunTestAttemptMetadata {
     }
 
     public interface SessionIdStage {
+        /**
+         * <p>This is the session ID for the test attempt.</p>
+         */
         _FinalStage sessionId(@NotNull String sessionId);
 
         Builder from(TestSuiteRunTestAttemptMetadata other);
@@ -91,6 +94,7 @@ public final class TestSuiteRunTestAttemptMetadata {
         }
 
         /**
+         * <p>This is the session ID for the test attempt.</p>
          * <p>This is the session ID for the test attempt.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

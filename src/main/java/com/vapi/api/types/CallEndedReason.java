@@ -20,9 +20,11 @@ public enum CallEndedReason {
 
     ASSISTANT_REQUEST_RETURNED_FORWARDING_PHONE_NUMBER("assistant-request-returned-forwarding-phone-number"),
 
-    CALL_START_ERROR_GET_ORG("call.start.error-get-org"),
+    SCHEDULED_CALL_DELETED("scheduled-call-deleted"),
 
-    CALL_START_ERROR_GET_SUBSCRIPTION("call.start.error-get-subscription"),
+    CALL_START_ERROR_VAPIFAULT_GET_ORG("call.start.error-vapifault-get-org"),
+
+    CALL_START_ERROR_VAPIFAULT_GET_SUBSCRIPTION("call.start.error-vapifault-get-subscription"),
 
     CALL_START_ERROR_GET_ASSISTANT("call.start.error-get-assistant"),
 
@@ -37,6 +39,16 @@ public enum CallEndedReason {
     CALL_START_ERROR_VAPI_NUMBER_OUTBOUND_DAILY_LIMIT("call.start.error-vapi-number-outbound-daily-limit"),
 
     CALL_START_ERROR_GET_TRANSPORT("call.start.error-get-transport"),
+
+    CALL_START_ERROR_SUBSCRIPTION_WALLET_DOES_NOT_EXIST("call.start.error-subscription-wallet-does-not-exist"),
+
+    CALL_START_ERROR_SUBSCRIPTION_FROZEN("call.start.error-subscription-frozen"),
+
+    CALL_START_ERROR_SUBSCRIPTION_INSUFFICIENT_CREDITS("call.start.error-subscription-insufficient-credits"),
+
+    CALL_START_ERROR_SUBSCRIPTION_UPGRADE_FAILED("call.start.error-subscription-upgrade-failed"),
+
+    CALL_START_ERROR_SUBSCRIPTION_CONCURRENCY_LIMIT_REACHED("call.start.error-subscription-concurrency-limit-reached"),
 
     ASSISTANT_NOT_VALID("assistant-not-valid"),
 
@@ -68,6 +80,8 @@ public enum CallEndedReason {
 
     PIPELINE_ERROR_SESAME_VOICE_FAILED("pipeline-error-sesame-voice-failed"),
 
+    PIPELINE_ERROR_INWORLD_VOICE_FAILED("pipeline-error-inworld-voice-failed"),
+
     PIPELINE_ERROR_TAVUS_VIDEO_FAILED("pipeline-error-tavus-video-failed"),
 
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_OPENAI_VOICE_FAILED("call.in-progress.error-vapifault-openai-voice-failed"),
@@ -95,6 +109,8 @@ public enum CallEndedReason {
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_HUME_VOICE_FAILED("call.in-progress.error-vapifault-hume-voice-failed"),
 
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_SESAME_VOICE_FAILED("call.in-progress.error-vapifault-sesame-voice-failed"),
+
+    CALL_IN_PROGRESS_ERROR_VAPIFAULT_INWORLD_VOICE_FAILED("call.in-progress.error-vapifault-inworld-voice-failed"),
 
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_TAVUS_VIDEO_FAILED("call.in-progress.error-vapifault-tavus-video-failed"),
 
@@ -194,8 +210,6 @@ public enum CallEndedReason {
 
     WORKER_SHUTDOWN("worker-shutdown"),
 
-    UNKNOWN_ERROR("unknown-error"),
-
     VONAGE_DISCONNECTED("vonage-disconnected"),
 
     VONAGE_FAILED_TO_CONNECT_CALL("vonage-failed-to-connect-call"),
@@ -218,6 +232,12 @@ public enum CallEndedReason {
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_CALL_STARTED_BUT_CONNECTION_TO_TRANSPORT_MISSING(
             "call.in-progress.error-vapifault-call-started-but-connection-to-transport-missing"),
 
+    CALL_IN_PROGRESS_ERROR_VAPIFAULT_WORKER_DIED("call.in-progress.error-vapifault-worker-died"),
+
+    CALL_IN_PROGRESS_TWILIO_COMPLETED_CALL("call.in-progress.twilio-completed-call"),
+
+    CALL_IN_PROGRESS_SIP_COMPLETED_CALL("call.in-progress.sip-completed-call"),
+
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_OPENAI_LLM_FAILED("call.in-progress.error-vapifault-openai-llm-failed"),
 
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_AZURE_OPENAI_LLM_FAILED(
@@ -237,6 +257,9 @@ public enum CallEndedReason {
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_CEREBRAS_LLM_FAILED("call.in-progress.error-vapifault-cerebras-llm-failed"),
 
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_DEEP_SEEK_LLM_FAILED("call.in-progress.error-vapifault-deep-seek-llm-failed"),
+
+    CALL_IN_PROGRESS_ERROR_VAPIFAULT_CHAT_PIPELINE_FAILED_TO_START(
+            "call.in-progress.error-vapifault-chat-pipeline-failed-to-start"),
 
     PIPELINE_ERROR_OPENAI_400_BAD_REQUEST_VALIDATION_FAILED("pipeline-error-openai-400-bad-request-validation-failed"),
 
@@ -908,6 +931,8 @@ public enum CallEndedReason {
 
     PIPELINE_ERROR_CARTESIA_500_SERVER_ERROR("pipeline-error-cartesia-500-server-error"),
 
+    PIPELINE_ERROR_CARTESIA_502_SERVER_ERROR("pipeline-error-cartesia-502-server-error"),
+
     PIPELINE_ERROR_CARTESIA_503_SERVER_ERROR("pipeline-error-cartesia-503-server-error"),
 
     PIPELINE_ERROR_CARTESIA_522_SERVER_ERROR("pipeline-error-cartesia-522-server-error"),
@@ -958,6 +983,8 @@ public enum CallEndedReason {
 
     PIPELINE_ERROR_ELEVEN_LABS_VOICE_DISABLED_BY_OWNER("pipeline-error-eleven-labs-voice-disabled-by-owner"),
 
+    PIPELINE_ERROR_ELEVEN_LABS_VAPI_VOICE_DISABLED_BY_OWNER("pipeline-error-eleven-labs-vapi-voice-disabled-by-owner"),
+
     PIPELINE_ERROR_ELEVEN_LABS_BLOCKED_ACCOUNT_IN_PROBATION("pipeline-error-eleven-labs-blocked-account-in-probation"),
 
     PIPELINE_ERROR_ELEVEN_LABS_BLOCKED_CONTENT_AGAINST_THEIR_POLICY(
@@ -978,6 +1005,8 @@ public enum CallEndedReason {
             "pipeline-error-eleven-labs-blocked-voice-potentially-against-terms-of-service-and-awaiting-verification"),
 
     PIPELINE_ERROR_ELEVEN_LABS_500_SERVER_ERROR("pipeline-error-eleven-labs-500-server-error"),
+
+    PIPELINE_ERROR_ELEVEN_LABS_503_SERVER_ERROR("pipeline-error-eleven-labs-503-server-error"),
 
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_ELEVEN_LABS_VOICE_NOT_FOUND(
             "call.in-progress.error-vapifault-eleven-labs-voice-not-found"),
@@ -1041,6 +1070,9 @@ public enum CallEndedReason {
 
     CALL_IN_PROGRESS_ERROR_PROVIDERFAULT_ELEVEN_LABS_500_SERVER_ERROR(
             "call.in-progress.error-providerfault-eleven-labs-500-server-error"),
+
+    CALL_IN_PROGRESS_ERROR_PROVIDERFAULT_ELEVEN_LABS_503_SERVER_ERROR(
+            "call.in-progress.error-providerfault-eleven-labs-503-server-error"),
 
     PIPELINE_ERROR_PLAYHT_REQUEST_TIMED_OUT("pipeline-error-playht-request-timed-out"),
 
@@ -1129,6 +1161,8 @@ public enum CallEndedReason {
     PIPELINE_ERROR_DEEPGRAM_RETURNING_502_BAD_GATEWAY_EHOSTUNREACH(
             "pipeline-error-deepgram-returning-502-bad-gateway-ehostunreach"),
 
+    PIPELINE_ERROR_DEEPGRAM_RETURNING_ECONNRESET("pipeline-error-deepgram-returning-econnreset"),
+
     CALL_IN_PROGRESS_ERROR_VAPIFAULT_DEEPGRAM_RETURNING_400_NO_SUCH_MODEL_LANGUAGE_TIER_COMBINATION(
             "call.in-progress.error-vapifault-deepgram-returning-400-no-such-model-language-tier-combination"),
 
@@ -1175,6 +1209,8 @@ public enum CallEndedReason {
     CALL_IN_PROGRESS_ERROR_ASSISTANT_DID_NOT_RECEIVE_CUSTOMER_AUDIO(
             "call.in-progress.error-assistant-did-not-receive-customer-audio"),
 
+    CALL_IN_PROGRESS_ERROR_TRANSFER_FAILED("call.in-progress.error-transfer-failed"),
+
     CUSTOMER_BUSY("customer-busy"),
 
     CUSTOMER_ENDED_CALL("customer-ended-call"),
@@ -1193,12 +1229,32 @@ public enum CallEndedReason {
 
     SILENCE_TIMED_OUT("silence-timed-out"),
 
-    CALL_IN_PROGRESS_ERROR_SIP_TELEPHONY_PROVIDER_FAILED_TO_CONNECT_CALL(
-            "call.in-progress.error-sip-telephony-provider-failed-to-connect-call"),
+    CALL_IN_PROGRESS_ERROR_SIP_INBOUND_CALL_FAILED_TO_CONNECT(
+            "call.in-progress.error-sip-inbound-call-failed-to-connect"),
+
+    CALL_IN_PROGRESS_ERROR_PROVIDERFAULT_OUTBOUND_SIP_403_FORBIDDEN(
+            "call.in-progress.error-providerfault-outbound-sip-403-forbidden"),
+
+    CALL_IN_PROGRESS_ERROR_PROVIDERFAULT_OUTBOUND_SIP_407_PROXY_AUTHENTICATION_REQUIRED(
+            "call.in-progress.error-providerfault-outbound-sip-407-proxy-authentication-required"),
+
+    CALL_IN_PROGRESS_ERROR_PROVIDERFAULT_OUTBOUND_SIP_503_SERVICE_UNAVAILABLE(
+            "call.in-progress.error-providerfault-outbound-sip-503-service-unavailable"),
+
+    CALL_IN_PROGRESS_ERROR_PROVIDERFAULT_OUTBOUND_SIP_480_TEMPORARILY_UNAVAILABLE(
+            "call.in-progress.error-providerfault-outbound-sip-480-temporarily-unavailable"),
+
+    CALL_IN_PROGRESS_ERROR_SIP_OUTBOUND_CALL_FAILED_TO_CONNECT(
+            "call.in-progress.error-sip-outbound-call-failed-to-connect"),
 
     CALL_RINGING_HOOK_EXECUTED_SAY("call.ringing.hook-executed-say"),
 
     CALL_RINGING_HOOK_EXECUTED_TRANSFER("call.ringing.hook-executed-transfer"),
+
+    CALL_RINGING_SIP_INBOUND_CALLER_HUNGUP_BEFORE_CALL_CONNECT(
+            "call.ringing.sip-inbound-caller-hungup-before-call-connect"),
+
+    CALL_RINGING_ERROR_SIP_INBOUND_CALL_FAILED_TO_CONNECT("call.ringing.error-sip-inbound-call-failed-to-connect"),
 
     TWILIO_FAILED_TO_CONNECT_CALL("twilio-failed-to-connect-call"),
 

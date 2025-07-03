@@ -19,40 +19,43 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ToolCall.Builder.class)
 public final class ToolCall {
-    private final ToolCallFunction function;
-
     private final String id;
+
+    private final String type;
+
+    private final ToolCallFunction function;
 
     private final Map<String, Object> additionalProperties;
 
-    private ToolCall(ToolCallFunction function, String id, Map<String, Object> additionalProperties) {
-        this.function = function;
+    private ToolCall(String id, String type, ToolCallFunction function, Map<String, Object> additionalProperties) {
         this.id = id;
+        this.type = type;
+        this.function = function;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return This is the type of tool the model called.
-     */
-    @JsonProperty("type")
-    public String getType() {
-        return "function";
-    }
-
-    /**
-     * @return This is the function the model called.
-     */
-    @JsonProperty("function")
-    public ToolCallFunction getFunction() {
-        return function;
-    }
-
-    /**
-     * @return This is the unique identifier for the tool call.
+     * @return This is the ID of the tool call
      */
     @JsonProperty("id")
     public String getId() {
         return id;
+    }
+
+    /**
+     * @return This is the type of tool
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @return This is the function that was called
+     */
+    @JsonProperty("function")
+    public ToolCallFunction getFunction() {
+        return function;
     }
 
     @java.lang.Override
@@ -67,12 +70,12 @@ public final class ToolCall {
     }
 
     private boolean equalTo(ToolCall other) {
-        return function.equals(other.function) && id.equals(other.id);
+        return id.equals(other.id) && type.equals(other.type) && function.equals(other.function);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.function, this.id);
+        return Objects.hash(this.id, this.type, this.function);
     }
 
     @java.lang.Override
@@ -80,18 +83,31 @@ public final class ToolCall {
         return ObjectMappers.stringify(this);
     }
 
-    public static FunctionStage builder() {
+    public static IdStage builder() {
         return new Builder();
     }
 
-    public interface FunctionStage {
-        IdStage function(@NotNull ToolCallFunction function);
+    public interface IdStage {
+        /**
+         * <p>This is the ID of the tool call</p>
+         */
+        TypeStage id(@NotNull String id);
 
         Builder from(ToolCall other);
     }
 
-    public interface IdStage {
-        _FinalStage id(@NotNull String id);
+    public interface TypeStage {
+        /**
+         * <p>This is the type of tool</p>
+         */
+        FunctionStage type(@NotNull String type);
+    }
+
+    public interface FunctionStage {
+        /**
+         * <p>This is the function that was called</p>
+         */
+        _FinalStage function(@NotNull ToolCallFunction function);
     }
 
     public interface _FinalStage {
@@ -99,10 +115,12 @@ public final class ToolCall {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements FunctionStage, IdStage, _FinalStage {
-        private ToolCallFunction function;
-
+    public static final class Builder implements IdStage, TypeStage, FunctionStage, _FinalStage {
         private String id;
+
+        private String type;
+
+        private ToolCallFunction function;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -111,36 +129,51 @@ public final class ToolCall {
 
         @java.lang.Override
         public Builder from(ToolCall other) {
-            function(other.getFunction());
             id(other.getId());
+            type(other.getType());
+            function(other.getFunction());
             return this;
         }
 
         /**
-         * <p>This is the function the model called.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("function")
-        public IdStage function(@NotNull ToolCallFunction function) {
-            this.function = Objects.requireNonNull(function, "function must not be null");
-            return this;
-        }
-
-        /**
-         * <p>This is the unique identifier for the tool call.</p>
+         * <p>This is the ID of the tool call</p>
+         * <p>This is the ID of the tool call</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("id")
-        public _FinalStage id(@NotNull String id) {
+        public TypeStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the type of tool</p>
+         * <p>This is the type of tool</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("type")
+        public FunctionStage type(@NotNull String type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        /**
+         * <p>This is the function that was called</p>
+         * <p>This is the function that was called</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("function")
+        public _FinalStage function(@NotNull ToolCallFunction function) {
+            this.function = Objects.requireNonNull(function, "function must not be null");
             return this;
         }
 
         @java.lang.Override
         public ToolCall build() {
-            return new ToolCall(function, id, additionalProperties);
+            return new ToolCall(id, type, function, additionalProperties);
         }
     }
 }

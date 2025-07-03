@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SupabaseCredential.Builder.class)
 public final class SupabaseCredential {
+    private final Optional<Double> fallbackIndex;
+
     private final String id;
 
     private final String orgId;
@@ -37,6 +39,7 @@ public final class SupabaseCredential {
     private final Map<String, Object> additionalProperties;
 
     private SupabaseCredential(
+            Optional<Double> fallbackIndex,
             String id,
             String orgId,
             OffsetDateTime createdAt,
@@ -44,6 +47,7 @@ public final class SupabaseCredential {
             Optional<String> name,
             Optional<SupabaseBucketPlan> bucketPlan,
             Map<String, Object> additionalProperties) {
+        this.fallbackIndex = fallbackIndex;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
@@ -59,6 +63,14 @@ public final class SupabaseCredential {
     @JsonProperty("provider")
     public String getProvider() {
         return "supabase";
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -118,7 +130,8 @@ public final class SupabaseCredential {
     }
 
     private boolean equalTo(SupabaseCredential other) {
-        return id.equals(other.id)
+        return fallbackIndex.equals(other.fallbackIndex)
+                && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
@@ -128,7 +141,8 @@ public final class SupabaseCredential {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.bucketPlan);
+        return Objects.hash(
+                this.fallbackIndex, this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.bucketPlan);
     }
 
     @java.lang.Override
@@ -141,26 +155,48 @@ public final class SupabaseCredential {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(SupabaseCredential other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         SupabaseCredential build();
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        _FinalStage fallbackIndex(Optional<Double> fallbackIndex);
+
+        _FinalStage fallbackIndex(Double fallbackIndex);
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -184,6 +220,8 @@ public final class SupabaseCredential {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -191,6 +229,7 @@ public final class SupabaseCredential {
 
         @java.lang.Override
         public Builder from(SupabaseCredential other) {
+            fallbackIndex(other.getFallbackIndex());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
@@ -201,6 +240,7 @@ public final class SupabaseCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the credential.</p>
          * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -213,6 +253,7 @@ public final class SupabaseCredential {
 
         /**
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -224,6 +265,7 @@ public final class SupabaseCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -234,6 +276,7 @@ public final class SupabaseCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -267,6 +310,9 @@ public final class SupabaseCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -274,9 +320,30 @@ public final class SupabaseCredential {
             return this;
         }
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public _FinalStage fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
+            return this;
+        }
+
         @java.lang.Override
         public SupabaseCredential build() {
-            return new SupabaseCredential(id, orgId, createdAt, updatedAt, name, bucketPlan, additionalProperties);
+            return new SupabaseCredential(
+                    fallbackIndex, id, orgId, createdAt, updatedAt, name, bucketPlan, additionalProperties);
         }
     }
 }

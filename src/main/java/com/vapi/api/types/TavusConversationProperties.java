@@ -244,6 +244,10 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>The maximum duration of the call in seconds. The default <code>maxCallDuration</code> is 3600 seconds (1 hour).
+         * Once the time limit specified by this parameter has been reached, the conversation will automatically shut down.</p>
+         */
         @JsonSetter(value = "maxCallDuration", nulls = Nulls.SKIP)
         public Builder maxCallDuration(Optional<Double> maxCallDuration) {
             this.maxCallDuration = maxCallDuration;
@@ -255,6 +259,9 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>The duration in seconds after which the call will be automatically shut down once the last participant leaves.</p>
+         */
         @JsonSetter(value = "participantLeftTimeout", nulls = Nulls.SKIP)
         public Builder participantLeftTimeout(Optional<Double> participantLeftTimeout) {
             this.participantLeftTimeout = participantLeftTimeout;
@@ -266,6 +273,10 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>Starting from conversation creation, the duration in seconds after which the call will be automatically shut down if no participant joins the call.
+         * Default is 300 seconds (5 minutes).</p>
+         */
         @JsonSetter(value = "participantAbsentTimeout", nulls = Nulls.SKIP)
         public Builder participantAbsentTimeout(Optional<Double> participantAbsentTimeout) {
             this.participantAbsentTimeout = participantAbsentTimeout;
@@ -277,6 +288,9 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>If true, the user will be able to record the conversation.</p>
+         */
         @JsonSetter(value = "enableRecording", nulls = Nulls.SKIP)
         public Builder enableRecording(Optional<Boolean> enableRecording) {
             this.enableRecording = enableRecording;
@@ -288,6 +302,11 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>If true, the user will be able to transcribe the conversation.
+         * You can find more instructions on displaying transcriptions if you are using your custom DailyJS components here.
+         * You need to have an event listener on Daily that listens for <code>app-messages</code>.</p>
+         */
         @JsonSetter(value = "enableTranscription", nulls = Nulls.SKIP)
         public Builder enableTranscription(Optional<Boolean> enableTranscription) {
             this.enableTranscription = enableTranscription;
@@ -299,6 +318,10 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>If true, the background will be replaced with a greenscreen (RGB values: <code>[0, 255, 155]</code>).
+         * You can use WebGL on the frontend to make the greenscreen transparent or change its color.</p>
+         */
         @JsonSetter(value = "applyGreenscreen", nulls = Nulls.SKIP)
         public Builder applyGreenscreen(Optional<Boolean> applyGreenscreen) {
             this.applyGreenscreen = applyGreenscreen;
@@ -310,6 +333,12 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>The language of the conversation. Please provide the <strong>full language name</strong>, not the two-letter code.
+         * If you are using your own TTS voice, please ensure it supports the language you provide.
+         * If you are using a stock replica or default persona, please note that only ElevenLabs and Cartesia supported languages are available.
+         * You can find a full list of supported languages for Cartesia here, for ElevenLabs here, and for PlayHT here.</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<String> language) {
             this.language = language;
@@ -321,6 +350,9 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>The name of the S3 bucket where the recording will be stored.</p>
+         */
         @JsonSetter(value = "recordingS3BucketName", nulls = Nulls.SKIP)
         public Builder recordingS3BucketName(Optional<String> recordingS3BucketName) {
             this.recordingS3BucketName = recordingS3BucketName;
@@ -332,6 +364,9 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>The region of the S3 bucket where the recording will be stored.</p>
+         */
         @JsonSetter(value = "recordingS3BucketRegion", nulls = Nulls.SKIP)
         public Builder recordingS3BucketRegion(Optional<String> recordingS3BucketRegion) {
             this.recordingS3BucketRegion = recordingS3BucketRegion;
@@ -343,6 +378,9 @@ public final class TavusConversationProperties {
             return this;
         }
 
+        /**
+         * <p>The ARN of the role that will be assumed to access the S3 bucket.</p>
+         */
         @JsonSetter(value = "awsAssumeRoleArn", nulls = Nulls.SKIP)
         public Builder awsAssumeRoleArn(Optional<String> awsAssumeRoleArn) {
             this.awsAssumeRoleArn = awsAssumeRoleArn;

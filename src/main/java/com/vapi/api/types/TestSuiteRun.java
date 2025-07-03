@@ -172,40 +172,64 @@ public final class TestSuiteRun {
     }
 
     public interface StatusStage {
+        /**
+         * <p>This is the current status of the test suite run.</p>
+         */
         IdStage status(@NotNull TestSuiteRunStatus status);
 
         Builder from(TestSuiteRun other);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the test suite run.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the organization this run belongs to.</p>
+         */
         TestSuiteIdStage orgId(@NotNull String orgId);
     }
 
     public interface TestSuiteIdStage {
+        /**
+         * <p>This is the unique identifier for the test suite this run belongs to.</p>
+         */
         CreatedAtStage testSuiteId(@NotNull String testSuiteId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the test suite run was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the test suite run was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         TestSuiteRun build();
 
+        /**
+         * <p>These are the results of the tests in this test suite run.</p>
+         */
         _FinalStage testResults(List<TestSuiteRunTestResult> testResults);
 
         _FinalStage addTestResults(TestSuiteRunTestResult testResults);
 
         _FinalStage addAllTestResults(List<TestSuiteRunTestResult> testResults);
 
+        /**
+         * <p>This is the name of the test suite run.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -250,6 +274,7 @@ public final class TestSuiteRun {
 
         /**
          * <p>This is the current status of the test suite run.</p>
+         * <p>This is the current status of the test suite run.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -260,6 +285,7 @@ public final class TestSuiteRun {
         }
 
         /**
+         * <p>This is the unique identifier for the test suite run.</p>
          * <p>This is the unique identifier for the test suite run.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -272,6 +298,7 @@ public final class TestSuiteRun {
 
         /**
          * <p>This is the unique identifier for the organization this run belongs to.</p>
+         * <p>This is the unique identifier for the organization this run belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -282,6 +309,7 @@ public final class TestSuiteRun {
         }
 
         /**
+         * <p>This is the unique identifier for the test suite this run belongs to.</p>
          * <p>This is the unique identifier for the test suite this run belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -294,6 +322,7 @@ public final class TestSuiteRun {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the test suite run was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the test suite run was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -304,6 +333,7 @@ public final class TestSuiteRun {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the test suite run was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the test suite run was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -324,6 +354,9 @@ public final class TestSuiteRun {
             return this;
         }
 
+        /**
+         * <p>This is the name of the test suite run.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -351,6 +384,9 @@ public final class TestSuiteRun {
             return this;
         }
 
+        /**
+         * <p>These are the results of the tests in this test suite run.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "testResults", nulls = Nulls.SKIP)
         public _FinalStage testResults(List<TestSuiteRunTestResult> testResults) {

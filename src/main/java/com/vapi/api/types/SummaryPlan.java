@@ -46,7 +46,9 @@ public final class SummaryPlan {
      * <p>You can customize by providing any messages you want.</p>
      * <p>Here are the template variables available:</p>
      * <ul>
-     * <li>{{transcript}}: The transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: The system prompt of the call from <code>assistant.model.messages[type=system].content</code>- {{endedReason}}: The ended reason of the call from <code>call.endedReason</code></li>
+     * <li>{{transcript}}: The transcript of the call from <code>call.artifact.transcript</code></li>
+     * <li>{{systemPrompt}}: The system prompt of the call from <code>assistant.model.messages[type=system].content</code></li>
+     * <li>{{endedReason}}: The ended reason of the call from <code>call.endedReason</code></li>
      * </ul>
      */
     @JsonProperty("messages")
@@ -131,6 +133,17 @@ public final class SummaryPlan {
             return this;
         }
 
+        /**
+         * <p>These are the messages used to generate the summary.</p>
+         * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert note-taker. You will be given a transcript of a call. Summarize the call in 2-3 sentences. DO NOT return anything except the summary.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n. Here is the ended reason of the call:\n\n{{endedReason}}\n\n&quot; } ]</code></p>
+         * <p>You can customize by providing any messages you want.</p>
+         * <p>Here are the template variables available:</p>
+         * <ul>
+         * <li>{{transcript}}: The transcript of the call from <code>call.artifact.transcript</code></li>
+         * <li>{{systemPrompt}}: The system prompt of the call from <code>assistant.model.messages[type=system].content</code></li>
+         * <li>{{endedReason}}: The ended reason of the call from <code>call.endedReason</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public Builder messages(Optional<List<Map<String, Object>>> messages) {
             this.messages = messages;
@@ -142,6 +155,14 @@ public final class SummaryPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether a summary is generated and stored in <code>call.analysis.summary</code>. Defaults to true.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you want to disable the summary, set this to false.</li>
+         * </ul>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -153,6 +174,14 @@ public final class SummaryPlan {
             return this;
         }
 
+        /**
+         * <p>This is how long the request is tried before giving up. When request times out, <code>call.analysis.summary</code> will be empty.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To guarantee the summary is generated, set this value high. Note, this will delay the end of call report in cases where model is slow to respond.</li>
+         * </ul>
+         * <p>@default 5 seconds</p>
+         */
         @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
         public Builder timeoutSeconds(Optional<Double> timeoutSeconds) {
             this.timeoutSeconds = timeoutSeconds;

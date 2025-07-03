@@ -88,6 +88,9 @@ public final class AssistantHookFilter {
     }
 
     public interface KeyStage {
+        /**
+         * <p>This is the key to filter on (e.g. &quot;call.endedReason&quot;)</p>
+         */
         _FinalStage key(@NotNull String key);
 
         Builder from(AssistantHookFilter other);
@@ -96,6 +99,9 @@ public final class AssistantHookFilter {
     public interface _FinalStage {
         AssistantHookFilter build();
 
+        /**
+         * <p>This is the array of possible values to match against</p>
+         */
         _FinalStage oneOf(List<String> oneOf);
 
         _FinalStage addOneOf(String oneOf);
@@ -122,6 +128,7 @@ public final class AssistantHookFilter {
         }
 
         /**
+         * <p>This is the key to filter on (e.g. &quot;call.endedReason&quot;)</p>
          * <p>This is the key to filter on (e.g. &quot;call.endedReason&quot;)</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -152,6 +159,9 @@ public final class AssistantHookFilter {
             return this;
         }
 
+        /**
+         * <p>This is the array of possible values to match against</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "oneOf", nulls = Nulls.SKIP)
         public _FinalStage oneOf(List<String> oneOf) {

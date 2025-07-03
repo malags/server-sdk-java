@@ -149,34 +149,55 @@ public final class BotMessage {
     }
 
     public interface RoleStage {
+        /**
+         * <p>The role of the bot in the conversation.</p>
+         */
         MessageStage role(@NotNull String role);
 
         Builder from(BotMessage other);
     }
 
     public interface MessageStage {
+        /**
+         * <p>The message content from the bot.</p>
+         */
         TimeStage message(@NotNull String message);
     }
 
     public interface TimeStage {
+        /**
+         * <p>The timestamp when the message was sent.</p>
+         */
         EndTimeStage time(double time);
     }
 
     public interface EndTimeStage {
+        /**
+         * <p>The timestamp when the message ended.</p>
+         */
         SecondsFromStartStage endTime(double endTime);
     }
 
     public interface SecondsFromStartStage {
+        /**
+         * <p>The number of seconds from the start of the conversation.</p>
+         */
         _FinalStage secondsFromStart(double secondsFromStart);
     }
 
     public interface _FinalStage {
         BotMessage build();
 
+        /**
+         * <p>The source of the message.</p>
+         */
         _FinalStage source(Optional<String> source);
 
         _FinalStage source(String source);
 
+        /**
+         * <p>The duration of the message in seconds.</p>
+         */
         _FinalStage duration(Optional<Double> duration);
 
         _FinalStage duration(Double duration);
@@ -218,6 +239,7 @@ public final class BotMessage {
 
         /**
          * <p>The role of the bot in the conversation.</p>
+         * <p>The role of the bot in the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -228,6 +250,7 @@ public final class BotMessage {
         }
 
         /**
+         * <p>The message content from the bot.</p>
          * <p>The message content from the bot.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -240,6 +263,7 @@ public final class BotMessage {
 
         /**
          * <p>The timestamp when the message was sent.</p>
+         * <p>The timestamp when the message was sent.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -251,6 +275,7 @@ public final class BotMessage {
 
         /**
          * <p>The timestamp when the message ended.</p>
+         * <p>The timestamp when the message ended.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -261,6 +286,7 @@ public final class BotMessage {
         }
 
         /**
+         * <p>The number of seconds from the start of the conversation.</p>
          * <p>The number of seconds from the start of the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -281,6 +307,9 @@ public final class BotMessage {
             return this;
         }
 
+        /**
+         * <p>The duration of the message in seconds.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "duration", nulls = Nulls.SKIP)
         public _FinalStage duration(Optional<Double> duration) {
@@ -298,6 +327,9 @@ public final class BotMessage {
             return this;
         }
 
+        /**
+         * <p>The source of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "source", nulls = Nulls.SKIP)
         public _FinalStage source(Optional<String> source) {

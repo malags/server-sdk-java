@@ -109,6 +109,9 @@ public final class UpdateVonageCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "apiSecret", nulls = Nulls.SKIP)
         public Builder apiSecret(Optional<String> apiSecret) {
             this.apiSecret = apiSecret;
@@ -120,6 +123,9 @@ public final class UpdateVonageCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

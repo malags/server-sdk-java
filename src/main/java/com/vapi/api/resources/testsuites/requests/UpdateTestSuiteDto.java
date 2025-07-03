@@ -133,6 +133,9 @@ public final class UpdateTestSuiteDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the test suite.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -144,6 +147,9 @@ public final class UpdateTestSuiteDto {
             return this;
         }
 
+        /**
+         * <p>This is the phone number ID associated with this test suite.</p>
+         */
         @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
         public Builder phoneNumberId(Optional<String> phoneNumberId) {
             this.phoneNumberId = phoneNumberId;
@@ -155,6 +161,10 @@ public final class UpdateTestSuiteDto {
             return this;
         }
 
+        /**
+         * <p>Override the default tester plan by providing custom assistant configuration for the test agent.</p>
+         * <p>We recommend only using this if you are confident, as we have already set sensible defaults on the tester plan.</p>
+         */
         @JsonSetter(value = "testerPlan", nulls = Nulls.SKIP)
         public Builder testerPlan(Optional<TesterPlan> testerPlan) {
             this.testerPlan = testerPlan;
@@ -166,6 +176,9 @@ public final class UpdateTestSuiteDto {
             return this;
         }
 
+        /**
+         * <p>These are the configuration for the assistant / phone number that is being tested.</p>
+         */
         @JsonSetter(value = "targetPlan", nulls = Nulls.SKIP)
         public Builder targetPlan(Optional<TargetPlan> targetPlan) {
             this.targetPlan = targetPlan;

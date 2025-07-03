@@ -186,20 +186,32 @@ public final class TwilioCredential {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(TwilioCredential other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         AccountSidStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
@@ -210,18 +222,30 @@ public final class TwilioCredential {
     public interface _FinalStage {
         TwilioCredential build();
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage authToken(Optional<String> authToken);
 
         _FinalStage authToken(String authToken);
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiKey(Optional<String> apiKey);
 
         _FinalStage apiKey(String apiKey);
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiSecret(Optional<String> apiSecret);
 
         _FinalStage apiSecret(String apiSecret);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -269,6 +293,7 @@ public final class TwilioCredential {
 
         /**
          * <p>This is the unique identifier for the credential.</p>
+         * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -279,6 +304,7 @@ public final class TwilioCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -291,6 +317,7 @@ public final class TwilioCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -301,6 +328,7 @@ public final class TwilioCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -328,6 +356,9 @@ public final class TwilioCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -345,6 +376,9 @@ public final class TwilioCredential {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "apiSecret", nulls = Nulls.SKIP)
         public _FinalStage apiSecret(Optional<String> apiSecret) {
@@ -362,6 +396,9 @@ public final class TwilioCredential {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public _FinalStage apiKey(Optional<String> apiKey) {
@@ -379,6 +416,9 @@ public final class TwilioCredential {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "authToken", nulls = Nulls.SKIP)
         public _FinalStage authToken(Optional<String> authToken) {

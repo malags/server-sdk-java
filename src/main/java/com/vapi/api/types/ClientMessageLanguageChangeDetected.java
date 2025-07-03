@@ -144,6 +144,9 @@ public final class ClientMessageLanguageChangeDetected {
     }
 
     public interface LanguageStage {
+        /**
+         * <p>This is the language the transcriber is switched to.</p>
+         */
         _FinalStage language(@NotNull String language);
 
         Builder from(ClientMessageLanguageChangeDetected other);
@@ -152,22 +155,37 @@ public final class ClientMessageLanguageChangeDetected {
     public interface _FinalStage {
         ClientMessageLanguageChangeDetected build();
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         _FinalStage phoneNumber(Optional<ClientMessageLanguageChangeDetectedPhoneNumber> phoneNumber);
 
         _FinalStage phoneNumber(ClientMessageLanguageChangeDetectedPhoneNumber phoneNumber);
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         _FinalStage timestamp(Optional<Double> timestamp);
 
         _FinalStage timestamp(Double timestamp);
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         _FinalStage call(Optional<Call> call);
 
         _FinalStage call(Call call);
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
@@ -205,6 +223,7 @@ public final class ClientMessageLanguageChangeDetected {
 
         /**
          * <p>This is the language the transcriber is switched to.</p>
+         * <p>This is the language the transcriber is switched to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -224,6 +243,9 @@ public final class ClientMessageLanguageChangeDetected {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -241,6 +263,9 @@ public final class ClientMessageLanguageChangeDetected {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -258,6 +283,9 @@ public final class ClientMessageLanguageChangeDetected {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public _FinalStage call(Optional<Call> call) {
@@ -275,6 +303,9 @@ public final class ClientMessageLanguageChangeDetected {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public _FinalStage timestamp(Optional<Double> timestamp) {
@@ -292,6 +323,9 @@ public final class ClientMessageLanguageChangeDetected {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ClientMessageLanguageChangeDetectedPhoneNumber> phoneNumber) {

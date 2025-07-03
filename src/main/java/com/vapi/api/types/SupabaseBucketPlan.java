@@ -146,30 +146,59 @@ public final class SupabaseBucketPlan {
     }
 
     public interface RegionStage {
+        /**
+         * <p>This is the S3 Region. It should look like us-east-1
+         * It should be one of the supabase regions defined in the SUPABASE_REGION enum
+         * Check https://supabase.com/docs/guides/platform/regions for up to date regions</p>
+         */
         UrlStage region(@NotNull SupabaseBucketPlanRegion region);
 
         Builder from(SupabaseBucketPlan other);
     }
 
     public interface UrlStage {
+        /**
+         * <p>This is the S3 compatible URL for Supabase S3
+         * This should look like https://&lt;project-ID&gt;.supabase.co/storage/v1/s3</p>
+         */
         AccessKeyIdStage url(@NotNull String url);
     }
 
     public interface AccessKeyIdStage {
+        /**
+         * <p>This is the Supabase S3 Access Key ID.
+         * The user creates this in the Supabase project Storage settings</p>
+         */
         SecretAccessKeyStage accessKeyId(@NotNull String accessKeyId);
     }
 
     public interface SecretAccessKeyStage {
+        /**
+         * <p>This is the Supabase S3 Secret Access Key.
+         * The user creates this in the Supabase project Storage settings along with the access key id</p>
+         */
         NameStage secretAccessKey(@NotNull String secretAccessKey);
     }
 
     public interface NameStage {
+        /**
+         * <p>This is the Supabase S3 Bucket Name.
+         * The user must create this in Supabase under Storage &gt; Buckets
+         * A bucket that does not exist will not be checked now, but file uploads will fail</p>
+         */
         _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
         SupabaseBucketPlan build();
 
+        /**
+         * <p>This is the Supabase S3 Bucket Folder Path.
+         * The user can create this in Supabase under Storage &gt; Buckets
+         * A path that does not exist will not be checked now, but file uploads will fail
+         * A Path is like a folder in the bucket
+         * Eg. If the bucket is called &quot;my-bucket&quot; and the path is &quot;my-folder&quot;, the full path is &quot;my-bucket/my-folder&quot;</p>
+         */
         _FinalStage path(Optional<String> path);
 
         _FinalStage path(String path);
@@ -210,6 +239,9 @@ public final class SupabaseBucketPlan {
          * <p>This is the S3 Region. It should look like us-east-1
          * It should be one of the supabase regions defined in the SUPABASE_REGION enum
          * Check https://supabase.com/docs/guides/platform/regions for up to date regions</p>
+         * <p>This is the S3 Region. It should look like us-east-1
+         * It should be one of the supabase regions defined in the SUPABASE_REGION enum
+         * Check https://supabase.com/docs/guides/platform/regions for up to date regions</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -220,6 +252,8 @@ public final class SupabaseBucketPlan {
         }
 
         /**
+         * <p>This is the S3 compatible URL for Supabase S3
+         * This should look like https://&lt;project-ID&gt;.supabase.co/storage/v1/s3</p>
          * <p>This is the S3 compatible URL for Supabase S3
          * This should look like https://&lt;project-ID&gt;.supabase.co/storage/v1/s3</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -234,6 +268,8 @@ public final class SupabaseBucketPlan {
         /**
          * <p>This is the Supabase S3 Access Key ID.
          * The user creates this in the Supabase project Storage settings</p>
+         * <p>This is the Supabase S3 Access Key ID.
+         * The user creates this in the Supabase project Storage settings</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -246,6 +282,8 @@ public final class SupabaseBucketPlan {
         /**
          * <p>This is the Supabase S3 Secret Access Key.
          * The user creates this in the Supabase project Storage settings along with the access key id</p>
+         * <p>This is the Supabase S3 Secret Access Key.
+         * The user creates this in the Supabase project Storage settings along with the access key id</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -256,6 +294,9 @@ public final class SupabaseBucketPlan {
         }
 
         /**
+         * <p>This is the Supabase S3 Bucket Name.
+         * The user must create this in Supabase under Storage &gt; Buckets
+         * A bucket that does not exist will not be checked now, but file uploads will fail</p>
          * <p>This is the Supabase S3 Bucket Name.
          * The user must create this in Supabase under Storage &gt; Buckets
          * A bucket that does not exist will not be checked now, but file uploads will fail</p>
@@ -282,6 +323,13 @@ public final class SupabaseBucketPlan {
             return this;
         }
 
+        /**
+         * <p>This is the Supabase S3 Bucket Folder Path.
+         * The user can create this in Supabase under Storage &gt; Buckets
+         * A path that does not exist will not be checked now, but file uploads will fail
+         * A Path is like a folder in the bucket
+         * Eg. If the bucket is called &quot;my-bucket&quot; and the path is &quot;my-folder&quot;, the full path is &quot;my-bucket/my-folder&quot;</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "path", nulls = Nulls.SKIP)
         public _FinalStage path(Optional<String> path) {

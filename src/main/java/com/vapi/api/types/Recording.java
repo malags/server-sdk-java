@@ -130,6 +130,9 @@ public final class Recording {
             return this;
         }
 
+        /**
+         * <p>This is the stereo recording url for the call. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "stereoUrl", nulls = Nulls.SKIP)
         public Builder stereoUrl(Optional<String> stereoUrl) {
             this.stereoUrl = stereoUrl;
@@ -141,6 +144,9 @@ public final class Recording {
             return this;
         }
 
+        /**
+         * <p>This is the video recording url for the call. To enable, set <code>assistant.artifactPlan.videoRecordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "videoUrl", nulls = Nulls.SKIP)
         public Builder videoUrl(Optional<String> videoUrl) {
             this.videoUrl = videoUrl;
@@ -152,6 +158,9 @@ public final class Recording {
             return this;
         }
 
+        /**
+         * <p>This is video recording start delay in ms. To enable, set <code>assistant.artifactPlan.videoRecordingEnabled</code>. This can be used to align the playback of the recording with artifact.messages timestamps.</p>
+         */
         @JsonSetter(value = "videoRecordingStartDelaySeconds", nulls = Nulls.SKIP)
         public Builder videoRecordingStartDelaySeconds(Optional<Double> videoRecordingStartDelaySeconds) {
             this.videoRecordingStartDelaySeconds = videoRecordingStartDelaySeconds;
@@ -163,6 +172,9 @@ public final class Recording {
             return this;
         }
 
+        /**
+         * <p>This is the mono recording url for the call. To enable, set <code>assistant.artifactPlan.recordingEnabled</code>.</p>
+         */
         @JsonSetter(value = "mono", nulls = Nulls.SKIP)
         public Builder mono(Optional<Mono> mono) {
             this.mono = mono;

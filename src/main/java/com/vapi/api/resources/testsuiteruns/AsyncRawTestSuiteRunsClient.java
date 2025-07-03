@@ -58,53 +58,52 @@ public class AsyncRawTestSuiteRunsClient {
                 .addPathSegments("run");
         if (request.getPage().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "page", request.getPage().get().toString(), false);
+                    httpUrl, "page", request.getPage().get(), false);
         }
         if (request.getSortOrder().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "sortOrder", request.getSortOrder().get().toString(), false);
+                    httpUrl, "sortOrder", request.getSortOrder().get(), false);
         }
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "limit", request.getLimit().get().toString(), false);
+                    httpUrl, "limit", request.getLimit().get(), false);
         }
         if (request.getCreatedAtGt().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "createdAtGt", request.getCreatedAtGt().get().toString(), false);
+                    httpUrl, "createdAtGt", request.getCreatedAtGt().get(), false);
         }
         if (request.getCreatedAtLt().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "createdAtLt", request.getCreatedAtLt().get().toString(), false);
+                    httpUrl, "createdAtLt", request.getCreatedAtLt().get(), false);
         }
         if (request.getCreatedAtGe().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "createdAtGe", request.getCreatedAtGe().get().toString(), false);
+                    httpUrl, "createdAtGe", request.getCreatedAtGe().get(), false);
         }
         if (request.getCreatedAtLe().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "createdAtLe", request.getCreatedAtLe().get().toString(), false);
+                    httpUrl, "createdAtLe", request.getCreatedAtLe().get(), false);
         }
         if (request.getUpdatedAtGt().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "updatedAtGt", request.getUpdatedAtGt().get().toString(), false);
+                    httpUrl, "updatedAtGt", request.getUpdatedAtGt().get(), false);
         }
         if (request.getUpdatedAtLt().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "updatedAtLt", request.getUpdatedAtLt().get().toString(), false);
+                    httpUrl, "updatedAtLt", request.getUpdatedAtLt().get(), false);
         }
         if (request.getUpdatedAtGe().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "updatedAtGe", request.getUpdatedAtGe().get().toString(), false);
+                    httpUrl, "updatedAtGe", request.getUpdatedAtGe().get(), false);
         }
         if (request.getUpdatedAtLe().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "updatedAtLe", request.getUpdatedAtLe().get().toString(), false);
+                    httpUrl, "updatedAtLe", request.getUpdatedAtLe().get(), false);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -228,7 +227,6 @@ public class AsyncRawTestSuiteRunsClient {
                 .url(httpUrl)
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
@@ -284,7 +282,6 @@ public class AsyncRawTestSuiteRunsClient {
                 .url(httpUrl)
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();

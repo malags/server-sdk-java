@@ -34,6 +34,8 @@ public final class CreateWebCallDto {
 
     private final Optional<CreateWorkflowDto> workflow;
 
+    private final Optional<WorkflowOverrides> workflowOverrides;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateWebCallDto(
@@ -44,6 +46,7 @@ public final class CreateWebCallDto {
             Optional<CreateSquadDto> squad,
             Optional<String> workflowId,
             Optional<CreateWorkflowDto> workflow,
+            Optional<WorkflowOverrides> workflowOverrides,
             Map<String, Object> additionalProperties) {
         this.assistantId = assistantId;
         this.assistant = assistant;
@@ -52,6 +55,7 @@ public final class CreateWebCallDto {
         this.squad = squad;
         this.workflowId = workflowId;
         this.workflow = workflow;
+        this.workflowOverrides = workflowOverrides;
         this.additionalProperties = additionalProperties;
     }
 
@@ -120,8 +124,7 @@ public final class CreateWebCallDto {
     }
 
     /**
-     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
-     * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+     * @return This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.
      * <p>To start a call with:</p>
      * <ul>
      * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
@@ -135,8 +138,7 @@ public final class CreateWebCallDto {
     }
 
     /**
-     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
-     * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+     * @return This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.
      * <p>To start a call with:</p>
      * <ul>
      * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
@@ -147,6 +149,14 @@ public final class CreateWebCallDto {
     @JsonProperty("workflow")
     public Optional<CreateWorkflowDto> getWorkflow() {
         return workflow;
+    }
+
+    /**
+     * @return These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.
+     */
+    @JsonProperty("workflowOverrides")
+    public Optional<WorkflowOverrides> getWorkflowOverrides() {
+        return workflowOverrides;
     }
 
     @java.lang.Override
@@ -167,7 +177,8 @@ public final class CreateWebCallDto {
                 && squadId.equals(other.squadId)
                 && squad.equals(other.squad)
                 && workflowId.equals(other.workflowId)
-                && workflow.equals(other.workflow);
+                && workflow.equals(other.workflow)
+                && workflowOverrides.equals(other.workflowOverrides);
     }
 
     @java.lang.Override
@@ -179,7 +190,8 @@ public final class CreateWebCallDto {
                 this.squadId,
                 this.squad,
                 this.workflowId,
-                this.workflow);
+                this.workflow,
+                this.workflowOverrides);
     }
 
     @java.lang.Override
@@ -207,6 +219,8 @@ public final class CreateWebCallDto {
 
         private Optional<CreateWorkflowDto> workflow = Optional.empty();
 
+        private Optional<WorkflowOverrides> workflowOverrides = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -220,9 +234,19 @@ public final class CreateWebCallDto {
             squad(other.getSquad());
             workflowId(other.getWorkflowId());
             workflow(other.getWorkflow());
+            workflowOverrides(other.getWorkflowOverrides());
             return this;
         }
 
+        /**
+         * <p>This is the assistant ID that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistantId</code> or <code>assistant</code></li>
+         * <li>Squad, use <code>squadId</code> or <code>squad</code></li>
+         * <li>Workflow, use <code>workflowId</code> or <code>workflow</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -234,6 +258,15 @@ public final class CreateWebCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for the call. To use an existing assistant, use <code>assistantId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code></li>
+         * <li>Squad, use <code>squad</code></li>
+         * <li>Workflow, use <code>workflow</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -245,6 +278,9 @@ public final class CreateWebCallDto {
             return this;
         }
 
+        /**
+         * <p>These are the overrides for the <code>assistant</code> or <code>assistantId</code>'s settings and template variables.</p>
+         */
         @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
         public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
             this.assistantOverrides = assistantOverrides;
@@ -256,6 +292,15 @@ public final class CreateWebCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for the call. To use a transient squad, use <code>squad</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -267,6 +312,15 @@ public final class CreateWebCallDto {
             return this;
         }
 
+        /**
+         * <p>This is a squad that will be used for the call. To use an existing squad, use <code>squadId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "squad", nulls = Nulls.SKIP)
         public Builder squad(Optional<CreateSquadDto> squad) {
             this.squad = squad;
@@ -278,6 +332,15 @@ public final class CreateWebCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public Builder workflowId(Optional<String> workflowId) {
             this.workflowId = workflowId;
@@ -289,6 +352,15 @@ public final class CreateWebCallDto {
             return this;
         }
 
+        /**
+         * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "workflow", nulls = Nulls.SKIP)
         public Builder workflow(Optional<CreateWorkflowDto> workflow) {
             this.workflow = workflow;
@@ -297,6 +369,20 @@ public final class CreateWebCallDto {
 
         public Builder workflow(CreateWorkflowDto workflow) {
             this.workflow = Optional.ofNullable(workflow);
+            return this;
+        }
+
+        /**
+         * <p>These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.</p>
+         */
+        @JsonSetter(value = "workflowOverrides", nulls = Nulls.SKIP)
+        public Builder workflowOverrides(Optional<WorkflowOverrides> workflowOverrides) {
+            this.workflowOverrides = workflowOverrides;
+            return this;
+        }
+
+        public Builder workflowOverrides(WorkflowOverrides workflowOverrides) {
+            this.workflowOverrides = Optional.ofNullable(workflowOverrides);
             return this;
         }
 
@@ -309,6 +395,7 @@ public final class CreateWebCallDto {
                     squad,
                     workflowId,
                     workflow,
+                    workflowOverrides,
                     additionalProperties);
         }
     }

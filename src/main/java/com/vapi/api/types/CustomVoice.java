@@ -125,6 +125,25 @@ public final class CustomVoice {
     }
 
     public interface ServerStage {
+        /**
+         * <p>This is where the voice request will be sent.</p>
+         * <p>Request Example:</p>
+         * <p>POST https://{server.url}
+         * Content-Type: application/json</p>
+         * <p>{
+         * &quot;message&quot;: {
+         * &quot;type&quot;: &quot;voice-request&quot;,
+         * &quot;text&quot;: &quot;Hello, world!&quot;,
+         * &quot;sampleRate&quot;: 24000,
+         * ...other metadata about the call...
+         * }
+         * }</p>
+         * <p>Response Expected: 1-channel 16-bit raw PCM audio at the sample rate specified in the request. Here is how the response will be piped to the transport:</p>
+         * <pre><code>response.on('data', (chunk: Buffer) =&gt; {
+         *   outputStream.write(chunk);
+         * });
+         * </code></pre>
+         */
         _FinalStage server(@NotNull Server server);
 
         Builder from(CustomVoice other);
@@ -133,14 +152,23 @@ public final class CustomVoice {
     public interface _FinalStage {
         CustomVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
 
         _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
@@ -188,6 +216,23 @@ public final class CustomVoice {
          *   outputStream.write(chunk);
          * });
          * </code></pre>
+         * <p>This is where the voice request will be sent.</p>
+         * <p>Request Example:</p>
+         * <p>POST https://{server.url}
+         * Content-Type: application/json</p>
+         * <p>{
+         * &quot;message&quot;: {
+         * &quot;type&quot;: &quot;voice-request&quot;,
+         * &quot;text&quot;: &quot;Hello, world!&quot;,
+         * &quot;sampleRate&quot;: 24000,
+         * ...other metadata about the call...
+         * }
+         * }</p>
+         * <p>Response Expected: 1-channel 16-bit raw PCM audio at the sample rate specified in the request. Here is how the response will be piped to the transport:</p>
+         * <pre><code>response.on('data', (chunk: Buffer) =&gt; {
+         *   outputStream.write(chunk);
+         * });
+         * </code></pre>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -207,6 +252,9 @@ public final class CustomVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
@@ -224,6 +272,9 @@ public final class CustomVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -241,6 +292,9 @@ public final class CustomVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

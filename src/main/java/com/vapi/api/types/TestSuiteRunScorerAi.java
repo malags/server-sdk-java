@@ -100,16 +100,25 @@ public final class TestSuiteRunScorerAi {
     }
 
     public interface ResultStage {
+        /**
+         * <p>This is the result of the test suite.</p>
+         */
         ReasoningStage result(@NotNull TestSuiteRunScorerAiResult result);
 
         Builder from(TestSuiteRunScorerAi other);
     }
 
     public interface ReasoningStage {
+        /**
+         * <p>This is the reasoning provided by the AI scorer.</p>
+         */
         RubricStage reasoning(@NotNull String reasoning);
     }
 
     public interface RubricStage {
+        /**
+         * <p>This is the rubric used by the AI scorer.</p>
+         */
         _FinalStage rubric(@NotNull String rubric);
     }
 
@@ -140,6 +149,7 @@ public final class TestSuiteRunScorerAi {
 
         /**
          * <p>This is the result of the test suite.</p>
+         * <p>This is the result of the test suite.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -151,6 +161,7 @@ public final class TestSuiteRunScorerAi {
 
         /**
          * <p>This is the reasoning provided by the AI scorer.</p>
+         * <p>This is the reasoning provided by the AI scorer.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -161,6 +172,7 @@ public final class TestSuiteRunScorerAi {
         }
 
         /**
+         * <p>This is the rubric used by the AI scorer.</p>
          * <p>This is the rubric used by the AI scorer.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

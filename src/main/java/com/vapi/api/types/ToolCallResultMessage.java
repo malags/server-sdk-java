@@ -149,34 +149,55 @@ public final class ToolCallResultMessage {
     }
 
     public interface RoleStage {
+        /**
+         * <p>The role of the tool call result in the conversation.</p>
+         */
         ToolCallIdStage role(@NotNull String role);
 
         Builder from(ToolCallResultMessage other);
     }
 
     public interface ToolCallIdStage {
+        /**
+         * <p>The ID of the tool call.</p>
+         */
         NameStage toolCallId(@NotNull String toolCallId);
     }
 
     public interface NameStage {
+        /**
+         * <p>The name of the tool that returned the result.</p>
+         */
         ResultStage name(@NotNull String name);
     }
 
     public interface ResultStage {
+        /**
+         * <p>The result of the tool call in JSON format.</p>
+         */
         TimeStage result(@NotNull String result);
     }
 
     public interface TimeStage {
+        /**
+         * <p>The timestamp when the message was sent.</p>
+         */
         SecondsFromStartStage time(double time);
     }
 
     public interface SecondsFromStartStage {
+        /**
+         * <p>The number of seconds from the start of the conversation.</p>
+         */
         _FinalStage secondsFromStart(double secondsFromStart);
     }
 
     public interface _FinalStage {
         ToolCallResultMessage build();
 
+        /**
+         * <p>The metadata for the tool call result.</p>
+         */
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
         _FinalStage metadata(Map<String, Object> metadata);
@@ -224,6 +245,7 @@ public final class ToolCallResultMessage {
 
         /**
          * <p>The role of the tool call result in the conversation.</p>
+         * <p>The role of the tool call result in the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -234,6 +256,7 @@ public final class ToolCallResultMessage {
         }
 
         /**
+         * <p>The ID of the tool call.</p>
          * <p>The ID of the tool call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -246,6 +269,7 @@ public final class ToolCallResultMessage {
 
         /**
          * <p>The name of the tool that returned the result.</p>
+         * <p>The name of the tool that returned the result.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -256,6 +280,7 @@ public final class ToolCallResultMessage {
         }
 
         /**
+         * <p>The result of the tool call in JSON format.</p>
          * <p>The result of the tool call in JSON format.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -268,6 +293,7 @@ public final class ToolCallResultMessage {
 
         /**
          * <p>The timestamp when the message was sent.</p>
+         * <p>The timestamp when the message was sent.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -278,6 +304,7 @@ public final class ToolCallResultMessage {
         }
 
         /**
+         * <p>The number of seconds from the start of the conversation.</p>
          * <p>The number of seconds from the start of the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -298,6 +325,9 @@ public final class ToolCallResultMessage {
             return this;
         }
 
+        /**
+         * <p>The metadata for the tool call result.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<Map<String, Object>> metadata) {

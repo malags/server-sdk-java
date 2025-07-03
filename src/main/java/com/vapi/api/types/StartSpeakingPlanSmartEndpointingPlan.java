@@ -35,6 +35,8 @@ public final class StartSpeakingPlanSmartEndpointingPlan {
             return visitor.visit((VapiSmartEndpointingPlan) this.value);
         } else if (this.type == 1) {
             return visitor.visit((LivekitSmartEndpointingPlan) this.value);
+        } else if (this.type == 2) {
+            return visitor.visit((CustomEndpointingModelSmartEndpointingPlan) this.value);
         }
         throw new IllegalStateException("Failed to visit value. This should never happen.");
     }
@@ -68,10 +70,16 @@ public final class StartSpeakingPlanSmartEndpointingPlan {
         return new StartSpeakingPlanSmartEndpointingPlan(value, 1);
     }
 
+    public static StartSpeakingPlanSmartEndpointingPlan of(CustomEndpointingModelSmartEndpointingPlan value) {
+        return new StartSpeakingPlanSmartEndpointingPlan(value, 2);
+    }
+
     public interface Visitor<T> {
         T visit(VapiSmartEndpointingPlan value);
 
         T visit(LivekitSmartEndpointingPlan value);
+
+        T visit(CustomEndpointingModelSmartEndpointingPlan value);
     }
 
     static final class Deserializer extends StdDeserializer<StartSpeakingPlanSmartEndpointingPlan> {
@@ -89,6 +97,11 @@ public final class StartSpeakingPlanSmartEndpointingPlan {
             }
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, LivekitSmartEndpointingPlan.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(
+                        value, CustomEndpointingModelSmartEndpointingPlan.class));
             } catch (IllegalArgumentException e) {
             }
             throw new JsonParseException(p, "Failed to deserialize");

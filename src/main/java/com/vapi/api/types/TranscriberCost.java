@@ -99,18 +99,36 @@ public final class TranscriberCost {
     }
 
     public interface MinutesStage {
+        /**
+         * <p>This is the minutes of <code>transcriber</code> usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code> for single assistant calls, while squad calls will have multiple transcriber costs one for each assistant that was used.</p>
+         */
         CostStage minutes(double minutes);
 
         Builder from(TranscriberCost other);
     }
 
     public interface CostStage {
+        /**
+         * <p>This is the cost of the component in USD.</p>
+         */
         _FinalStage cost(double cost);
     }
 
     public interface _FinalStage {
         TranscriberCost build();
 
+        /**
+         * <p>This is the transcriber that was used during the call.</p>
+         * <p>This matches one of the below:</p>
+         * <ul>
+         * <li><code>call.assistant.transcriber</code>,</li>
+         * <li><code>call.assistantId-&gt;transcriber</code>,</li>
+         * <li><code>call.squad[n].assistant.transcriber</code>,</li>
+         * <li><code>call.squad[n].assistantId-&gt;transcriber</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistant.transcriber</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistantId-&gt;transcriber</code>.</li>
+         * </ul>
+         */
         _FinalStage transcriber(Map<String, Object> transcriber);
 
         _FinalStage putAllTranscriber(Map<String, Object> transcriber);
@@ -141,6 +159,7 @@ public final class TranscriberCost {
 
         /**
          * <p>This is the minutes of <code>transcriber</code> usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code> for single assistant calls, while squad calls will have multiple transcriber costs one for each assistant that was used.</p>
+         * <p>This is the minutes of <code>transcriber</code> usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code> for single assistant calls, while squad calls will have multiple transcriber costs one for each assistant that was used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -151,6 +170,7 @@ public final class TranscriberCost {
         }
 
         /**
+         * <p>This is the cost of the component in USD.</p>
          * <p>This is the cost of the component in USD.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -199,6 +219,18 @@ public final class TranscriberCost {
             return this;
         }
 
+        /**
+         * <p>This is the transcriber that was used during the call.</p>
+         * <p>This matches one of the below:</p>
+         * <ul>
+         * <li><code>call.assistant.transcriber</code>,</li>
+         * <li><code>call.assistantId-&gt;transcriber</code>,</li>
+         * <li><code>call.squad[n].assistant.transcriber</code>,</li>
+         * <li><code>call.squad[n].assistantId-&gt;transcriber</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistant.transcriber</code>,</li>
+         * <li><code>call.squadId-&gt;[n].assistantId-&gt;transcriber</code>.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "transcriber", nulls = Nulls.SKIP)
         public _FinalStage transcriber(Map<String, Object> transcriber) {

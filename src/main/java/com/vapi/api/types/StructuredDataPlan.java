@@ -148,6 +148,15 @@ public final class StructuredDataPlan {
             return this;
         }
 
+        /**
+         * <p>These are the messages used to generate the structured data.</p>
+         * <p>@default: <code>[ { &quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are an expert data extractor. You will be given a transcript of a call. Extract structured data per the JSON Schema. DO NOT return anything except the structured data.\n\nJson Schema:\\n{{schema}}\n\nOnly respond with the JSON.&quot; }, { &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Here is the transcript:\n\n{{transcript}}\n\n. Here is the ended reason of the call:\n\n{{endedReason}}\n\n&quot; } ]</code></p>
+         * <p>You can customize by providing any messages you want.</p>
+         * <p>Here are the template variables available:</p>
+         * <ul>
+         * <li>{{transcript}}: the transcript of the call from <code>call.artifact.transcript</code>- {{systemPrompt}}: the system prompt of the call from <code>assistant.model.messages[type=system].content</code>- {{schema}}: the schema of the structured data from <code>structuredDataPlan.schema</code>- {{endedReason}}: the ended reason of the call from <code>call.endedReason</code></li>
+         * </ul>
+         */
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public Builder messages(Optional<List<Map<String, Object>>> messages) {
             this.messages = messages;
@@ -159,6 +168,14 @@ public final class StructuredDataPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether structured data is generated and stored in <code>call.analysis.structuredData</code>. Defaults to false.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you want to extract structured data, set this to true and provide a <code>schema</code>.</li>
+         * </ul>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -170,6 +187,10 @@ public final class StructuredDataPlan {
             return this;
         }
 
+        /**
+         * <p>This is the schema of the structured data. The output is stored in <code>call.analysis.structuredData</code>.</p>
+         * <p>Complete guide on JSON Schema can be found <a href="https://ajv.js.org/json-schema.html#json-data-type">here</a>.</p>
+         */
         @JsonSetter(value = "schema", nulls = Nulls.SKIP)
         public Builder schema(Optional<JsonSchema> schema) {
             this.schema = schema;
@@ -181,6 +202,14 @@ public final class StructuredDataPlan {
             return this;
         }
 
+        /**
+         * <p>This is how long the request is tried before giving up. When request times out, <code>call.analysis.structuredData</code> will be empty.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To guarantee the structured data is generated, set this value high. Note, this will delay the end of call report in cases where model is slow to respond.</li>
+         * </ul>
+         * <p>@default 5 seconds</p>
+         */
         @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
         public Builder timeoutSeconds(Optional<Double> timeoutSeconds) {
             this.timeoutSeconds = timeoutSeconds;

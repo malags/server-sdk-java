@@ -48,6 +48,8 @@ public final class Org {
 
     private final Optional<String> jwtSecret;
 
+    private final Optional<Double> minutesUsed;
+
     private final Optional<String> name;
 
     private final Optional<OrgChannel> channel;
@@ -76,6 +78,7 @@ public final class Org {
             Optional<String> stripeSubscriptionStatus,
             Optional<OrgPlan> plan,
             Optional<String> jwtSecret,
+            Optional<Double> minutesUsed,
             Optional<String> name,
             Optional<OrgChannel> channel,
             Optional<Double> billingLimit,
@@ -96,6 +99,7 @@ public final class Org {
         this.stripeSubscriptionStatus = stripeSubscriptionStatus;
         this.plan = plan;
         this.jwtSecret = jwtSecret;
+        this.minutesUsed = minutesUsed;
         this.name = name;
         this.channel = channel;
         this.billingLimit = billingLimit;
@@ -209,6 +213,14 @@ public final class Org {
     }
 
     /**
+     * @return This is the total number of call minutes used by this org across all time.
+     */
+    @JsonProperty("minutesUsed")
+    public Optional<Double> getMinutesUsed() {
+        return minutesUsed;
+    }
+
+    /**
      * @return This is the name of the org. This is just for your own reference.
      */
     @JsonProperty("name")
@@ -292,6 +304,7 @@ public final class Org {
                 && stripeSubscriptionStatus.equals(other.stripeSubscriptionStatus)
                 && plan.equals(other.plan)
                 && jwtSecret.equals(other.jwtSecret)
+                && minutesUsed.equals(other.minutesUsed)
                 && name.equals(other.name)
                 && channel.equals(other.channel)
                 && billingLimit.equals(other.billingLimit)
@@ -316,6 +329,7 @@ public final class Org {
                 this.stripeSubscriptionStatus,
                 this.plan,
                 this.jwtSecret,
+                this.minutesUsed,
                 this.name,
                 this.channel,
                 this.billingLimit,
@@ -334,22 +348,36 @@ public final class Org {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the org.</p>
+         */
         CreatedAtStage id(@NotNull String id);
 
         Builder from(Org other);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the org was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the org was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         Org build();
 
+        /**
+         * <p>When this is enabled, no logs, recordings, or transcriptions will be stored. At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.
+         * When HIPAA is enabled, only OpenAI/Custom LLM or Azure Providers will be available for LLM and Voice respectively.
+         * This is due to the compliance requirements of HIPAA. Other providers may not meet these requirements.</p>
+         */
         _FinalStage hipaaEnabled(Optional<Boolean> hipaaEnabled);
 
         _FinalStage hipaaEnabled(Boolean hipaaEnabled);
@@ -358,58 +386,118 @@ public final class Org {
 
         _FinalStage subscription(Subscription subscription);
 
+        /**
+         * <p>This is the ID of the subscription the org belongs to.</p>
+         */
         _FinalStage subscriptionId(Optional<String> subscriptionId);
 
         _FinalStage subscriptionId(String subscriptionId);
 
+        /**
+         * <p>This is the Stripe customer for the org.</p>
+         */
         _FinalStage stripeCustomerId(Optional<String> stripeCustomerId);
 
         _FinalStage stripeCustomerId(String stripeCustomerId);
 
+        /**
+         * <p>This is the subscription for the org.</p>
+         */
         _FinalStage stripeSubscriptionId(Optional<String> stripeSubscriptionId);
 
         _FinalStage stripeSubscriptionId(String stripeSubscriptionId);
 
+        /**
+         * <p>This is the subscription's subscription item.</p>
+         */
         _FinalStage stripeSubscriptionItemId(Optional<String> stripeSubscriptionItemId);
 
         _FinalStage stripeSubscriptionItemId(String stripeSubscriptionItemId);
 
+        /**
+         * <p>This is the subscription's current period start.</p>
+         */
         _FinalStage stripeSubscriptionCurrentPeriodStart(Optional<OffsetDateTime> stripeSubscriptionCurrentPeriodStart);
 
         _FinalStage stripeSubscriptionCurrentPeriodStart(OffsetDateTime stripeSubscriptionCurrentPeriodStart);
 
+        /**
+         * <p>This is the subscription's status.</p>
+         */
         _FinalStage stripeSubscriptionStatus(Optional<String> stripeSubscriptionStatus);
 
         _FinalStage stripeSubscriptionStatus(String stripeSubscriptionStatus);
 
+        /**
+         * <p>This is the plan for the org.</p>
+         */
         _FinalStage plan(Optional<OrgPlan> plan);
 
         _FinalStage plan(OrgPlan plan);
 
+        /**
+         * <p>This is the secret key used for signing JWT tokens for the org.</p>
+         */
         _FinalStage jwtSecret(Optional<String> jwtSecret);
 
         _FinalStage jwtSecret(String jwtSecret);
 
+        /**
+         * <p>This is the total number of call minutes used by this org across all time.</p>
+         */
+        _FinalStage minutesUsed(Optional<Double> minutesUsed);
+
+        _FinalStage minutesUsed(Double minutesUsed);
+
+        /**
+         * <p>This is the name of the org. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the channel of the org. There is the cluster the API traffic for the org will be directed.</p>
+         */
         _FinalStage channel(Optional<OrgChannel> channel);
 
         _FinalStage channel(OrgChannel channel);
 
+        /**
+         * <p>This is the monthly billing limit for the org. To go beyond $1000/mo, please contact us at support@vapi.ai.</p>
+         */
         _FinalStage billingLimit(Optional<Double> billingLimit);
 
         _FinalStage billingLimit(Double billingLimit);
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         _FinalStage server(Optional<Server> server);
 
         _FinalStage server(Server server);
 
+        /**
+         * <p>This is the concurrency limit for the org. This is the maximum number of calls that can be active at any given time. To go beyond 10, please contact us at support@vapi.ai.</p>
+         */
         _FinalStage concurrencyLimit(Optional<Double> concurrencyLimit);
 
         _FinalStage concurrencyLimit(Double concurrencyLimit);
 
+        /**
+         * <p>Stores the information about the compliance plan enforced at the organization level. Currently pciEnabled is supported through this field.
+         * When this is enabled, any logs, recordings, or transcriptions will be shipped to the customer endpoints if provided else lost.
+         * At the end of the call, you will receive an end-of-call-report message to store on your server, if webhook is provided.
+         * Defaults to false.
+         * When PCI is enabled, only PCI-compliant Providers will be available for LLM, Voice and transcribers.
+         * This is due to the compliance requirements of PCI. Other providers may not meet these requirements.</p>
+         */
         _FinalStage compliancePlan(Optional<CompliancePlan> compliancePlan);
 
         _FinalStage compliancePlan(CompliancePlan compliancePlan);
@@ -434,6 +522,8 @@ public final class Org {
         private Optional<OrgChannel> channel = Optional.empty();
 
         private Optional<String> name = Optional.empty();
+
+        private Optional<Double> minutesUsed = Optional.empty();
 
         private Optional<String> jwtSecret = Optional.empty();
 
@@ -475,6 +565,7 @@ public final class Org {
             stripeSubscriptionStatus(other.getStripeSubscriptionStatus());
             plan(other.getPlan());
             jwtSecret(other.getJwtSecret());
+            minutesUsed(other.getMinutesUsed());
             name(other.getName());
             channel(other.getChannel());
             billingLimit(other.getBillingLimit());
@@ -485,6 +576,7 @@ public final class Org {
         }
 
         /**
+         * <p>This is the unique identifier for the org.</p>
          * <p>This is the unique identifier for the org.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -497,6 +589,7 @@ public final class Org {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the org was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the org was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -507,6 +600,7 @@ public final class Org {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the org was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the org was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -532,6 +626,14 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>Stores the information about the compliance plan enforced at the organization level. Currently pciEnabled is supported through this field.
+         * When this is enabled, any logs, recordings, or transcriptions will be shipped to the customer endpoints if provided else lost.
+         * At the end of the call, you will receive an end-of-call-report message to store on your server, if webhook is provided.
+         * Defaults to false.
+         * When PCI is enabled, only PCI-compliant Providers will be available for LLM, Voice and transcribers.
+         * This is due to the compliance requirements of PCI. Other providers may not meet these requirements.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "compliancePlan", nulls = Nulls.SKIP)
         public _FinalStage compliancePlan(Optional<CompliancePlan> compliancePlan) {
@@ -549,6 +651,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the concurrency limit for the org. This is the maximum number of calls that can be active at any given time. To go beyond 10, please contact us at support@vapi.ai.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "concurrencyLimit", nulls = Nulls.SKIP)
         public _FinalStage concurrencyLimit(Optional<Double> concurrencyLimit) {
@@ -572,6 +677,15 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @java.lang.Override
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public _FinalStage server(Optional<Server> server) {
@@ -589,6 +703,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the monthly billing limit for the org. To go beyond $1000/mo, please contact us at support@vapi.ai.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "billingLimit", nulls = Nulls.SKIP)
         public _FinalStage billingLimit(Optional<Double> billingLimit) {
@@ -606,6 +723,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the channel of the org. There is the cluster the API traffic for the org will be directed.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "channel", nulls = Nulls.SKIP)
         public _FinalStage channel(Optional<OrgChannel> channel) {
@@ -623,10 +743,33 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the name of the org. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
             this.name = name;
+            return this;
+        }
+
+        /**
+         * <p>This is the total number of call minutes used by this org across all time.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage minutesUsed(Double minutesUsed) {
+            this.minutesUsed = Optional.ofNullable(minutesUsed);
+            return this;
+        }
+
+        /**
+         * <p>This is the total number of call minutes used by this org across all time.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "minutesUsed", nulls = Nulls.SKIP)
+        public _FinalStage minutesUsed(Optional<Double> minutesUsed) {
+            this.minutesUsed = minutesUsed;
             return this;
         }
 
@@ -640,6 +783,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the secret key used for signing JWT tokens for the org.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "jwtSecret", nulls = Nulls.SKIP)
         public _FinalStage jwtSecret(Optional<String> jwtSecret) {
@@ -657,6 +803,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the plan for the org.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "plan", nulls = Nulls.SKIP)
         public _FinalStage plan(Optional<OrgPlan> plan) {
@@ -674,6 +823,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the subscription's status.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripeSubscriptionStatus", nulls = Nulls.SKIP)
         public _FinalStage stripeSubscriptionStatus(Optional<String> stripeSubscriptionStatus) {
@@ -691,6 +843,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the subscription's current period start.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripeSubscriptionCurrentPeriodStart", nulls = Nulls.SKIP)
         public _FinalStage stripeSubscriptionCurrentPeriodStart(
@@ -709,6 +864,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the subscription's subscription item.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripeSubscriptionItemId", nulls = Nulls.SKIP)
         public _FinalStage stripeSubscriptionItemId(Optional<String> stripeSubscriptionItemId) {
@@ -726,6 +884,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the subscription for the org.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripeSubscriptionId", nulls = Nulls.SKIP)
         public _FinalStage stripeSubscriptionId(Optional<String> stripeSubscriptionId) {
@@ -743,6 +904,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the Stripe customer for the org.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripeCustomerId", nulls = Nulls.SKIP)
         public _FinalStage stripeCustomerId(Optional<String> stripeCustomerId) {
@@ -760,6 +924,9 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the subscription the org belongs to.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "subscriptionId", nulls = Nulls.SKIP)
         public _FinalStage subscriptionId(Optional<String> subscriptionId) {
@@ -792,6 +959,11 @@ public final class Org {
             return this;
         }
 
+        /**
+         * <p>When this is enabled, no logs, recordings, or transcriptions will be stored. At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.
+         * When HIPAA is enabled, only OpenAI/Custom LLM or Azure Providers will be available for LLM and Voice respectively.
+         * This is due to the compliance requirements of HIPAA. Other providers may not meet these requirements.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hipaaEnabled", nulls = Nulls.SKIP)
         public _FinalStage hipaaEnabled(Optional<Boolean> hipaaEnabled) {
@@ -815,6 +987,7 @@ public final class Org {
                     stripeSubscriptionStatus,
                     plan,
                     jwtSecret,
+                    minutesUsed,
                     name,
                     channel,
                     billingLimit,

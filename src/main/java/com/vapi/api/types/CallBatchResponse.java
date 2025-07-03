@@ -96,6 +96,9 @@ public final class CallBatchResponse {
             return this;
         }
 
+        /**
+         * <p>This is the list of calls that were created.</p>
+         */
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public Builder results(List<Call> results) {
             this.results.clear();
@@ -113,6 +116,9 @@ public final class CallBatchResponse {
             return this;
         }
 
+        /**
+         * <p>This is the list of calls that failed to be created.</p>
+         */
         @JsonSetter(value = "errors", nulls = Nulls.SKIP)
         public Builder errors(List<CallBatchError> errors) {
             this.errors.clear();

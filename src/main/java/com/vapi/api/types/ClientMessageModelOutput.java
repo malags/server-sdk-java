@@ -171,6 +171,9 @@ public final class ClientMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public Builder phoneNumber(Optional<ClientMessageModelOutputPhoneNumber> phoneNumber) {
             this.phoneNumber = phoneNumber;
@@ -182,6 +185,9 @@ public final class ClientMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public Builder timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
@@ -193,6 +199,9 @@ public final class ClientMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public Builder call(Optional<Call> call) {
             this.call = call;
@@ -204,6 +213,9 @@ public final class ClientMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public Builder customer(Optional<CreateCustomerDto> customer) {
             this.customer = customer;
@@ -215,6 +227,9 @@ public final class ClientMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -226,6 +241,9 @@ public final class ClientMessageModelOutput {
             return this;
         }
 
+        /**
+         * <p>This is the output of the model. It can be a token or tool call.</p>
+         */
         @JsonSetter(value = "output", nulls = Nulls.SKIP)
         public Builder output(Map<String, Object> output) {
             this.output.clear();

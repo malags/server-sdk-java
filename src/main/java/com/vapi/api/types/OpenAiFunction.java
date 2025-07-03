@@ -113,6 +113,10 @@ public final class OpenAiFunction {
     }
 
     public interface NameStage {
+        /**
+         * <p>This is the the name of the function to be called.</p>
+         * <p>Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.</p>
+         */
         _FinalStage name(@NotNull String name);
 
         Builder from(OpenAiFunction other);
@@ -121,14 +125,26 @@ public final class OpenAiFunction {
     public interface _FinalStage {
         OpenAiFunction build();
 
+        /**
+         * <p>This is a boolean that controls whether to enable strict schema adherence when generating the function call. If set to true, the model will follow the exact schema defined in the parameters field. Only a subset of JSON Schema is supported when strict is true. Learn more about Structured Outputs in the <a href="https://openai.com/index/introducing-structured-outputs-in-the-api/">OpenAI guide</a>.</p>
+         * <p>@default false</p>
+         */
         _FinalStage strict(Optional<Boolean> strict);
 
         _FinalStage strict(Boolean strict);
 
+        /**
+         * <p>This is the description of what the function does, used by the AI to choose when and how to call the function.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
 
+        /**
+         * <p>These are the parameters the functions accepts, described as a JSON Schema object.</p>
+         * <p>See the <a href="https://platform.openai.com/docs/guides/function-calling">OpenAI guide</a> for examples, and the <a href="https://json-schema.org/understanding-json-schema">JSON Schema reference</a> for documentation about the format.</p>
+         * <p>Omitting parameters defines a function with an empty parameter list.</p>
+         */
         _FinalStage parameters(Optional<OpenAiFunctionParameters> parameters);
 
         _FinalStage parameters(OpenAiFunctionParameters parameters);
@@ -161,6 +177,8 @@ public final class OpenAiFunction {
         /**
          * <p>This is the the name of the function to be called.</p>
          * <p>Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.</p>
+         * <p>This is the the name of the function to be called.</p>
+         * <p>Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -182,6 +200,11 @@ public final class OpenAiFunction {
             return this;
         }
 
+        /**
+         * <p>These are the parameters the functions accepts, described as a JSON Schema object.</p>
+         * <p>See the <a href="https://platform.openai.com/docs/guides/function-calling">OpenAI guide</a> for examples, and the <a href="https://json-schema.org/understanding-json-schema">JSON Schema reference</a> for documentation about the format.</p>
+         * <p>Omitting parameters defines a function with an empty parameter list.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "parameters", nulls = Nulls.SKIP)
         public _FinalStage parameters(Optional<OpenAiFunctionParameters> parameters) {
@@ -199,6 +222,9 @@ public final class OpenAiFunction {
             return this;
         }
 
+        /**
+         * <p>This is the description of what the function does, used by the AI to choose when and how to call the function.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
@@ -217,6 +243,10 @@ public final class OpenAiFunction {
             return this;
         }
 
+        /**
+         * <p>This is a boolean that controls whether to enable strict schema adherence when generating the function call. If set to true, the model will follow the exact schema defined in the parameters field. Only a subset of JSON Schema is supported when strict is true. Learn more about Structured Outputs in the <a href="https://openai.com/index/introducing-structured-outputs-in-the-api/">OpenAI guide</a>.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "strict", nulls = Nulls.SKIP)
         public _FinalStage strict(Optional<Boolean> strict) {

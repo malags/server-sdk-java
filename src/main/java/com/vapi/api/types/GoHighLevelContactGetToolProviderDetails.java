@@ -96,6 +96,9 @@ public final class GoHighLevelContactGetToolProviderDetails {
             return this;
         }
 
+        /**
+         * <p>This is the Template URL or the Snapshot URL corresponding to the Template.</p>
+         */
         @JsonSetter(value = "templateUrl", nulls = Nulls.SKIP)
         public Builder templateUrl(Optional<String> templateUrl) {
             this.templateUrl = templateUrl;

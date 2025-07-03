@@ -30,15 +30,15 @@ public final class JsonSchema {
 
     private final Optional<String> description;
 
+    private final Optional<String> pattern;
+
+    private final Optional<JsonSchemaFormat> format;
+
     private final Optional<List<String>> required;
 
-    private final Optional<String> regex;
-
-    private final Optional<String> value;
-
-    private final Optional<String> target;
-
     private final Optional<List<String>> enum_;
+
+    private final Optional<String> title;
 
     private final Map<String, Object> additionalProperties;
 
@@ -47,21 +47,21 @@ public final class JsonSchema {
             Optional<Map<String, Object>> items,
             Optional<Map<String, Object>> properties,
             Optional<String> description,
+            Optional<String> pattern,
+            Optional<JsonSchemaFormat> format,
             Optional<List<String>> required,
-            Optional<String> regex,
-            Optional<String> value,
-            Optional<String> target,
             Optional<List<String>> enum_,
+            Optional<String> title,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.items = items;
         this.properties = properties;
         this.description = description;
+        this.pattern = pattern;
+        this.format = format;
         this.required = required;
-        this.regex = regex;
-        this.value = value;
-        this.target = target;
         this.enum_ = enum_;
+        this.title = title;
         this.additionalProperties = additionalProperties;
     }
 
@@ -104,6 +104,24 @@ public final class JsonSchema {
     }
 
     /**
+     * @return This is the pattern of the string. This is a regex that will be used to validate the data in question. To use a common format, use the <code>format</code> property instead.
+     * <p>OpenAI documentation: https://platform.openai.com/docs/guides/structured-outputs#supported-properties</p>
+     */
+    @JsonProperty("pattern")
+    public Optional<String> getPattern() {
+        return pattern;
+    }
+
+    /**
+     * @return This is the format of the string. To pass a regex, use the <code>pattern</code> property instead.
+     * <p>OpenAI documentation: https://platform.openai.com/docs/guides/structured-outputs?api-mode=chat&amp;type-restrictions=string-restrictions</p>
+     */
+    @JsonProperty("format")
+    public Optional<JsonSchemaFormat> getFormat() {
+        return format;
+    }
+
+    /**
      * @return This is a list of properties that are required.
      * <p>This only makes sense if the type is &quot;object&quot;.</p>
      */
@@ -113,35 +131,19 @@ public final class JsonSchema {
     }
 
     /**
-     * @return This is a regex that will be used to validate data in question.
-     */
-    @JsonProperty("regex")
-    public Optional<String> getRegex() {
-        return regex;
-    }
-
-    /**
-     * @return This the value that will be used in filling the property.
-     */
-    @JsonProperty("value")
-    public Optional<String> getValue() {
-        return value;
-    }
-
-    /**
-     * @return This the target variable that will be filled with the value of this property.
-     */
-    @JsonProperty("target")
-    public Optional<String> getTarget() {
-        return target;
-    }
-
-    /**
      * @return This array specifies the allowed values that can be used to restrict the output of the model.
      */
     @JsonProperty("enum")
     public Optional<List<String>> getEnum() {
         return enum_;
+    }
+
+    /**
+     * @return This is the title of the schema.
+     */
+    @JsonProperty("title")
+    public Optional<String> getTitle() {
+        return title;
     }
 
     @java.lang.Override
@@ -160,11 +162,11 @@ public final class JsonSchema {
                 && items.equals(other.items)
                 && properties.equals(other.properties)
                 && description.equals(other.description)
+                && pattern.equals(other.pattern)
+                && format.equals(other.format)
                 && required.equals(other.required)
-                && regex.equals(other.regex)
-                && value.equals(other.value)
-                && target.equals(other.target)
-                && enum_.equals(other.enum_);
+                && enum_.equals(other.enum_)
+                && title.equals(other.title);
     }
 
     @java.lang.Override
@@ -174,11 +176,11 @@ public final class JsonSchema {
                 this.items,
                 this.properties,
                 this.description,
+                this.pattern,
+                this.format,
                 this.required,
-                this.regex,
-                this.value,
-                this.target,
-                this.enum_);
+                this.enum_,
+                this.title);
     }
 
     @java.lang.Override
@@ -191,6 +193,13 @@ public final class JsonSchema {
     }
 
     public interface TypeStage {
+        /**
+         * <p>This is the type of output you'd like.</p>
+         * <p><code>string</code>, <code>number</code>, <code>integer</code>, <code>boolean</code> are the primitive types and should be obvious.</p>
+         * <p><code>array</code> and <code>object</code> are more interesting and quite powerful. They allow you to define nested structures.</p>
+         * <p>For <code>array</code>, you can define the schema of the items in the array using the <code>items</code> property.</p>
+         * <p>For <code>object</code>, you can define the properties of the object using the <code>properties</code> property.</p>
+         */
         _FinalStage type(@NotNull JsonSchemaType type);
 
         Builder from(JsonSchema other);
@@ -199,52 +208,81 @@ public final class JsonSchema {
     public interface _FinalStage {
         JsonSchema build();
 
+        /**
+         * <p>This is required if the type is &quot;array&quot;. This is the schema of the items in the array.</p>
+         * <p>This is of type JsonSchema. However, Swagger doesn't support circular references.</p>
+         */
         _FinalStage items(Optional<Map<String, Object>> items);
 
         _FinalStage items(Map<String, Object> items);
 
+        /**
+         * <p>This is required if the type is &quot;object&quot;. This specifies the properties of the object.</p>
+         * <p>This is a map of string to JsonSchema. However, Swagger doesn't support circular references.</p>
+         */
         _FinalStage properties(Optional<Map<String, Object>> properties);
 
         _FinalStage properties(Map<String, Object> properties);
 
+        /**
+         * <p>This is the description to help the model understand what it needs to output.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
 
+        /**
+         * <p>This is the pattern of the string. This is a regex that will be used to validate the data in question. To use a common format, use the <code>format</code> property instead.</p>
+         * <p>OpenAI documentation: https://platform.openai.com/docs/guides/structured-outputs#supported-properties</p>
+         */
+        _FinalStage pattern(Optional<String> pattern);
+
+        _FinalStage pattern(String pattern);
+
+        /**
+         * <p>This is the format of the string. To pass a regex, use the <code>pattern</code> property instead.</p>
+         * <p>OpenAI documentation: https://platform.openai.com/docs/guides/structured-outputs?api-mode=chat&amp;type-restrictions=string-restrictions</p>
+         */
+        _FinalStage format(Optional<JsonSchemaFormat> format);
+
+        _FinalStage format(JsonSchemaFormat format);
+
+        /**
+         * <p>This is a list of properties that are required.</p>
+         * <p>This only makes sense if the type is &quot;object&quot;.</p>
+         */
         _FinalStage required(Optional<List<String>> required);
 
         _FinalStage required(List<String> required);
 
-        _FinalStage regex(Optional<String> regex);
-
-        _FinalStage regex(String regex);
-
-        _FinalStage value(Optional<String> value);
-
-        _FinalStage value(String value);
-
-        _FinalStage target(Optional<String> target);
-
-        _FinalStage target(String target);
-
+        /**
+         * <p>This array specifies the allowed values that can be used to restrict the output of the model.</p>
+         */
         _FinalStage enum_(Optional<List<String>> enum_);
 
         _FinalStage enum_(List<String> enum_);
+
+        /**
+         * <p>This is the title of the schema.</p>
+         */
+        _FinalStage title(Optional<String> title);
+
+        _FinalStage title(String title);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TypeStage, _FinalStage {
         private JsonSchemaType type;
 
+        private Optional<String> title = Optional.empty();
+
         private Optional<List<String>> enum_ = Optional.empty();
 
-        private Optional<String> target = Optional.empty();
-
-        private Optional<String> value = Optional.empty();
-
-        private Optional<String> regex = Optional.empty();
-
         private Optional<List<String>> required = Optional.empty();
+
+        private Optional<JsonSchemaFormat> format = Optional.empty();
+
+        private Optional<String> pattern = Optional.empty();
 
         private Optional<String> description = Optional.empty();
 
@@ -263,15 +301,20 @@ public final class JsonSchema {
             items(other.getItems());
             properties(other.getProperties());
             description(other.getDescription());
+            pattern(other.getPattern());
+            format(other.getFormat());
             required(other.getRequired());
-            regex(other.getRegex());
-            value(other.getValue());
-            target(other.getTarget());
             enum_(other.getEnum());
+            title(other.getTitle());
             return this;
         }
 
         /**
+         * <p>This is the type of output you'd like.</p>
+         * <p><code>string</code>, <code>number</code>, <code>integer</code>, <code>boolean</code> are the primitive types and should be obvious.</p>
+         * <p><code>array</code> and <code>object</code> are more interesting and quite powerful. They allow you to define nested structures.</p>
+         * <p>For <code>array</code>, you can define the schema of the items in the array using the <code>items</code> property.</p>
+         * <p>For <code>object</code>, you can define the properties of the object using the <code>properties</code> property.</p>
          * <p>This is the type of output you'd like.</p>
          * <p><code>string</code>, <code>number</code>, <code>integer</code>, <code>boolean</code> are the primitive types and should be obvious.</p>
          * <p><code>array</code> and <code>object</code> are more interesting and quite powerful. They allow you to define nested structures.</p>
@@ -287,6 +330,26 @@ public final class JsonSchema {
         }
 
         /**
+         * <p>This is the title of the schema.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage title(String title) {
+            this.title = Optional.ofNullable(title);
+            return this;
+        }
+
+        /**
+         * <p>This is the title of the schema.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "title", nulls = Nulls.SKIP)
+        public _FinalStage title(Optional<String> title) {
+            this.title = title;
+            return this;
+        }
+
+        /**
          * <p>This array specifies the allowed values that can be used to restrict the output of the model.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -296,61 +359,13 @@ public final class JsonSchema {
             return this;
         }
 
+        /**
+         * <p>This array specifies the allowed values that can be used to restrict the output of the model.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "enum", nulls = Nulls.SKIP)
         public _FinalStage enum_(Optional<List<String>> enum_) {
             this.enum_ = enum_;
-            return this;
-        }
-
-        /**
-         * <p>This the target variable that will be filled with the value of this property.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage target(String target) {
-            this.target = Optional.ofNullable(target);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "target", nulls = Nulls.SKIP)
-        public _FinalStage target(Optional<String> target) {
-            this.target = target;
-            return this;
-        }
-
-        /**
-         * <p>This the value that will be used in filling the property.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage value(String value) {
-            this.value = Optional.ofNullable(value);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "value", nulls = Nulls.SKIP)
-        public _FinalStage value(Optional<String> value) {
-            this.value = value;
-            return this;
-        }
-
-        /**
-         * <p>This is a regex that will be used to validate data in question.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage regex(String regex) {
-            this.regex = Optional.ofNullable(regex);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "regex", nulls = Nulls.SKIP)
-        public _FinalStage regex(Optional<String> regex) {
-            this.regex = regex;
             return this;
         }
 
@@ -365,10 +380,58 @@ public final class JsonSchema {
             return this;
         }
 
+        /**
+         * <p>This is a list of properties that are required.</p>
+         * <p>This only makes sense if the type is &quot;object&quot;.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "required", nulls = Nulls.SKIP)
         public _FinalStage required(Optional<List<String>> required) {
             this.required = required;
+            return this;
+        }
+
+        /**
+         * <p>This is the format of the string. To pass a regex, use the <code>pattern</code> property instead.</p>
+         * <p>OpenAI documentation: https://platform.openai.com/docs/guides/structured-outputs?api-mode=chat&amp;type-restrictions=string-restrictions</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage format(JsonSchemaFormat format) {
+            this.format = Optional.ofNullable(format);
+            return this;
+        }
+
+        /**
+         * <p>This is the format of the string. To pass a regex, use the <code>pattern</code> property instead.</p>
+         * <p>OpenAI documentation: https://platform.openai.com/docs/guides/structured-outputs?api-mode=chat&amp;type-restrictions=string-restrictions</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "format", nulls = Nulls.SKIP)
+        public _FinalStage format(Optional<JsonSchemaFormat> format) {
+            this.format = format;
+            return this;
+        }
+
+        /**
+         * <p>This is the pattern of the string. This is a regex that will be used to validate the data in question. To use a common format, use the <code>format</code> property instead.</p>
+         * <p>OpenAI documentation: https://platform.openai.com/docs/guides/structured-outputs#supported-properties</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage pattern(String pattern) {
+            this.pattern = Optional.ofNullable(pattern);
+            return this;
+        }
+
+        /**
+         * <p>This is the pattern of the string. This is a regex that will be used to validate the data in question. To use a common format, use the <code>format</code> property instead.</p>
+         * <p>OpenAI documentation: https://platform.openai.com/docs/guides/structured-outputs#supported-properties</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "pattern", nulls = Nulls.SKIP)
+        public _FinalStage pattern(Optional<String> pattern) {
+            this.pattern = pattern;
             return this;
         }
 
@@ -382,6 +445,9 @@ public final class JsonSchema {
             return this;
         }
 
+        /**
+         * <p>This is the description to help the model understand what it needs to output.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
@@ -400,6 +466,10 @@ public final class JsonSchema {
             return this;
         }
 
+        /**
+         * <p>This is required if the type is &quot;object&quot;. This specifies the properties of the object.</p>
+         * <p>This is a map of string to JsonSchema. However, Swagger doesn't support circular references.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "properties", nulls = Nulls.SKIP)
         public _FinalStage properties(Optional<Map<String, Object>> properties) {
@@ -418,6 +488,10 @@ public final class JsonSchema {
             return this;
         }
 
+        /**
+         * <p>This is required if the type is &quot;array&quot;. This is the schema of the items in the array.</p>
+         * <p>This is of type JsonSchema. However, Swagger doesn't support circular references.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "items", nulls = Nulls.SKIP)
         public _FinalStage items(Optional<Map<String, Object>> items) {
@@ -428,7 +502,16 @@ public final class JsonSchema {
         @java.lang.Override
         public JsonSchema build() {
             return new JsonSchema(
-                    type, items, properties, description, required, regex, value, target, enum_, additionalProperties);
+                    type,
+                    items,
+                    properties,
+                    description,
+                    pattern,
+                    format,
+                    required,
+                    enum_,
+                    title,
+                    additionalProperties);
         }
     }
 }

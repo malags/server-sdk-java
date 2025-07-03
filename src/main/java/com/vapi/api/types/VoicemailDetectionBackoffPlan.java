@@ -114,6 +114,9 @@ public final class VoicemailDetectionBackoffPlan {
             return this;
         }
 
+        /**
+         * <p>This is the number of seconds to wait before starting the first retry attempt.</p>
+         */
         @JsonSetter(value = "startAtSeconds", nulls = Nulls.SKIP)
         public Builder startAtSeconds(Optional<Double> startAtSeconds) {
             this.startAtSeconds = startAtSeconds;
@@ -125,6 +128,9 @@ public final class VoicemailDetectionBackoffPlan {
             return this;
         }
 
+        /**
+         * <p>This is the interval in seconds between retry attempts.</p>
+         */
         @JsonSetter(value = "frequencySeconds", nulls = Nulls.SKIP)
         public Builder frequencySeconds(Optional<Double> frequencySeconds) {
             this.frequencySeconds = frequencySeconds;
@@ -136,6 +142,9 @@ public final class VoicemailDetectionBackoffPlan {
             return this;
         }
 
+        /**
+         * <p>This is the maximum number of retry attempts before giving up.</p>
+         */
         @JsonSetter(value = "maxRetries", nulls = Nulls.SKIP)
         public Builder maxRetries(Optional<Double> maxRetries) {
             this.maxRetries = maxRetries;

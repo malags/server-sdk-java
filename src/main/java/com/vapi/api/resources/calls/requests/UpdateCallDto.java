@@ -80,6 +80,9 @@ public final class UpdateCallDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the call. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

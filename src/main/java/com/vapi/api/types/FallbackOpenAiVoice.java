@@ -138,6 +138,10 @@ public final class FallbackOpenAiVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the provider-specific ID that will be used.
+         * Please note that ash, ballad, coral, sage, and verse may only be used with realtime models.</p>
+         */
         _FinalStage voiceId(@NotNull FallbackOpenAiVoiceId voiceId);
 
         Builder from(FallbackOpenAiVoice other);
@@ -146,22 +150,38 @@ public final class FallbackOpenAiVoice {
     public interface _FinalStage {
         FallbackOpenAiVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the model that will be used for text-to-speech.</p>
+         */
         _FinalStage model(Optional<FallbackOpenAiVoiceModel> model);
 
         _FinalStage model(FallbackOpenAiVoiceModel model);
 
+        /**
+         * <p>This is a prompt that allows you to control the voice of your generated audio.
+         * Does not work with 'tts-1' or 'tts-1-hd' models.</p>
+         */
         _FinalStage instructions(Optional<String> instructions);
 
         _FinalStage instructions(String instructions);
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         */
         _FinalStage speed(Optional<Double> speed);
 
         _FinalStage speed(Double speed);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -200,6 +220,8 @@ public final class FallbackOpenAiVoice {
         /**
          * <p>This is the provider-specific ID that will be used.
          * Please note that ash, ballad, coral, sage, and verse may only be used with realtime models.</p>
+         * <p>This is the provider-specific ID that will be used.
+         * Please note that ash, ballad, coral, sage, and verse may only be used with realtime models.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -219,6 +241,9 @@ public final class FallbackOpenAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -236,6 +261,9 @@ public final class FallbackOpenAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "speed", nulls = Nulls.SKIP)
         public _FinalStage speed(Optional<Double> speed) {
@@ -254,6 +282,10 @@ public final class FallbackOpenAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is a prompt that allows you to control the voice of your generated audio.
+         * Does not work with 'tts-1' or 'tts-1-hd' models.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "instructions", nulls = Nulls.SKIP)
         public _FinalStage instructions(Optional<String> instructions) {
@@ -271,6 +303,9 @@ public final class FallbackOpenAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used for text-to-speech.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<FallbackOpenAiVoiceModel> model) {
@@ -288,6 +323,9 @@ public final class FallbackOpenAiVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

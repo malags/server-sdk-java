@@ -569,150 +569,264 @@ public final class Subscription {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the subscription.</p>
+         */
         CreatedAtStage id(@NotNull String id);
 
         Builder from(Subscription other);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the timestamp when the subscription was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the timestamp when the subscription was last updated.</p>
+         */
         TypeStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface TypeStage {
+        /**
+         * <p>This is the type / tier of the subscription.</p>
+         */
         StatusStage type(@NotNull SubscriptionType type);
     }
 
     public interface StatusStage {
+        /**
+         * <p>This is the status of the subscription. Past due subscriptions are subscriptions
+         * with past due payments.</p>
+         */
         CreditsStage status(@NotNull SubscriptionStatus status);
     }
 
     public interface CreditsStage {
+        /**
+         * <p>This is the number of credits the subscription currently has.</p>
+         * <p>Note: This is a string to avoid floating point precision issues.</p>
+         */
         ConcurrencyCounterStage credits(@NotNull String credits);
     }
 
     public interface ConcurrencyCounterStage {
+        /**
+         * <p>This is the total number of active calls (concurrency) across all orgs under this subscription.</p>
+         */
         ConcurrencyLimitIncludedStage concurrencyCounter(double concurrencyCounter);
     }
 
     public interface ConcurrencyLimitIncludedStage {
+        /**
+         * <p>This is the default concurrency limit for the subscription.</p>
+         */
         ConcurrencyLimitPurchasedStage concurrencyLimitIncluded(double concurrencyLimitIncluded);
     }
 
     public interface ConcurrencyLimitPurchasedStage {
+        /**
+         * <p>This is the purchased add-on concurrency limit for the subscription.</p>
+         */
         _FinalStage concurrencyLimitPurchased(double concurrencyLimitPurchased);
     }
 
     public interface _FinalStage {
         Subscription build();
 
+        /**
+         * <p>This is the number of free phone numbers the subscription has</p>
+         */
         _FinalStage phoneNumbersCounter(Optional<Double> phoneNumbersCounter);
 
         _FinalStage phoneNumbersCounter(Double phoneNumbersCounter);
 
+        /**
+         * <p>This is the maximum number of free phone numbers the subscription can have</p>
+         */
         _FinalStage phoneNumbersIncluded(Optional<Double> phoneNumbersIncluded);
 
         _FinalStage phoneNumbersIncluded(Double phoneNumbersIncluded);
 
+        /**
+         * <p>This is the ID of the monthly job that charges for subscription add ons and phone numbers.</p>
+         */
         _FinalStage monthlyChargeScheduleId(Optional<Double> monthlyChargeScheduleId);
 
         _FinalStage monthlyChargeScheduleId(Double monthlyChargeScheduleId);
 
+        /**
+         * <p>This is the ID of the monthly job that checks whether the credit balance of the subscription
+         * is sufficient for the monthly charge.</p>
+         */
         _FinalStage monthlyCreditCheckScheduleId(Optional<Double> monthlyCreditCheckScheduleId);
 
         _FinalStage monthlyCreditCheckScheduleId(Double monthlyCreditCheckScheduleId);
 
+        /**
+         * <p>This is the Stripe customer ID.</p>
+         */
         _FinalStage stripeCustomerId(Optional<String> stripeCustomerId);
 
         _FinalStage stripeCustomerId(String stripeCustomerId);
 
+        /**
+         * <p>This is the Stripe payment ID.</p>
+         */
         _FinalStage stripePaymentMethodId(Optional<String> stripePaymentMethodId);
 
         _FinalStage stripePaymentMethodId(String stripePaymentMethodId);
 
+        /**
+         * <p>If this flag is true, then the user has purchased slack support.</p>
+         */
         _FinalStage slackSupportEnabled(Optional<Boolean> slackSupportEnabled);
 
         _FinalStage slackSupportEnabled(Boolean slackSupportEnabled);
 
+        /**
+         * <p>If this subscription has a slack support subscription, the slack channel's ID will be stored here.</p>
+         */
         _FinalStage slackChannelId(Optional<String> slackChannelId);
 
         _FinalStage slackChannelId(String slackChannelId);
 
+        /**
+         * <p>This is the HIPAA enabled flag for the subscription. It determines whether orgs under this
+         * subscription have the option to enable HIPAA compliance.</p>
+         */
         _FinalStage hipaaEnabled(Optional<Boolean> hipaaEnabled);
 
         _FinalStage hipaaEnabled(Boolean hipaaEnabled);
 
+        /**
+         * <p>This is the ID for the Common Paper agreement outlining the HIPAA contract.</p>
+         */
         _FinalStage hipaaCommonPaperAgreementId(Optional<String> hipaaCommonPaperAgreementId);
 
         _FinalStage hipaaCommonPaperAgreementId(String hipaaCommonPaperAgreementId);
 
+        /**
+         * <p>This is the Stripe fingerprint of the payment method (card). It allows us
+         * to detect users who try to abuse our system through multiple sign-ups.</p>
+         */
         _FinalStage stripePaymentMethodFingerprint(Optional<String> stripePaymentMethodFingerprint);
 
         _FinalStage stripePaymentMethodFingerprint(String stripePaymentMethodFingerprint);
 
+        /**
+         * <p>This is the customer's email on Stripe.</p>
+         */
         _FinalStage stripeCustomerEmail(Optional<String> stripeCustomerEmail);
 
         _FinalStage stripeCustomerEmail(String stripeCustomerEmail);
 
+        /**
+         * <p>This is the email of the referrer for the subscription.</p>
+         */
         _FinalStage referredByEmail(Optional<String> referredByEmail);
 
         _FinalStage referredByEmail(String referredByEmail);
 
+        /**
+         * <p>This is the auto reload plan configured for the subscription.</p>
+         */
         _FinalStage autoReloadPlan(Optional<AutoReloadPlan> autoReloadPlan);
 
         _FinalStage autoReloadPlan(AutoReloadPlan autoReloadPlan);
 
+        /**
+         * <p>The number of minutes included in the subscription.</p>
+         */
         _FinalStage minutesIncluded(Optional<Double> minutesIncluded);
 
         _FinalStage minutesIncluded(Double minutesIncluded);
 
+        /**
+         * <p>The number of minutes used in the subscription.</p>
+         */
         _FinalStage minutesUsed(Optional<Double> minutesUsed);
 
         _FinalStage minutesUsed(Double minutesUsed);
 
+        /**
+         * <p>This is the timestamp at which the number of monthly free minutes is scheduled to reset at.</p>
+         */
         _FinalStage minutesUsedNextResetAt(Optional<OffsetDateTime> minutesUsedNextResetAt);
 
         _FinalStage minutesUsedNextResetAt(OffsetDateTime minutesUsedNextResetAt);
 
+        /**
+         * <p>The per minute charge on minutes that exceed the included minutes. Enterprise only.</p>
+         */
         _FinalStage minutesOverageCost(Optional<Double> minutesOverageCost);
 
         _FinalStage minutesOverageCost(Double minutesOverageCost);
 
+        /**
+         * <p>The list of providers included in the subscription. Enterprise only.</p>
+         */
         _FinalStage providersIncluded(Optional<List<String>> providersIncluded);
 
         _FinalStage providersIncluded(List<String> providersIncluded);
 
+        /**
+         * <p>The maximum number of outbound calls this subscription may make in a day. Resets every night.</p>
+         */
         _FinalStage outboundCallsDailyLimit(Optional<Double> outboundCallsDailyLimit);
 
         _FinalStage outboundCallsDailyLimit(Double outboundCallsDailyLimit);
 
+        /**
+         * <p>The current number of outbound calls the subscription has made in the current day.</p>
+         */
         _FinalStage outboundCallsCounter(Optional<Double> outboundCallsCounter);
 
         _FinalStage outboundCallsCounter(Double outboundCallsCounter);
 
+        /**
+         * <p>This is the timestamp at which the outbound calls counter is scheduled to reset at.</p>
+         */
         _FinalStage outboundCallsCounterNextResetAt(Optional<OffsetDateTime> outboundCallsCounterNextResetAt);
 
         _FinalStage outboundCallsCounterNextResetAt(OffsetDateTime outboundCallsCounterNextResetAt);
 
+        /**
+         * <p>This is the IDs of the coupons applicable to this subscription.</p>
+         */
         _FinalStage couponIds(Optional<List<String>> couponIds);
 
         _FinalStage couponIds(List<String> couponIds);
 
+        /**
+         * <p>This is the number of credits left obtained from a coupon.</p>
+         */
         _FinalStage couponUsageLeft(Optional<String> couponUsageLeft);
 
         _FinalStage couponUsageLeft(String couponUsageLeft);
 
+        /**
+         * <p>This is the invoice plan for the subscription.</p>
+         */
         _FinalStage invoicePlan(Optional<InvoicePlan> invoicePlan);
 
         _FinalStage invoicePlan(InvoicePlan invoicePlan);
 
+        /**
+         * <p>This is the PCI enabled flag for the subscription. It determines whether orgs under this
+         * subscription have the option to enable PCI compliance.</p>
+         */
         _FinalStage pciEnabled(Optional<Boolean> pciEnabled);
 
         _FinalStage pciEnabled(Boolean pciEnabled);
 
+        /**
+         * <p>This is the ID for the Common Paper agreement outlining the PCI contract.</p>
+         */
         _FinalStage pciCommonPaperAgreementId(Optional<String> pciCommonPaperAgreementId);
 
         _FinalStage pciCommonPaperAgreementId(String pciCommonPaperAgreementId);
@@ -850,6 +964,7 @@ public final class Subscription {
 
         /**
          * <p>This is the unique identifier for the subscription.</p>
+         * <p>This is the unique identifier for the subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -860,6 +975,7 @@ public final class Subscription {
         }
 
         /**
+         * <p>This is the timestamp when the subscription was created.</p>
          * <p>This is the timestamp when the subscription was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -872,6 +988,7 @@ public final class Subscription {
 
         /**
          * <p>This is the timestamp when the subscription was last updated.</p>
+         * <p>This is the timestamp when the subscription was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -883,6 +1000,7 @@ public final class Subscription {
 
         /**
          * <p>This is the type / tier of the subscription.</p>
+         * <p>This is the type / tier of the subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -893,6 +1011,8 @@ public final class Subscription {
         }
 
         /**
+         * <p>This is the status of the subscription. Past due subscriptions are subscriptions
+         * with past due payments.</p>
          * <p>This is the status of the subscription. Past due subscriptions are subscriptions
          * with past due payments.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -907,6 +1027,8 @@ public final class Subscription {
         /**
          * <p>This is the number of credits the subscription currently has.</p>
          * <p>Note: This is a string to avoid floating point precision issues.</p>
+         * <p>This is the number of credits the subscription currently has.</p>
+         * <p>Note: This is a string to avoid floating point precision issues.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -917,6 +1039,7 @@ public final class Subscription {
         }
 
         /**
+         * <p>This is the total number of active calls (concurrency) across all orgs under this subscription.</p>
          * <p>This is the total number of active calls (concurrency) across all orgs under this subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -929,6 +1052,7 @@ public final class Subscription {
 
         /**
          * <p>This is the default concurrency limit for the subscription.</p>
+         * <p>This is the default concurrency limit for the subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -939,6 +1063,7 @@ public final class Subscription {
         }
 
         /**
+         * <p>This is the purchased add-on concurrency limit for the subscription.</p>
          * <p>This is the purchased add-on concurrency limit for the subscription.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -959,6 +1084,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the ID for the Common Paper agreement outlining the PCI contract.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "pciCommonPaperAgreementId", nulls = Nulls.SKIP)
         public _FinalStage pciCommonPaperAgreementId(Optional<String> pciCommonPaperAgreementId) {
@@ -977,6 +1105,10 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the PCI enabled flag for the subscription. It determines whether orgs under this
+         * subscription have the option to enable PCI compliance.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "pciEnabled", nulls = Nulls.SKIP)
         public _FinalStage pciEnabled(Optional<Boolean> pciEnabled) {
@@ -994,6 +1126,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the invoice plan for the subscription.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "invoicePlan", nulls = Nulls.SKIP)
         public _FinalStage invoicePlan(Optional<InvoicePlan> invoicePlan) {
@@ -1011,6 +1146,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the number of credits left obtained from a coupon.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "couponUsageLeft", nulls = Nulls.SKIP)
         public _FinalStage couponUsageLeft(Optional<String> couponUsageLeft) {
@@ -1028,6 +1166,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the IDs of the coupons applicable to this subscription.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "couponIds", nulls = Nulls.SKIP)
         public _FinalStage couponIds(Optional<List<String>> couponIds) {
@@ -1045,6 +1186,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp at which the outbound calls counter is scheduled to reset at.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "outboundCallsCounterNextResetAt", nulls = Nulls.SKIP)
         public _FinalStage outboundCallsCounterNextResetAt(Optional<OffsetDateTime> outboundCallsCounterNextResetAt) {
@@ -1062,6 +1206,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>The current number of outbound calls the subscription has made in the current day.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "outboundCallsCounter", nulls = Nulls.SKIP)
         public _FinalStage outboundCallsCounter(Optional<Double> outboundCallsCounter) {
@@ -1079,6 +1226,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>The maximum number of outbound calls this subscription may make in a day. Resets every night.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "outboundCallsDailyLimit", nulls = Nulls.SKIP)
         public _FinalStage outboundCallsDailyLimit(Optional<Double> outboundCallsDailyLimit) {
@@ -1096,6 +1246,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>The list of providers included in the subscription. Enterprise only.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "providersIncluded", nulls = Nulls.SKIP)
         public _FinalStage providersIncluded(Optional<List<String>> providersIncluded) {
@@ -1113,6 +1266,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>The per minute charge on minutes that exceed the included minutes. Enterprise only.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "minutesOverageCost", nulls = Nulls.SKIP)
         public _FinalStage minutesOverageCost(Optional<Double> minutesOverageCost) {
@@ -1130,6 +1286,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp at which the number of monthly free minutes is scheduled to reset at.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "minutesUsedNextResetAt", nulls = Nulls.SKIP)
         public _FinalStage minutesUsedNextResetAt(Optional<OffsetDateTime> minutesUsedNextResetAt) {
@@ -1147,6 +1306,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>The number of minutes used in the subscription.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "minutesUsed", nulls = Nulls.SKIP)
         public _FinalStage minutesUsed(Optional<Double> minutesUsed) {
@@ -1164,6 +1326,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>The number of minutes included in the subscription.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "minutesIncluded", nulls = Nulls.SKIP)
         public _FinalStage minutesIncluded(Optional<Double> minutesIncluded) {
@@ -1181,6 +1346,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the auto reload plan configured for the subscription.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "autoReloadPlan", nulls = Nulls.SKIP)
         public _FinalStage autoReloadPlan(Optional<AutoReloadPlan> autoReloadPlan) {
@@ -1198,6 +1366,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the email of the referrer for the subscription.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "referredByEmail", nulls = Nulls.SKIP)
         public _FinalStage referredByEmail(Optional<String> referredByEmail) {
@@ -1215,6 +1386,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the customer's email on Stripe.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripeCustomerEmail", nulls = Nulls.SKIP)
         public _FinalStage stripeCustomerEmail(Optional<String> stripeCustomerEmail) {
@@ -1233,6 +1407,10 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the Stripe fingerprint of the payment method (card). It allows us
+         * to detect users who try to abuse our system through multiple sign-ups.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripePaymentMethodFingerprint", nulls = Nulls.SKIP)
         public _FinalStage stripePaymentMethodFingerprint(Optional<String> stripePaymentMethodFingerprint) {
@@ -1250,6 +1428,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the ID for the Common Paper agreement outlining the HIPAA contract.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hipaaCommonPaperAgreementId", nulls = Nulls.SKIP)
         public _FinalStage hipaaCommonPaperAgreementId(Optional<String> hipaaCommonPaperAgreementId) {
@@ -1268,6 +1449,10 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the HIPAA enabled flag for the subscription. It determines whether orgs under this
+         * subscription have the option to enable HIPAA compliance.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "hipaaEnabled", nulls = Nulls.SKIP)
         public _FinalStage hipaaEnabled(Optional<Boolean> hipaaEnabled) {
@@ -1285,6 +1470,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>If this subscription has a slack support subscription, the slack channel's ID will be stored here.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "slackChannelId", nulls = Nulls.SKIP)
         public _FinalStage slackChannelId(Optional<String> slackChannelId) {
@@ -1302,6 +1490,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>If this flag is true, then the user has purchased slack support.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "slackSupportEnabled", nulls = Nulls.SKIP)
         public _FinalStage slackSupportEnabled(Optional<Boolean> slackSupportEnabled) {
@@ -1319,6 +1510,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the Stripe payment ID.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripePaymentMethodId", nulls = Nulls.SKIP)
         public _FinalStage stripePaymentMethodId(Optional<String> stripePaymentMethodId) {
@@ -1336,6 +1530,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the Stripe customer ID.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stripeCustomerId", nulls = Nulls.SKIP)
         public _FinalStage stripeCustomerId(Optional<String> stripeCustomerId) {
@@ -1354,6 +1551,10 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the monthly job that checks whether the credit balance of the subscription
+         * is sufficient for the monthly charge.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "monthlyCreditCheckScheduleId", nulls = Nulls.SKIP)
         public _FinalStage monthlyCreditCheckScheduleId(Optional<Double> monthlyCreditCheckScheduleId) {
@@ -1371,6 +1572,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the monthly job that charges for subscription add ons and phone numbers.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "monthlyChargeScheduleId", nulls = Nulls.SKIP)
         public _FinalStage monthlyChargeScheduleId(Optional<Double> monthlyChargeScheduleId) {
@@ -1388,6 +1592,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the maximum number of free phone numbers the subscription can have</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumbersIncluded", nulls = Nulls.SKIP)
         public _FinalStage phoneNumbersIncluded(Optional<Double> phoneNumbersIncluded) {
@@ -1405,6 +1612,9 @@ public final class Subscription {
             return this;
         }
 
+        /**
+         * <p>This is the number of free phone numbers the subscription has</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumbersCounter", nulls = Nulls.SKIP)
         public _FinalStage phoneNumbersCounter(Optional<Double> phoneNumbersCounter) {

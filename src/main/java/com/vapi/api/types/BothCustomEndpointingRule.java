@@ -136,6 +136,18 @@ public final class BothCustomEndpointingRule {
     }
 
     public interface AssistantRegexStage {
+        /**
+         * <p>This is the regex pattern to match the assistant's message.</p>
+         * <p>Note:</p>
+         * <ul>
+         * <li>This works by using the <code>RegExp.test</code> method in Node.JS. Eg. <code>/hello/.test(&quot;hello there&quot;)</code> will return <code>true</code>.</li>
+         * </ul>
+         * <p>Hot tip:</p>
+         * <ul>
+         * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
+         * <li><code>RegExp.test</code> does substring matching, so <code>/cat/.test(&quot;I love cats&quot;)</code> will return <code>true</code>. To do full string matching, send &quot;^cat$&quot;.</li>
+         * </ul>
+         */
         CustomerRegexStage assistantRegex(@NotNull String assistantRegex);
 
         Builder from(BothCustomEndpointingRule other);
@@ -146,16 +158,27 @@ public final class BothCustomEndpointingRule {
     }
 
     public interface TimeoutSecondsStage {
+        /**
+         * <p>This is the endpointing timeout in seconds, if the rule is matched.</p>
+         */
         _FinalStage timeoutSeconds(double timeoutSeconds);
     }
 
     public interface _FinalStage {
         BothCustomEndpointingRule build();
 
+        /**
+         * <p>These are the options for the assistant's message regex match. Defaults to all disabled.</p>
+         * <p>@default []</p>
+         */
         _FinalStage assistantRegexOptions(Optional<List<RegexOption>> assistantRegexOptions);
 
         _FinalStage assistantRegexOptions(List<RegexOption> assistantRegexOptions);
 
+        /**
+         * <p>These are the options for the customer's message regex match. Defaults to all disabled.</p>
+         * <p>@default []</p>
+         */
         _FinalStage customerRegexOptions(Optional<List<RegexOption>> customerRegexOptions);
 
         _FinalStage customerRegexOptions(List<RegexOption> customerRegexOptions);
@@ -200,6 +223,16 @@ public final class BothCustomEndpointingRule {
          * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
          * <li><code>RegExp.test</code> does substring matching, so <code>/cat/.test(&quot;I love cats&quot;)</code> will return <code>true</code>. To do full string matching, send &quot;^cat$&quot;.</li>
          * </ul>
+         * <p>This is the regex pattern to match the assistant's message.</p>
+         * <p>Note:</p>
+         * <ul>
+         * <li>This works by using the <code>RegExp.test</code> method in Node.JS. Eg. <code>/hello/.test(&quot;hello there&quot;)</code> will return <code>true</code>.</li>
+         * </ul>
+         * <p>Hot tip:</p>
+         * <ul>
+         * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
+         * <li><code>RegExp.test</code> does substring matching, so <code>/cat/.test(&quot;I love cats&quot;)</code> will return <code>true</code>. To do full string matching, send &quot;^cat$&quot;.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -217,6 +250,7 @@ public final class BothCustomEndpointingRule {
         }
 
         /**
+         * <p>This is the endpointing timeout in seconds, if the rule is matched.</p>
          * <p>This is the endpointing timeout in seconds, if the rule is matched.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -238,6 +272,10 @@ public final class BothCustomEndpointingRule {
             return this;
         }
 
+        /**
+         * <p>These are the options for the customer's message regex match. Defaults to all disabled.</p>
+         * <p>@default []</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customerRegexOptions", nulls = Nulls.SKIP)
         public _FinalStage customerRegexOptions(Optional<List<RegexOption>> customerRegexOptions) {
@@ -256,6 +294,10 @@ public final class BothCustomEndpointingRule {
             return this;
         }
 
+        /**
+         * <p>These are the options for the assistant's message regex match. Defaults to all disabled.</p>
+         * <p>@default []</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistantRegexOptions", nulls = Nulls.SKIP)
         public _FinalStage assistantRegexOptions(Optional<List<RegexOption>> assistantRegexOptions) {

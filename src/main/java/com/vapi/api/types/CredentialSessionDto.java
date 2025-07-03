@@ -66,6 +66,9 @@ public final class CredentialSessionDto {
     }
 
     public interface ProviderStage {
+        /**
+         * <p>The type of credential to generate a session for. Only Nango user-facing providers are supported.</p>
+         */
         _FinalStage provider(@NotNull CredentialSessionDtoProvider provider);
 
         Builder from(CredentialSessionDto other);
@@ -91,6 +94,7 @@ public final class CredentialSessionDto {
         }
 
         /**
+         * <p>The type of credential to generate a session for. Only Nango user-facing providers are supported.</p>
          * <p>The type of credential to generate a session for. Only Nango user-facing providers are supported.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

@@ -163,6 +163,9 @@ public final class SipTrunkGateway {
     }
 
     public interface IpStage {
+        /**
+         * <p>This is the address of the gateway. It can be an IPv4 address like 1.1.1.1 or a fully qualified domain name like my-sip-trunk.pstn.twilio.com.</p>
+         */
         _FinalStage ip(@NotNull String ip);
 
         Builder from(SipTrunkGateway other);
@@ -171,26 +174,52 @@ public final class SipTrunkGateway {
     public interface _FinalStage {
         SipTrunkGateway build();
 
+        /**
+         * <p>This is the port number of the gateway. Default is 5060.</p>
+         * <p>@default 5060</p>
+         */
         _FinalStage port(Optional<Double> port);
 
         _FinalStage port(Double port);
 
+        /**
+         * <p>This is the netmask of the gateway. Defaults to 32.</p>
+         * <p>@default 32</p>
+         */
         _FinalStage netmask(Optional<Double> netmask);
 
         _FinalStage netmask(Double netmask);
 
+        /**
+         * <p>This is whether inbound calls are allowed from this gateway. Default is true.</p>
+         * <p>@default true</p>
+         */
         _FinalStage inboundEnabled(Optional<Boolean> inboundEnabled);
 
         _FinalStage inboundEnabled(Boolean inboundEnabled);
 
+        /**
+         * <p>This is whether outbound calls should be sent to this gateway. Default is true.</p>
+         * <p>Note, if netmask is less than 32, it doesn't affect the outbound IPs that are tried. 1 attempt is made to <code>ip:port</code>.</p>
+         * <p>@default true</p>
+         */
         _FinalStage outboundEnabled(Optional<Boolean> outboundEnabled);
 
         _FinalStage outboundEnabled(Boolean outboundEnabled);
 
+        /**
+         * <p>This is the protocol to use for SIP signaling outbound calls. Default is udp.</p>
+         * <p>@default udp</p>
+         */
         _FinalStage outboundProtocol(Optional<SipTrunkGatewayOutboundProtocol> outboundProtocol);
 
         _FinalStage outboundProtocol(SipTrunkGatewayOutboundProtocol outboundProtocol);
 
+        /**
+         * <p>This is whether to send options ping to the gateway. This can be used to check if the gateway is reachable. Default is false.</p>
+         * <p>This is useful for high availability setups where you want to check if the gateway is reachable before routing calls to it. Note, if no gateway for a trunk is reachable, outbound calls will be rejected.</p>
+         * <p>@default false</p>
+         */
         _FinalStage optionsPingEnabled(Optional<Boolean> optionsPingEnabled);
 
         _FinalStage optionsPingEnabled(Boolean optionsPingEnabled);
@@ -231,6 +260,7 @@ public final class SipTrunkGateway {
 
         /**
          * <p>This is the address of the gateway. It can be an IPv4 address like 1.1.1.1 or a fully qualified domain name like my-sip-trunk.pstn.twilio.com.</p>
+         * <p>This is the address of the gateway. It can be an IPv4 address like 1.1.1.1 or a fully qualified domain name like my-sip-trunk.pstn.twilio.com.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -252,6 +282,11 @@ public final class SipTrunkGateway {
             return this;
         }
 
+        /**
+         * <p>This is whether to send options ping to the gateway. This can be used to check if the gateway is reachable. Default is false.</p>
+         * <p>This is useful for high availability setups where you want to check if the gateway is reachable before routing calls to it. Note, if no gateway for a trunk is reachable, outbound calls will be rejected.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "optionsPingEnabled", nulls = Nulls.SKIP)
         public _FinalStage optionsPingEnabled(Optional<Boolean> optionsPingEnabled) {
@@ -270,6 +305,10 @@ public final class SipTrunkGateway {
             return this;
         }
 
+        /**
+         * <p>This is the protocol to use for SIP signaling outbound calls. Default is udp.</p>
+         * <p>@default udp</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "outboundProtocol", nulls = Nulls.SKIP)
         public _FinalStage outboundProtocol(Optional<SipTrunkGatewayOutboundProtocol> outboundProtocol) {
@@ -289,6 +328,11 @@ public final class SipTrunkGateway {
             return this;
         }
 
+        /**
+         * <p>This is whether outbound calls should be sent to this gateway. Default is true.</p>
+         * <p>Note, if netmask is less than 32, it doesn't affect the outbound IPs that are tried. 1 attempt is made to <code>ip:port</code>.</p>
+         * <p>@default true</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "outboundEnabled", nulls = Nulls.SKIP)
         public _FinalStage outboundEnabled(Optional<Boolean> outboundEnabled) {
@@ -307,6 +351,10 @@ public final class SipTrunkGateway {
             return this;
         }
 
+        /**
+         * <p>This is whether inbound calls are allowed from this gateway. Default is true.</p>
+         * <p>@default true</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "inboundEnabled", nulls = Nulls.SKIP)
         public _FinalStage inboundEnabled(Optional<Boolean> inboundEnabled) {
@@ -325,6 +373,10 @@ public final class SipTrunkGateway {
             return this;
         }
 
+        /**
+         * <p>This is the netmask of the gateway. Defaults to 32.</p>
+         * <p>@default 32</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "netmask", nulls = Nulls.SKIP)
         public _FinalStage netmask(Optional<Double> netmask) {
@@ -343,6 +395,10 @@ public final class SipTrunkGateway {
             return this;
         }
 
+        /**
+         * <p>This is the port number of the gateway. Default is 5060.</p>
+         * <p>@default 5060</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "port", nulls = Nulls.SKIP)
         public _FinalStage port(Optional<Double> port) {

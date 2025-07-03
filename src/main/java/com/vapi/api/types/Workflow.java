@@ -26,7 +26,15 @@ import org.jetbrains.annotations.NotNull;
 public final class Workflow {
     private final List<WorkflowNodesItem> nodes;
 
-    private final Optional<WorkflowModel> model;
+    private final Optional<WorkflowTranscriber> transcriber;
+
+    private final Optional<WorkflowVoice> voice;
+
+    private final Optional<LangfuseObservabilityPlan> observabilityPlan;
+
+    private final Optional<WorkflowBackgroundSound> backgroundSound;
+
+    private final Optional<List<WorkflowCredentialsItem>> credentials;
 
     private final String id;
 
@@ -40,26 +48,74 @@ public final class Workflow {
 
     private final List<Edge> edges;
 
+    private final Optional<String> globalPrompt;
+
+    private final Optional<Server> server;
+
+    private final Optional<CompliancePlan> compliancePlan;
+
+    private final Optional<AnalysisPlan> analysisPlan;
+
+    private final Optional<ArtifactPlan> artifactPlan;
+
+    private final Optional<StartSpeakingPlan> startSpeakingPlan;
+
+    private final Optional<StopSpeakingPlan> stopSpeakingPlan;
+
+    private final Optional<MonitorPlan> monitorPlan;
+
+    private final Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan;
+
+    private final Optional<List<String>> credentialIds;
+
     private final Map<String, Object> additionalProperties;
 
     private Workflow(
             List<WorkflowNodesItem> nodes,
-            Optional<WorkflowModel> model,
+            Optional<WorkflowTranscriber> transcriber,
+            Optional<WorkflowVoice> voice,
+            Optional<LangfuseObservabilityPlan> observabilityPlan,
+            Optional<WorkflowBackgroundSound> backgroundSound,
+            Optional<List<WorkflowCredentialsItem>> credentials,
             String id,
             String orgId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             String name,
             List<Edge> edges,
+            Optional<String> globalPrompt,
+            Optional<Server> server,
+            Optional<CompliancePlan> compliancePlan,
+            Optional<AnalysisPlan> analysisPlan,
+            Optional<ArtifactPlan> artifactPlan,
+            Optional<StartSpeakingPlan> startSpeakingPlan,
+            Optional<StopSpeakingPlan> stopSpeakingPlan,
+            Optional<MonitorPlan> monitorPlan,
+            Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan,
+            Optional<List<String>> credentialIds,
             Map<String, Object> additionalProperties) {
         this.nodes = nodes;
-        this.model = model;
+        this.transcriber = transcriber;
+        this.voice = voice;
+        this.observabilityPlan = observabilityPlan;
+        this.backgroundSound = backgroundSound;
+        this.credentials = credentials;
         this.id = id;
         this.orgId = orgId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.name = name;
         this.edges = edges;
+        this.globalPrompt = globalPrompt;
+        this.server = server;
+        this.compliancePlan = compliancePlan;
+        this.analysisPlan = analysisPlan;
+        this.artifactPlan = artifactPlan;
+        this.startSpeakingPlan = startSpeakingPlan;
+        this.stopSpeakingPlan = stopSpeakingPlan;
+        this.monitorPlan = monitorPlan;
+        this.backgroundSpeechDenoisingPlan = backgroundSpeechDenoisingPlan;
+        this.credentialIds = credentialIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -69,11 +125,47 @@ public final class Workflow {
     }
 
     /**
-     * @return These are the options for the workflow's LLM.
+     * @return This is the transcriber for the workflow.
+     * <p>This can be overridden at node level using <code>nodes[n].transcriber</code>.</p>
      */
-    @JsonProperty("model")
-    public Optional<WorkflowModel> getModel() {
-        return model;
+    @JsonProperty("transcriber")
+    public Optional<WorkflowTranscriber> getTranscriber() {
+        return transcriber;
+    }
+
+    /**
+     * @return This is the voice for the workflow.
+     * <p>This can be overridden at node level using <code>nodes[n].voice</code>.</p>
+     */
+    @JsonProperty("voice")
+    public Optional<WorkflowVoice> getVoice() {
+        return voice;
+    }
+
+    /**
+     * @return This is the plan for observability of workflow's calls.
+     * <p>Currently, only Langfuse is supported.</p>
+     */
+    @JsonProperty("observabilityPlan")
+    public Optional<LangfuseObservabilityPlan> getObservabilityPlan() {
+        return observabilityPlan;
+    }
+
+    /**
+     * @return This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+     * You can also provide a custom sound by providing a URL to an audio file.
+     */
+    @JsonProperty("backgroundSound")
+    public Optional<WorkflowBackgroundSound> getBackgroundSound() {
+        return backgroundSound;
+    }
+
+    /**
+     * @return These are dynamic credentials that will be used for the workflow calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.
+     */
+    @JsonProperty("credentials")
+    public Optional<List<WorkflowCredentialsItem>> getCredentials() {
+        return credentials;
     }
 
     @JsonProperty("id")
@@ -106,6 +198,119 @@ public final class Workflow {
         return edges;
     }
 
+    @JsonProperty("globalPrompt")
+    public Optional<String> getGlobalPrompt() {
+        return globalPrompt;
+    }
+
+    /**
+     * @return This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.
+     * <p>The order of precedence is:</p>
+     * <ol>
+     * <li>tool.server</li>
+     * <li>workflow.server / assistant.server</li>
+     * <li>phoneNumber.server</li>
+     * <li>org.server</li>
+     * </ol>
+     */
+    @JsonProperty("server")
+    public Optional<Server> getServer() {
+        return server;
+    }
+
+    /**
+     * @return This is the compliance plan for the workflow. It allows you to configure HIPAA and other compliance settings.
+     */
+    @JsonProperty("compliancePlan")
+    public Optional<CompliancePlan> getCompliancePlan() {
+        return compliancePlan;
+    }
+
+    /**
+     * @return This is the plan for analysis of workflow's calls. Stored in <code>call.analysis</code>.
+     */
+    @JsonProperty("analysisPlan")
+    public Optional<AnalysisPlan> getAnalysisPlan() {
+        return analysisPlan;
+    }
+
+    /**
+     * @return This is the plan for artifacts generated during workflow's calls. Stored in <code>call.artifact</code>.
+     */
+    @JsonProperty("artifactPlan")
+    public Optional<ArtifactPlan> getArtifactPlan() {
+        return artifactPlan;
+    }
+
+    /**
+     * @return This is the plan for when the workflow nodes should start talking.
+     * <p>You should configure this if you're running into these issues:</p>
+     * <ul>
+     * <li>The assistant is too slow to start talking after the customer is done speaking.</li>
+     * <li>The assistant is too fast to start talking after the customer is done speaking.</li>
+     * <li>The assistant is so fast that it's actually interrupting the customer.</li>
+     * </ul>
+     */
+    @JsonProperty("startSpeakingPlan")
+    public Optional<StartSpeakingPlan> getStartSpeakingPlan() {
+        return startSpeakingPlan;
+    }
+
+    /**
+     * @return This is the plan for when workflow nodes should stop talking on customer interruption.
+     * <p>You should configure this if you're running into these issues:</p>
+     * <ul>
+     * <li>The assistant is too slow to recognize customer's interruption.</li>
+     * <li>The assistant is too fast to recognize customer's interruption.</li>
+     * <li>The assistant is getting interrupted by phrases that are just acknowledgments.</li>
+     * <li>The assistant is getting interrupted by background noises.</li>
+     * <li>The assistant is not properly stopping -- it starts talking right after getting interrupted.</li>
+     * </ul>
+     */
+    @JsonProperty("stopSpeakingPlan")
+    public Optional<StopSpeakingPlan> getStopSpeakingPlan() {
+        return stopSpeakingPlan;
+    }
+
+    /**
+     * @return This is the plan for real-time monitoring of the workflow's calls.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>To enable live listening of the workflow's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
+     * <li>To enable live control of the workflow's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
+     * </ul>
+     */
+    @JsonProperty("monitorPlan")
+    public Optional<MonitorPlan> getMonitorPlan() {
+        return monitorPlan;
+    }
+
+    /**
+     * @return This enables filtering of noise and background speech while the user is talking.
+     * <p>Features:</p>
+     * <ul>
+     * <li>Smart denoising using Krisp</li>
+     * <li>Fourier denoising</li>
+     * </ul>
+     * <p>Both can be used together. Order of precedence:</p>
+     * <ul>
+     * <li>Smart denoising</li>
+     * <li>Fourier denoising</li>
+     * </ul>
+     */
+    @JsonProperty("backgroundSpeechDenoisingPlan")
+    public Optional<BackgroundSpeechDenoisingPlan> getBackgroundSpeechDenoisingPlan() {
+        return backgroundSpeechDenoisingPlan;
+    }
+
+    /**
+     * @return These are the credentials that will be used for the workflow calls. By default, all the credentials are available for use in the call but you can provide a subset using this.
+     */
+    @JsonProperty("credentialIds")
+    public Optional<List<String>> getCredentialIds() {
+        return credentialIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -119,19 +324,54 @@ public final class Workflow {
 
     private boolean equalTo(Workflow other) {
         return nodes.equals(other.nodes)
-                && model.equals(other.model)
+                && transcriber.equals(other.transcriber)
+                && voice.equals(other.voice)
+                && observabilityPlan.equals(other.observabilityPlan)
+                && backgroundSound.equals(other.backgroundSound)
+                && credentials.equals(other.credentials)
                 && id.equals(other.id)
                 && orgId.equals(other.orgId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && name.equals(other.name)
-                && edges.equals(other.edges);
+                && edges.equals(other.edges)
+                && globalPrompt.equals(other.globalPrompt)
+                && server.equals(other.server)
+                && compliancePlan.equals(other.compliancePlan)
+                && analysisPlan.equals(other.analysisPlan)
+                && artifactPlan.equals(other.artifactPlan)
+                && startSpeakingPlan.equals(other.startSpeakingPlan)
+                && stopSpeakingPlan.equals(other.stopSpeakingPlan)
+                && monitorPlan.equals(other.monitorPlan)
+                && backgroundSpeechDenoisingPlan.equals(other.backgroundSpeechDenoisingPlan)
+                && credentialIds.equals(other.credentialIds);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.nodes, this.model, this.id, this.orgId, this.createdAt, this.updatedAt, this.name, this.edges);
+                this.nodes,
+                this.transcriber,
+                this.voice,
+                this.observabilityPlan,
+                this.backgroundSound,
+                this.credentials,
+                this.id,
+                this.orgId,
+                this.createdAt,
+                this.updatedAt,
+                this.name,
+                this.edges,
+                this.globalPrompt,
+                this.server,
+                this.compliancePlan,
+                this.analysisPlan,
+                this.artifactPlan,
+                this.startSpeakingPlan,
+                this.stopSpeakingPlan,
+                this.monitorPlan,
+                this.backgroundSpeechDenoisingPlan,
+                this.credentialIds);
     }
 
     @java.lang.Override
@@ -174,15 +414,154 @@ public final class Workflow {
 
         _FinalStage addAllNodes(List<WorkflowNodesItem> nodes);
 
-        _FinalStage model(Optional<WorkflowModel> model);
+        /**
+         * <p>This is the transcriber for the workflow.</p>
+         * <p>This can be overridden at node level using <code>nodes[n].transcriber</code>.</p>
+         */
+        _FinalStage transcriber(Optional<WorkflowTranscriber> transcriber);
 
-        _FinalStage model(WorkflowModel model);
+        _FinalStage transcriber(WorkflowTranscriber transcriber);
+
+        /**
+         * <p>This is the voice for the workflow.</p>
+         * <p>This can be overridden at node level using <code>nodes[n].voice</code>.</p>
+         */
+        _FinalStage voice(Optional<WorkflowVoice> voice);
+
+        _FinalStage voice(WorkflowVoice voice);
+
+        /**
+         * <p>This is the plan for observability of workflow's calls.</p>
+         * <p>Currently, only Langfuse is supported.</p>
+         */
+        _FinalStage observabilityPlan(Optional<LangfuseObservabilityPlan> observabilityPlan);
+
+        _FinalStage observabilityPlan(LangfuseObservabilityPlan observabilityPlan);
+
+        /**
+         * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+         * You can also provide a custom sound by providing a URL to an audio file.</p>
+         */
+        _FinalStage backgroundSound(Optional<WorkflowBackgroundSound> backgroundSound);
+
+        _FinalStage backgroundSound(WorkflowBackgroundSound backgroundSound);
+
+        /**
+         * <p>These are dynamic credentials that will be used for the workflow calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.</p>
+         */
+        _FinalStage credentials(Optional<List<WorkflowCredentialsItem>> credentials);
+
+        _FinalStage credentials(List<WorkflowCredentialsItem> credentials);
 
         _FinalStage edges(List<Edge> edges);
 
         _FinalStage addEdges(Edge edges);
 
         _FinalStage addAllEdges(List<Edge> edges);
+
+        _FinalStage globalPrompt(Optional<String> globalPrompt);
+
+        _FinalStage globalPrompt(String globalPrompt);
+
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>tool.server</li>
+         * <li>workflow.server / assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
+        _FinalStage server(Optional<Server> server);
+
+        _FinalStage server(Server server);
+
+        /**
+         * <p>This is the compliance plan for the workflow. It allows you to configure HIPAA and other compliance settings.</p>
+         */
+        _FinalStage compliancePlan(Optional<CompliancePlan> compliancePlan);
+
+        _FinalStage compliancePlan(CompliancePlan compliancePlan);
+
+        /**
+         * <p>This is the plan for analysis of workflow's calls. Stored in <code>call.analysis</code>.</p>
+         */
+        _FinalStage analysisPlan(Optional<AnalysisPlan> analysisPlan);
+
+        _FinalStage analysisPlan(AnalysisPlan analysisPlan);
+
+        /**
+         * <p>This is the plan for artifacts generated during workflow's calls. Stored in <code>call.artifact</code>.</p>
+         */
+        _FinalStage artifactPlan(Optional<ArtifactPlan> artifactPlan);
+
+        _FinalStage artifactPlan(ArtifactPlan artifactPlan);
+
+        /**
+         * <p>This is the plan for when the workflow nodes should start talking.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to start talking after the customer is done speaking.</li>
+         * <li>The assistant is too fast to start talking after the customer is done speaking.</li>
+         * <li>The assistant is so fast that it's actually interrupting the customer.</li>
+         * </ul>
+         */
+        _FinalStage startSpeakingPlan(Optional<StartSpeakingPlan> startSpeakingPlan);
+
+        _FinalStage startSpeakingPlan(StartSpeakingPlan startSpeakingPlan);
+
+        /**
+         * <p>This is the plan for when workflow nodes should stop talking on customer interruption.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to recognize customer's interruption.</li>
+         * <li>The assistant is too fast to recognize customer's interruption.</li>
+         * <li>The assistant is getting interrupted by phrases that are just acknowledgments.</li>
+         * <li>The assistant is getting interrupted by background noises.</li>
+         * <li>The assistant is not properly stopping -- it starts talking right after getting interrupted.</li>
+         * </ul>
+         */
+        _FinalStage stopSpeakingPlan(Optional<StopSpeakingPlan> stopSpeakingPlan);
+
+        _FinalStage stopSpeakingPlan(StopSpeakingPlan stopSpeakingPlan);
+
+        /**
+         * <p>This is the plan for real-time monitoring of the workflow's calls.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To enable live listening of the workflow's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
+         * <li>To enable live control of the workflow's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
+         * </ul>
+         */
+        _FinalStage monitorPlan(Optional<MonitorPlan> monitorPlan);
+
+        _FinalStage monitorPlan(MonitorPlan monitorPlan);
+
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Features:</p>
+         * <ul>
+         * <li>Smart denoising using Krisp</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * <p>Both can be used together. Order of precedence:</p>
+         * <ul>
+         * <li>Smart denoising</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         */
+        _FinalStage backgroundSpeechDenoisingPlan(
+                Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan);
+
+        _FinalStage backgroundSpeechDenoisingPlan(BackgroundSpeechDenoisingPlan backgroundSpeechDenoisingPlan);
+
+        /**
+         * <p>These are the credentials that will be used for the workflow calls. By default, all the credentials are available for use in the call but you can provide a subset using this.</p>
+         */
+        _FinalStage credentialIds(Optional<List<String>> credentialIds);
+
+        _FinalStage credentialIds(List<String> credentialIds);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -198,9 +577,37 @@ public final class Workflow {
 
         private String name;
 
+        private Optional<List<String>> credentialIds = Optional.empty();
+
+        private Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan = Optional.empty();
+
+        private Optional<MonitorPlan> monitorPlan = Optional.empty();
+
+        private Optional<StopSpeakingPlan> stopSpeakingPlan = Optional.empty();
+
+        private Optional<StartSpeakingPlan> startSpeakingPlan = Optional.empty();
+
+        private Optional<ArtifactPlan> artifactPlan = Optional.empty();
+
+        private Optional<AnalysisPlan> analysisPlan = Optional.empty();
+
+        private Optional<CompliancePlan> compliancePlan = Optional.empty();
+
+        private Optional<Server> server = Optional.empty();
+
+        private Optional<String> globalPrompt = Optional.empty();
+
         private List<Edge> edges = new ArrayList<>();
 
-        private Optional<WorkflowModel> model = Optional.empty();
+        private Optional<List<WorkflowCredentialsItem>> credentials = Optional.empty();
+
+        private Optional<WorkflowBackgroundSound> backgroundSound = Optional.empty();
+
+        private Optional<LangfuseObservabilityPlan> observabilityPlan = Optional.empty();
+
+        private Optional<WorkflowVoice> voice = Optional.empty();
+
+        private Optional<WorkflowTranscriber> transcriber = Optional.empty();
 
         private List<WorkflowNodesItem> nodes = new ArrayList<>();
 
@@ -212,13 +619,27 @@ public final class Workflow {
         @java.lang.Override
         public Builder from(Workflow other) {
             nodes(other.getNodes());
-            model(other.getModel());
+            transcriber(other.getTranscriber());
+            voice(other.getVoice());
+            observabilityPlan(other.getObservabilityPlan());
+            backgroundSound(other.getBackgroundSound());
+            credentials(other.getCredentials());
             id(other.getId());
             orgId(other.getOrgId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             name(other.getName());
             edges(other.getEdges());
+            globalPrompt(other.getGlobalPrompt());
+            server(other.getServer());
+            compliancePlan(other.getCompliancePlan());
+            analysisPlan(other.getAnalysisPlan());
+            artifactPlan(other.getArtifactPlan());
+            startSpeakingPlan(other.getStartSpeakingPlan());
+            stopSpeakingPlan(other.getStopSpeakingPlan());
+            monitorPlan(other.getMonitorPlan());
+            backgroundSpeechDenoisingPlan(other.getBackgroundSpeechDenoisingPlan());
+            credentialIds(other.getCredentialIds());
             return this;
         }
 
@@ -257,6 +678,272 @@ public final class Workflow {
             return this;
         }
 
+        /**
+         * <p>These are the credentials that will be used for the workflow calls. By default, all the credentials are available for use in the call but you can provide a subset using this.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage credentialIds(List<String> credentialIds) {
+            this.credentialIds = Optional.ofNullable(credentialIds);
+            return this;
+        }
+
+        /**
+         * <p>These are the credentials that will be used for the workflow calls. By default, all the credentials are available for use in the call but you can provide a subset using this.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "credentialIds", nulls = Nulls.SKIP)
+        public _FinalStage credentialIds(Optional<List<String>> credentialIds) {
+            this.credentialIds = credentialIds;
+            return this;
+        }
+
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Features:</p>
+         * <ul>
+         * <li>Smart denoising using Krisp</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * <p>Both can be used together. Order of precedence:</p>
+         * <ul>
+         * <li>Smart denoising</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage backgroundSpeechDenoisingPlan(BackgroundSpeechDenoisingPlan backgroundSpeechDenoisingPlan) {
+            this.backgroundSpeechDenoisingPlan = Optional.ofNullable(backgroundSpeechDenoisingPlan);
+            return this;
+        }
+
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Features:</p>
+         * <ul>
+         * <li>Smart denoising using Krisp</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * <p>Both can be used together. Order of precedence:</p>
+         * <ul>
+         * <li>Smart denoising</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "backgroundSpeechDenoisingPlan", nulls = Nulls.SKIP)
+        public _FinalStage backgroundSpeechDenoisingPlan(
+                Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan) {
+            this.backgroundSpeechDenoisingPlan = backgroundSpeechDenoisingPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for real-time monitoring of the workflow's calls.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To enable live listening of the workflow's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
+         * <li>To enable live control of the workflow's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage monitorPlan(MonitorPlan monitorPlan) {
+            this.monitorPlan = Optional.ofNullable(monitorPlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for real-time monitoring of the workflow's calls.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To enable live listening of the workflow's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
+         * <li>To enable live control of the workflow's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "monitorPlan", nulls = Nulls.SKIP)
+        public _FinalStage monitorPlan(Optional<MonitorPlan> monitorPlan) {
+            this.monitorPlan = monitorPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for when workflow nodes should stop talking on customer interruption.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to recognize customer's interruption.</li>
+         * <li>The assistant is too fast to recognize customer's interruption.</li>
+         * <li>The assistant is getting interrupted by phrases that are just acknowledgments.</li>
+         * <li>The assistant is getting interrupted by background noises.</li>
+         * <li>The assistant is not properly stopping -- it starts talking right after getting interrupted.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage stopSpeakingPlan(StopSpeakingPlan stopSpeakingPlan) {
+            this.stopSpeakingPlan = Optional.ofNullable(stopSpeakingPlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for when workflow nodes should stop talking on customer interruption.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to recognize customer's interruption.</li>
+         * <li>The assistant is too fast to recognize customer's interruption.</li>
+         * <li>The assistant is getting interrupted by phrases that are just acknowledgments.</li>
+         * <li>The assistant is getting interrupted by background noises.</li>
+         * <li>The assistant is not properly stopping -- it starts talking right after getting interrupted.</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "stopSpeakingPlan", nulls = Nulls.SKIP)
+        public _FinalStage stopSpeakingPlan(Optional<StopSpeakingPlan> stopSpeakingPlan) {
+            this.stopSpeakingPlan = stopSpeakingPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for when the workflow nodes should start talking.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to start talking after the customer is done speaking.</li>
+         * <li>The assistant is too fast to start talking after the customer is done speaking.</li>
+         * <li>The assistant is so fast that it's actually interrupting the customer.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage startSpeakingPlan(StartSpeakingPlan startSpeakingPlan) {
+            this.startSpeakingPlan = Optional.ofNullable(startSpeakingPlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for when the workflow nodes should start talking.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to start talking after the customer is done speaking.</li>
+         * <li>The assistant is too fast to start talking after the customer is done speaking.</li>
+         * <li>The assistant is so fast that it's actually interrupting the customer.</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "startSpeakingPlan", nulls = Nulls.SKIP)
+        public _FinalStage startSpeakingPlan(Optional<StartSpeakingPlan> startSpeakingPlan) {
+            this.startSpeakingPlan = startSpeakingPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for artifacts generated during workflow's calls. Stored in <code>call.artifact</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage artifactPlan(ArtifactPlan artifactPlan) {
+            this.artifactPlan = Optional.ofNullable(artifactPlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for artifacts generated during workflow's calls. Stored in <code>call.artifact</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "artifactPlan", nulls = Nulls.SKIP)
+        public _FinalStage artifactPlan(Optional<ArtifactPlan> artifactPlan) {
+            this.artifactPlan = artifactPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for analysis of workflow's calls. Stored in <code>call.analysis</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage analysisPlan(AnalysisPlan analysisPlan) {
+            this.analysisPlan = Optional.ofNullable(analysisPlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for analysis of workflow's calls. Stored in <code>call.analysis</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "analysisPlan", nulls = Nulls.SKIP)
+        public _FinalStage analysisPlan(Optional<AnalysisPlan> analysisPlan) {
+            this.analysisPlan = analysisPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the compliance plan for the workflow. It allows you to configure HIPAA and other compliance settings.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage compliancePlan(CompliancePlan compliancePlan) {
+            this.compliancePlan = Optional.ofNullable(compliancePlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the compliance plan for the workflow. It allows you to configure HIPAA and other compliance settings.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "compliancePlan", nulls = Nulls.SKIP)
+        public _FinalStage compliancePlan(Optional<CompliancePlan> compliancePlan) {
+            this.compliancePlan = compliancePlan;
+            return this;
+        }
+
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>tool.server</li>
+         * <li>workflow.server / assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage server(Server server) {
+            this.server = Optional.ofNullable(server);
+            return this;
+        }
+
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>tool.server</li>
+         * <li>workflow.server / assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "server", nulls = Nulls.SKIP)
+        public _FinalStage server(Optional<Server> server) {
+            this.server = server;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage globalPrompt(String globalPrompt) {
+            this.globalPrompt = Optional.ofNullable(globalPrompt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "globalPrompt", nulls = Nulls.SKIP)
+        public _FinalStage globalPrompt(Optional<String> globalPrompt) {
+            this.globalPrompt = globalPrompt;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage addAllEdges(List<Edge> edges) {
             this.edges.addAll(edges);
@@ -278,19 +965,110 @@ public final class Workflow {
         }
 
         /**
-         * <p>These are the options for the workflow's LLM.</p>
+         * <p>These are dynamic credentials that will be used for the workflow calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage model(WorkflowModel model) {
-            this.model = Optional.ofNullable(model);
+        public _FinalStage credentials(List<WorkflowCredentialsItem> credentials) {
+            this.credentials = Optional.ofNullable(credentials);
             return this;
         }
 
+        /**
+         * <p>These are dynamic credentials that will be used for the workflow calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.</p>
+         */
         @java.lang.Override
-        @JsonSetter(value = "model", nulls = Nulls.SKIP)
-        public _FinalStage model(Optional<WorkflowModel> model) {
-            this.model = model;
+        @JsonSetter(value = "credentials", nulls = Nulls.SKIP)
+        public _FinalStage credentials(Optional<List<WorkflowCredentialsItem>> credentials) {
+            this.credentials = credentials;
+            return this;
+        }
+
+        /**
+         * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+         * You can also provide a custom sound by providing a URL to an audio file.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage backgroundSound(WorkflowBackgroundSound backgroundSound) {
+            this.backgroundSound = Optional.ofNullable(backgroundSound);
+            return this;
+        }
+
+        /**
+         * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+         * You can also provide a custom sound by providing a URL to an audio file.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "backgroundSound", nulls = Nulls.SKIP)
+        public _FinalStage backgroundSound(Optional<WorkflowBackgroundSound> backgroundSound) {
+            this.backgroundSound = backgroundSound;
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for observability of workflow's calls.</p>
+         * <p>Currently, only Langfuse is supported.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage observabilityPlan(LangfuseObservabilityPlan observabilityPlan) {
+            this.observabilityPlan = Optional.ofNullable(observabilityPlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for observability of workflow's calls.</p>
+         * <p>Currently, only Langfuse is supported.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "observabilityPlan", nulls = Nulls.SKIP)
+        public _FinalStage observabilityPlan(Optional<LangfuseObservabilityPlan> observabilityPlan) {
+            this.observabilityPlan = observabilityPlan;
+            return this;
+        }
+
+        /**
+         * <p>This is the voice for the workflow.</p>
+         * <p>This can be overridden at node level using <code>nodes[n].voice</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage voice(WorkflowVoice voice) {
+            this.voice = Optional.ofNullable(voice);
+            return this;
+        }
+
+        /**
+         * <p>This is the voice for the workflow.</p>
+         * <p>This can be overridden at node level using <code>nodes[n].voice</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "voice", nulls = Nulls.SKIP)
+        public _FinalStage voice(Optional<WorkflowVoice> voice) {
+            this.voice = voice;
+            return this;
+        }
+
+        /**
+         * <p>This is the transcriber for the workflow.</p>
+         * <p>This can be overridden at node level using <code>nodes[n].transcriber</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage transcriber(WorkflowTranscriber transcriber) {
+            this.transcriber = Optional.ofNullable(transcriber);
+            return this;
+        }
+
+        /**
+         * <p>This is the transcriber for the workflow.</p>
+         * <p>This can be overridden at node level using <code>nodes[n].transcriber</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "transcriber", nulls = Nulls.SKIP)
+        public _FinalStage transcriber(Optional<WorkflowTranscriber> transcriber) {
+            this.transcriber = transcriber;
             return this;
         }
 
@@ -316,7 +1094,30 @@ public final class Workflow {
 
         @java.lang.Override
         public Workflow build() {
-            return new Workflow(nodes, model, id, orgId, createdAt, updatedAt, name, edges, additionalProperties);
+            return new Workflow(
+                    nodes,
+                    transcriber,
+                    voice,
+                    observabilityPlan,
+                    backgroundSound,
+                    credentials,
+                    id,
+                    orgId,
+                    createdAt,
+                    updatedAt,
+                    name,
+                    edges,
+                    globalPrompt,
+                    server,
+                    compliancePlan,
+                    analysisPlan,
+                    artifactPlan,
+                    startSpeakingPlan,
+                    stopSpeakingPlan,
+                    monitorPlan,
+                    backgroundSpeechDenoisingPlan,
+                    credentialIds,
+                    additionalProperties);
         }
     }
 }

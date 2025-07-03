@@ -78,6 +78,18 @@ public final class FallbackPlanVoicesItem {
         return new FallbackPlanVoicesItem(new TavusValue(value));
     }
 
+    public static FallbackPlanVoicesItem neuphonic(FallbackNeuphonicVoice value) {
+        return new FallbackPlanVoicesItem(new NeuphonicValue(value));
+    }
+
+    public static FallbackPlanVoicesItem sesame(FallbackSesameVoice value) {
+        return new FallbackPlanVoicesItem(new SesameValue(value));
+    }
+
+    public static FallbackPlanVoicesItem inworld(FallbackInworldVoice value) {
+        return new FallbackPlanVoicesItem(new InworldValue(value));
+    }
+
     public boolean isAzure() {
         return value instanceof AzureValue;
     }
@@ -128,6 +140,18 @@ public final class FallbackPlanVoicesItem {
 
     public boolean isTavus() {
         return value instanceof TavusValue;
+    }
+
+    public boolean isNeuphonic() {
+        return value instanceof NeuphonicValue;
+    }
+
+    public boolean isSesame() {
+        return value instanceof SesameValue;
+    }
+
+    public boolean isInworld() {
+        return value instanceof InworldValue;
     }
 
     public boolean _isUnknown() {
@@ -225,6 +249,27 @@ public final class FallbackPlanVoicesItem {
         return Optional.empty();
     }
 
+    public Optional<FallbackNeuphonicVoice> getNeuphonic() {
+        if (isNeuphonic()) {
+            return Optional.of(((NeuphonicValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<FallbackSesameVoice> getSesame() {
+        if (isSesame()) {
+            return Optional.of(((SesameValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<FallbackInworldVoice> getInworld() {
+        if (isInworld()) {
+            return Optional.of(((InworldValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -264,6 +309,12 @@ public final class FallbackPlanVoicesItem {
 
         T visitTavus(FallbackTavusVoice tavus);
 
+        T visitNeuphonic(FallbackNeuphonicVoice neuphonic);
+
+        T visitSesame(FallbackSesameVoice sesame);
+
+        T visitInworld(FallbackInworldVoice inworld);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -281,7 +332,10 @@ public final class FallbackPlanVoicesItem {
         @JsonSubTypes.Type(PlayhtValue.class),
         @JsonSubTypes.Type(RimeAiValue.class),
         @JsonSubTypes.Type(SmallestAiValue.class),
-        @JsonSubTypes.Type(TavusValue.class)
+        @JsonSubTypes.Type(TavusValue.class),
+        @JsonSubTypes.Type(NeuphonicValue.class),
+        @JsonSubTypes.Type(SesameValue.class),
+        @JsonSubTypes.Type(InworldValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -781,6 +835,123 @@ public final class FallbackPlanVoicesItem {
         }
 
         private boolean equalTo(TavusValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "FallbackPlanVoicesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("neuphonic")
+    @JsonIgnoreProperties("provider")
+    private static final class NeuphonicValue implements Value {
+        @JsonUnwrapped
+        private FallbackNeuphonicVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private NeuphonicValue() {}
+
+        private NeuphonicValue(FallbackNeuphonicVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitNeuphonic(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof NeuphonicValue && equalTo((NeuphonicValue) other);
+        }
+
+        private boolean equalTo(NeuphonicValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "FallbackPlanVoicesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("sesame")
+    @JsonIgnoreProperties("provider")
+    private static final class SesameValue implements Value {
+        @JsonUnwrapped
+        private FallbackSesameVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SesameValue() {}
+
+        private SesameValue(FallbackSesameVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSesame(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SesameValue && equalTo((SesameValue) other);
+        }
+
+        private boolean equalTo(SesameValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "FallbackPlanVoicesItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("inworld")
+    @JsonIgnoreProperties("provider")
+    private static final class InworldValue implements Value {
+        @JsonUnwrapped
+        private FallbackInworldVoice value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private InworldValue() {}
+
+        private InworldValue(FallbackInworldVoice value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitInworld(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof InworldValue && equalTo((InworldValue) other);
+        }
+
+        private boolean equalTo(InworldValue other) {
             return value.equals(other.value);
         }
 

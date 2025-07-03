@@ -97,6 +97,9 @@ public final class UpdateGoHighLevelMcpCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the authentication session for the credential.</p>
+         */
         @JsonSetter(value = "authenticationSession", nulls = Nulls.SKIP)
         public Builder authenticationSession(Optional<Oauth2AuthenticationSession> authenticationSession) {
             this.authenticationSession = authenticationSession;
@@ -108,6 +111,9 @@ public final class UpdateGoHighLevelMcpCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

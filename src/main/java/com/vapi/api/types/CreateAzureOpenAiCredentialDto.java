@@ -135,6 +135,9 @@ public final class CreateAzureOpenAiCredentialDto {
     }
 
     public interface OpenAiKeyStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         OpenAiEndpointStage openAiKey(@NotNull String openAiKey);
     }
 
@@ -151,10 +154,16 @@ public final class CreateAzureOpenAiCredentialDto {
 
         _FinalStage addAllModels(List<CreateAzureOpenAiCredentialDtoModelsItem> models);
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage ocpApimSubscriptionKey(Optional<String> ocpApimSubscriptionKey);
 
         _FinalStage ocpApimSubscriptionKey(String ocpApimSubscriptionKey);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -199,6 +208,7 @@ public final class CreateAzureOpenAiCredentialDto {
 
         /**
          * <p>This is not returned in the API.</p>
+         * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -225,6 +235,9 @@ public final class CreateAzureOpenAiCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -242,6 +255,9 @@ public final class CreateAzureOpenAiCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "ocpApimSubscriptionKey", nulls = Nulls.SKIP)
         public _FinalStage ocpApimSubscriptionKey(Optional<String> ocpApimSubscriptionKey) {

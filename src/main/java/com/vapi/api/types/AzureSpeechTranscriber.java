@@ -97,6 +97,9 @@ public final class AzureSpeechTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription. The list of languages Azure supports can be found here: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=stt</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<AzureSpeechTranscriberLanguage> language) {
             this.language = language;
@@ -108,6 +111,9 @@ public final class AzureSpeechTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public Builder fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
             this.fallbackPlan = fallbackPlan;

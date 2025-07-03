@@ -65,6 +65,8 @@ public final class ServerMessageMessage {
             return visitor.visit((ServerMessageVoiceInput) this.value);
         } else if (this.type == 16) {
             return visitor.visit((ServerMessageVoiceRequest) this.value);
+        } else if (this.type == 17) {
+            return visitor.visit((ServerMessageCallEndpointingRequest) this.value);
         }
         throw new IllegalStateException("Failed to visit value. This should never happen.");
     }
@@ -157,6 +159,10 @@ public final class ServerMessageMessage {
         return new ServerMessageMessage(value, 16);
     }
 
+    public static ServerMessageMessage of(ServerMessageCallEndpointingRequest value) {
+        return new ServerMessageMessage(value, 17);
+    }
+
     public interface Visitor<T> {
         T visit(ServerMessageAssistantRequest value);
 
@@ -191,6 +197,8 @@ public final class ServerMessageMessage {
         T visit(ServerMessageVoiceInput value);
 
         T visit(ServerMessageVoiceRequest value);
+
+        T visit(ServerMessageCallEndpointingRequest value);
     }
 
     static final class Deserializer extends StdDeserializer<ServerMessageMessage> {
@@ -267,6 +275,10 @@ public final class ServerMessageMessage {
             }
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageVoiceRequest.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, ServerMessageCallEndpointingRequest.class));
             } catch (IllegalArgumentException e) {
             }
             throw new JsonParseException(p, "Failed to deserialize");

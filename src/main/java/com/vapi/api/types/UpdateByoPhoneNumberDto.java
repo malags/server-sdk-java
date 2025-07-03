@@ -260,6 +260,15 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
         public Builder fallbackDestination(Optional<UpdateByoPhoneNumberDtoFallbackDestination> fallbackDestination) {
             this.fallbackDestination = fallbackDestination;
@@ -271,6 +280,9 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public Builder hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
             this.hooks = hooks;
@@ -282,6 +294,16 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle the E164 check for the <code>number</code> field. This is an advanced property which should be used if you know your use case requires it.</p>
+         * <p>Use cases:</p>
+         * <ul>
+         * <li><code>false</code>: To allow non-E164 numbers like <code>+001234567890</code>, <code>1234</code>, or <code>abc</code>. This is useful for dialing out to non-E164 numbers on your SIP trunks.</li>
+         * <li><code>true</code> (default): To allow only E164 numbers like <code>+14155551234</code>. This is standard for PSTN calls.</li>
+         * </ul>
+         * <p>If <code>false</code>, the <code>number</code> is still required to only contain alphanumeric characters (regex: <code>/^\+?[a-zA-Z0-9]+$/</code>).</p>
+         * <p>@default true (E164 check is enabled)</p>
+         */
         @JsonSetter(value = "numberE164CheckEnabled", nulls = Nulls.SKIP)
         public Builder numberE164CheckEnabled(Optional<Boolean> numberE164CheckEnabled) {
             this.numberE164CheckEnabled = numberE164CheckEnabled;
@@ -293,6 +315,9 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -304,6 +329,10 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -315,6 +344,10 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public Builder workflowId(Optional<String> workflowId) {
             this.workflowId = workflowId;
@@ -326,6 +359,10 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -337,6 +374,15 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public Builder server(Optional<Server> server) {
             this.server = server;
@@ -348,6 +394,9 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the number of the customer.</p>
+         */
         @JsonSetter(value = "number", nulls = Nulls.SKIP)
         public Builder number(Optional<String> number) {
             this.number = number;
@@ -359,6 +408,10 @@ public final class UpdateByoPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the credential of your own SIP trunk or Carrier (type <code>byo-sip-trunk</code>) which can be used to make calls to this phone number.</p>
+         * <p>You can add the SIP trunk or Carrier credential in the Provider Credentials page on the Dashboard to get the credentialId.</p>
+         */
         @JsonSetter(value = "credentialId", nulls = Nulls.SKIP)
         public Builder credentialId(Optional<String> credentialId) {
             this.credentialId = credentialId;

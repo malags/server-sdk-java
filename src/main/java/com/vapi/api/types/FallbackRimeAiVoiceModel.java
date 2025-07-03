@@ -6,11 +6,11 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum FallbackRimeAiVoiceModel {
-    V_1("v1"),
-
     MIST("mist"),
 
-    MISTV_2("mistv2");
+    MISTV_2("mistv2"),
+
+    ARCANA("arcana");
 
     private final String value;
 

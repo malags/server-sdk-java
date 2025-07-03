@@ -112,6 +112,9 @@ public final class GoogleTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used for the transcription.</p>
+         */
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public Builder model(Optional<GoogleTranscriberModel> model) {
             this.model = model;
@@ -123,6 +126,9 @@ public final class GoogleTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be set for the transcription.</p>
+         */
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public Builder language(Optional<GoogleTranscriberLanguage> language) {
             this.language = language;
@@ -134,6 +140,9 @@ public final class GoogleTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public Builder fallbackPlan(Optional<FallbackTranscriberPlan> fallbackPlan) {
             this.fallbackPlan = fallbackPlan;

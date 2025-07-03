@@ -123,26 +123,41 @@ public final class User {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the profile or user.</p>
+         */
         CreatedAtStage id(@NotNull String id);
 
         Builder from(User other);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the profile was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the profile was last updated.</p>
+         */
         EmailStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface EmailStage {
+        /**
+         * <p>This is the email of the user that is associated with the profile.</p>
+         */
         _FinalStage email(@NotNull String email);
     }
 
     public interface _FinalStage {
         User build();
 
+        /**
+         * <p>This is the full name of the user that is associated with the profile.</p>
+         */
         _FinalStage fullName(Optional<String> fullName);
 
         _FinalStage fullName(String fullName);
@@ -177,6 +192,7 @@ public final class User {
 
         /**
          * <p>This is the unique identifier for the profile or user.</p>
+         * <p>This is the unique identifier for the profile or user.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -187,6 +203,7 @@ public final class User {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the profile was created.</p>
          * <p>This is the ISO 8601 date-time string of when the profile was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -199,6 +216,7 @@ public final class User {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the profile was last updated.</p>
+         * <p>This is the ISO 8601 date-time string of when the profile was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -209,6 +227,7 @@ public final class User {
         }
 
         /**
+         * <p>This is the email of the user that is associated with the profile.</p>
          * <p>This is the email of the user that is associated with the profile.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -229,6 +248,9 @@ public final class User {
             return this;
         }
 
+        /**
+         * <p>This is the full name of the user that is associated with the profile.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fullName", nulls = Nulls.SKIP)
         public _FinalStage fullName(Optional<String> fullName) {

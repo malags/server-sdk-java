@@ -25,9 +25,13 @@ public final class TransferPlan {
 
     private final Optional<TransferPlanMessage> message;
 
+    private final Optional<Double> timeout;
+
     private final Optional<Map<String, Object>> sipVerb;
 
     private final Optional<String> holdAudioUrl;
+
+    private final Optional<String> transferCompleteAudioUrl;
 
     private final Optional<String> twiml;
 
@@ -42,8 +46,10 @@ public final class TransferPlan {
     private TransferPlan(
             TransferPlanMode mode,
             Optional<TransferPlanMessage> message,
+            Optional<Double> timeout,
             Optional<Map<String, Object>> sipVerb,
             Optional<String> holdAudioUrl,
+            Optional<String> transferCompleteAudioUrl,
             Optional<String> twiml,
             Optional<SummaryPlan> summaryPlan,
             Optional<Boolean> sipHeadersInReferToEnabled,
@@ -51,8 +57,10 @@ public final class TransferPlan {
             Map<String, Object> additionalProperties) {
         this.mode = mode;
         this.message = message;
+        this.timeout = timeout;
         this.sipVerb = sipVerb;
         this.holdAudioUrl = holdAudioUrl;
+        this.transferCompleteAudioUrl = transferCompleteAudioUrl;
         this.twiml = twiml;
         this.summaryPlan = summaryPlan;
         this.sipHeadersInReferToEnabled = sipHeadersInReferToEnabled;
@@ -93,6 +101,15 @@ public final class TransferPlan {
     }
 
     /**
+     * @return This is the timeout in seconds for the warm-transfer-wait-for-operator-to-speak-first-and-then-say-message/summary
+     * <p>@default 60</p>
+     */
+    @JsonProperty("timeout")
+    public Optional<Double> getTimeout() {
+        return timeout;
+    }
+
+    /**
      * @return This specifies the SIP verb to use while transferring the call.
      * <ul>
      * <li>'refer': Uses SIP REFER to transfer the call (default)</li>
@@ -119,6 +136,22 @@ public final class TransferPlan {
     @JsonProperty("holdAudioUrl")
     public Optional<String> getHoldAudioUrl() {
         return holdAudioUrl;
+    }
+
+    /**
+     * @return This is the URL to an audio file played after the warm transfer message or summary is delivered to the destination party.
+     * It can be used to play a custom sound like 'beep' to notify that the transfer is complete.
+     * <p>Usage:</p>
+     * <ul>
+     * <li>Used only when <code>mode</code> is <code>warm-transfer-experimental</code>.</li>
+     * <li>Used when transferring calls to play hold audio for the destination party.</li>
+     * <li>Must be a publicly accessible URL to an audio file.</li>
+     * <li>Supported formats: MP3 and WAV.</li>
+     * </ul>
+     */
+    @JsonProperty("transferCompleteAudioUrl")
+    public Optional<String> getTransferCompleteAudioUrl() {
+        return transferCompleteAudioUrl;
     }
 
     /**
@@ -188,8 +221,10 @@ public final class TransferPlan {
     private boolean equalTo(TransferPlan other) {
         return mode.equals(other.mode)
                 && message.equals(other.message)
+                && timeout.equals(other.timeout)
                 && sipVerb.equals(other.sipVerb)
                 && holdAudioUrl.equals(other.holdAudioUrl)
+                && transferCompleteAudioUrl.equals(other.transferCompleteAudioUrl)
                 && twiml.equals(other.twiml)
                 && summaryPlan.equals(other.summaryPlan)
                 && sipHeadersInReferToEnabled.equals(other.sipHeadersInReferToEnabled)
@@ -201,8 +236,10 @@ public final class TransferPlan {
         return Objects.hash(
                 this.mode,
                 this.message,
+                this.timeout,
                 this.sipVerb,
                 this.holdAudioUrl,
+                this.transferCompleteAudioUrl,
                 this.twiml,
                 this.summaryPlan,
                 this.sipHeadersInReferToEnabled,
@@ -219,6 +256,21 @@ public final class TransferPlan {
     }
 
     public interface ModeStage {
+        /**
+         * <p>This configures how transfer is executed and the experience of the destination party receiving the call.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li><code>blind-transfer</code>: The assistant forwards the call to the destination without any message or summary.</li>
+         * <li><code>blind-transfer-add-summary-to-sip-header</code>: The assistant forwards the call to the destination and adds a SIP header X-Transfer-Summary to the call to include the summary.</li>
+         * <li><code>warm-transfer-say-message</code>: The assistant dials the destination, delivers the <code>message</code> to the destination party, connects the customer, and leaves the call.</li>
+         * <li><code>warm-transfer-say-summary</code>: The assistant dials the destination, provides a summary of the call to the destination party, connects the customer, and leaves the call.</li>
+         * <li><code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>: The assistant dials the destination, waits for the operator to speak, delivers the <code>message</code> to the destination party, and then connects the customer.</li>
+         * <li><code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code>: The assistant dials the destination, waits for the operator to speak, provides a summary of the call to the destination party, and then connects the customer.</li>
+         * <li><code>warm-transfer-twiml</code>: The assistant dials the destination, executes the twiml instructions on the destination call leg, connects the customer, and leaves the call.</li>
+         * <li><code>warm-transfer-experimental</code>: The assistant puts the customer on hold, dials the destination, and if the destination answers (and is human), delivers a message or summary before connecting the customer. If the destination is unreachable or not human (e.g., with voicemail detection), the assistant delivers the <code>fallbackMessage</code> to the customer and optionally ends the call.</li>
+         * </ul>
+         * <p>@default 'blind-transfer'</p>
+         */
         _FinalStage mode(@NotNull TransferPlanMode mode);
 
         Builder from(TransferPlan other);
@@ -227,30 +279,112 @@ public final class TransferPlan {
     public interface _FinalStage {
         TransferPlan build();
 
+        /**
+         * <p>This is the message the assistant will deliver to the destination party before connecting the customer.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>blind-transfer-add-summary-to-sip-header</code>, <code>warm-transfer-say-message</code>, <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>, or <code>warm-transfer-experimental</code>.</li>
+         * </ul>
+         */
         _FinalStage message(Optional<TransferPlanMessage> message);
 
         _FinalStage message(TransferPlanMessage message);
 
+        /**
+         * <p>This is the timeout in seconds for the warm-transfer-wait-for-operator-to-speak-first-and-then-say-message/summary</p>
+         * <p>@default 60</p>
+         */
+        _FinalStage timeout(Optional<Double> timeout);
+
+        _FinalStage timeout(Double timeout);
+
+        /**
+         * <p>This specifies the SIP verb to use while transferring the call.</p>
+         * <ul>
+         * <li>'refer': Uses SIP REFER to transfer the call (default)</li>
+         * <li>'bye': Ends current call with SIP BYE</li>
+         * <li>'dial': Uses SIP DIAL to transfer the call</li>
+         * </ul>
+         */
         _FinalStage sipVerb(Optional<Map<String, Object>> sipVerb);
 
         _FinalStage sipVerb(Map<String, Object> sipVerb);
 
+        /**
+         * <p>This is the URL to an audio file played while the customer is on hold during transfer.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-experimental</code>.</li>
+         * <li>Used when transferring calls to play hold audio for the customer.</li>
+         * <li>Must be a publicly accessible URL to an audio file.</li>
+         * <li>Supported formats: MP3 and WAV.</li>
+         * <li>If not provided, the default hold audio will be used.</li>
+         * </ul>
+         */
         _FinalStage holdAudioUrl(Optional<String> holdAudioUrl);
 
         _FinalStage holdAudioUrl(String holdAudioUrl);
 
+        /**
+         * <p>This is the URL to an audio file played after the warm transfer message or summary is delivered to the destination party.
+         * It can be used to play a custom sound like 'beep' to notify that the transfer is complete.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-experimental</code>.</li>
+         * <li>Used when transferring calls to play hold audio for the destination party.</li>
+         * <li>Must be a publicly accessible URL to an audio file.</li>
+         * <li>Supported formats: MP3 and WAV.</li>
+         * </ul>
+         */
+        _FinalStage transferCompleteAudioUrl(Optional<String> transferCompleteAudioUrl);
+
+        _FinalStage transferCompleteAudioUrl(String transferCompleteAudioUrl);
+
+        /**
+         * <p>This is the TwiML instructions to execute on the destination call leg before connecting the customer.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-twiml</code>.</li>
+         * <li>Supports only <code>Play</code>, <code>Say</code>, <code>Gather</code>, <code>Hangup</code> and <code>Pause</code> verbs.</li>
+         * <li>Maximum length is 4096 characters.</li>
+         * </ul>
+         * <p>Example:</p>
+         * <pre><code>&lt;Say voice=&quot;alice&quot; language=&quot;en-US&quot;&gt;Hello, transferring a customer to you.&lt;/Say&gt;
+         * &lt;Pause length=&quot;2&quot;/&gt;
+         * &lt;Say&gt;They called about billing questions.&lt;/Say&gt;
+         * </code></pre>
+         */
         _FinalStage twiml(Optional<String> twiml);
 
         _FinalStage twiml(String twiml);
 
+        /**
+         * <p>This is the plan for generating a summary of the call to present to the destination party.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>blind-transfer-add-summary-to-sip-header</code> or <code>warm-transfer-say-summary</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code> or <code>warm-transfer-experimental</code>.</li>
+         * </ul>
+         */
         _FinalStage summaryPlan(Optional<SummaryPlan> summaryPlan);
 
         _FinalStage summaryPlan(SummaryPlan summaryPlan);
 
+        /**
+         * <p>This flag includes the sipHeaders from above in the refer to sip uri as url encoded query params.</p>
+         * <p>@default false</p>
+         */
         _FinalStage sipHeadersInReferToEnabled(Optional<Boolean> sipHeadersInReferToEnabled);
 
         _FinalStage sipHeadersInReferToEnabled(Boolean sipHeadersInReferToEnabled);
 
+        /**
+         * <p>This configures the fallback plan when the transfer fails (destination unreachable, busy, or not human).</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-experimental</code>.</li>
+         * <li>If not provided when using <code>warm-transfer-experimental</code>, a default message will be used.</li>
+         * </ul>
+         */
         _FinalStage fallbackPlan(Optional<TransferFallbackPlan> fallbackPlan);
 
         _FinalStage fallbackPlan(TransferFallbackPlan fallbackPlan);
@@ -268,9 +402,13 @@ public final class TransferPlan {
 
         private Optional<String> twiml = Optional.empty();
 
+        private Optional<String> transferCompleteAudioUrl = Optional.empty();
+
         private Optional<String> holdAudioUrl = Optional.empty();
 
         private Optional<Map<String, Object>> sipVerb = Optional.empty();
+
+        private Optional<Double> timeout = Optional.empty();
 
         private Optional<TransferPlanMessage> message = Optional.empty();
 
@@ -283,8 +421,10 @@ public final class TransferPlan {
         public Builder from(TransferPlan other) {
             mode(other.getMode());
             message(other.getMessage());
+            timeout(other.getTimeout());
             sipVerb(other.getSipVerb());
             holdAudioUrl(other.getHoldAudioUrl());
+            transferCompleteAudioUrl(other.getTransferCompleteAudioUrl());
             twiml(other.getTwiml());
             summaryPlan(other.getSummaryPlan());
             sipHeadersInReferToEnabled(other.getSipHeadersInReferToEnabled());
@@ -293,6 +433,19 @@ public final class TransferPlan {
         }
 
         /**
+         * <p>This configures how transfer is executed and the experience of the destination party receiving the call.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li><code>blind-transfer</code>: The assistant forwards the call to the destination without any message or summary.</li>
+         * <li><code>blind-transfer-add-summary-to-sip-header</code>: The assistant forwards the call to the destination and adds a SIP header X-Transfer-Summary to the call to include the summary.</li>
+         * <li><code>warm-transfer-say-message</code>: The assistant dials the destination, delivers the <code>message</code> to the destination party, connects the customer, and leaves the call.</li>
+         * <li><code>warm-transfer-say-summary</code>: The assistant dials the destination, provides a summary of the call to the destination party, connects the customer, and leaves the call.</li>
+         * <li><code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>: The assistant dials the destination, waits for the operator to speak, delivers the <code>message</code> to the destination party, and then connects the customer.</li>
+         * <li><code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code>: The assistant dials the destination, waits for the operator to speak, provides a summary of the call to the destination party, and then connects the customer.</li>
+         * <li><code>warm-transfer-twiml</code>: The assistant dials the destination, executes the twiml instructions on the destination call leg, connects the customer, and leaves the call.</li>
+         * <li><code>warm-transfer-experimental</code>: The assistant puts the customer on hold, dials the destination, and if the destination answers (and is human), delivers a message or summary before connecting the customer. If the destination is unreachable or not human (e.g., with voicemail detection), the assistant delivers the <code>fallbackMessage</code> to the customer and optionally ends the call.</li>
+         * </ul>
+         * <p>@default 'blind-transfer'</p>
          * <p>This configures how transfer is executed and the experience of the destination party receiving the call.</p>
          * <p>Usage:</p>
          * <ul>
@@ -330,6 +483,14 @@ public final class TransferPlan {
             return this;
         }
 
+        /**
+         * <p>This configures the fallback plan when the transfer fails (destination unreachable, busy, or not human).</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-experimental</code>.</li>
+         * <li>If not provided when using <code>warm-transfer-experimental</code>, a default message will be used.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public _FinalStage fallbackPlan(Optional<TransferFallbackPlan> fallbackPlan) {
@@ -348,6 +509,10 @@ public final class TransferPlan {
             return this;
         }
 
+        /**
+         * <p>This flag includes the sipHeaders from above in the refer to sip uri as url encoded query params.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "sipHeadersInReferToEnabled", nulls = Nulls.SKIP)
         public _FinalStage sipHeadersInReferToEnabled(Optional<Boolean> sipHeadersInReferToEnabled) {
@@ -369,6 +534,13 @@ public final class TransferPlan {
             return this;
         }
 
+        /**
+         * <p>This is the plan for generating a summary of the call to present to the destination party.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>blind-transfer-add-summary-to-sip-header</code> or <code>warm-transfer-say-summary</code> or <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-summary</code> or <code>warm-transfer-experimental</code>.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "summaryPlan", nulls = Nulls.SKIP)
         public _FinalStage summaryPlan(Optional<SummaryPlan> summaryPlan) {
@@ -397,10 +569,60 @@ public final class TransferPlan {
             return this;
         }
 
+        /**
+         * <p>This is the TwiML instructions to execute on the destination call leg before connecting the customer.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-twiml</code>.</li>
+         * <li>Supports only <code>Play</code>, <code>Say</code>, <code>Gather</code>, <code>Hangup</code> and <code>Pause</code> verbs.</li>
+         * <li>Maximum length is 4096 characters.</li>
+         * </ul>
+         * <p>Example:</p>
+         * <pre><code>&lt;Say voice=&quot;alice&quot; language=&quot;en-US&quot;&gt;Hello, transferring a customer to you.&lt;/Say&gt;
+         * &lt;Pause length=&quot;2&quot;/&gt;
+         * &lt;Say&gt;They called about billing questions.&lt;/Say&gt;
+         * </code></pre>
+         */
         @java.lang.Override
         @JsonSetter(value = "twiml", nulls = Nulls.SKIP)
         public _FinalStage twiml(Optional<String> twiml) {
             this.twiml = twiml;
+            return this;
+        }
+
+        /**
+         * <p>This is the URL to an audio file played after the warm transfer message or summary is delivered to the destination party.
+         * It can be used to play a custom sound like 'beep' to notify that the transfer is complete.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-experimental</code>.</li>
+         * <li>Used when transferring calls to play hold audio for the destination party.</li>
+         * <li>Must be a publicly accessible URL to an audio file.</li>
+         * <li>Supported formats: MP3 and WAV.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage transferCompleteAudioUrl(String transferCompleteAudioUrl) {
+            this.transferCompleteAudioUrl = Optional.ofNullable(transferCompleteAudioUrl);
+            return this;
+        }
+
+        /**
+         * <p>This is the URL to an audio file played after the warm transfer message or summary is delivered to the destination party.
+         * It can be used to play a custom sound like 'beep' to notify that the transfer is complete.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-experimental</code>.</li>
+         * <li>Used when transferring calls to play hold audio for the destination party.</li>
+         * <li>Must be a publicly accessible URL to an audio file.</li>
+         * <li>Supported formats: MP3 and WAV.</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "transferCompleteAudioUrl", nulls = Nulls.SKIP)
+        public _FinalStage transferCompleteAudioUrl(Optional<String> transferCompleteAudioUrl) {
+            this.transferCompleteAudioUrl = transferCompleteAudioUrl;
             return this;
         }
 
@@ -422,6 +644,17 @@ public final class TransferPlan {
             return this;
         }
 
+        /**
+         * <p>This is the URL to an audio file played while the customer is on hold during transfer.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>warm-transfer-experimental</code>.</li>
+         * <li>Used when transferring calls to play hold audio for the customer.</li>
+         * <li>Must be a publicly accessible URL to an audio file.</li>
+         * <li>Supported formats: MP3 and WAV.</li>
+         * <li>If not provided, the default hold audio will be used.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "holdAudioUrl", nulls = Nulls.SKIP)
         public _FinalStage holdAudioUrl(Optional<String> holdAudioUrl) {
@@ -444,10 +677,40 @@ public final class TransferPlan {
             return this;
         }
 
+        /**
+         * <p>This specifies the SIP verb to use while transferring the call.</p>
+         * <ul>
+         * <li>'refer': Uses SIP REFER to transfer the call (default)</li>
+         * <li>'bye': Ends current call with SIP BYE</li>
+         * <li>'dial': Uses SIP DIAL to transfer the call</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "sipVerb", nulls = Nulls.SKIP)
         public _FinalStage sipVerb(Optional<Map<String, Object>> sipVerb) {
             this.sipVerb = sipVerb;
+            return this;
+        }
+
+        /**
+         * <p>This is the timeout in seconds for the warm-transfer-wait-for-operator-to-speak-first-and-then-say-message/summary</p>
+         * <p>@default 60</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timeout(Double timeout) {
+            this.timeout = Optional.ofNullable(timeout);
+            return this;
+        }
+
+        /**
+         * <p>This is the timeout in seconds for the warm-transfer-wait-for-operator-to-speak-first-and-then-say-message/summary</p>
+         * <p>@default 60</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "timeout", nulls = Nulls.SKIP)
+        public _FinalStage timeout(Optional<Double> timeout) {
+            this.timeout = timeout;
             return this;
         }
 
@@ -465,6 +728,13 @@ public final class TransferPlan {
             return this;
         }
 
+        /**
+         * <p>This is the message the assistant will deliver to the destination party before connecting the customer.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Used only when <code>mode</code> is <code>blind-transfer-add-summary-to-sip-header</code>, <code>warm-transfer-say-message</code>, <code>warm-transfer-wait-for-operator-to-speak-first-and-then-say-message</code>, or <code>warm-transfer-experimental</code>.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
         public _FinalStage message(Optional<TransferPlanMessage> message) {
@@ -477,8 +747,10 @@ public final class TransferPlan {
             return new TransferPlan(
                     mode,
                     message,
+                    timeout,
                     sipVerb,
                     holdAudioUrl,
+                    transferCompleteAudioUrl,
                     twiml,
                     summaryPlan,
                     sipHeadersInReferToEnabled,

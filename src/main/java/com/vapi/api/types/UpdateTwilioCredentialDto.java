@@ -143,6 +143,9 @@ public final class UpdateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "authToken", nulls = Nulls.SKIP)
         public Builder authToken(Optional<String> authToken) {
             this.authToken = authToken;
@@ -154,6 +157,9 @@ public final class UpdateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public Builder apiKey(Optional<String> apiKey) {
             this.apiKey = apiKey;
@@ -165,6 +171,9 @@ public final class UpdateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "apiSecret", nulls = Nulls.SKIP)
         public Builder apiSecret(Optional<String> apiSecret) {
             this.apiSecret = apiSecret;
@@ -176,6 +185,9 @@ public final class UpdateTwilioCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

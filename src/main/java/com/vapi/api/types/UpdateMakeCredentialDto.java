@@ -130,6 +130,9 @@ public final class UpdateMakeCredentialDto {
             return this;
         }
 
+        /**
+         * <p>Team ID</p>
+         */
         @JsonSetter(value = "teamId", nulls = Nulls.SKIP)
         public Builder teamId(Optional<String> teamId) {
             this.teamId = teamId;
@@ -141,6 +144,9 @@ public final class UpdateMakeCredentialDto {
             return this;
         }
 
+        /**
+         * <p>Region of your application. For example: eu1, eu2, us1, us2</p>
+         */
         @JsonSetter(value = "region", nulls = Nulls.SKIP)
         public Builder region(Optional<String> region) {
             this.region = region;
@@ -152,6 +158,9 @@ public final class UpdateMakeCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "apiKey", nulls = Nulls.SKIP)
         public Builder apiKey(Optional<String> apiKey) {
             this.apiKey = apiKey;
@@ -163,6 +172,9 @@ public final class UpdateMakeCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

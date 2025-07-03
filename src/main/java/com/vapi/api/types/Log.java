@@ -393,102 +393,174 @@ public final class Log {
     }
 
     public interface TimeStage {
+        /**
+         * <p>This is the timestamp at which the log was written.</p>
+         */
         OrgIdStage time(@NotNull String time);
 
         Builder from(Log other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this log belongs to.</p>
+         */
         TypeStage orgId(@NotNull String orgId);
     }
 
     public interface TypeStage {
+        /**
+         * <p>This is the type of the log.</p>
+         */
         _FinalStage type(@NotNull LogType type);
     }
 
     public interface _FinalStage {
         Log build();
 
+        /**
+         * <p>This is the type of the webhook, given the log is from a webhook.</p>
+         */
         _FinalStage webhookType(Optional<String> webhookType);
 
         _FinalStage webhookType(String webhookType);
 
+        /**
+         * <p>This is the specific resource, relevant only to API logs.</p>
+         */
         _FinalStage resource(Optional<LogResource> resource);
 
         _FinalStage resource(LogResource resource);
 
+        /**
+         * <p>'This is how long the request took.</p>
+         */
         _FinalStage requestDurationSeconds(Optional<Double> requestDurationSeconds);
 
         _FinalStage requestDurationSeconds(Double requestDurationSeconds);
 
+        /**
+         * <p>This is the timestamp at which the request began.</p>
+         */
         _FinalStage requestStartedAt(Optional<String> requestStartedAt);
 
         _FinalStage requestStartedAt(String requestStartedAt);
 
+        /**
+         * <p>This is the timestamp at which the request finished.</p>
+         */
         _FinalStage requestFinishedAt(Optional<String> requestFinishedAt);
 
         _FinalStage requestFinishedAt(String requestFinishedAt);
 
+        /**
+         * <p>This is the body of the request.</p>
+         */
         _FinalStage requestBody(Optional<Map<String, Object>> requestBody);
 
         _FinalStage requestBody(Map<String, Object> requestBody);
 
+        /**
+         * <p>This is the request method.</p>
+         */
         _FinalStage requestHttpMethod(Optional<LogRequestHttpMethod> requestHttpMethod);
 
         _FinalStage requestHttpMethod(LogRequestHttpMethod requestHttpMethod);
 
+        /**
+         * <p>This is the request URL.</p>
+         */
         _FinalStage requestUrl(Optional<String> requestUrl);
 
         _FinalStage requestUrl(String requestUrl);
 
+        /**
+         * <p>This is the request path.</p>
+         */
         _FinalStage requestPath(Optional<String> requestPath);
 
         _FinalStage requestPath(String requestPath);
 
+        /**
+         * <p>This is the request query.</p>
+         */
         _FinalStage requestQuery(Optional<String> requestQuery);
 
         _FinalStage requestQuery(String requestQuery);
 
+        /**
+         * <p>This the HTTP status code of the response.</p>
+         */
         _FinalStage responseHttpCode(Optional<Double> responseHttpCode);
 
         _FinalStage responseHttpCode(Double responseHttpCode);
 
+        /**
+         * <p>This is the request IP address.</p>
+         */
         _FinalStage requestIpAddress(Optional<String> requestIpAddress);
 
         _FinalStage requestIpAddress(String requestIpAddress);
 
+        /**
+         * <p>This is the origin of the request</p>
+         */
         _FinalStage requestOrigin(Optional<String> requestOrigin);
 
         _FinalStage requestOrigin(String requestOrigin);
 
+        /**
+         * <p>This is the body of the response.</p>
+         */
         _FinalStage responseBody(Optional<Map<String, Object>> responseBody);
 
         _FinalStage responseBody(Map<String, Object> responseBody);
 
+        /**
+         * <p>These are the headers of the request.</p>
+         */
         _FinalStage requestHeaders(Optional<Map<String, Object>> requestHeaders);
 
         _FinalStage requestHeaders(Map<String, Object> requestHeaders);
 
+        /**
+         * <p>This is the error, if one occurred.</p>
+         */
         _FinalStage error(Optional<Error> error);
 
         _FinalStage error(Error error);
 
+        /**
+         * <p>This is the ID of the assistant.</p>
+         */
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
 
+        /**
+         * <p>This is the ID of the phone number.</p>
+         */
         _FinalStage phoneNumberId(Optional<String> phoneNumberId);
 
         _FinalStage phoneNumberId(String phoneNumberId);
 
+        /**
+         * <p>This is the ID of the customer.</p>
+         */
         _FinalStage customerId(Optional<String> customerId);
 
         _FinalStage customerId(String customerId);
 
+        /**
+         * <p>This is the ID of the squad.</p>
+         */
         _FinalStage squadId(Optional<String> squadId);
 
         _FinalStage squadId(String squadId);
 
+        /**
+         * <p>This is the ID of the call.</p>
+         */
         _FinalStage callId(Optional<String> callId);
 
         _FinalStage callId(String callId);
@@ -580,6 +652,7 @@ public final class Log {
 
         /**
          * <p>This is the timestamp at which the log was written.</p>
+         * <p>This is the timestamp at which the log was written.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -591,6 +664,7 @@ public final class Log {
 
         /**
          * <p>This is the unique identifier for the org that this log belongs to.</p>
+         * <p>This is the unique identifier for the org that this log belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -601,6 +675,7 @@ public final class Log {
         }
 
         /**
+         * <p>This is the type of the log.</p>
          * <p>This is the type of the log.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -621,6 +696,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "callId", nulls = Nulls.SKIP)
         public _FinalStage callId(Optional<String> callId) {
@@ -638,6 +716,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the squad.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public _FinalStage squadId(Optional<String> squadId) {
@@ -655,6 +736,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the customer.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customerId", nulls = Nulls.SKIP)
         public _FinalStage customerId(Optional<String> customerId) {
@@ -672,6 +756,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the phone number.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
         public _FinalStage phoneNumberId(Optional<String> phoneNumberId) {
@@ -689,6 +776,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public _FinalStage assistantId(Optional<String> assistantId) {
@@ -706,6 +796,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the error, if one occurred.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "error", nulls = Nulls.SKIP)
         public _FinalStage error(Optional<Error> error) {
@@ -723,6 +816,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>These are the headers of the request.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestHeaders", nulls = Nulls.SKIP)
         public _FinalStage requestHeaders(Optional<Map<String, Object>> requestHeaders) {
@@ -740,6 +836,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the body of the response.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "responseBody", nulls = Nulls.SKIP)
         public _FinalStage responseBody(Optional<Map<String, Object>> responseBody) {
@@ -757,6 +856,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the origin of the request</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestOrigin", nulls = Nulls.SKIP)
         public _FinalStage requestOrigin(Optional<String> requestOrigin) {
@@ -774,6 +876,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the request IP address.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestIpAddress", nulls = Nulls.SKIP)
         public _FinalStage requestIpAddress(Optional<String> requestIpAddress) {
@@ -791,6 +896,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This the HTTP status code of the response.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "responseHttpCode", nulls = Nulls.SKIP)
         public _FinalStage responseHttpCode(Optional<Double> responseHttpCode) {
@@ -808,6 +916,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the request query.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestQuery", nulls = Nulls.SKIP)
         public _FinalStage requestQuery(Optional<String> requestQuery) {
@@ -825,6 +936,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the request path.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestPath", nulls = Nulls.SKIP)
         public _FinalStage requestPath(Optional<String> requestPath) {
@@ -842,6 +956,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the request URL.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestUrl", nulls = Nulls.SKIP)
         public _FinalStage requestUrl(Optional<String> requestUrl) {
@@ -859,6 +976,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the request method.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestHttpMethod", nulls = Nulls.SKIP)
         public _FinalStage requestHttpMethod(Optional<LogRequestHttpMethod> requestHttpMethod) {
@@ -876,6 +996,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the body of the request.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestBody", nulls = Nulls.SKIP)
         public _FinalStage requestBody(Optional<Map<String, Object>> requestBody) {
@@ -893,6 +1016,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp at which the request finished.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestFinishedAt", nulls = Nulls.SKIP)
         public _FinalStage requestFinishedAt(Optional<String> requestFinishedAt) {
@@ -910,6 +1036,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp at which the request began.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestStartedAt", nulls = Nulls.SKIP)
         public _FinalStage requestStartedAt(Optional<String> requestStartedAt) {
@@ -927,6 +1056,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>'This is how long the request took.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "requestDurationSeconds", nulls = Nulls.SKIP)
         public _FinalStage requestDurationSeconds(Optional<Double> requestDurationSeconds) {
@@ -944,6 +1076,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the specific resource, relevant only to API logs.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "resource", nulls = Nulls.SKIP)
         public _FinalStage resource(Optional<LogResource> resource) {
@@ -961,6 +1096,9 @@ public final class Log {
             return this;
         }
 
+        /**
+         * <p>This is the type of the webhook, given the log is from a webhook.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "webhookType", nulls = Nulls.SKIP)
         public _FinalStage webhookType(Optional<String> webhookType) {

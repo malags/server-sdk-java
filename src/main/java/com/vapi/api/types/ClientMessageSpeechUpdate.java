@@ -177,38 +177,62 @@ public final class ClientMessageSpeechUpdate {
     }
 
     public interface StatusStage {
+        /**
+         * <p>This is the status of the speech update.</p>
+         */
         RoleStage status(@NotNull ClientMessageSpeechUpdateStatus status);
 
         Builder from(ClientMessageSpeechUpdate other);
     }
 
     public interface RoleStage {
+        /**
+         * <p>This is the role which the speech update is for.</p>
+         */
         _FinalStage role(@NotNull ClientMessageSpeechUpdateRole role);
     }
 
     public interface _FinalStage {
         ClientMessageSpeechUpdate build();
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         _FinalStage phoneNumber(Optional<ClientMessageSpeechUpdatePhoneNumber> phoneNumber);
 
         _FinalStage phoneNumber(ClientMessageSpeechUpdatePhoneNumber phoneNumber);
 
+        /**
+         * <p>This is the turn number of the speech update (0-indexed).</p>
+         */
         _FinalStage turn(Optional<Double> turn);
 
         _FinalStage turn(Double turn);
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         _FinalStage timestamp(Optional<Double> timestamp);
 
         _FinalStage timestamp(Double timestamp);
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         _FinalStage call(Optional<Call> call);
 
         _FinalStage call(Call call);
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
@@ -252,6 +276,7 @@ public final class ClientMessageSpeechUpdate {
 
         /**
          * <p>This is the status of the speech update.</p>
+         * <p>This is the status of the speech update.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -262,6 +287,7 @@ public final class ClientMessageSpeechUpdate {
         }
 
         /**
+         * <p>This is the role which the speech update is for.</p>
          * <p>This is the role which the speech update is for.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -282,6 +308,9 @@ public final class ClientMessageSpeechUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -299,6 +328,9 @@ public final class ClientMessageSpeechUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -316,6 +348,9 @@ public final class ClientMessageSpeechUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public _FinalStage call(Optional<Call> call) {
@@ -333,6 +368,9 @@ public final class ClientMessageSpeechUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public _FinalStage timestamp(Optional<Double> timestamp) {
@@ -350,6 +388,9 @@ public final class ClientMessageSpeechUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the turn number of the speech update (0-indexed).</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "turn", nulls = Nulls.SKIP)
         public _FinalStage turn(Optional<Double> turn) {
@@ -367,6 +408,9 @@ public final class ClientMessageSpeechUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ClientMessageSpeechUpdatePhoneNumber> phoneNumber) {

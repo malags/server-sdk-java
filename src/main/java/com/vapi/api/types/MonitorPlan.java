@@ -143,6 +143,11 @@ public final class MonitorPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether the assistant's calls allow live listening. Defaults to true.</p>
+         * <p>Fetch <code>call.monitor.listenUrl</code> to get the live listening URL.</p>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "listenEnabled", nulls = Nulls.SKIP)
         public Builder listenEnabled(Optional<Boolean> listenEnabled) {
             this.listenEnabled = listenEnabled;
@@ -154,6 +159,11 @@ public final class MonitorPlan {
             return this;
         }
 
+        /**
+         * <p>This enables authentication on the <code>call.monitor.listenUrl</code>.</p>
+         * <p>If <code>listenAuthenticationEnabled</code> is <code>true</code>, the <code>call.monitor.listenUrl</code> will require an <code>Authorization: Bearer &lt;vapi-public-api-key&gt;</code> header.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "listenAuthenticationEnabled", nulls = Nulls.SKIP)
         public Builder listenAuthenticationEnabled(Optional<Boolean> listenAuthenticationEnabled) {
             this.listenAuthenticationEnabled = listenAuthenticationEnabled;
@@ -165,6 +175,12 @@ public final class MonitorPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether the assistant's calls allow live control. Defaults to true.</p>
+         * <p>Fetch <code>call.monitor.controlUrl</code> to get the live control URL.</p>
+         * <p>To use, send any control message via a POST request to <code>call.monitor.controlUrl</code>. Here are the types of controls supported: https://docs.vapi.ai/api-reference/messages/client-inbound-message</p>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "controlEnabled", nulls = Nulls.SKIP)
         public Builder controlEnabled(Optional<Boolean> controlEnabled) {
             this.controlEnabled = controlEnabled;
@@ -176,6 +192,11 @@ public final class MonitorPlan {
             return this;
         }
 
+        /**
+         * <p>This enables authentication on the <code>call.monitor.controlUrl</code>.</p>
+         * <p>If <code>controlAuthenticationEnabled</code> is <code>true</code>, the <code>call.monitor.controlUrl</code> will require an <code>Authorization: Bearer &lt;vapi-public-api-key&gt;</code> header.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "controlAuthenticationEnabled", nulls = Nulls.SKIP)
         public Builder controlAuthenticationEnabled(Optional<Boolean> controlAuthenticationEnabled) {
             this.controlAuthenticationEnabled = controlAuthenticationEnabled;

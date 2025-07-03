@@ -157,6 +157,9 @@ public final class HumeVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>The ID of the particular voice you want to use.</p>
+         */
         _FinalStage voiceId(@NotNull String voiceId);
 
         Builder from(HumeVoice other);
@@ -165,26 +168,46 @@ public final class HumeVoice {
     public interface _FinalStage {
         HumeVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the model that will be used.</p>
+         */
         _FinalStage model(Optional<String> model);
 
         _FinalStage model(String model);
 
+        /**
+         * <p>Indicates whether the chosen voice is a preset Hume AI voice or a custom voice.</p>
+         */
         _FinalStage isCustomHumeVoice(Optional<Boolean> isCustomHumeVoice);
 
         _FinalStage isCustomHumeVoice(Boolean isCustomHumeVoice);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
 
+        /**
+         * <p>Natural language instructions describing how the synthesized speech should sound, including but not limited to tone, intonation, pacing, and accent (e.g., 'a soft, gentle voice with a strong British accent').</p>
+         * <p>If a Voice is specified in the request, this description serves as acting instructions.
+         * If no Voice is specified, a new voice is generated based on this description.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
 
         _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
@@ -225,6 +248,7 @@ public final class HumeVoice {
 
         /**
          * <p>The ID of the particular voice you want to use.</p>
+         * <p>The ID of the particular voice you want to use.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -244,6 +268,9 @@ public final class HumeVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
@@ -263,6 +290,11 @@ public final class HumeVoice {
             return this;
         }
 
+        /**
+         * <p>Natural language instructions describing how the synthesized speech should sound, including but not limited to tone, intonation, pacing, and accent (e.g., 'a soft, gentle voice with a strong British accent').</p>
+         * <p>If a Voice is specified in the request, this description serves as acting instructions.
+         * If no Voice is specified, a new voice is generated based on this description.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
@@ -280,6 +312,9 @@ public final class HumeVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -297,6 +332,9 @@ public final class HumeVoice {
             return this;
         }
 
+        /**
+         * <p>Indicates whether the chosen voice is a preset Hume AI voice or a custom voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "isCustomHumeVoice", nulls = Nulls.SKIP)
         public _FinalStage isCustomHumeVoice(Optional<Boolean> isCustomHumeVoice) {
@@ -314,6 +352,9 @@ public final class HumeVoice {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<String> model) {
@@ -331,6 +372,9 @@ public final class HumeVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

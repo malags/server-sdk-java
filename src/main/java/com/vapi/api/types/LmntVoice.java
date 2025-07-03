@@ -27,6 +27,8 @@ public final class LmntVoice {
 
     private final Optional<Double> speed;
 
+    private final Optional<LmntVoiceLanguage> language;
+
     private final Optional<ChunkPlan> chunkPlan;
 
     private final Optional<FallbackPlan> fallbackPlan;
@@ -37,12 +39,14 @@ public final class LmntVoice {
             Optional<Boolean> cachingEnabled,
             LmntVoiceId voiceId,
             Optional<Double> speed,
+            Optional<LmntVoiceLanguage> language,
             Optional<ChunkPlan> chunkPlan,
             Optional<FallbackPlan> fallbackPlan,
             Map<String, Object> additionalProperties) {
         this.cachingEnabled = cachingEnabled;
         this.voiceId = voiceId;
         this.speed = speed;
+        this.language = language;
         this.chunkPlan = chunkPlan;
         this.fallbackPlan = fallbackPlan;
         this.additionalProperties = additionalProperties;
@@ -70,6 +74,14 @@ public final class LmntVoice {
     @JsonProperty("speed")
     public Optional<Double> getSpeed() {
         return speed;
+    }
+
+    /**
+     * @return Two letter ISO 639-1 language code. Use &quot;auto&quot; for auto-detection.
+     */
+    @JsonProperty("language")
+    public Optional<LmntVoiceLanguage> getLanguage() {
+        return language;
     }
 
     /**
@@ -103,13 +115,15 @@ public final class LmntVoice {
         return cachingEnabled.equals(other.cachingEnabled)
                 && voiceId.equals(other.voiceId)
                 && speed.equals(other.speed)
+                && language.equals(other.language)
                 && chunkPlan.equals(other.chunkPlan)
                 && fallbackPlan.equals(other.fallbackPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.cachingEnabled, this.voiceId, this.speed, this.chunkPlan, this.fallbackPlan);
+        return Objects.hash(
+                this.cachingEnabled, this.voiceId, this.speed, this.language, this.chunkPlan, this.fallbackPlan);
     }
 
     @java.lang.Override
@@ -122,6 +136,9 @@ public final class LmntVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the provider-specific ID that will be used.</p>
+         */
         _FinalStage voiceId(@NotNull LmntVoiceId voiceId);
 
         Builder from(LmntVoice other);
@@ -130,18 +147,37 @@ public final class LmntVoice {
     public interface _FinalStage {
         LmntVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         */
         _FinalStage speed(Optional<Double> speed);
 
         _FinalStage speed(Double speed);
 
+        /**
+         * <p>Two letter ISO 639-1 language code. Use &quot;auto&quot; for auto-detection.</p>
+         */
+        _FinalStage language(Optional<LmntVoiceLanguage> language);
+
+        _FinalStage language(LmntVoiceLanguage language);
+
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan);
 
         _FinalStage fallbackPlan(FallbackPlan fallbackPlan);
@@ -154,6 +190,8 @@ public final class LmntVoice {
         private Optional<FallbackPlan> fallbackPlan = Optional.empty();
 
         private Optional<ChunkPlan> chunkPlan = Optional.empty();
+
+        private Optional<LmntVoiceLanguage> language = Optional.empty();
 
         private Optional<Double> speed = Optional.empty();
 
@@ -169,12 +207,14 @@ public final class LmntVoice {
             cachingEnabled(other.getCachingEnabled());
             voiceId(other.getVoiceId());
             speed(other.getSpeed());
+            language(other.getLanguage());
             chunkPlan(other.getChunkPlan());
             fallbackPlan(other.getFallbackPlan());
             return this;
         }
 
         /**
+         * <p>This is the provider-specific ID that will be used.</p>
          * <p>This is the provider-specific ID that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -195,6 +235,9 @@ public final class LmntVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for voice provider fallbacks in the event that the primary voice provider fails.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackPlan", nulls = Nulls.SKIP)
         public _FinalStage fallbackPlan(Optional<FallbackPlan> fallbackPlan) {
@@ -212,10 +255,33 @@ public final class LmntVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
             this.chunkPlan = chunkPlan;
+            return this;
+        }
+
+        /**
+         * <p>Two letter ISO 639-1 language code. Use &quot;auto&quot; for auto-detection.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage language(LmntVoiceLanguage language) {
+            this.language = Optional.ofNullable(language);
+            return this;
+        }
+
+        /**
+         * <p>Two letter ISO 639-1 language code. Use &quot;auto&quot; for auto-detection.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "language", nulls = Nulls.SKIP)
+        public _FinalStage language(Optional<LmntVoiceLanguage> language) {
+            this.language = language;
             return this;
         }
 
@@ -229,6 +295,9 @@ public final class LmntVoice {
             return this;
         }
 
+        /**
+         * <p>This is the speed multiplier that will be used.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "speed", nulls = Nulls.SKIP)
         public _FinalStage speed(Optional<Double> speed) {
@@ -246,6 +315,9 @@ public final class LmntVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {
@@ -255,7 +327,8 @@ public final class LmntVoice {
 
         @java.lang.Override
         public LmntVoice build() {
-            return new LmntVoice(cachingEnabled, voiceId, speed, chunkPlan, fallbackPlan, additionalProperties);
+            return new LmntVoice(
+                    cachingEnabled, voiceId, speed, language, chunkPlan, fallbackPlan, additionalProperties);
         }
     }
 }

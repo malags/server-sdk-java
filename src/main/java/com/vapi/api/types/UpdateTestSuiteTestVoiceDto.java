@@ -131,6 +131,9 @@ public final class UpdateTestSuiteTestVoiceDto {
             return this;
         }
 
+        /**
+         * <p>These are the scorers used to evaluate the test.</p>
+         */
         @JsonSetter(value = "scorers", nulls = Nulls.SKIP)
         public Builder scorers(Optional<List<TestSuiteTestScorerAi>> scorers) {
             this.scorers = scorers;
@@ -142,6 +145,9 @@ public final class UpdateTestSuiteTestVoiceDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the test.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -153,6 +159,9 @@ public final class UpdateTestSuiteTestVoiceDto {
             return this;
         }
 
+        /**
+         * <p>This is the script to be used for the voice test.</p>
+         */
         @JsonSetter(value = "script", nulls = Nulls.SKIP)
         public Builder script(Optional<String> script) {
             this.script = script;
@@ -164,6 +173,9 @@ public final class UpdateTestSuiteTestVoiceDto {
             return this;
         }
 
+        /**
+         * <p>This is the number of attempts allowed for the test.</p>
+         */
         @JsonSetter(value = "numAttempts", nulls = Nulls.SKIP)
         public Builder numAttempts(Optional<Double> numAttempts) {
             this.numAttempts = numAttempts;

@@ -141,6 +141,9 @@ public final class FallbackCartesiaVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>The ID of the particular voice you want to use.</p>
+         */
         _FinalStage voiceId(@NotNull String voiceId);
 
         Builder from(FallbackCartesiaVoice other);
@@ -149,22 +152,37 @@ public final class FallbackCartesiaVoice {
     public interface _FinalStage {
         FallbackCartesiaVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>This is the model that will be used. This is optional and will default to the correct model for the voiceId.</p>
+         */
         _FinalStage model(Optional<FallbackCartesiaVoiceModel> model);
 
         _FinalStage model(FallbackCartesiaVoiceModel model);
 
+        /**
+         * <p>This is the language that will be used. This is optional and will default to the correct language for the voiceId.</p>
+         */
         _FinalStage language(Optional<FallbackCartesiaVoiceLanguage> language);
 
         _FinalStage language(FallbackCartesiaVoiceLanguage language);
 
+        /**
+         * <p>Experimental controls for Cartesia voice generation</p>
+         */
         _FinalStage experimentalControls(Optional<CartesiaExperimentalControls> experimentalControls);
 
         _FinalStage experimentalControls(CartesiaExperimentalControls experimentalControls);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -202,6 +220,7 @@ public final class FallbackCartesiaVoice {
 
         /**
          * <p>The ID of the particular voice you want to use.</p>
+         * <p>The ID of the particular voice you want to use.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -221,6 +240,9 @@ public final class FallbackCartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -238,6 +260,9 @@ public final class FallbackCartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>Experimental controls for Cartesia voice generation</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "experimentalControls", nulls = Nulls.SKIP)
         public _FinalStage experimentalControls(Optional<CartesiaExperimentalControls> experimentalControls) {
@@ -255,6 +280,9 @@ public final class FallbackCartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the language that will be used. This is optional and will default to the correct language for the voiceId.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public _FinalStage language(Optional<FallbackCartesiaVoiceLanguage> language) {
@@ -272,6 +300,9 @@ public final class FallbackCartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used. This is optional and will default to the correct model for the voiceId.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<FallbackCartesiaVoiceModel> model) {
@@ -289,6 +320,9 @@ public final class FallbackCartesiaVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

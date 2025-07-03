@@ -22,15 +22,19 @@ import java.util.Optional;
 public final class ServerMessageResponseTransferDestinationRequest {
     private final Optional<ServerMessageResponseTransferDestinationRequestDestination> destination;
 
+    private final Optional<ServerMessageResponseTransferDestinationRequestMessage> message;
+
     private final Optional<String> error;
 
     private final Map<String, Object> additionalProperties;
 
     private ServerMessageResponseTransferDestinationRequest(
             Optional<ServerMessageResponseTransferDestinationRequestDestination> destination,
+            Optional<ServerMessageResponseTransferDestinationRequestMessage> message,
             Optional<String> error,
             Map<String, Object> additionalProperties) {
         this.destination = destination;
+        this.message = message;
         this.error = error;
         this.additionalProperties = additionalProperties;
     }
@@ -41,6 +45,14 @@ public final class ServerMessageResponseTransferDestinationRequest {
     @JsonProperty("destination")
     public Optional<ServerMessageResponseTransferDestinationRequestDestination> getDestination() {
         return destination;
+    }
+
+    /**
+     * @return This is the message that will be spoken to the user as the tool is running.
+     */
+    @JsonProperty("message")
+    public Optional<ServerMessageResponseTransferDestinationRequestMessage> getMessage() {
+        return message;
     }
 
     /**
@@ -64,12 +76,12 @@ public final class ServerMessageResponseTransferDestinationRequest {
     }
 
     private boolean equalTo(ServerMessageResponseTransferDestinationRequest other) {
-        return destination.equals(other.destination) && error.equals(other.error);
+        return destination.equals(other.destination) && message.equals(other.message) && error.equals(other.error);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.destination, this.error);
+        return Objects.hash(this.destination, this.message, this.error);
     }
 
     @java.lang.Override
@@ -85,6 +97,8 @@ public final class ServerMessageResponseTransferDestinationRequest {
     public static final class Builder {
         private Optional<ServerMessageResponseTransferDestinationRequestDestination> destination = Optional.empty();
 
+        private Optional<ServerMessageResponseTransferDestinationRequestMessage> message = Optional.empty();
+
         private Optional<String> error = Optional.empty();
 
         @JsonAnySetter
@@ -94,10 +108,14 @@ public final class ServerMessageResponseTransferDestinationRequest {
 
         public Builder from(ServerMessageResponseTransferDestinationRequest other) {
             destination(other.getDestination());
+            message(other.getMessage());
             error(other.getError());
             return this;
         }
 
+        /**
+         * <p>This is the destination you'd like the call to be transferred to.</p>
+         */
         @JsonSetter(value = "destination", nulls = Nulls.SKIP)
         public Builder destination(Optional<ServerMessageResponseTransferDestinationRequestDestination> destination) {
             this.destination = destination;
@@ -109,6 +127,23 @@ public final class ServerMessageResponseTransferDestinationRequest {
             return this;
         }
 
+        /**
+         * <p>This is the message that will be spoken to the user as the tool is running.</p>
+         */
+        @JsonSetter(value = "message", nulls = Nulls.SKIP)
+        public Builder message(Optional<ServerMessageResponseTransferDestinationRequestMessage> message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder message(ServerMessageResponseTransferDestinationRequestMessage message) {
+            this.message = Optional.ofNullable(message);
+            return this;
+        }
+
+        /**
+         * <p>This is the error message if the transfer should not be made.</p>
+         */
         @JsonSetter(value = "error", nulls = Nulls.SKIP)
         public Builder error(Optional<String> error) {
             this.error = error;
@@ -121,7 +156,8 @@ public final class ServerMessageResponseTransferDestinationRequest {
         }
 
         public ServerMessageResponseTransferDestinationRequest build() {
-            return new ServerMessageResponseTransferDestinationRequest(destination, error, additionalProperties);
+            return new ServerMessageResponseTransferDestinationRequest(
+                    destination, message, error, additionalProperties);
         }
     }
 }

@@ -66,6 +66,9 @@ public final class ClientInboundMessage {
     }
 
     public interface MessageStage {
+        /**
+         * <p>These are the messages that can be sent from client-side SDKs to control the call.</p>
+         */
         _FinalStage message(@NotNull ClientInboundMessageMessage message);
 
         Builder from(ClientInboundMessage other);
@@ -91,6 +94,7 @@ public final class ClientInboundMessage {
         }
 
         /**
+         * <p>These are the messages that can be sent from client-side SDKs to control the call.</p>
          * <p>These are the messages that can be sent from client-side SDKs to control the call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

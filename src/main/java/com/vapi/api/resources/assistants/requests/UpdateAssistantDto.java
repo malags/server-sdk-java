@@ -24,6 +24,7 @@ import com.vapi.api.resources.assistants.types.UpdateAssistantDtoVoice;
 import com.vapi.api.resources.assistants.types.UpdateAssistantDtoVoicemailDetection;
 import com.vapi.api.types.AnalysisPlan;
 import com.vapi.api.types.ArtifactPlan;
+import com.vapi.api.types.BackgroundSpeechDenoisingPlan;
 import com.vapi.api.types.CompliancePlan;
 import com.vapi.api.types.KeypadInputPlan;
 import com.vapi.api.types.LangfuseObservabilityPlan;
@@ -90,6 +91,8 @@ public final class UpdateAssistantDto {
 
     private final Optional<Map<String, Object>> metadata;
 
+    private final Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan;
+
     private final Optional<AnalysisPlan> analysisPlan;
 
     private final Optional<ArtifactPlan> artifactPlan;
@@ -135,6 +138,7 @@ public final class UpdateAssistantDto {
             Optional<List<String>> endCallPhrases,
             Optional<CompliancePlan> compliancePlan,
             Optional<Map<String, Object>> metadata,
+            Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan,
             Optional<AnalysisPlan> analysisPlan,
             Optional<ArtifactPlan> artifactPlan,
             Optional<MessagePlan> messagePlan,
@@ -169,6 +173,7 @@ public final class UpdateAssistantDto {
         this.endCallPhrases = endCallPhrases;
         this.compliancePlan = compliancePlan;
         this.metadata = metadata;
+        this.backgroundSpeechDenoisingPlan = backgroundSpeechDenoisingPlan;
         this.analysisPlan = analysisPlan;
         this.artifactPlan = artifactPlan;
         this.messagePlan = messagePlan;
@@ -316,8 +321,8 @@ public final class UpdateAssistantDto {
     }
 
     /**
-     * @return This is the plan for observability configuration of assistant's calls.
-     * Currently supports Langfuse for tracing and monitoring.
+     * @return This is the plan for observability of assistant's calls.
+     * <p>Currently, only Langfuse is supported.</p>
      */
     @JsonProperty("observabilityPlan")
     public Optional<LangfuseObservabilityPlan> getObservabilityPlan() {
@@ -389,6 +394,25 @@ public final class UpdateAssistantDto {
     }
 
     /**
+     * @return This enables filtering of noise and background speech while the user is talking.
+     * <p>Features:</p>
+     * <ul>
+     * <li>Smart denoising using Krisp</li>
+     * <li>Fourier denoising</li>
+     * </ul>
+     * <p>Smart denoising can be combined with or used independently of Fourier denoising.</p>
+     * <p>Order of precedence:</p>
+     * <ul>
+     * <li>Smart denoising</li>
+     * <li>Fourier denoising</li>
+     * </ul>
+     */
+    @JsonProperty("backgroundSpeechDenoisingPlan")
+    public Optional<BackgroundSpeechDenoisingPlan> getBackgroundSpeechDenoisingPlan() {
+        return backgroundSpeechDenoisingPlan;
+    }
+
+    /**
      * @return This is the plan for analysis of assistant's calls. Stored in <code>call.analysis</code>.
      */
     @JsonProperty("analysisPlan")
@@ -398,7 +422,6 @@ public final class UpdateAssistantDto {
 
     /**
      * @return This is the plan for artifacts generated during assistant's calls. Stored in <code>call.artifact</code>.
-     * <p>Note: <code>recordingEnabled</code> is currently at the root level. It will be moved to <code>artifactPlan</code> in the future, but will remain backwards compatible.</p>
      */
     @JsonProperty("artifactPlan")
     public Optional<ArtifactPlan> getArtifactPlan() {
@@ -451,7 +474,6 @@ public final class UpdateAssistantDto {
      * <li>To enable live listening of the assistant's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
      * <li>To enable live control of the assistant's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
      * </ul>
-     * <p>Note, <code>serverMessages</code>, <code>clientMessages</code>, <code>serverUrl</code> and <code>serverUrlSecret</code> are currently at the root level but will be moved to <code>monitorPlan</code> in the future. Will remain backwards compatible</p>
      */
     @JsonProperty("monitorPlan")
     public Optional<MonitorPlan> getMonitorPlan() {
@@ -521,6 +543,7 @@ public final class UpdateAssistantDto {
                 && endCallPhrases.equals(other.endCallPhrases)
                 && compliancePlan.equals(other.compliancePlan)
                 && metadata.equals(other.metadata)
+                && backgroundSpeechDenoisingPlan.equals(other.backgroundSpeechDenoisingPlan)
                 && analysisPlan.equals(other.analysisPlan)
                 && artifactPlan.equals(other.artifactPlan)
                 && messagePlan.equals(other.messagePlan)
@@ -559,6 +582,7 @@ public final class UpdateAssistantDto {
                 this.endCallPhrases,
                 this.compliancePlan,
                 this.metadata,
+                this.backgroundSpeechDenoisingPlan,
                 this.analysisPlan,
                 this.artifactPlan,
                 this.messagePlan,
@@ -629,6 +653,8 @@ public final class UpdateAssistantDto {
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
+        private Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan = Optional.empty();
+
         private Optional<AnalysisPlan> analysisPlan = Optional.empty();
 
         private Optional<ArtifactPlan> artifactPlan = Optional.empty();
@@ -677,6 +703,7 @@ public final class UpdateAssistantDto {
             endCallPhrases(other.getEndCallPhrases());
             compliancePlan(other.getCompliancePlan());
             metadata(other.getMetadata());
+            backgroundSpeechDenoisingPlan(other.getBackgroundSpeechDenoisingPlan());
             analysisPlan(other.getAnalysisPlan());
             artifactPlan(other.getArtifactPlan());
             messagePlan(other.getMessagePlan());
@@ -689,6 +716,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are the options for the assistant's transcriber.</p>
+         */
         @JsonSetter(value = "transcriber", nulls = Nulls.SKIP)
         public Builder transcriber(Optional<UpdateAssistantDtoTranscriber> transcriber) {
             this.transcriber = transcriber;
@@ -700,6 +730,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are the options for the assistant's LLM.</p>
+         */
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public Builder model(Optional<UpdateAssistantDtoModel> model) {
             this.model = model;
@@ -711,6 +744,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are the options for the assistant's voice.</p>
+         */
         @JsonSetter(value = "voice", nulls = Nulls.SKIP)
         public Builder voice(Optional<UpdateAssistantDtoVoice> voice) {
             this.voice = voice;
@@ -722,6 +758,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the first message that the assistant will say. This can also be a URL to a containerized audio file (mp3, wav, etc.).</p>
+         * <p>If unspecified, assistant will wait for user to speak and use the model to respond once they speak.</p>
+         */
         @JsonSetter(value = "firstMessage", nulls = Nulls.SKIP)
         public Builder firstMessage(Optional<String> firstMessage) {
             this.firstMessage = firstMessage;
@@ -744,6 +784,16 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the mode for the first message. Default is 'assistant-speaks-first'.</p>
+         * <p>Use:</p>
+         * <ul>
+         * <li>'assistant-speaks-first' to have the assistant speak first.</li>
+         * <li>'assistant-waits-for-user' to have the assistant wait for the user to speak first.</li>
+         * <li>'assistant-speaks-first-with-model-generated-message' to have the assistant speak first with a message generated by the model based on the conversation state. (<code>assistant.model.messages</code> at call start, <code>call.messages</code> at squad transfer points).</li>
+         * </ul>
+         * <p>@default 'assistant-speaks-first'</p>
+         */
         @JsonSetter(value = "firstMessageMode", nulls = Nulls.SKIP)
         public Builder firstMessageMode(Optional<UpdateAssistantDtoFirstMessageMode> firstMessageMode) {
             this.firstMessageMode = firstMessageMode;
@@ -755,6 +805,11 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are the settings to configure or disable voicemail detection. Alternatively, voicemail detection can be configured using the model.tools=[VoicemailTool].
+         * This uses Twilio's built-in detection while the VoicemailTool relies on the model to detect if a voicemail was reached.
+         * You can use neither of them, one of them, or both of them. By default, Twilio built-in detection is enabled while VoicemailTool is not.</p>
+         */
         @JsonSetter(value = "voicemailDetection", nulls = Nulls.SKIP)
         public Builder voicemailDetection(Optional<UpdateAssistantDtoVoicemailDetection> voicemailDetection) {
             this.voicemailDetection = voicemailDetection;
@@ -766,6 +821,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input,workflow.node.started. You can check the shape of the messages in ClientMessage schema.</p>
+         */
         @JsonSetter(value = "clientMessages", nulls = Nulls.SKIP)
         public Builder clientMessages(Optional<List<UpdateAssistantDtoClientMessagesItem>> clientMessages) {
             this.clientMessages = clientMessages;
@@ -777,6 +835,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are the messages that will be sent to your Server URL. Default is conversation-update,end-of-call-report,function-call,hang,speech-update,status-update,tool-calls,transfer-destination-request,user-interrupted. You can check the shape of the messages in ServerMessage schema.</p>
+         */
         @JsonSetter(value = "serverMessages", nulls = Nulls.SKIP)
         public Builder serverMessages(Optional<List<UpdateAssistantDtoServerMessagesItem>> serverMessages) {
             this.serverMessages = serverMessages;
@@ -788,6 +849,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>How many seconds of silence to wait before ending the call. Defaults to 30.</p>
+         * <p>@default 30</p>
+         */
         @JsonSetter(value = "silenceTimeoutSeconds", nulls = Nulls.SKIP)
         public Builder silenceTimeoutSeconds(Optional<Double> silenceTimeoutSeconds) {
             this.silenceTimeoutSeconds = silenceTimeoutSeconds;
@@ -799,6 +864,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the maximum number of seconds that the call will last. When the call reaches this duration, it will be ended.</p>
+         * <p>@default 600 (10 minutes)</p>
+         */
         @JsonSetter(value = "maxDurationSeconds", nulls = Nulls.SKIP)
         public Builder maxDurationSeconds(Optional<Double> maxDurationSeconds) {
             this.maxDurationSeconds = maxDurationSeconds;
@@ -810,6 +879,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+         * You can also provide a custom sound by providing a URL to an audio file.</p>
+         */
         @JsonSetter(value = "backgroundSound", nulls = Nulls.SKIP)
         public Builder backgroundSound(Optional<UpdateAssistantDtoBackgroundSound> backgroundSound) {
             this.backgroundSound = backgroundSound;
@@ -821,6 +894,11 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Default <code>false</code> while in beta.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "backgroundDenoisingEnabled", nulls = Nulls.SKIP)
         public Builder backgroundDenoisingEnabled(Optional<Boolean> backgroundDenoisingEnabled) {
             this.backgroundDenoisingEnabled = backgroundDenoisingEnabled;
@@ -832,6 +910,11 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This determines whether the model's output is used in conversation history rather than the transcription of assistant's speech.</p>
+         * <p>Default <code>false</code> while in beta.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "modelOutputInMessagesEnabled", nulls = Nulls.SKIP)
         public Builder modelOutputInMessagesEnabled(Optional<Boolean> modelOutputInMessagesEnabled) {
             this.modelOutputInMessagesEnabled = modelOutputInMessagesEnabled;
@@ -843,6 +926,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are the configurations to be passed to the transport providers of assistant's calls, like Twilio. You can store multiple configurations for different transport providers. For a call, only the configuration matching the call transport provider is used.</p>
+         */
         @JsonSetter(value = "transportConfigurations", nulls = Nulls.SKIP)
         public Builder transportConfigurations(Optional<List<TransportConfigurationTwilio>> transportConfigurations) {
             this.transportConfigurations = transportConfigurations;
@@ -854,6 +940,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the plan for observability of assistant's calls.</p>
+         * <p>Currently, only Langfuse is supported.</p>
+         */
         @JsonSetter(value = "observabilityPlan", nulls = Nulls.SKIP)
         public Builder observabilityPlan(Optional<LangfuseObservabilityPlan> observabilityPlan) {
             this.observabilityPlan = observabilityPlan;
@@ -865,6 +955,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are dynamic credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can supplement an additional credentials using this. Dynamic credentials override existing credentials.</p>
+         */
         @JsonSetter(value = "credentials", nulls = Nulls.SKIP)
         public Builder credentials(Optional<List<UpdateAssistantDtoCredentialsItem>> credentials) {
             this.credentials = credentials;
@@ -876,6 +969,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is a set of actions that will be performed on certain events.</p>
+         */
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public Builder hooks(Optional<List<UpdateAssistantDtoHooksItem>> hooks) {
             this.hooks = hooks;
@@ -887,6 +983,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the assistant.</p>
+         * <p>This is required when you want to transfer between assistants in a call.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -898,6 +998,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the message that the assistant will say if the call is forwarded to voicemail.</p>
+         * <p>If unspecified, it will hang up.</p>
+         */
         @JsonSetter(value = "voicemailMessage", nulls = Nulls.SKIP)
         public Builder voicemailMessage(Optional<String> voicemailMessage) {
             this.voicemailMessage = voicemailMessage;
@@ -909,6 +1013,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the message that the assistant will say if it ends the call.</p>
+         * <p>If unspecified, it will hang up without saying anything.</p>
+         */
         @JsonSetter(value = "endCallMessage", nulls = Nulls.SKIP)
         public Builder endCallMessage(Optional<String> endCallMessage) {
             this.endCallMessage = endCallMessage;
@@ -920,6 +1028,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This list contains phrases that, if spoken by the assistant, will trigger the call to be hung up. Case insensitive.</p>
+         */
         @JsonSetter(value = "endCallPhrases", nulls = Nulls.SKIP)
         public Builder endCallPhrases(Optional<List<String>> endCallPhrases) {
             this.endCallPhrases = endCallPhrases;
@@ -942,6 +1053,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is for metadata you want to store on the assistant.</p>
+         */
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public Builder metadata(Optional<Map<String, Object>> metadata) {
             this.metadata = metadata;
@@ -953,6 +1067,35 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This enables filtering of noise and background speech while the user is talking.</p>
+         * <p>Features:</p>
+         * <ul>
+         * <li>Smart denoising using Krisp</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         * <p>Smart denoising can be combined with or used independently of Fourier denoising.</p>
+         * <p>Order of precedence:</p>
+         * <ul>
+         * <li>Smart denoising</li>
+         * <li>Fourier denoising</li>
+         * </ul>
+         */
+        @JsonSetter(value = "backgroundSpeechDenoisingPlan", nulls = Nulls.SKIP)
+        public Builder backgroundSpeechDenoisingPlan(
+                Optional<BackgroundSpeechDenoisingPlan> backgroundSpeechDenoisingPlan) {
+            this.backgroundSpeechDenoisingPlan = backgroundSpeechDenoisingPlan;
+            return this;
+        }
+
+        public Builder backgroundSpeechDenoisingPlan(BackgroundSpeechDenoisingPlan backgroundSpeechDenoisingPlan) {
+            this.backgroundSpeechDenoisingPlan = Optional.ofNullable(backgroundSpeechDenoisingPlan);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for analysis of assistant's calls. Stored in <code>call.analysis</code>.</p>
+         */
         @JsonSetter(value = "analysisPlan", nulls = Nulls.SKIP)
         public Builder analysisPlan(Optional<AnalysisPlan> analysisPlan) {
             this.analysisPlan = analysisPlan;
@@ -964,6 +1107,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the plan for artifacts generated during assistant's calls. Stored in <code>call.artifact</code>.</p>
+         */
         @JsonSetter(value = "artifactPlan", nulls = Nulls.SKIP)
         public Builder artifactPlan(Optional<ArtifactPlan> artifactPlan) {
             this.artifactPlan = artifactPlan;
@@ -975,6 +1121,10 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the plan for static predefined messages that can be spoken by the assistant during the call, like <code>idleMessages</code>.</p>
+         * <p>Note: <code>firstMessage</code>, <code>voicemailMessage</code>, and <code>endCallMessage</code> are currently at the root level. They will be moved to <code>messagePlan</code> in the future, but will remain backwards compatible.</p>
+         */
         @JsonSetter(value = "messagePlan", nulls = Nulls.SKIP)
         public Builder messagePlan(Optional<MessagePlan> messagePlan) {
             this.messagePlan = messagePlan;
@@ -986,6 +1136,15 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the plan for when the assistant should start talking.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to start talking after the customer is done speaking.</li>
+         * <li>The assistant is too fast to start talking after the customer is done speaking.</li>
+         * <li>The assistant is so fast that it's actually interrupting the customer.</li>
+         * </ul>
+         */
         @JsonSetter(value = "startSpeakingPlan", nulls = Nulls.SKIP)
         public Builder startSpeakingPlan(Optional<StartSpeakingPlan> startSpeakingPlan) {
             this.startSpeakingPlan = startSpeakingPlan;
@@ -997,6 +1156,17 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the plan for when assistant should stop talking on customer interruption.</p>
+         * <p>You should configure this if you're running into these issues:</p>
+         * <ul>
+         * <li>The assistant is too slow to recognize customer's interruption.</li>
+         * <li>The assistant is too fast to recognize customer's interruption.</li>
+         * <li>The assistant is getting interrupted by phrases that are just acknowledgments.</li>
+         * <li>The assistant is getting interrupted by background noises.</li>
+         * <li>The assistant is not properly stopping -- it starts talking right after getting interrupted.</li>
+         * </ul>
+         */
         @JsonSetter(value = "stopSpeakingPlan", nulls = Nulls.SKIP)
         public Builder stopSpeakingPlan(Optional<StopSpeakingPlan> stopSpeakingPlan) {
             this.stopSpeakingPlan = stopSpeakingPlan;
@@ -1008,6 +1178,14 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is the plan for real-time monitoring of the assistant's calls.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>To enable live listening of the assistant's calls, set <code>monitorPlan.listenEnabled</code> to <code>true</code>.</li>
+         * <li>To enable live control of the assistant's calls, set <code>monitorPlan.controlEnabled</code> to <code>true</code>.</li>
+         * </ul>
+         */
         @JsonSetter(value = "monitorPlan", nulls = Nulls.SKIP)
         public Builder monitorPlan(Optional<MonitorPlan> monitorPlan) {
             this.monitorPlan = monitorPlan;
@@ -1019,6 +1197,9 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>These are the credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can provide a subset using this.</p>
+         */
         @JsonSetter(value = "credentialIds", nulls = Nulls.SKIP)
         public Builder credentialIds(Optional<List<String>> credentialIds) {
             this.credentialIds = credentialIds;
@@ -1030,6 +1211,15 @@ public final class UpdateAssistantDto {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server.url</li>
+         * <li>phoneNumber.serverUrl</li>
+         * <li>org.serverUrl</li>
+         * </ol>
+         */
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public Builder server(Optional<Server> server) {
             this.server = server;
@@ -1078,6 +1268,7 @@ public final class UpdateAssistantDto {
                     endCallPhrases,
                     compliancePlan,
                     metadata,
+                    backgroundSpeechDenoisingPlan,
                     analysisPlan,
                     artifactPlan,
                     messagePlan,

@@ -133,6 +133,14 @@ public final class TransportConfigurationTwilio {
             return this;
         }
 
+        /**
+         * <p>The integer number of seconds that we should allow the phone to ring before assuming there is no answer.
+         * The default is <code>60</code> seconds and the maximum is <code>600</code> seconds.
+         * For some call flows, we will add a 5-second buffer to the timeout value you provide.
+         * For this reason, a timeout value of 10 seconds could result in an actual timeout closer to 15 seconds.
+         * You can set this to a short time, such as <code>15</code> seconds, to hang up before reaching an answering machine or voicemail.</p>
+         * <p>@default 60</p>
+         */
         @JsonSetter(value = "timeout", nulls = Nulls.SKIP)
         public Builder timeout(Optional<Double> timeout) {
             this.timeout = timeout;
@@ -144,6 +152,12 @@ public final class TransportConfigurationTwilio {
             return this;
         }
 
+        /**
+         * <p>Whether to record the call.
+         * Can be <code>true</code> to record the phone call, or <code>false</code> to not.
+         * The default is <code>false</code>.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "record", nulls = Nulls.SKIP)
         public Builder record(Optional<Boolean> record) {
             this.record = record;
@@ -155,6 +169,15 @@ public final class TransportConfigurationTwilio {
             return this;
         }
 
+        /**
+         * <p>The number of channels in the final recording.
+         * Can be: <code>mono</code> or <code>dual</code>.
+         * The default is <code>mono</code>.
+         * <code>mono</code> records both legs of the call in a single channel of the recording file.
+         * <code>dual</code> records each leg to a separate channel of the recording file.
+         * The first channel of a dual-channel recording contains the parent call and the second channel contains the child call.</p>
+         * <p>@default 'mono'</p>
+         */
         @JsonSetter(value = "recordingChannels", nulls = Nulls.SKIP)
         public Builder recordingChannels(Optional<TransportConfigurationTwilioRecordingChannels> recordingChannels) {
             this.recordingChannels = recordingChannels;

@@ -112,6 +112,9 @@ public final class CreateTokenDto {
             return this;
         }
 
+        /**
+         * <p>This is the tag for the token. It represents its scope.</p>
+         */
         @JsonSetter(value = "tag", nulls = Nulls.SKIP)
         public Builder tag(Optional<CreateTokenDtoTag> tag) {
             this.tag = tag;
@@ -123,6 +126,9 @@ public final class CreateTokenDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the token. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -134,6 +140,9 @@ public final class CreateTokenDto {
             return this;
         }
 
+        /**
+         * <p>This are the restrictions for the token.</p>
+         */
         @JsonSetter(value = "restrictions", nulls = Nulls.SKIP)
         public Builder restrictions(Optional<TokenRestrictions> restrictions) {
             this.restrictions = restrictions;

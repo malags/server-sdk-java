@@ -67,6 +67,9 @@ public final class VapiSmartEndpointingPlan {
     }
 
     public interface ProviderStage {
+        /**
+         * <p>This is the provider for the smart endpointing plan.</p>
+         */
         _FinalStage provider(@NotNull VapiSmartEndpointingPlanProvider provider);
 
         Builder from(VapiSmartEndpointingPlan other);
@@ -92,6 +95,7 @@ public final class VapiSmartEndpointingPlan {
         }
 
         /**
+         * <p>This is the provider for the smart endpointing plan.</p>
          * <p>This is the provider for the smart endpointing plan.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

@@ -20,6 +20,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UpdateSupabaseCredentialDto.Builder.class)
 public final class UpdateSupabaseCredentialDto {
+    private final Optional<Double> fallbackIndex;
+
     private final Optional<String> name;
 
     private final Optional<SupabaseBucketPlan> bucketPlan;
@@ -27,10 +29,22 @@ public final class UpdateSupabaseCredentialDto {
     private final Map<String, Object> additionalProperties;
 
     private UpdateSupabaseCredentialDto(
-            Optional<String> name, Optional<SupabaseBucketPlan> bucketPlan, Map<String, Object> additionalProperties) {
+            Optional<Double> fallbackIndex,
+            Optional<String> name,
+            Optional<SupabaseBucketPlan> bucketPlan,
+            Map<String, Object> additionalProperties) {
+        this.fallbackIndex = fallbackIndex;
         this.name = name;
         this.bucketPlan = bucketPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -58,12 +72,14 @@ public final class UpdateSupabaseCredentialDto {
     }
 
     private boolean equalTo(UpdateSupabaseCredentialDto other) {
-        return name.equals(other.name) && bucketPlan.equals(other.bucketPlan);
+        return fallbackIndex.equals(other.fallbackIndex)
+                && name.equals(other.name)
+                && bucketPlan.equals(other.bucketPlan);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.bucketPlan);
+        return Objects.hash(this.fallbackIndex, this.name, this.bucketPlan);
     }
 
     @java.lang.Override
@@ -77,6 +93,8 @@ public final class UpdateSupabaseCredentialDto {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         private Optional<SupabaseBucketPlan> bucketPlan = Optional.empty();
@@ -87,11 +105,29 @@ public final class UpdateSupabaseCredentialDto {
         private Builder() {}
 
         public Builder from(UpdateSupabaseCredentialDto other) {
+            fallbackIndex(other.getFallbackIndex());
             name(other.getName());
             bucketPlan(other.getBucketPlan());
             return this;
         }
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public Builder fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
+            return this;
+        }
+
+        public Builder fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -115,7 +151,7 @@ public final class UpdateSupabaseCredentialDto {
         }
 
         public UpdateSupabaseCredentialDto build() {
-            return new UpdateSupabaseCredentialDto(name, bucketPlan, additionalProperties);
+            return new UpdateSupabaseCredentialDto(fallbackIndex, name, bucketPlan, additionalProperties);
         }
     }
 }

@@ -73,6 +73,16 @@ public final class ServerMessage {
     }
 
     public interface MessageStage {
+        /**
+         * <p>These are all the messages that can be sent to your server before, after and during the call. Configure the messages you'd like to receive in <code>assistant.serverMessages</code>.</p>
+         * <p>The server where the message is sent is determined by the following precedence order:</p>
+         * <ol>
+         * <li><code>tool.server.url</code> (if configured, and only for &quot;tool-calls&quot; message)</li>
+         * <li><code>assistant.serverUrl</code> (if configure)</li>
+         * <li><code>phoneNumber.serverUrl</code> (if configured)</li>
+         * <li><code>org.serverUrl</code> (if configured)</li>
+         * </ol>
+         */
         _FinalStage message(@NotNull ServerMessageMessage message);
 
         Builder from(ServerMessage other);
@@ -98,6 +108,14 @@ public final class ServerMessage {
         }
 
         /**
+         * <p>These are all the messages that can be sent to your server before, after and during the call. Configure the messages you'd like to receive in <code>assistant.serverMessages</code>.</p>
+         * <p>The server where the message is sent is determined by the following precedence order:</p>
+         * <ol>
+         * <li><code>tool.server.url</code> (if configured, and only for &quot;tool-calls&quot; message)</li>
+         * <li><code>assistant.serverUrl</code> (if configure)</li>
+         * <li><code>phoneNumber.serverUrl</code> (if configured)</li>
+         * <li><code>org.serverUrl</code> (if configured)</li>
+         * </ol>
          * <p>These are all the messages that can be sent to your server before, after and during the call. Configure the messages you'd like to receive in <code>assistant.serverMessages</code>.</p>
          * <p>The server where the message is sent is determined by the following precedence order:</p>
          * <ol>

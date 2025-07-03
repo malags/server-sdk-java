@@ -82,6 +82,25 @@ public final class ServerMessageResponseVoiceRequest {
     }
 
     public interface DataStage {
+        /**
+         * <p>DO NOT respond to a <code>voice-request</code> webhook with this schema of { data }. This schema just exists to document what the response should look like. Follow these instructions:</p>
+         * <p>Here is what the request will look like:</p>
+         * <p>POST https://{assistant.voice.server.url}
+         * Content-Type: application/json</p>
+         * <p>{
+         * &quot;messsage&quot;: {
+         * &quot;type&quot;: &quot;voice-request&quot;,
+         * &quot;text&quot;: &quot;Hello, world!&quot;,
+         * &quot;sampleRate&quot;: 24000,
+         * ...other metadata about the call...
+         * }
+         * }</p>
+         * <p>The expected response is 1-channel 16-bit raw PCM audio at the sample rate specified in the request. Here is how the response will be piped to the transport:</p>
+         * <pre><code>response.on('data', (chunk: Buffer) =&gt; {
+         *   outputStream.write(chunk);
+         * });
+         * </code></pre>
+         */
         _FinalStage data(@NotNull String data);
 
         Builder from(ServerMessageResponseVoiceRequest other);
@@ -107,6 +126,23 @@ public final class ServerMessageResponseVoiceRequest {
         }
 
         /**
+         * <p>DO NOT respond to a <code>voice-request</code> webhook with this schema of { data }. This schema just exists to document what the response should look like. Follow these instructions:</p>
+         * <p>Here is what the request will look like:</p>
+         * <p>POST https://{assistant.voice.server.url}
+         * Content-Type: application/json</p>
+         * <p>{
+         * &quot;messsage&quot;: {
+         * &quot;type&quot;: &quot;voice-request&quot;,
+         * &quot;text&quot;: &quot;Hello, world!&quot;,
+         * &quot;sampleRate&quot;: 24000,
+         * ...other metadata about the call...
+         * }
+         * }</p>
+         * <p>The expected response is 1-channel 16-bit raw PCM audio at the sample rate specified in the request. Here is how the response will be piped to the transport:</p>
+         * <pre><code>response.on('data', (chunk: Buffer) =&gt; {
+         *   outputStream.write(chunk);
+         * });
+         * </code></pre>
          * <p>DO NOT respond to a <code>voice-request</code> webhook with this schema of { data }. This schema just exists to document what the response should look like. Follow these instructions:</p>
          * <p>Here is what the request will look like:</p>
          * <p>POST https://{assistant.voice.server.url}

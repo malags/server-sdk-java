@@ -131,6 +131,9 @@ public final class Analysis {
             return this;
         }
 
+        /**
+         * <p>This is the summary of the call. Customize by setting <code>assistant.analysisPlan.summaryPrompt</code>.</p>
+         */
         @JsonSetter(value = "summary", nulls = Nulls.SKIP)
         public Builder summary(Optional<String> summary) {
             this.summary = summary;
@@ -142,6 +145,9 @@ public final class Analysis {
             return this;
         }
 
+        /**
+         * <p>This is the structured data extracted from the call. Customize by setting <code>assistant.analysisPlan.structuredDataPrompt</code> and/or <code>assistant.analysisPlan.structuredDataSchema</code>.</p>
+         */
         @JsonSetter(value = "structuredData", nulls = Nulls.SKIP)
         public Builder structuredData(Optional<Map<String, Object>> structuredData) {
             this.structuredData = structuredData;
@@ -153,6 +159,9 @@ public final class Analysis {
             return this;
         }
 
+        /**
+         * <p>This is the structured data catalog of the call. Customize by setting <code>assistant.analysisPlan.structuredDataMultiPlan</code>.</p>
+         */
         @JsonSetter(value = "structuredDataMulti", nulls = Nulls.SKIP)
         public Builder structuredDataMulti(Optional<List<Map<String, Object>>> structuredDataMulti) {
             this.structuredDataMulti = structuredDataMulti;
@@ -164,6 +173,9 @@ public final class Analysis {
             return this;
         }
 
+        /**
+         * <p>This is the evaluation of the call. Customize by setting <code>assistant.analysisPlan.successEvaluationPrompt</code> and/or <code>assistant.analysisPlan.successEvaluationRubric</code>.</p>
+         */
         @JsonSetter(value = "successEvaluation", nulls = Nulls.SKIP)
         public Builder successEvaluation(Optional<String> successEvaluation) {
             this.successEvaluation = successEvaluation;

@@ -80,6 +80,9 @@ public final class SayAssistantHookAction {
             return this;
         }
 
+        /**
+         * <p>This is the message to say</p>
+         */
         @JsonSetter(value = "exact", nulls = Nulls.SKIP)
         public Builder exact(Map<String, Object> exact) {
             this.exact.clear();

@@ -270,6 +270,10 @@ public final class UpdateAssistantDtoCredentialsItem {
         return new UpdateAssistantDtoCredentialsItem(new GhlOauth2AuthorizationValue(value));
     }
 
+    public static UpdateAssistantDtoCredentialsItem inworld(Object value) {
+        return new UpdateAssistantDtoCredentialsItem(new InworldValue(value));
+    }
+
     public boolean is11Labs() {
         return value instanceof _11LabsValue;
     }
@@ -460,6 +464,10 @@ public final class UpdateAssistantDtoCredentialsItem {
 
     public boolean isGhlOauth2Authorization() {
         return value instanceof GhlOauth2AuthorizationValue;
+    }
+
+    public boolean isInworld() {
+        return value instanceof InworldValue;
     }
 
     public boolean _isUnknown() {
@@ -802,6 +810,13 @@ public final class UpdateAssistantDtoCredentialsItem {
         return Optional.empty();
     }
 
+    public Optional<Object> getInworld() {
+        if (isInworld()) {
+            return Optional.of(((InworldValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -913,6 +928,8 @@ public final class UpdateAssistantDtoCredentialsItem {
 
         T visitGhlOauth2Authorization(CreateGoHighLevelMcpCredentialDto ghlOauth2Authorization);
 
+        T visitInworld(Object inworld);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -965,7 +982,8 @@ public final class UpdateAssistantDtoCredentialsItem {
         @JsonSubTypes.Type(GoogleCalendarOauth2AuthorizationValue.class),
         @JsonSubTypes.Type(GoogleSheetsOauth2AuthorizationValue.class),
         @JsonSubTypes.Type(SlackOauth2AuthorizationValue.class),
-        @JsonSubTypes.Type(GhlOauth2AuthorizationValue.class)
+        @JsonSubTypes.Type(GhlOauth2AuthorizationValue.class),
+        @JsonSubTypes.Type(InworldValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -2832,6 +2850,43 @@ public final class UpdateAssistantDtoCredentialsItem {
         }
 
         private boolean equalTo(GhlOauth2AuthorizationValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "UpdateAssistantDtoCredentialsItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("inworld")
+    @JsonIgnoreProperties("provider")
+    private static final class InworldValue implements Value {
+        @JsonProperty("value")
+        private Object value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private InworldValue(@JsonProperty("value") Object value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitInworld(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof InworldValue && equalTo((InworldValue) other);
+        }
+
+        private boolean equalTo(InworldValue other) {
             return value.equals(other.value);
         }
 

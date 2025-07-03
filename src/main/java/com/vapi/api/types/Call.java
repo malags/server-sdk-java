@@ -65,6 +65,8 @@ public final class Call {
 
     private final Optional<String> phoneCallProviderId;
 
+    private final Optional<String> campaignId;
+
     private final Optional<String> assistantId;
 
     private final Optional<CreateAssistantDto> assistant;
@@ -78,6 +80,8 @@ public final class Call {
     private final Optional<String> workflowId;
 
     private final Optional<CreateWorkflowDto> workflow;
+
+    private final Optional<WorkflowOverrides> workflowOverrides;
 
     private final Optional<String> phoneNumberId;
 
@@ -117,6 +121,7 @@ public final class Call {
             Optional<Monitor> monitor,
             Optional<Artifact> artifact,
             Optional<String> phoneCallProviderId,
+            Optional<String> campaignId,
             Optional<String> assistantId,
             Optional<CreateAssistantDto> assistant,
             Optional<AssistantOverrides> assistantOverrides,
@@ -124,6 +129,7 @@ public final class Call {
             Optional<CreateSquadDto> squad,
             Optional<String> workflowId,
             Optional<CreateWorkflowDto> workflow,
+            Optional<WorkflowOverrides> workflowOverrides,
             Optional<String> phoneNumberId,
             Optional<ImportTwilioPhoneNumberDto> phoneNumber,
             Optional<String> customerId,
@@ -153,6 +159,7 @@ public final class Call {
         this.monitor = monitor;
         this.artifact = artifact;
         this.phoneCallProviderId = phoneCallProviderId;
+        this.campaignId = campaignId;
         this.assistantId = assistantId;
         this.assistant = assistant;
         this.assistantOverrides = assistantOverrides;
@@ -160,6 +167,7 @@ public final class Call {
         this.squad = squad;
         this.workflowId = workflowId;
         this.workflow = workflow;
+        this.workflowOverrides = workflowOverrides;
         this.phoneNumberId = phoneNumberId;
         this.phoneNumber = phoneNumber;
         this.customerId = customerId;
@@ -339,6 +347,14 @@ public final class Call {
     }
 
     /**
+     * @return This is the campaign ID that the call belongs to.
+     */
+    @JsonProperty("campaignId")
+    public Optional<String> getCampaignId() {
+        return campaignId;
+    }
+
+    /**
      * @return This is the assistant ID that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.
      * <p>To start a call with:</p>
      * <ul>
@@ -403,8 +419,7 @@ public final class Call {
     }
 
     /**
-     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
-     * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+     * @return This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.
      * <p>To start a call with:</p>
      * <ul>
      * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
@@ -418,8 +433,7 @@ public final class Call {
     }
 
     /**
-     * @return [BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.
-     * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+     * @return This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.
      * <p>To start a call with:</p>
      * <ul>
      * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
@@ -430,6 +444,14 @@ public final class Call {
     @JsonProperty("workflow")
     public Optional<CreateWorkflowDto> getWorkflow() {
         return workflow;
+    }
+
+    /**
+     * @return These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.
+     */
+    @JsonProperty("workflowOverrides")
+    public Optional<WorkflowOverrides> getWorkflowOverrides() {
+        return workflowOverrides;
     }
 
     /**
@@ -525,6 +547,7 @@ public final class Call {
                 && monitor.equals(other.monitor)
                 && artifact.equals(other.artifact)
                 && phoneCallProviderId.equals(other.phoneCallProviderId)
+                && campaignId.equals(other.campaignId)
                 && assistantId.equals(other.assistantId)
                 && assistant.equals(other.assistant)
                 && assistantOverrides.equals(other.assistantOverrides)
@@ -532,6 +555,7 @@ public final class Call {
                 && squad.equals(other.squad)
                 && workflowId.equals(other.workflowId)
                 && workflow.equals(other.workflow)
+                && workflowOverrides.equals(other.workflowOverrides)
                 && phoneNumberId.equals(other.phoneNumberId)
                 && phoneNumber.equals(other.phoneNumber)
                 && customerId.equals(other.customerId)
@@ -565,6 +589,7 @@ public final class Call {
                 this.monitor,
                 this.artifact,
                 this.phoneCallProviderId,
+                this.campaignId,
                 this.assistantId,
                 this.assistant,
                 this.assistantOverrides,
@@ -572,6 +597,7 @@ public final class Call {
                 this.squad,
                 this.workflowId,
                 this.workflow,
+                this.workflowOverrides,
                 this.phoneNumberId,
                 this.phoneNumber,
                 this.customerId,
@@ -591,30 +617,48 @@ public final class Call {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the call.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(Call other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this call belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         Call build();
 
+        /**
+         * <p>This is the type of call.</p>
+         */
         _FinalStage type(Optional<CallType> type);
 
         _FinalStage type(CallType type);
 
+        /**
+         * <p>These are the costs of individual components of the call in USD.</p>
+         */
         _FinalStage costs(Optional<List<CallCostsItem>> costs);
 
         _FinalStage costs(List<CallCostsItem> costs);
@@ -623,114 +667,255 @@ public final class Call {
 
         _FinalStage messages(List<CallMessagesItem> messages);
 
+        /**
+         * <p>This is the provider of the call.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         _FinalStage phoneCallProvider(Optional<CallPhoneCallProvider> phoneCallProvider);
 
         _FinalStage phoneCallProvider(CallPhoneCallProvider phoneCallProvider);
 
+        /**
+         * <p>This is the transport of the phone call.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         _FinalStage phoneCallTransport(Optional<CallPhoneCallTransport> phoneCallTransport);
 
         _FinalStage phoneCallTransport(CallPhoneCallTransport phoneCallTransport);
 
+        /**
+         * <p>This is the status of the call.</p>
+         */
         _FinalStage status(Optional<CallStatus> status);
 
         _FinalStage status(CallStatus status);
 
+        /**
+         * <p>This is the explanation for how the call ended.</p>
+         */
         _FinalStage endedReason(Optional<CallEndedReason> endedReason);
 
         _FinalStage endedReason(CallEndedReason endedReason);
 
+        /**
+         * <p>This is the destination where the call ended up being transferred to. If the call was not transferred, this will be empty.</p>
+         */
         _FinalStage destination(Optional<CallDestination> destination);
 
         _FinalStage destination(CallDestination destination);
 
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call was started.</p>
+         */
         _FinalStage startedAt(Optional<OffsetDateTime> startedAt);
 
         _FinalStage startedAt(OffsetDateTime startedAt);
 
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call was ended.</p>
+         */
         _FinalStage endedAt(Optional<OffsetDateTime> endedAt);
 
         _FinalStage endedAt(OffsetDateTime endedAt);
 
+        /**
+         * <p>This is the cost of the call in USD.</p>
+         */
         _FinalStage cost(Optional<Double> cost);
 
         _FinalStage cost(Double cost);
 
+        /**
+         * <p>This is the cost of the call in USD.</p>
+         */
         _FinalStage costBreakdown(Optional<CostBreakdown> costBreakdown);
 
         _FinalStage costBreakdown(CostBreakdown costBreakdown);
 
+        /**
+         * <p>This is a copy of assistant artifact plan. This isn't actually stored on the call but rather just returned in POST /call/web to enable artifact creation client side.</p>
+         */
         _FinalStage artifactPlan(Optional<ArtifactPlan> artifactPlan);
 
         _FinalStage artifactPlan(ArtifactPlan artifactPlan);
 
+        /**
+         * <p>This is the analysis of the call. Configure in <code>assistant.analysisPlan</code>.</p>
+         */
         _FinalStage analysis(Optional<Analysis> analysis);
 
         _FinalStage analysis(Analysis analysis);
 
+        /**
+         * <p>This is to real-time monitor the call. Configure in <code>assistant.monitorPlan</code>.</p>
+         */
         _FinalStage monitor(Optional<Monitor> monitor);
 
         _FinalStage monitor(Monitor monitor);
 
+        /**
+         * <p>These are the artifacts created from the call. Configure in <code>assistant.artifactPlan</code>.</p>
+         */
         _FinalStage artifact(Optional<Artifact> artifact);
 
         _FinalStage artifact(Artifact artifact);
 
+        /**
+         * <p>The ID of the call as provided by the phone number service. callSid in Twilio. conversationUuid in Vonage. callControlId in Telnyx.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         _FinalStage phoneCallProviderId(Optional<String> phoneCallProviderId);
 
         _FinalStage phoneCallProviderId(String phoneCallProviderId);
 
+        /**
+         * <p>This is the campaign ID that the call belongs to.</p>
+         */
+        _FinalStage campaignId(Optional<String> campaignId);
+
+        _FinalStage campaignId(String campaignId);
+
+        /**
+         * <p>This is the assistant ID that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistantId</code> or <code>assistant</code></li>
+         * <li>Squad, use <code>squadId</code> or <code>squad</code></li>
+         * <li>Workflow, use <code>workflowId</code> or <code>workflow</code></li>
+         * </ul>
+         */
         _FinalStage assistantId(Optional<String> assistantId);
 
         _FinalStage assistantId(String assistantId);
 
+        /**
+         * <p>This is the assistant that will be used for the call. To use an existing assistant, use <code>assistantId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code></li>
+         * <li>Squad, use <code>squad</code></li>
+         * <li>Workflow, use <code>workflow</code></li>
+         * </ul>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
 
+        /**
+         * <p>These are the overrides for the <code>assistant</code> or <code>assistantId</code>'s settings and template variables.</p>
+         */
         _FinalStage assistantOverrides(Optional<AssistantOverrides> assistantOverrides);
 
         _FinalStage assistantOverrides(AssistantOverrides assistantOverrides);
 
+        /**
+         * <p>This is the squad that will be used for the call. To use a transient squad, use <code>squad</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         _FinalStage squadId(Optional<String> squadId);
 
         _FinalStage squadId(String squadId);
 
+        /**
+         * <p>This is a squad that will be used for the call. To use an existing squad, use <code>squadId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         _FinalStage squad(Optional<CreateSquadDto> squad);
 
         _FinalStage squad(CreateSquadDto squad);
 
+        /**
+         * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         _FinalStage workflowId(Optional<String> workflowId);
 
         _FinalStage workflowId(String workflowId);
 
+        /**
+         * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         _FinalStage workflow(Optional<CreateWorkflowDto> workflow);
 
         _FinalStage workflow(CreateWorkflowDto workflow);
 
+        /**
+         * <p>These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.</p>
+         */
+        _FinalStage workflowOverrides(Optional<WorkflowOverrides> workflowOverrides);
+
+        _FinalStage workflowOverrides(WorkflowOverrides workflowOverrides);
+
+        /**
+         * <p>This is the phone number that will be used for the call. To use a transient number, use <code>phoneNumber</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         _FinalStage phoneNumberId(Optional<String> phoneNumberId);
 
         _FinalStage phoneNumberId(String phoneNumberId);
 
+        /**
+         * <p>This is the phone number that will be used for the call. To use an existing number, use <code>phoneNumberId</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         _FinalStage phoneNumber(Optional<ImportTwilioPhoneNumberDto> phoneNumber);
 
         _FinalStage phoneNumber(ImportTwilioPhoneNumberDto phoneNumber);
 
+        /**
+         * <p>This is the customer that will be called. To call a transient customer , use <code>customer</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         _FinalStage customerId(Optional<String> customerId);
 
         _FinalStage customerId(String customerId);
 
+        /**
+         * <p>This is the customer that will be called. To call an existing customer, use <code>customerId</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the name of the call. This is just for your own reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the schedule plan of the call.</p>
+         */
         _FinalStage schedulePlan(Optional<SchedulePlan> schedulePlan);
 
         _FinalStage schedulePlan(SchedulePlan schedulePlan);
 
+        /**
+         * <p>This is the transport of the call.</p>
+         */
         _FinalStage transport(Optional<Map<String, Object>> transport);
 
         _FinalStage transport(Map<String, Object> transport);
@@ -760,6 +945,8 @@ public final class Call {
 
         private Optional<String> phoneNumberId = Optional.empty();
 
+        private Optional<WorkflowOverrides> workflowOverrides = Optional.empty();
+
         private Optional<CreateWorkflowDto> workflow = Optional.empty();
 
         private Optional<String> workflowId = Optional.empty();
@@ -773,6 +960,8 @@ public final class Call {
         private Optional<CreateAssistantDto> assistant = Optional.empty();
 
         private Optional<String> assistantId = Optional.empty();
+
+        private Optional<String> campaignId = Optional.empty();
 
         private Optional<String> phoneCallProviderId = Optional.empty();
 
@@ -836,6 +1025,7 @@ public final class Call {
             monitor(other.getMonitor());
             artifact(other.getArtifact());
             phoneCallProviderId(other.getPhoneCallProviderId());
+            campaignId(other.getCampaignId());
             assistantId(other.getAssistantId());
             assistant(other.getAssistant());
             assistantOverrides(other.getAssistantOverrides());
@@ -843,6 +1033,7 @@ public final class Call {
             squad(other.getSquad());
             workflowId(other.getWorkflowId());
             workflow(other.getWorkflow());
+            workflowOverrides(other.getWorkflowOverrides());
             phoneNumberId(other.getPhoneNumberId());
             phoneNumber(other.getPhoneNumber());
             customerId(other.getCustomerId());
@@ -855,6 +1046,7 @@ public final class Call {
 
         /**
          * <p>This is the unique identifier for the call.</p>
+         * <p>This is the unique identifier for the call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -865,6 +1057,7 @@ public final class Call {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this call belongs to.</p>
          * <p>This is the unique identifier for the org that this call belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -877,6 +1070,7 @@ public final class Call {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the call was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the call was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -887,6 +1081,7 @@ public final class Call {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the call was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the call was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -907,6 +1102,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the transport of the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "transport", nulls = Nulls.SKIP)
         public _FinalStage transport(Optional<Map<String, Object>> transport) {
@@ -924,6 +1122,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the schedule plan of the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "schedulePlan", nulls = Nulls.SKIP)
         public _FinalStage schedulePlan(Optional<SchedulePlan> schedulePlan) {
@@ -941,6 +1142,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the name of the call. This is just for your own reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -959,6 +1163,10 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the customer that will be called. To call an existing customer, use <code>customerId</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -977,6 +1185,10 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the customer that will be called. To call a transient customer , use <code>customer</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customerId", nulls = Nulls.SKIP)
         public _FinalStage customerId(Optional<String> customerId) {
@@ -995,6 +1207,10 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that will be used for the call. To use an existing number, use <code>phoneNumberId</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ImportTwilioPhoneNumberDto> phoneNumber) {
@@ -1013,6 +1229,10 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that will be used for the call. To use a transient number, use <code>phoneNumber</code> instead.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumberId", nulls = Nulls.SKIP)
         public _FinalStage phoneNumberId(Optional<String> phoneNumberId) {
@@ -1021,7 +1241,26 @@ public final class Call {
         }
 
         /**
-         * <p>[BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.</p>
+         * <p>These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage workflowOverrides(WorkflowOverrides workflowOverrides) {
+            this.workflowOverrides = Optional.ofNullable(workflowOverrides);
+            return this;
+        }
+
+        /**
+         * <p>These are the overrides for the <code>workflow</code> or <code>workflowId</code>'s settings and template variables.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "workflowOverrides", nulls = Nulls.SKIP)
+        public _FinalStage workflowOverrides(Optional<WorkflowOverrides> workflowOverrides) {
+            this.workflowOverrides = workflowOverrides;
+            return this;
+        }
+
+        /**
          * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
          * <p>To start a call with:</p>
          * <ul>
@@ -1037,6 +1276,15 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is a workflow that will be used for the call. To use an existing workflow, use <code>workflowId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "workflow", nulls = Nulls.SKIP)
         public _FinalStage workflow(Optional<CreateWorkflowDto> workflow) {
@@ -1045,7 +1293,6 @@ public final class Call {
         }
 
         /**
-         * <p>[BETA] This feature is in active development. The API and behavior are subject to change as we refine it based on user feedback.</p>
          * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
          * <p>To start a call with:</p>
          * <ul>
@@ -1061,6 +1308,15 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for the call. To use a transient workflow, use <code>workflow</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public _FinalStage workflowId(Optional<String> workflowId) {
@@ -1084,6 +1340,15 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is a squad that will be used for the call. To use an existing squad, use <code>squadId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "squad", nulls = Nulls.SKIP)
         public _FinalStage squad(Optional<CreateSquadDto> squad) {
@@ -1107,6 +1372,15 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for the call. To use a transient squad, use <code>squad</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code> or <code>assistantId</code></li>
+         * <li>Squad, use <code>squad</code> or <code>squadId</code></li>
+         * <li>Workflow, use <code>workflow</code> or <code>workflowId</code></li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public _FinalStage squadId(Optional<String> squadId) {
@@ -1124,6 +1398,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>These are the overrides for the <code>assistant</code> or <code>assistantId</code>'s settings and template variables.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
         public _FinalStage assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
@@ -1147,6 +1424,15 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for the call. To use an existing assistant, use <code>assistantId</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistant</code></li>
+         * <li>Squad, use <code>squad</code></li>
+         * <li>Workflow, use <code>workflow</code></li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -1170,10 +1456,39 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the assistant ID that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.</p>
+         * <p>To start a call with:</p>
+         * <ul>
+         * <li>Assistant, use <code>assistantId</code> or <code>assistant</code></li>
+         * <li>Squad, use <code>squadId</code> or <code>squad</code></li>
+         * <li>Workflow, use <code>workflowId</code> or <code>workflow</code></li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public _FinalStage assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
+            return this;
+        }
+
+        /**
+         * <p>This is the campaign ID that the call belongs to.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage campaignId(String campaignId) {
+            this.campaignId = Optional.ofNullable(campaignId);
+            return this;
+        }
+
+        /**
+         * <p>This is the campaign ID that the call belongs to.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "campaignId", nulls = Nulls.SKIP)
+        public _FinalStage campaignId(Optional<String> campaignId) {
+            this.campaignId = campaignId;
             return this;
         }
 
@@ -1188,6 +1503,10 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>The ID of the call as provided by the phone number service. callSid in Twilio. conversationUuid in Vonage. callControlId in Telnyx.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneCallProviderId", nulls = Nulls.SKIP)
         public _FinalStage phoneCallProviderId(Optional<String> phoneCallProviderId) {
@@ -1205,6 +1524,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>These are the artifacts created from the call. Configure in <code>assistant.artifactPlan</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "artifact", nulls = Nulls.SKIP)
         public _FinalStage artifact(Optional<Artifact> artifact) {
@@ -1222,6 +1544,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is to real-time monitor the call. Configure in <code>assistant.monitorPlan</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "monitor", nulls = Nulls.SKIP)
         public _FinalStage monitor(Optional<Monitor> monitor) {
@@ -1239,6 +1564,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the analysis of the call. Configure in <code>assistant.analysisPlan</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "analysis", nulls = Nulls.SKIP)
         public _FinalStage analysis(Optional<Analysis> analysis) {
@@ -1256,6 +1584,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is a copy of assistant artifact plan. This isn't actually stored on the call but rather just returned in POST /call/web to enable artifact creation client side.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "artifactPlan", nulls = Nulls.SKIP)
         public _FinalStage artifactPlan(Optional<ArtifactPlan> artifactPlan) {
@@ -1273,6 +1604,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the cost of the call in USD.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "costBreakdown", nulls = Nulls.SKIP)
         public _FinalStage costBreakdown(Optional<CostBreakdown> costBreakdown) {
@@ -1290,6 +1624,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the cost of the call in USD.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cost", nulls = Nulls.SKIP)
         public _FinalStage cost(Optional<Double> cost) {
@@ -1307,6 +1644,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call was ended.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "endedAt", nulls = Nulls.SKIP)
         public _FinalStage endedAt(Optional<OffsetDateTime> endedAt) {
@@ -1324,6 +1664,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the ISO 8601 date-time string of when the call was started.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "startedAt", nulls = Nulls.SKIP)
         public _FinalStage startedAt(Optional<OffsetDateTime> startedAt) {
@@ -1341,6 +1684,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the destination where the call ended up being transferred to. If the call was not transferred, this will be empty.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "destination", nulls = Nulls.SKIP)
         public _FinalStage destination(Optional<CallDestination> destination) {
@@ -1358,6 +1704,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the explanation for how the call ended.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "endedReason", nulls = Nulls.SKIP)
         public _FinalStage endedReason(Optional<CallEndedReason> endedReason) {
@@ -1375,6 +1724,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the status of the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
         public _FinalStage status(Optional<CallStatus> status) {
@@ -1393,6 +1745,10 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the transport of the phone call.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneCallTransport", nulls = Nulls.SKIP)
         public _FinalStage phoneCallTransport(Optional<CallPhoneCallTransport> phoneCallTransport) {
@@ -1411,6 +1767,10 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the provider of the call.</p>
+         * <p>Only relevant for <code>outboundPhoneCall</code> and <code>inboundPhoneCall</code> type.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneCallProvider", nulls = Nulls.SKIP)
         public _FinalStage phoneCallProvider(Optional<CallPhoneCallProvider> phoneCallProvider) {
@@ -1441,6 +1801,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>These are the costs of individual components of the call in USD.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "costs", nulls = Nulls.SKIP)
         public _FinalStage costs(Optional<List<CallCostsItem>> costs) {
@@ -1458,6 +1821,9 @@ public final class Call {
             return this;
         }
 
+        /**
+         * <p>This is the type of call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
         public _FinalStage type(Optional<CallType> type) {
@@ -1489,6 +1855,7 @@ public final class Call {
                     monitor,
                     artifact,
                     phoneCallProviderId,
+                    campaignId,
                     assistantId,
                     assistant,
                     assistantOverrides,
@@ -1496,6 +1863,7 @@ public final class Call {
                     squad,
                     workflowId,
                     workflow,
+                    workflowOverrides,
                     phoneNumberId,
                     phoneNumber,
                     customerId,

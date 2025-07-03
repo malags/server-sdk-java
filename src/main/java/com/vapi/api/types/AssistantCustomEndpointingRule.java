@@ -107,18 +107,37 @@ public final class AssistantCustomEndpointingRule {
     }
 
     public interface RegexStage {
+        /**
+         * <p>This is the regex pattern to match.</p>
+         * <p>Note:</p>
+         * <ul>
+         * <li>This works by using the <code>RegExp.test</code> method in Node.JS. Eg. <code>/hello/.test(&quot;hello there&quot;)</code> will return <code>true</code>.</li>
+         * </ul>
+         * <p>Hot tip:</p>
+         * <ul>
+         * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
+         * <li><code>RegExp.test</code> does substring matching, so <code>/cat/.test(&quot;I love cats&quot;)</code> will return <code>true</code>. To do full string matching, send &quot;^cat$&quot;.</li>
+         * </ul>
+         */
         TimeoutSecondsStage regex(@NotNull String regex);
 
         Builder from(AssistantCustomEndpointingRule other);
     }
 
     public interface TimeoutSecondsStage {
+        /**
+         * <p>This is the endpointing timeout in seconds, if the rule is matched.</p>
+         */
         _FinalStage timeoutSeconds(double timeoutSeconds);
     }
 
     public interface _FinalStage {
         AssistantCustomEndpointingRule build();
 
+        /**
+         * <p>These are the options for the regex match. Defaults to all disabled.</p>
+         * <p>@default []</p>
+         */
         _FinalStage regexOptions(Optional<List<RegexOption>> regexOptions);
 
         _FinalStage regexOptions(List<RegexOption> regexOptions);
@@ -156,6 +175,16 @@ public final class AssistantCustomEndpointingRule {
          * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
          * <li><code>RegExp.test</code> does substring matching, so <code>/cat/.test(&quot;I love cats&quot;)</code> will return <code>true</code>. To do full string matching, send &quot;^cat$&quot;.</li>
          * </ul>
+         * <p>This is the regex pattern to match.</p>
+         * <p>Note:</p>
+         * <ul>
+         * <li>This works by using the <code>RegExp.test</code> method in Node.JS. Eg. <code>/hello/.test(&quot;hello there&quot;)</code> will return <code>true</code>.</li>
+         * </ul>
+         * <p>Hot tip:</p>
+         * <ul>
+         * <li>In JavaScript, escape <code>\</code> when sending the regex pattern. Eg. <code>&quot;hello\sthere&quot;</code> will be sent over the wire as <code>&quot;hellosthere&quot;</code>. Send <code>&quot;hello\\sthere&quot;</code> instead.</li>
+         * <li><code>RegExp.test</code> does substring matching, so <code>/cat/.test(&quot;I love cats&quot;)</code> will return <code>true</code>. To do full string matching, send &quot;^cat$&quot;.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -166,6 +195,7 @@ public final class AssistantCustomEndpointingRule {
         }
 
         /**
+         * <p>This is the endpointing timeout in seconds, if the rule is matched.</p>
          * <p>This is the endpointing timeout in seconds, if the rule is matched.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -187,6 +217,10 @@ public final class AssistantCustomEndpointingRule {
             return this;
         }
 
+        /**
+         * <p>These are the options for the regex match. Defaults to all disabled.</p>
+         * <p>@default []</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "regexOptions", nulls = Nulls.SKIP)
         public _FinalStage regexOptions(Optional<List<RegexOption>> regexOptions) {

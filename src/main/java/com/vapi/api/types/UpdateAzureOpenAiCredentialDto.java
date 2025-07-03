@@ -177,6 +177,9 @@ public final class UpdateAzureOpenAiCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "openAIKey", nulls = Nulls.SKIP)
         public Builder openAiKey(Optional<String> openAiKey) {
             this.openAiKey = openAiKey;
@@ -188,6 +191,9 @@ public final class UpdateAzureOpenAiCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "ocpApimSubscriptionKey", nulls = Nulls.SKIP)
         public Builder ocpApimSubscriptionKey(Optional<String> ocpApimSubscriptionKey) {
             this.ocpApimSubscriptionKey = ocpApimSubscriptionKey;
@@ -199,6 +205,9 @@ public final class UpdateAzureOpenAiCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

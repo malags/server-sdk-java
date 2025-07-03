@@ -109,22 +109,34 @@ public final class CreateMakeCredentialDto {
     }
 
     public interface TeamIdStage {
+        /**
+         * <p>Team ID</p>
+         */
         RegionStage teamId(@NotNull String teamId);
 
         Builder from(CreateMakeCredentialDto other);
     }
 
     public interface RegionStage {
+        /**
+         * <p>Region of your application. For example: eu1, eu2, us1, us2</p>
+         */
         ApiKeyStage region(@NotNull String region);
     }
 
     public interface ApiKeyStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiKey(@NotNull String apiKey);
     }
 
     public interface _FinalStage {
         CreateMakeCredentialDto build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -156,6 +168,7 @@ public final class CreateMakeCredentialDto {
 
         /**
          * <p>Team ID</p>
+         * <p>Team ID</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -167,6 +180,7 @@ public final class CreateMakeCredentialDto {
 
         /**
          * <p>Region of your application. For example: eu1, eu2, us1, us2</p>
+         * <p>Region of your application. For example: eu1, eu2, us1, us2</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -177,6 +191,7 @@ public final class CreateMakeCredentialDto {
         }
 
         /**
+         * <p>This is not returned in the API.</p>
          * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -197,6 +212,9 @@ public final class CreateMakeCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

@@ -211,6 +211,16 @@ public final class ArtifactPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether assistant's calls are recorded. Defaults to true.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you don't want to record the calls, set this to false.</li>
+         * <li>If you want to record the calls when <code>assistant.hipaaEnabled</code> (deprecated) or <code>assistant.compliancePlan.hipaaEnabled</code> explicity set this to true and make sure to provide S3 or GCP credentials on the Provider Credentials page in the Dashboard.</li>
+         * </ul>
+         * <p>You can find the recording at <code>call.artifact.recordingUrl</code> and <code>call.artifact.stereoRecordingUrl</code> after the call is ended.</p>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "recordingEnabled", nulls = Nulls.SKIP)
         public Builder recordingEnabled(Optional<Boolean> recordingEnabled) {
             this.recordingEnabled = recordingEnabled;
@@ -222,6 +232,10 @@ public final class ArtifactPlan {
             return this;
         }
 
+        /**
+         * <p>This determines the format of the recording. Defaults to <code>wav;l16</code>.</p>
+         * <p>@default 'wav;l16'</p>
+         */
         @JsonSetter(value = "recordingFormat", nulls = Nulls.SKIP)
         public Builder recordingFormat(Optional<ArtifactPlanRecordingFormat> recordingFormat) {
             this.recordingFormat = recordingFormat;
@@ -233,6 +247,11 @@ public final class ArtifactPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether the video is recorded during the call. Defaults to false. Only relevant for <code>webCall</code> type.</p>
+         * <p>You can find the video recording at <code>call.artifact.videoRecordingUrl</code> after the call is ended.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "videoRecordingEnabled", nulls = Nulls.SKIP)
         public Builder videoRecordingEnabled(Optional<Boolean> videoRecordingEnabled) {
             this.videoRecordingEnabled = videoRecordingEnabled;
@@ -244,6 +263,11 @@ public final class ArtifactPlan {
             return this;
         }
 
+        /**
+         * <p>This determines whether the SIP packet capture is enabled. Defaults to true. Only relevant for <code>phone</code> type calls where phone number's provider is <code>vapi</code> or <code>byo-phone-number</code>.</p>
+         * <p>You can find the packet capture at <code>call.artifact.pcapUrl</code> after the call is ended.</p>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "pcapEnabled", nulls = Nulls.SKIP)
         public Builder pcapEnabled(Optional<Boolean> pcapEnabled) {
             this.pcapEnabled = pcapEnabled;
@@ -255,6 +279,16 @@ public final class ArtifactPlan {
             return this;
         }
 
+        /**
+         * <p>This is the path where the SIP packet capture will be uploaded. This is only used if you have provided S3 or GCP credentials on the Provider Credentials page in the Dashboard.</p>
+         * <p>If credential.s3PathPrefix or credential.bucketPlan.path is set, this will append to it.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you want to upload the packet capture to a specific path, set this to the path. Example: <code>/my-assistant-captures</code>.</li>
+         * <li>If you want to upload the packet capture to the root of the bucket, set this to <code>/</code>.</li>
+         * </ul>
+         * <p>@default '/'</p>
+         */
         @JsonSetter(value = "pcapS3PathPrefix", nulls = Nulls.SKIP)
         public Builder pcapS3PathPrefix(Optional<String> pcapS3PathPrefix) {
             this.pcapS3PathPrefix = pcapS3PathPrefix;
@@ -266,6 +300,9 @@ public final class ArtifactPlan {
             return this;
         }
 
+        /**
+         * <p>This is the plan for <code>call.artifact.transcript</code>. To disable, set <code>transcriptPlan.enabled</code> to false.</p>
+         */
         @JsonSetter(value = "transcriptPlan", nulls = Nulls.SKIP)
         public Builder transcriptPlan(Optional<TranscriptPlan> transcriptPlan) {
             this.transcriptPlan = transcriptPlan;
@@ -277,6 +314,16 @@ public final class ArtifactPlan {
             return this;
         }
 
+        /**
+         * <p>This is the path where the recording will be uploaded. This is only used if you have provided S3 or GCP credentials on the Provider Credentials page in the Dashboard.</p>
+         * <p>If credential.s3PathPrefix or credential.bucketPlan.path is set, this will append to it.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>If you want to upload the recording to a specific path, set this to the path. Example: <code>/my-assistant-recordings</code>.</li>
+         * <li>If you want to upload the recording to the root of the bucket, set this to <code>/</code>.</li>
+         * </ul>
+         * <p>@default '/'</p>
+         */
         @JsonSetter(value = "recordingPath", nulls = Nulls.SKIP)
         public Builder recordingPath(Optional<String> recordingPath) {
             this.recordingPath = recordingPath;

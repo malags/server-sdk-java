@@ -154,36 +154,59 @@ public final class Squad {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the squad.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(Squad other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this squad belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the squad was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the squad was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         Squad build();
 
+        /**
+         * <p>This is the name of the squad.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the list of assistants that make up the squad.</p>
+         * <p>The call will start with the first assistant in the list.</p>
+         */
         _FinalStage members(List<SquadMemberDto> members);
 
         _FinalStage addMembers(SquadMemberDto members);
 
         _FinalStage addAllMembers(List<SquadMemberDto> members);
 
+        /**
+         * <p>This can be used to override all the assistants' settings and provide values for their template variables.</p>
+         * <p>Both <code>membersOverrides</code> and <code>members[n].assistantOverrides</code> can be used together. First, <code>members[n].assistantOverrides</code> is applied. Then, <code>membersOverrides</code> is applied as a global override.</p>
+         */
         _FinalStage membersOverrides(Optional<AssistantOverrides> membersOverrides);
 
         _FinalStage membersOverrides(AssistantOverrides membersOverrides);
@@ -224,6 +247,7 @@ public final class Squad {
 
         /**
          * <p>This is the unique identifier for the squad.</p>
+         * <p>This is the unique identifier for the squad.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -234,6 +258,7 @@ public final class Squad {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this squad belongs to.</p>
          * <p>This is the unique identifier for the org that this squad belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -246,6 +271,7 @@ public final class Squad {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the squad was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the squad was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -256,6 +282,7 @@ public final class Squad {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the squad was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the squad was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -277,6 +304,10 @@ public final class Squad {
             return this;
         }
 
+        /**
+         * <p>This can be used to override all the assistants' settings and provide values for their template variables.</p>
+         * <p>Both <code>membersOverrides</code> and <code>members[n].assistantOverrides</code> can be used together. First, <code>members[n].assistantOverrides</code> is applied. Then, <code>membersOverrides</code> is applied as a global override.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "membersOverrides", nulls = Nulls.SKIP)
         public _FinalStage membersOverrides(Optional<AssistantOverrides> membersOverrides) {
@@ -306,6 +337,10 @@ public final class Squad {
             return this;
         }
 
+        /**
+         * <p>This is the list of assistants that make up the squad.</p>
+         * <p>The call will start with the first assistant in the list.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "members", nulls = Nulls.SKIP)
         public _FinalStage members(List<SquadMemberDto> members) {
@@ -324,6 +359,9 @@ public final class Squad {
             return this;
         }
 
+        /**
+         * <p>This is the name of the squad.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

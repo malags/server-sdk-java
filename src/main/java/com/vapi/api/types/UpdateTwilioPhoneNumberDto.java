@@ -306,6 +306,15 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the fallback destination an inbound call will be transferred to if:</p>
+         * <ol>
+         * <li><code>assistantId</code> is not set</li>
+         * <li><code>squadId</code> is not set</li>
+         * <li>and, <code>assistant-request</code> message to the <code>serverUrl</code> fails</li>
+         * </ol>
+         * <p>If this is not set and above conditions are met, the inbound call is hung up with an error message.</p>
+         */
         @JsonSetter(value = "fallbackDestination", nulls = Nulls.SKIP)
         public Builder fallbackDestination(
                 Optional<UpdateTwilioPhoneNumberDtoFallbackDestination> fallbackDestination) {
@@ -318,6 +327,9 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the hooks that will be used for incoming calls to this phone number.</p>
+         */
         @JsonSetter(value = "hooks", nulls = Nulls.SKIP)
         public Builder hooks(Optional<List<PhoneNumberHookCallRinging>> hooks) {
             this.hooks = hooks;
@@ -329,6 +341,12 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>Controls whether Vapi sets the messaging webhook URL on the Twilio number during import.</p>
+         * <p>If set to <code>false</code>, Vapi will not update the Twilio messaging URL, leaving it as is.
+         * If <code>true</code> or omitted (default), Vapi will configure both the voice and messaging URLs.</p>
+         * <p>@default true</p>
+         */
         @JsonSetter(value = "smsEnabled", nulls = Nulls.SKIP)
         public Builder smsEnabled(Optional<Boolean> smsEnabled) {
             this.smsEnabled = smsEnabled;
@@ -340,6 +358,9 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of the phone number. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -351,6 +372,10 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code> nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -362,6 +387,10 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the workflow that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "workflowId", nulls = Nulls.SKIP)
         public Builder workflowId(Optional<String> workflowId) {
             this.workflowId = workflowId;
@@ -373,6 +402,10 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the squad that will be used for incoming calls to this phone number.</p>
+         * <p>If neither <code>assistantId</code>, <code>squadId</code>, nor <code>workflowId</code> is set, <code>assistant-request</code> will be sent to your Server URL. Check <code>ServerMessage</code> and <code>ServerMessageResponse</code> for the shape of the message and response that is expected.</p>
+         */
         @JsonSetter(value = "squadId", nulls = Nulls.SKIP)
         public Builder squadId(Optional<String> squadId) {
             this.squadId = squadId;
@@ -384,6 +417,15 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.</p>
+         * <p>The order of precedence is:</p>
+         * <ol>
+         * <li>assistant.server</li>
+         * <li>phoneNumber.server</li>
+         * <li>org.server</li>
+         * </ol>
+         */
         @JsonSetter(value = "server", nulls = Nulls.SKIP)
         public Builder server(Optional<Server> server) {
             this.server = server;
@@ -395,6 +437,9 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>These are the digits of the phone number you own on your Twilio.</p>
+         */
         @JsonSetter(value = "number", nulls = Nulls.SKIP)
         public Builder number(Optional<String> number) {
             this.number = number;
@@ -406,6 +451,9 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the Twilio Account SID for the phone number.</p>
+         */
         @JsonSetter(value = "twilioAccountSid", nulls = Nulls.SKIP)
         public Builder twilioAccountSid(Optional<String> twilioAccountSid) {
             this.twilioAccountSid = twilioAccountSid;
@@ -417,6 +465,9 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the Twilio Auth Token for the phone number.</p>
+         */
         @JsonSetter(value = "twilioAuthToken", nulls = Nulls.SKIP)
         public Builder twilioAuthToken(Optional<String> twilioAuthToken) {
             this.twilioAuthToken = twilioAuthToken;
@@ -428,6 +479,9 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the Twilio API Key for the phone number.</p>
+         */
         @JsonSetter(value = "twilioApiKey", nulls = Nulls.SKIP)
         public Builder twilioApiKey(Optional<String> twilioApiKey) {
             this.twilioApiKey = twilioApiKey;
@@ -439,6 +493,9 @@ public final class UpdateTwilioPhoneNumberDto {
             return this;
         }
 
+        /**
+         * <p>This is the Twilio API Secret for the phone number.</p>
+         */
         @JsonSetter(value = "twilioApiSecret", nulls = Nulls.SKIP)
         public Builder twilioApiSecret(Optional<String> twilioApiSecret) {
             this.twilioApiSecret = twilioApiSecret;

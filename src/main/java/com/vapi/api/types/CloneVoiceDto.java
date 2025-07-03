@@ -111,6 +111,9 @@ public final class CloneVoiceDto {
     }
 
     public interface NameStage {
+        /**
+         * <p>This is the name of the cloned voice in the provider account.</p>
+         */
         _FinalStage name(@NotNull String name);
 
         Builder from(CloneVoiceDto other);
@@ -119,14 +122,23 @@ public final class CloneVoiceDto {
     public interface _FinalStage {
         CloneVoiceDto build();
 
+        /**
+         * <p>This is the description of your cloned voice.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
 
+        /**
+         * <p>Serialized labels dictionary for the voice.</p>
+         */
         _FinalStage labels(Optional<String> labels);
 
         _FinalStage labels(String labels);
 
+        /**
+         * <p>These are the files you want to use to clone your voice. Only Audio files are supported.</p>
+         */
         _FinalStage files(List<String> files);
 
         _FinalStage addFiles(String files);
@@ -160,6 +172,7 @@ public final class CloneVoiceDto {
 
         /**
          * <p>This is the name of the cloned voice in the provider account.</p>
+         * <p>This is the name of the cloned voice in the provider account.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -189,6 +202,9 @@ public final class CloneVoiceDto {
             return this;
         }
 
+        /**
+         * <p>These are the files you want to use to clone your voice. Only Audio files are supported.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "files", nulls = Nulls.SKIP)
         public _FinalStage files(List<String> files) {
@@ -207,6 +223,9 @@ public final class CloneVoiceDto {
             return this;
         }
 
+        /**
+         * <p>Serialized labels dictionary for the voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "labels", nulls = Nulls.SKIP)
         public _FinalStage labels(Optional<String> labels) {
@@ -224,6 +243,9 @@ public final class CloneVoiceDto {
             return this;
         }
 
+        /**
+         * <p>This is the description of your cloned voice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {

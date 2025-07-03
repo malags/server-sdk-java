@@ -97,6 +97,10 @@ public final class CompliancePlan {
             return this;
         }
 
+        /**
+         * <p>When this is enabled, no logs, recordings, or transcriptions will be stored.
+         * At the end of the call, you will still receive an end-of-call-report message to store on your server. Defaults to false.</p>
+         */
         @JsonSetter(value = "hipaaEnabled", nulls = Nulls.SKIP)
         public Builder hipaaEnabled(Optional<Boolean> hipaaEnabled) {
             this.hipaaEnabled = hipaaEnabled;
@@ -108,6 +112,10 @@ public final class CompliancePlan {
             return this;
         }
 
+        /**
+         * <p>When this is enabled, the user will be restricted to use PCI-compliant providers, and no logs or transcripts are stored.
+         * At the end of the call, you will receive an end-of-call-report message to store on your server. Defaults to false.</p>
+         */
         @JsonSetter(value = "pciEnabled", nulls = Nulls.SKIP)
         public Builder pciEnabled(Optional<Boolean> pciEnabled) {
             this.pciEnabled = pciEnabled;

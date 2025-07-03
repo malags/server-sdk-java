@@ -144,6 +144,9 @@ public final class SquadMemberDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for the call. To use a transient assistant, use <code>assistant</code> instead.</p>
+         */
         @JsonSetter(value = "assistantId", nulls = Nulls.SKIP)
         public Builder assistantId(Optional<String> assistantId) {
             this.assistantId = assistantId;
@@ -166,6 +169,9 @@ public final class SquadMemberDto {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that will be used for the call. To use an existing assistant, use <code>assistantId</code> instead.</p>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -177,6 +183,9 @@ public final class SquadMemberDto {
             return this;
         }
 
+        /**
+         * <p>This can be used to override the assistant's settings and provide values for it's template variables.</p>
+         */
         @JsonSetter(value = "assistantOverrides", nulls = Nulls.SKIP)
         public Builder assistantOverrides(Optional<AssistantOverrides> assistantOverrides) {
             this.assistantOverrides = assistantOverrides;
@@ -188,6 +197,10 @@ public final class SquadMemberDto {
             return this;
         }
 
+        /**
+         * <p>These are the others assistants that this assistant can transfer to.</p>
+         * <p>If the assistant already has transfer call tool, these destinations are just appended to existing ones.</p>
+         */
         @JsonSetter(value = "assistantDestinations", nulls = Nulls.SKIP)
         public Builder assistantDestinations(Optional<List<TransferDestinationAssistant>> assistantDestinations) {
             this.assistantDestinations = assistantDestinations;

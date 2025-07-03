@@ -99,6 +99,9 @@ public final class ServerMessageResponseKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>This is the list of documents that will be sent to the model alongside the <code>messages</code> to generate a response.</p>
+         */
         @JsonSetter(value = "documents", nulls = Nulls.SKIP)
         public Builder documents(Optional<List<KnowledgeBaseResponseDocument>> documents) {
             this.documents = documents;
@@ -110,6 +113,9 @@ public final class ServerMessageResponseKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>This can be used to skip the model output generation and speak a custom message.</p>
+         */
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
         public Builder message(Optional<CustomMessage> message) {
             this.message = message;

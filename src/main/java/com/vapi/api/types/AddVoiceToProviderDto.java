@@ -89,16 +89,25 @@ public final class AddVoiceToProviderDto {
     }
 
     public interface OwnerIdStage {
+        /**
+         * <p>This is the owner_id of your shared voice which you want to add to your provider Account from Provider Voice Library</p>
+         */
         VoiceIdStage ownerId(@NotNull String ownerId);
 
         Builder from(AddVoiceToProviderDto other);
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the voice_id of the shared voice which you want to add to your provider Account from Provider Voice Library</p>
+         */
         NameStage voiceId(@NotNull String voiceId);
     }
 
     public interface NameStage {
+        /**
+         * <p>This is the new name of the voice which you want to have once you have added voice to your provider Account from Provider Voice Library</p>
+         */
         _FinalStage name(@NotNull String name);
     }
 
@@ -129,6 +138,7 @@ public final class AddVoiceToProviderDto {
 
         /**
          * <p>This is the owner_id of your shared voice which you want to add to your provider Account from Provider Voice Library</p>
+         * <p>This is the owner_id of your shared voice which you want to add to your provider Account from Provider Voice Library</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -140,6 +150,7 @@ public final class AddVoiceToProviderDto {
 
         /**
          * <p>This is the voice_id of the shared voice which you want to add to your provider Account from Provider Voice Library</p>
+         * <p>This is the voice_id of the shared voice which you want to add to your provider Account from Provider Voice Library</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -150,6 +161,7 @@ public final class AddVoiceToProviderDto {
         }
 
         /**
+         * <p>This is the new name of the voice which you want to have once you have added voice to your provider Account from Provider Voice Library</p>
          * <p>This is the new name of the voice which you want to have once you have added voice to your provider Account from Provider Voice Library</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

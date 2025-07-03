@@ -91,6 +91,9 @@ public final class CreateDeepgramCredentialDto {
     }
 
     public interface ApiKeyStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiKey(@NotNull String apiKey);
 
         Builder from(CreateDeepgramCredentialDto other);
@@ -99,10 +102,16 @@ public final class CreateDeepgramCredentialDto {
     public interface _FinalStage {
         CreateDeepgramCredentialDto build();
 
+        /**
+         * <p>This can be used to point to an onprem Deepgram instance. Defaults to api.deepgram.com.</p>
+         */
         _FinalStage apiUrl(Optional<String> apiUrl);
 
         _FinalStage apiUrl(String apiUrl);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -131,6 +140,7 @@ public final class CreateDeepgramCredentialDto {
 
         /**
          * <p>This is not returned in the API.</p>
+         * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -150,6 +160,9 @@ public final class CreateDeepgramCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -167,6 +180,9 @@ public final class CreateDeepgramCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This can be used to point to an onprem Deepgram instance. Defaults to api.deepgram.com.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "apiUrl", nulls = Nulls.SKIP)
         public _FinalStage apiUrl(Optional<String> apiUrl) {

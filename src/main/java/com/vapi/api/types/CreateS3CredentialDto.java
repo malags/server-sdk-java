@@ -31,6 +31,8 @@ public final class CreateS3CredentialDto {
 
     private final String s3PathPrefix;
 
+    private final Optional<Double> fallbackIndex;
+
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
@@ -41,6 +43,7 @@ public final class CreateS3CredentialDto {
             String region,
             String s3BucketName,
             String s3PathPrefix,
+            Optional<Double> fallbackIndex,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.awsAccessKeyId = awsAccessKeyId;
@@ -48,6 +51,7 @@ public final class CreateS3CredentialDto {
         this.region = region;
         this.s3BucketName = s3BucketName;
         this.s3PathPrefix = s3PathPrefix;
+        this.fallbackIndex = fallbackIndex;
         this.name = name;
         this.additionalProperties = additionalProperties;
     }
@@ -93,6 +97,14 @@ public final class CreateS3CredentialDto {
     }
 
     /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
+    }
+
+    /**
      * @return This is the name of credential. This is just for your reference.
      */
     @JsonProperty("name")
@@ -117,6 +129,7 @@ public final class CreateS3CredentialDto {
                 && region.equals(other.region)
                 && s3BucketName.equals(other.s3BucketName)
                 && s3PathPrefix.equals(other.s3PathPrefix)
+                && fallbackIndex.equals(other.fallbackIndex)
                 && name.equals(other.name);
     }
 
@@ -128,6 +141,7 @@ public final class CreateS3CredentialDto {
                 this.region,
                 this.s3BucketName,
                 this.s3PathPrefix,
+                this.fallbackIndex,
                 this.name);
     }
 
@@ -141,30 +155,55 @@ public final class CreateS3CredentialDto {
     }
 
     public interface AwsAccessKeyIdStage {
+        /**
+         * <p>AWS access key ID.</p>
+         */
         AwsSecretAccessKeyStage awsAccessKeyId(@NotNull String awsAccessKeyId);
 
         Builder from(CreateS3CredentialDto other);
     }
 
     public interface AwsSecretAccessKeyStage {
+        /**
+         * <p>AWS access key secret. This is not returned in the API.</p>
+         */
         RegionStage awsSecretAccessKey(@NotNull String awsSecretAccessKey);
     }
 
     public interface RegionStage {
+        /**
+         * <p>AWS region in which the S3 bucket is located.</p>
+         */
         S3BucketNameStage region(@NotNull String region);
     }
 
     public interface S3BucketNameStage {
+        /**
+         * <p>AWS S3 bucket name.</p>
+         */
         S3PathPrefixStage s3BucketName(@NotNull String s3BucketName);
     }
 
     public interface S3PathPrefixStage {
+        /**
+         * <p>The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;</p>
+         */
         _FinalStage s3PathPrefix(@NotNull String s3PathPrefix);
     }
 
     public interface _FinalStage {
         CreateS3CredentialDto build();
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        _FinalStage fallbackIndex(Optional<Double> fallbackIndex);
+
+        _FinalStage fallbackIndex(Double fallbackIndex);
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -190,6 +229,8 @@ public final class CreateS3CredentialDto {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -202,11 +243,13 @@ public final class CreateS3CredentialDto {
             region(other.getRegion());
             s3BucketName(other.getS3BucketName());
             s3PathPrefix(other.getS3PathPrefix());
+            fallbackIndex(other.getFallbackIndex());
             name(other.getName());
             return this;
         }
 
         /**
+         * <p>AWS access key ID.</p>
          * <p>AWS access key ID.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -219,6 +262,7 @@ public final class CreateS3CredentialDto {
 
         /**
          * <p>AWS access key secret. This is not returned in the API.</p>
+         * <p>AWS access key secret. This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -229,6 +273,7 @@ public final class CreateS3CredentialDto {
         }
 
         /**
+         * <p>AWS region in which the S3 bucket is located.</p>
          * <p>AWS region in which the S3 bucket is located.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -241,6 +286,7 @@ public final class CreateS3CredentialDto {
 
         /**
          * <p>AWS S3 bucket name.</p>
+         * <p>AWS S3 bucket name.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -251,6 +297,7 @@ public final class CreateS3CredentialDto {
         }
 
         /**
+         * <p>The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;</p>
          * <p>The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -271,6 +318,9 @@ public final class CreateS3CredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -278,10 +328,37 @@ public final class CreateS3CredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public _FinalStage fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
+            return this;
+        }
+
         @java.lang.Override
         public CreateS3CredentialDto build() {
             return new CreateS3CredentialDto(
-                    awsAccessKeyId, awsSecretAccessKey, region, s3BucketName, s3PathPrefix, name, additionalProperties);
+                    awsAccessKeyId,
+                    awsSecretAccessKey,
+                    region,
+                    s3BucketName,
+                    s3PathPrefix,
+                    fallbackIndex,
+                    name,
+                    additionalProperties);
         }
     }
 }

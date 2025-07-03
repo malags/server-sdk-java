@@ -253,58 +253,110 @@ public final class CustomLlmModel {
     }
 
     public interface UrlStage {
+        /**
+         * <p>These is the URL we'll use for the OpenAI client's <code>baseURL</code>. Ex. https://openrouter.ai/api/v1</p>
+         */
         ModelStage url(@NotNull String url);
 
         Builder from(CustomLlmModel other);
     }
 
     public interface ModelStage {
+        /**
+         * <p>This is the name of the model. Ex. cognitivecomputations/dolphin-mixtral-8x7b</p>
+         */
         _FinalStage model(@NotNull String model);
     }
 
     public interface _FinalStage {
         CustomLlmModel build();
 
+        /**
+         * <p>This is the starting state for the conversation.</p>
+         */
         _FinalStage messages(Optional<List<OpenAiMessage>> messages);
 
         _FinalStage messages(List<OpenAiMessage> messages);
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use existing tools, use <code>toolIds</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         _FinalStage tools(Optional<List<CustomLlmModelToolsItem>> tools);
 
         _FinalStage tools(List<CustomLlmModelToolsItem> tools);
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use transient tools, use <code>tools</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         _FinalStage toolIds(Optional<List<String>> toolIds);
 
         _FinalStage toolIds(List<String> toolIds);
 
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         */
         _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase);
 
         _FinalStage knowledgeBase(CreateCustomKnowledgeBaseDto knowledgeBase);
 
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         */
         _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId);
 
         _FinalStage knowledgeBaseId(String knowledgeBaseId);
 
+        /**
+         * <p>This determines whether metadata is sent in requests to the custom provider.</p>
+         * <ul>
+         * <li><code>off</code> will not send any metadata. payload will look like <code>{ messages }</code></li>
+         * <li><code>variable</code> will send <code>assistant.metadata</code> as a variable on the payload. payload will look like <code>{ messages, metadata }</code></li>
+         * <li><code>destructured</code> will send <code>assistant.metadata</code> fields directly on the payload. payload will look like <code>{ messages, ...metadata }</code></li>
+         * </ul>
+         * <p>Further, <code>variable</code> and <code>destructured</code> will send <code>call</code>, <code>phoneNumber</code>, and <code>customer</code> objects in the payload.</p>
+         * <p>Default is <code>variable</code>.</p>
+         */
         _FinalStage metadataSendMode(Optional<CustomLlmModelMetadataSendMode> metadataSendMode);
 
         _FinalStage metadataSendMode(CustomLlmModelMetadataSendMode metadataSendMode);
 
+        /**
+         * <p>This sets the timeout for the connection to the custom provider without needing to stream any tokens back. Default is 20 seconds.</p>
+         */
         _FinalStage timeoutSeconds(Optional<Double> timeoutSeconds);
 
         _FinalStage timeoutSeconds(Double timeoutSeconds);
 
+        /**
+         * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
+         */
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
 
+        /**
+         * <p>This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.</p>
+         */
         _FinalStage maxTokens(Optional<Double> maxTokens);
 
         _FinalStage maxTokens(Double maxTokens);
 
+        /**
+         * <p>This determines whether we detect user's emotion while they speak and send it as an additional info to model.</p>
+         * <p>Default <code>false</code> because the model is usually are good at understanding the user's emotion from text.</p>
+         * <p>@default false</p>
+         */
         _FinalStage emotionRecognitionEnabled(Optional<Boolean> emotionRecognitionEnabled);
 
         _FinalStage emotionRecognitionEnabled(Boolean emotionRecognitionEnabled);
 
+        /**
+         * <p>This sets how many turns at the start of the conversation to use a smaller, faster model from the same provider before switching to the primary model. Example, gpt-3.5-turbo if provider is openai.</p>
+         * <p>Default is 0.</p>
+         * <p>@default 0</p>
+         */
         _FinalStage numFastTurns(Optional<Double> numFastTurns);
 
         _FinalStage numFastTurns(Double numFastTurns);
@@ -363,6 +415,7 @@ public final class CustomLlmModel {
 
         /**
          * <p>These is the URL we'll use for the OpenAI client's <code>baseURL</code>. Ex. https://openrouter.ai/api/v1</p>
+         * <p>These is the URL we'll use for the OpenAI client's <code>baseURL</code>. Ex. https://openrouter.ai/api/v1</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -373,6 +426,7 @@ public final class CustomLlmModel {
         }
 
         /**
+         * <p>This is the name of the model. Ex. cognitivecomputations/dolphin-mixtral-8x7b</p>
          * <p>This is the name of the model. Ex. cognitivecomputations/dolphin-mixtral-8x7b</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -395,6 +449,11 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>This sets how many turns at the start of the conversation to use a smaller, faster model from the same provider before switching to the primary model. Example, gpt-3.5-turbo if provider is openai.</p>
+         * <p>Default is 0.</p>
+         * <p>@default 0</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "numFastTurns", nulls = Nulls.SKIP)
         public _FinalStage numFastTurns(Optional<Double> numFastTurns) {
@@ -414,6 +473,11 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>This determines whether we detect user's emotion while they speak and send it as an additional info to model.</p>
+         * <p>Default <code>false</code> because the model is usually are good at understanding the user's emotion from text.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "emotionRecognitionEnabled", nulls = Nulls.SKIP)
         public _FinalStage emotionRecognitionEnabled(Optional<Boolean> emotionRecognitionEnabled) {
@@ -431,6 +495,9 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "maxTokens", nulls = Nulls.SKIP)
         public _FinalStage maxTokens(Optional<Double> maxTokens) {
@@ -448,6 +515,9 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
@@ -465,6 +535,9 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>This sets the timeout for the connection to the custom provider without needing to stream any tokens back. Default is 20 seconds.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
         public _FinalStage timeoutSeconds(Optional<Double> timeoutSeconds) {
@@ -489,6 +562,16 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>This determines whether metadata is sent in requests to the custom provider.</p>
+         * <ul>
+         * <li><code>off</code> will not send any metadata. payload will look like <code>{ messages }</code></li>
+         * <li><code>variable</code> will send <code>assistant.metadata</code> as a variable on the payload. payload will look like <code>{ messages, metadata }</code></li>
+         * <li><code>destructured</code> will send <code>assistant.metadata</code> fields directly on the payload. payload will look like <code>{ messages, ...metadata }</code></li>
+         * </ul>
+         * <p>Further, <code>variable</code> and <code>destructured</code> will send <code>call</code>, <code>phoneNumber</code>, and <code>customer</code> objects in the payload.</p>
+         * <p>Default is <code>variable</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metadataSendMode", nulls = Nulls.SKIP)
         public _FinalStage metadataSendMode(Optional<CustomLlmModelMetadataSendMode> metadataSendMode) {
@@ -506,6 +589,9 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "knowledgeBaseId", nulls = Nulls.SKIP)
         public _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId) {
@@ -523,6 +609,9 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "knowledgeBase", nulls = Nulls.SKIP)
         public _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase) {
@@ -541,6 +630,10 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use transient tools, use <code>tools</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "toolIds", nulls = Nulls.SKIP)
         public _FinalStage toolIds(Optional<List<String>> toolIds) {
@@ -559,6 +652,10 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use existing tools, use <code>toolIds</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "tools", nulls = Nulls.SKIP)
         public _FinalStage tools(Optional<List<CustomLlmModelToolsItem>> tools) {
@@ -576,6 +673,9 @@ public final class CustomLlmModel {
             return this;
         }
 
+        /**
+         * <p>This is the starting state for the conversation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public _FinalStage messages(Optional<List<OpenAiMessage>> messages) {

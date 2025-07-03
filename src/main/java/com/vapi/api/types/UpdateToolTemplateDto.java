@@ -197,6 +197,9 @@ public final class UpdateToolTemplateDto {
             return this;
         }
 
+        /**
+         * <p>The name of the template. This is just for your own reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;

@@ -219,6 +219,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost to summarize the call.</p>
+         */
         @JsonSetter(value = "summary", nulls = Nulls.SKIP)
         public Builder summary(Optional<Double> summary) {
             this.summary = summary;
@@ -230,6 +233,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the number of prompt tokens used to summarize the call.</p>
+         */
         @JsonSetter(value = "summaryPromptTokens", nulls = Nulls.SKIP)
         public Builder summaryPromptTokens(Optional<Double> summaryPromptTokens) {
             this.summaryPromptTokens = summaryPromptTokens;
@@ -241,6 +247,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the number of completion tokens used to summarize the call.</p>
+         */
         @JsonSetter(value = "summaryCompletionTokens", nulls = Nulls.SKIP)
         public Builder summaryCompletionTokens(Optional<Double> summaryCompletionTokens) {
             this.summaryCompletionTokens = summaryCompletionTokens;
@@ -252,6 +261,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost to extract structured data from the call.</p>
+         */
         @JsonSetter(value = "structuredData", nulls = Nulls.SKIP)
         public Builder structuredData(Optional<Double> structuredData) {
             this.structuredData = structuredData;
@@ -263,6 +275,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the number of prompt tokens used to extract structured data from the call.</p>
+         */
         @JsonSetter(value = "structuredDataPromptTokens", nulls = Nulls.SKIP)
         public Builder structuredDataPromptTokens(Optional<Double> structuredDataPromptTokens) {
             this.structuredDataPromptTokens = structuredDataPromptTokens;
@@ -274,6 +289,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the number of completion tokens used to extract structured data from the call.</p>
+         */
         @JsonSetter(value = "structuredDataCompletionTokens", nulls = Nulls.SKIP)
         public Builder structuredDataCompletionTokens(Optional<Double> structuredDataCompletionTokens) {
             this.structuredDataCompletionTokens = structuredDataCompletionTokens;
@@ -285,6 +303,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the cost to evaluate if the call was successful.</p>
+         */
         @JsonSetter(value = "successEvaluation", nulls = Nulls.SKIP)
         public Builder successEvaluation(Optional<Double> successEvaluation) {
             this.successEvaluation = successEvaluation;
@@ -296,6 +317,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the number of prompt tokens used to evaluate if the call was successful.</p>
+         */
         @JsonSetter(value = "successEvaluationPromptTokens", nulls = Nulls.SKIP)
         public Builder successEvaluationPromptTokens(Optional<Double> successEvaluationPromptTokens) {
             this.successEvaluationPromptTokens = successEvaluationPromptTokens;
@@ -307,6 +331,9 @@ public final class AnalysisCostBreakdown {
             return this;
         }
 
+        /**
+         * <p>This is the number of completion tokens used to evaluate if the call was successful.</p>
+         */
         @JsonSetter(value = "successEvaluationCompletionTokens", nulls = Nulls.SKIP)
         public Builder successEvaluationCompletionTokens(Optional<Double> successEvaluationCompletionTokens) {
             this.successEvaluationCompletionTokens = successEvaluationCompletionTokens;

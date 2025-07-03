@@ -187,32 +187,54 @@ public final class VonageCredential {
     }
 
     public interface VonageApplicationPrivateKeyStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         ApiSecretStage vonageApplicationPrivateKey(@NotNull String vonageApplicationPrivateKey);
 
         Builder from(VonageCredential other);
     }
 
     public interface ApiSecretStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         IdStage apiSecret(@NotNull String apiSecret);
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         VonageApplicationIdStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface VonageApplicationIdStage {
+        /**
+         * <p>This is the Vonage Application ID for the credential.</p>
+         * <p>Only relevant for Vonage credentials.</p>
+         */
         ApiKeyStage vonageApplicationId(@NotNull String vonageApplicationId);
     }
 
@@ -223,6 +245,9 @@ public final class VonageCredential {
     public interface _FinalStage {
         VonageCredential build();
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -278,6 +303,7 @@ public final class VonageCredential {
 
         /**
          * <p>This is not returned in the API.</p>
+         * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -290,6 +316,7 @@ public final class VonageCredential {
 
         /**
          * <p>This is not returned in the API.</p>
+         * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -300,6 +327,7 @@ public final class VonageCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the credential.</p>
          * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -312,6 +340,7 @@ public final class VonageCredential {
 
         /**
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -322,6 +351,7 @@ public final class VonageCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -334,6 +364,7 @@ public final class VonageCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -344,6 +375,8 @@ public final class VonageCredential {
         }
 
         /**
+         * <p>This is the Vonage Application ID for the credential.</p>
+         * <p>Only relevant for Vonage credentials.</p>
          * <p>This is the Vonage Application ID for the credential.</p>
          * <p>Only relevant for Vonage credentials.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -373,6 +406,9 @@ public final class VonageCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {

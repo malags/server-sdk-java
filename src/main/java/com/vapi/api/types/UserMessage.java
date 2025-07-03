@@ -135,30 +135,48 @@ public final class UserMessage {
     }
 
     public interface RoleStage {
+        /**
+         * <p>The role of the user in the conversation.</p>
+         */
         MessageStage role(@NotNull String role);
 
         Builder from(UserMessage other);
     }
 
     public interface MessageStage {
+        /**
+         * <p>The message content from the user.</p>
+         */
         TimeStage message(@NotNull String message);
     }
 
     public interface TimeStage {
+        /**
+         * <p>The timestamp when the message was sent.</p>
+         */
         EndTimeStage time(double time);
     }
 
     public interface EndTimeStage {
+        /**
+         * <p>The timestamp when the message ended.</p>
+         */
         SecondsFromStartStage endTime(double endTime);
     }
 
     public interface SecondsFromStartStage {
+        /**
+         * <p>The number of seconds from the start of the conversation.</p>
+         */
         _FinalStage secondsFromStart(double secondsFromStart);
     }
 
     public interface _FinalStage {
         UserMessage build();
 
+        /**
+         * <p>The duration of the message in seconds.</p>
+         */
         _FinalStage duration(Optional<Double> duration);
 
         _FinalStage duration(Double duration);
@@ -197,6 +215,7 @@ public final class UserMessage {
 
         /**
          * <p>The role of the user in the conversation.</p>
+         * <p>The role of the user in the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -207,6 +226,7 @@ public final class UserMessage {
         }
 
         /**
+         * <p>The message content from the user.</p>
          * <p>The message content from the user.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -219,6 +239,7 @@ public final class UserMessage {
 
         /**
          * <p>The timestamp when the message was sent.</p>
+         * <p>The timestamp when the message was sent.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -230,6 +251,7 @@ public final class UserMessage {
 
         /**
          * <p>The timestamp when the message ended.</p>
+         * <p>The timestamp when the message ended.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -240,6 +262,7 @@ public final class UserMessage {
         }
 
         /**
+         * <p>The number of seconds from the start of the conversation.</p>
          * <p>The number of seconds from the start of the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -260,6 +283,9 @@ public final class UserMessage {
             return this;
         }
 
+        /**
+         * <p>The duration of the message in seconds.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "duration", nulls = Nulls.SKIP)
         public _FinalStage duration(Optional<Double> duration) {

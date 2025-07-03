@@ -83,12 +83,24 @@ public final class RegexOption {
     }
 
     public interface TypeStage {
+        /**
+         * <p>This is the type of the regex option. Options are:</p>
+         * <ul>
+         * <li><code>ignore-case</code>: Ignores the case of the text being matched. Add</li>
+         * <li><code>whole-word</code>: Matches whole words only.</li>
+         * <li><code>multi-line</code>: Matches across multiple lines.</li>
+         * </ul>
+         */
         EnabledStage type(@NotNull RegexOptionType type);
 
         Builder from(RegexOption other);
     }
 
     public interface EnabledStage {
+        /**
+         * <p>This is whether to enable the option.</p>
+         * <p>@default false</p>
+         */
         _FinalStage enabled(boolean enabled);
     }
 
@@ -121,6 +133,12 @@ public final class RegexOption {
          * <li><code>whole-word</code>: Matches whole words only.</li>
          * <li><code>multi-line</code>: Matches across multiple lines.</li>
          * </ul>
+         * <p>This is the type of the regex option. Options are:</p>
+         * <ul>
+         * <li><code>ignore-case</code>: Ignores the case of the text being matched. Add</li>
+         * <li><code>whole-word</code>: Matches whole words only.</li>
+         * <li><code>multi-line</code>: Matches across multiple lines.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -131,6 +149,8 @@ public final class RegexOption {
         }
 
         /**
+         * <p>This is whether to enable the option.</p>
+         * <p>@default false</p>
          * <p>This is whether to enable the option.</p>
          * <p>@default false</p>
          * @return Reference to {@code this} so that method calls can be chained together.

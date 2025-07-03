@@ -124,26 +124,41 @@ public final class AnalyticsQuery {
     }
 
     public interface TableStage {
+        /**
+         * <p>This is the table you want to query.</p>
+         */
         NameStage table(@NotNull AnalyticsQueryTable table);
 
         Builder from(AnalyticsQuery other);
     }
 
     public interface NameStage {
+        /**
+         * <p>This is the name of the query. This will be used to identify the query in the response.</p>
+         */
         _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
         AnalyticsQuery build();
 
+        /**
+         * <p>This is the list of columns you want to group by.</p>
+         */
         _FinalStage groupBy(Optional<List<AnalyticsQueryGroupByItem>> groupBy);
 
         _FinalStage groupBy(List<AnalyticsQueryGroupByItem> groupBy);
 
+        /**
+         * <p>This is the time range for the query.</p>
+         */
         _FinalStage timeRange(Optional<TimeRange> timeRange);
 
         _FinalStage timeRange(TimeRange timeRange);
 
+        /**
+         * <p>This is the list of operations you want to perform.</p>
+         */
         _FinalStage operations(List<AnalyticsOperation> operations);
 
         _FinalStage addOperations(AnalyticsOperation operations);
@@ -180,6 +195,7 @@ public final class AnalyticsQuery {
 
         /**
          * <p>This is the table you want to query.</p>
+         * <p>This is the table you want to query.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -190,6 +206,7 @@ public final class AnalyticsQuery {
         }
 
         /**
+         * <p>This is the name of the query. This will be used to identify the query in the response.</p>
          * <p>This is the name of the query. This will be used to identify the query in the response.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -220,6 +237,9 @@ public final class AnalyticsQuery {
             return this;
         }
 
+        /**
+         * <p>This is the list of operations you want to perform.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "operations", nulls = Nulls.SKIP)
         public _FinalStage operations(List<AnalyticsOperation> operations) {
@@ -238,6 +258,9 @@ public final class AnalyticsQuery {
             return this;
         }
 
+        /**
+         * <p>This is the time range for the query.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timeRange", nulls = Nulls.SKIP)
         public _FinalStage timeRange(Optional<TimeRange> timeRange) {
@@ -255,6 +278,9 @@ public final class AnalyticsQuery {
             return this;
         }
 
+        /**
+         * <p>This is the list of columns you want to group by.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "groupBy", nulls = Nulls.SKIP)
         public _FinalStage groupBy(Optional<List<AnalyticsQueryGroupByItem>> groupBy) {

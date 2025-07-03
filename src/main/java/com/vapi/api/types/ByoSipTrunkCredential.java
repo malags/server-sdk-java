@@ -233,56 +233,97 @@ public final class ByoSipTrunkCredential {
     }
 
     public interface IdStage {
+        /**
+         * <p>This is the unique identifier for the credential.</p>
+         */
         OrgIdStage id(@NotNull String id);
 
         Builder from(ByoSipTrunkCredential other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
+         */
         CreatedAtStage orgId(@NotNull String orgId);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         */
         UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
+         */
         _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
         ByoSipTrunkCredential build();
 
+        /**
+         * <p>This can be used to bring your own SIP trunks or to connect to a Carrier.</p>
+         */
         _FinalStage provider(Optional<String> provider);
 
         _FinalStage provider(String provider);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
 
+        /**
+         * <p>This is the list of SIP trunk's gateways.</p>
+         */
         _FinalStage gateways(List<SipTrunkGateway> gateways);
 
         _FinalStage addGateways(SipTrunkGateway gateways);
 
         _FinalStage addAllGateways(List<SipTrunkGateway> gateways);
 
+        /**
+         * <p>This can be used to configure the outbound authentication if required by the SIP trunk.</p>
+         */
         _FinalStage outboundAuthenticationPlan(Optional<SipTrunkOutboundAuthenticationPlan> outboundAuthenticationPlan);
 
         _FinalStage outboundAuthenticationPlan(SipTrunkOutboundAuthenticationPlan outboundAuthenticationPlan);
 
+        /**
+         * <p>This ensures the outbound origination attempts have a leading plus. Defaults to false to match conventional telecom behavior.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Vonage/Twilio requires leading plus for all outbound calls. Set this to true.</li>
+         * </ul>
+         * <p>@default false</p>
+         */
         _FinalStage outboundLeadingPlusEnabled(Optional<Boolean> outboundLeadingPlusEnabled);
 
         _FinalStage outboundLeadingPlusEnabled(Boolean outboundLeadingPlusEnabled);
 
+        /**
+         * <p>This can be used to configure the tech prefix on outbound calls. This is an advanced property.</p>
+         */
         _FinalStage techPrefix(Optional<String> techPrefix);
 
         _FinalStage techPrefix(String techPrefix);
 
+        /**
+         * <p>This can be used to enable the SIP diversion header for authenticating the calling number if the SIP trunk supports it. This is an advanced property.</p>
+         */
         _FinalStage sipDiversionHeader(Optional<String> sipDiversionHeader);
 
         _FinalStage sipDiversionHeader(String sipDiversionHeader);
 
+        /**
+         * <p>This is an advanced configuration for enterprise deployments. This uses the onprem SBC to trunk into the SIP trunk's <code>gateways</code>, rather than the managed SBC provided by Vapi.</p>
+         */
         _FinalStage sbcConfiguration(Optional<SbcConfiguration> sbcConfiguration);
 
         _FinalStage sbcConfiguration(SbcConfiguration sbcConfiguration);
@@ -338,6 +379,7 @@ public final class ByoSipTrunkCredential {
 
         /**
          * <p>This is the unique identifier for the credential.</p>
+         * <p>This is the unique identifier for the credential.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -348,6 +390,7 @@ public final class ByoSipTrunkCredential {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * <p>This is the unique identifier for the org that this credential belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -360,6 +403,7 @@ public final class ByoSipTrunkCredential {
 
         /**
          * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
+         * <p>This is the ISO 8601 date-time string of when the credential was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -370,6 +414,7 @@ public final class ByoSipTrunkCredential {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * <p>This is the ISO 8601 date-time string of when the assistant was last updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -390,6 +435,9 @@ public final class ByoSipTrunkCredential {
             return this;
         }
 
+        /**
+         * <p>This is an advanced configuration for enterprise deployments. This uses the onprem SBC to trunk into the SIP trunk's <code>gateways</code>, rather than the managed SBC provided by Vapi.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "sbcConfiguration", nulls = Nulls.SKIP)
         public _FinalStage sbcConfiguration(Optional<SbcConfiguration> sbcConfiguration) {
@@ -407,6 +455,9 @@ public final class ByoSipTrunkCredential {
             return this;
         }
 
+        /**
+         * <p>This can be used to enable the SIP diversion header for authenticating the calling number if the SIP trunk supports it. This is an advanced property.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "sipDiversionHeader", nulls = Nulls.SKIP)
         public _FinalStage sipDiversionHeader(Optional<String> sipDiversionHeader) {
@@ -424,6 +475,9 @@ public final class ByoSipTrunkCredential {
             return this;
         }
 
+        /**
+         * <p>This can be used to configure the tech prefix on outbound calls. This is an advanced property.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "techPrefix", nulls = Nulls.SKIP)
         public _FinalStage techPrefix(Optional<String> techPrefix) {
@@ -446,6 +500,14 @@ public final class ByoSipTrunkCredential {
             return this;
         }
 
+        /**
+         * <p>This ensures the outbound origination attempts have a leading plus. Defaults to false to match conventional telecom behavior.</p>
+         * <p>Usage:</p>
+         * <ul>
+         * <li>Vonage/Twilio requires leading plus for all outbound calls. Set this to true.</li>
+         * </ul>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "outboundLeadingPlusEnabled", nulls = Nulls.SKIP)
         public _FinalStage outboundLeadingPlusEnabled(Optional<Boolean> outboundLeadingPlusEnabled) {
@@ -463,6 +525,9 @@ public final class ByoSipTrunkCredential {
             return this;
         }
 
+        /**
+         * <p>This can be used to configure the outbound authentication if required by the SIP trunk.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "outboundAuthenticationPlan", nulls = Nulls.SKIP)
         public _FinalStage outboundAuthenticationPlan(
@@ -491,6 +556,9 @@ public final class ByoSipTrunkCredential {
             return this;
         }
 
+        /**
+         * <p>This is the list of SIP trunk's gateways.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "gateways", nulls = Nulls.SKIP)
         public _FinalStage gateways(List<SipTrunkGateway> gateways) {
@@ -509,6 +577,9 @@ public final class ByoSipTrunkCredential {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -526,6 +597,9 @@ public final class ByoSipTrunkCredential {
             return this;
         }
 
+        /**
+         * <p>This can be used to bring your own SIP trunks or to connect to a Carrier.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "provider", nulls = Nulls.SKIP)
         public _FinalStage provider(Optional<String> provider) {

@@ -44,6 +44,8 @@ public final class ServerMessageStatusUpdate {
 
     private final Optional<Call> call;
 
+    private final Optional<Chat> chat;
+
     private final Optional<String> transcript;
 
     private final Optional<String> summary;
@@ -64,6 +66,7 @@ public final class ServerMessageStatusUpdate {
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
             Optional<Call> call,
+            Optional<Chat> chat,
             Optional<String> transcript,
             Optional<String> summary,
             Optional<Map<String, Object>> inboundPhoneCallDebuggingArtifacts,
@@ -79,6 +82,7 @@ public final class ServerMessageStatusUpdate {
         this.assistant = assistant;
         this.customer = customer;
         this.call = call;
+        this.chat = chat;
         this.transcript = transcript;
         this.summary = summary;
         this.inboundPhoneCallDebuggingArtifacts = inboundPhoneCallDebuggingArtifacts;
@@ -183,6 +187,14 @@ public final class ServerMessageStatusUpdate {
     }
 
     /**
+     * @return This is the chat object.
+     */
+    @JsonProperty("chat")
+    public Optional<Chat> getChat() {
+        return chat;
+    }
+
+    /**
      * @return This is the transcript of the call. This is only sent if the status is &quot;forwarding&quot;.
      */
     @JsonProperty("transcript")
@@ -230,6 +242,7 @@ public final class ServerMessageStatusUpdate {
                 && assistant.equals(other.assistant)
                 && customer.equals(other.customer)
                 && call.equals(other.call)
+                && chat.equals(other.chat)
                 && transcript.equals(other.transcript)
                 && summary.equals(other.summary)
                 && inboundPhoneCallDebuggingArtifacts.equals(other.inboundPhoneCallDebuggingArtifacts);
@@ -249,6 +262,7 @@ public final class ServerMessageStatusUpdate {
                 this.assistant,
                 this.customer,
                 this.call,
+                this.chat,
                 this.transcript,
                 this.summary,
                 this.inboundPhoneCallDebuggingArtifacts);
@@ -264,6 +278,9 @@ public final class ServerMessageStatusUpdate {
     }
 
     public interface StatusStage {
+        /**
+         * <p>This is the status of the call.</p>
+         */
         _FinalStage status(@NotNull ServerMessageStatusUpdateStatus status);
 
         Builder from(ServerMessageStatusUpdate other);
@@ -272,54 +289,102 @@ public final class ServerMessageStatusUpdate {
     public interface _FinalStage {
         ServerMessageStatusUpdate build();
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         _FinalStage phoneNumber(Optional<ServerMessageStatusUpdatePhoneNumber> phoneNumber);
 
         _FinalStage phoneNumber(ServerMessageStatusUpdatePhoneNumber phoneNumber);
 
+        /**
+         * <p>This is the reason the call ended. This is only sent if the status is &quot;ended&quot;.</p>
+         */
         _FinalStage endedReason(Optional<ServerMessageStatusUpdateEndedReason> endedReason);
 
         _FinalStage endedReason(ServerMessageStatusUpdateEndedReason endedReason);
 
+        /**
+         * <p>These are the conversation messages of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         _FinalStage messages(Optional<List<ServerMessageStatusUpdateMessagesItem>> messages);
 
         _FinalStage messages(List<ServerMessageStatusUpdateMessagesItem> messages);
 
+        /**
+         * <p>These are the conversation messages of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         _FinalStage messagesOpenAiFormatted(Optional<List<OpenAiMessage>> messagesOpenAiFormatted);
 
         _FinalStage messagesOpenAiFormatted(List<OpenAiMessage> messagesOpenAiFormatted);
 
+        /**
+         * <p>This is the destination the call is being transferred to. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         _FinalStage destination(Optional<ServerMessageStatusUpdateDestination> destination);
 
         _FinalStage destination(ServerMessageStatusUpdateDestination destination);
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         _FinalStage timestamp(Optional<Double> timestamp);
 
         _FinalStage timestamp(Double timestamp);
 
+        /**
+         * <p>This is a live version of the <code>call.artifact</code>.</p>
+         * <p>This matches what is stored on <code>call.artifact</code> after the call.</p>
+         */
         _FinalStage artifact(Optional<Artifact> artifact);
 
         _FinalStage artifact(Artifact artifact);
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         _FinalStage call(Optional<Call> call);
 
         _FinalStage call(Call call);
 
+        /**
+         * <p>This is the chat object.</p>
+         */
+        _FinalStage chat(Optional<Chat> chat);
+
+        _FinalStage chat(Chat chat);
+
+        /**
+         * <p>This is the transcript of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         _FinalStage transcript(Optional<String> transcript);
 
         _FinalStage transcript(String transcript);
 
+        /**
+         * <p>This is the summary of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         _FinalStage summary(Optional<String> summary);
 
         _FinalStage summary(String summary);
 
+        /**
+         * <p>This is the inbound phone call debugging artifacts. This is only sent if the status is &quot;ended&quot; and there was an error accepting the inbound phone call.</p>
+         * <p>This will include any errors related to the &quot;assistant-request&quot; if one was made.</p>
+         */
         _FinalStage inboundPhoneCallDebuggingArtifacts(
                 Optional<Map<String, Object>> inboundPhoneCallDebuggingArtifacts);
 
@@ -335,6 +400,8 @@ public final class ServerMessageStatusUpdate {
         private Optional<String> summary = Optional.empty();
 
         private Optional<String> transcript = Optional.empty();
+
+        private Optional<Chat> chat = Optional.empty();
 
         private Optional<Call> call = Optional.empty();
 
@@ -374,6 +441,7 @@ public final class ServerMessageStatusUpdate {
             assistant(other.getAssistant());
             customer(other.getCustomer());
             call(other.getCall());
+            chat(other.getChat());
             transcript(other.getTranscript());
             summary(other.getSummary());
             inboundPhoneCallDebuggingArtifacts(other.getInboundPhoneCallDebuggingArtifacts());
@@ -381,6 +449,7 @@ public final class ServerMessageStatusUpdate {
         }
 
         /**
+         * <p>This is the status of the call.</p>
          * <p>This is the status of the call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -402,6 +471,10 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the inbound phone call debugging artifacts. This is only sent if the status is &quot;ended&quot; and there was an error accepting the inbound phone call.</p>
+         * <p>This will include any errors related to the &quot;assistant-request&quot; if one was made.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "inboundPhoneCallDebuggingArtifacts", nulls = Nulls.SKIP)
         public _FinalStage inboundPhoneCallDebuggingArtifacts(
@@ -420,6 +493,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the summary of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "summary", nulls = Nulls.SKIP)
         public _FinalStage summary(Optional<String> summary) {
@@ -437,10 +513,33 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the transcript of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "transcript", nulls = Nulls.SKIP)
         public _FinalStage transcript(Optional<String> transcript) {
             this.transcript = transcript;
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage chat(Chat chat) {
+            this.chat = Optional.ofNullable(chat);
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "chat", nulls = Nulls.SKIP)
+        public _FinalStage chat(Optional<Chat> chat) {
+            this.chat = chat;
             return this;
         }
 
@@ -454,6 +553,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public _FinalStage call(Optional<Call> call) {
@@ -471,6 +573,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -488,6 +593,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -506,6 +614,10 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is a live version of the <code>call.artifact</code>.</p>
+         * <p>This matches what is stored on <code>call.artifact</code> after the call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "artifact", nulls = Nulls.SKIP)
         public _FinalStage artifact(Optional<Artifact> artifact) {
@@ -523,6 +635,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public _FinalStage timestamp(Optional<Double> timestamp) {
@@ -540,6 +655,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the destination the call is being transferred to. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "destination", nulls = Nulls.SKIP)
         public _FinalStage destination(Optional<ServerMessageStatusUpdateDestination> destination) {
@@ -557,6 +675,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>These are the conversation messages of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "messagesOpenAIFormatted", nulls = Nulls.SKIP)
         public _FinalStage messagesOpenAiFormatted(Optional<List<OpenAiMessage>> messagesOpenAiFormatted) {
@@ -574,6 +695,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>These are the conversation messages of the call. This is only sent if the status is &quot;forwarding&quot;.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public _FinalStage messages(Optional<List<ServerMessageStatusUpdateMessagesItem>> messages) {
@@ -591,6 +715,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the reason the call ended. This is only sent if the status is &quot;ended&quot;.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "endedReason", nulls = Nulls.SKIP)
         public _FinalStage endedReason(Optional<ServerMessageStatusUpdateEndedReason> endedReason) {
@@ -608,6 +735,9 @@ public final class ServerMessageStatusUpdate {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ServerMessageStatusUpdatePhoneNumber> phoneNumber) {
@@ -629,6 +759,7 @@ public final class ServerMessageStatusUpdate {
                     assistant,
                     customer,
                     call,
+                    chat,
                     transcript,
                     summary,
                     inboundPhoneCallDebuggingArtifacts,

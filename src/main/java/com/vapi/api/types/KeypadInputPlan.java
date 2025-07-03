@@ -120,6 +120,11 @@ public final class KeypadInputPlan {
             return this;
         }
 
+        /**
+         * <p>This keeps track of whether the user has enabled keypad input.
+         * By default, it is off.</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -131,6 +136,12 @@ public final class KeypadInputPlan {
             return this;
         }
 
+        /**
+         * <p>This is the time in seconds to wait before processing the input.
+         * If the input is not received within this time, the input will be ignored.
+         * If set to &quot;off&quot;, the input will be processed when the user enters a delimiter or immediately if no delimiter is used.</p>
+         * <p>@default 2</p>
+         */
         @JsonSetter(value = "timeoutSeconds", nulls = Nulls.SKIP)
         public Builder timeoutSeconds(Optional<Double> timeoutSeconds) {
             this.timeoutSeconds = timeoutSeconds;
@@ -142,6 +153,10 @@ public final class KeypadInputPlan {
             return this;
         }
 
+        /**
+         * <p>This is the delimiter(s) that will be used to process the input.
+         * Can be '#', '*', or an empty array.</p>
+         */
         @JsonSetter(value = "delimiters", nulls = Nulls.SKIP)
         public Builder delimiters(Optional<KeypadInputPlanDelimiters> delimiters) {
             this.delimiters = delimiters;

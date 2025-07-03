@@ -143,6 +143,9 @@ public final class ClientMessageVoiceInput {
     }
 
     public interface InputStage {
+        /**
+         * <p>This is the voice input content</p>
+         */
         _FinalStage input(@NotNull String input);
 
         Builder from(ClientMessageVoiceInput other);
@@ -151,22 +154,37 @@ public final class ClientMessageVoiceInput {
     public interface _FinalStage {
         ClientMessageVoiceInput build();
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         _FinalStage phoneNumber(Optional<ClientMessageVoiceInputPhoneNumber> phoneNumber);
 
         _FinalStage phoneNumber(ClientMessageVoiceInputPhoneNumber phoneNumber);
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         _FinalStage timestamp(Optional<Double> timestamp);
 
         _FinalStage timestamp(Double timestamp);
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         _FinalStage call(Optional<Call> call);
 
         _FinalStage call(Call call);
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         _FinalStage customer(Optional<CreateCustomerDto> customer);
 
         _FinalStage customer(CreateCustomerDto customer);
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         _FinalStage assistant(Optional<CreateAssistantDto> assistant);
 
         _FinalStage assistant(CreateAssistantDto assistant);
@@ -204,6 +222,7 @@ public final class ClientMessageVoiceInput {
 
         /**
          * <p>This is the voice input content</p>
+         * <p>This is the voice input content</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -223,6 +242,9 @@ public final class ClientMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public _FinalStage assistant(Optional<CreateAssistantDto> assistant) {
@@ -240,6 +262,9 @@ public final class ClientMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public _FinalStage customer(Optional<CreateCustomerDto> customer) {
@@ -257,6 +282,9 @@ public final class ClientMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public _FinalStage call(Optional<Call> call) {
@@ -274,6 +302,9 @@ public final class ClientMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public _FinalStage timestamp(Optional<Double> timestamp) {
@@ -291,6 +322,9 @@ public final class ClientMessageVoiceInput {
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public _FinalStage phoneNumber(Optional<ClientMessageVoiceInputPhoneNumber> phoneNumber) {

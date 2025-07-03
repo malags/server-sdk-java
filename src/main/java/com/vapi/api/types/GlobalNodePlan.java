@@ -97,6 +97,10 @@ public final class GlobalNodePlan {
             return this;
         }
 
+        /**
+         * <p>This is the flag to determine if this node is a global node</p>
+         * <p>@default false</p>
+         */
         @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
         public Builder enabled(Optional<Boolean> enabled) {
             this.enabled = enabled;
@@ -108,6 +112,10 @@ public final class GlobalNodePlan {
             return this;
         }
 
+        /**
+         * <p>This is the condition that will be checked to determine if the global node should be executed.</p>
+         * <p>@default ''</p>
+         */
         @JsonSetter(value = "enterCondition", nulls = Nulls.SKIP)
         public Builder enterCondition(Optional<String> enterCondition) {
             this.enterCondition = enterCondition;

@@ -10,7 +10,15 @@ public enum SubscriptionType {
 
     PAY_AS_YOU_GO("pay-as-you-go"),
 
-    ENTERPRISE("enterprise");
+    ENTERPRISE("enterprise"),
+
+    AGENCY("agency"),
+
+    STARTUP("startup"),
+
+    GROWTH("growth"),
+
+    SCALE("scale");
 
     private final String value;
 

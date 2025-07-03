@@ -119,22 +119,34 @@ public final class KnowledgeBase {
     }
 
     public interface NameStage {
+        /**
+         * <p>The name of the knowledge base</p>
+         */
         DescriptionStage name(@NotNull String name);
 
         Builder from(KnowledgeBase other);
     }
 
     public interface DescriptionStage {
+        /**
+         * <p>A description of the knowledge base</p>
+         */
         _FinalStage description(@NotNull String description);
     }
 
     public interface _FinalStage {
         KnowledgeBase build();
 
+        /**
+         * <p>The model to use for the knowledge base</p>
+         */
         _FinalStage model(Optional<KnowledgeBaseModel> model);
 
         _FinalStage model(KnowledgeBaseModel model);
 
+        /**
+         * <p>The file IDs associated with this knowledge base</p>
+         */
         _FinalStage fileIds(List<String> fileIds);
 
         _FinalStage addFileIds(String fileIds);
@@ -168,6 +180,7 @@ public final class KnowledgeBase {
 
         /**
          * <p>The name of the knowledge base</p>
+         * <p>The name of the knowledge base</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -178,6 +191,7 @@ public final class KnowledgeBase {
         }
 
         /**
+         * <p>A description of the knowledge base</p>
          * <p>A description of the knowledge base</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -208,6 +222,9 @@ public final class KnowledgeBase {
             return this;
         }
 
+        /**
+         * <p>The file IDs associated with this knowledge base</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fileIds", nulls = Nulls.SKIP)
         public _FinalStage fileIds(List<String> fileIds) {
@@ -226,6 +243,9 @@ public final class KnowledgeBase {
             return this;
         }
 
+        /**
+         * <p>The model to use for the knowledge base</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<KnowledgeBaseModel> model) {

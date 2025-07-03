@@ -112,6 +112,9 @@ public final class SipTrunkOutboundAuthenticationPlan {
             return this;
         }
 
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         @JsonSetter(value = "authPassword", nulls = Nulls.SKIP)
         public Builder authPassword(Optional<String> authPassword) {
             this.authPassword = authPassword;
@@ -134,6 +137,9 @@ public final class SipTrunkOutboundAuthenticationPlan {
             return this;
         }
 
+        /**
+         * <p>This can be used to configure if SIP register is required by the SIP trunk. If not provided, no SIP registration will be attempted.</p>
+         */
         @JsonSetter(value = "sipRegisterPlan", nulls = Nulls.SKIP)
         public Builder sipRegisterPlan(Optional<SipTrunkOutboundSipRegisterPlan> sipRegisterPlan) {
             this.sipRegisterPlan = sipRegisterPlan;

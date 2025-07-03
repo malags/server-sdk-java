@@ -121,24 +121,39 @@ public final class CallLogPrivileged {
     }
 
     public interface CallIdStage {
+        /**
+         * <p>This is the unique identifier for the call.</p>
+         */
         OrgIdStage callId(@NotNull String callId);
 
         Builder from(CallLogPrivileged other);
     }
 
     public interface OrgIdStage {
+        /**
+         * <p>This is the unique identifier for the org that this call log belongs to.</p>
+         */
         LogStage orgId(@NotNull String orgId);
     }
 
     public interface LogStage {
+        /**
+         * <p>This is the log message associated with the call.</p>
+         */
         LevelStage log(@NotNull String log);
     }
 
     public interface LevelStage {
+        /**
+         * <p>This is the level of the log message.</p>
+         */
         TimeStage level(@NotNull CallLogPrivilegedLevel level);
     }
 
     public interface TimeStage {
+        /**
+         * <p>This is the ISO 8601 date-time string of when the log was created.</p>
+         */
         _FinalStage time(@NotNull OffsetDateTime time);
     }
 
@@ -175,6 +190,7 @@ public final class CallLogPrivileged {
 
         /**
          * <p>This is the unique identifier for the call.</p>
+         * <p>This is the unique identifier for the call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -185,6 +201,7 @@ public final class CallLogPrivileged {
         }
 
         /**
+         * <p>This is the unique identifier for the org that this call log belongs to.</p>
          * <p>This is the unique identifier for the org that this call log belongs to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -197,6 +214,7 @@ public final class CallLogPrivileged {
 
         /**
          * <p>This is the log message associated with the call.</p>
+         * <p>This is the log message associated with the call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -208,6 +226,7 @@ public final class CallLogPrivileged {
 
         /**
          * <p>This is the level of the log message.</p>
+         * <p>This is the level of the log message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -218,6 +237,7 @@ public final class CallLogPrivileged {
         }
 
         /**
+         * <p>This is the ISO 8601 date-time string of when the log was created.</p>
          * <p>This is the ISO 8601 date-time string of when the log was created.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

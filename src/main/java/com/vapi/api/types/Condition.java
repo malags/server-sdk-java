@@ -89,16 +89,25 @@ public final class Condition {
     }
 
     public interface OperatorStage {
+        /**
+         * <p>This is the operator you want to use to compare the parameter and value.</p>
+         */
         ParamStage operator(@NotNull ConditionOperator operator);
 
         Builder from(Condition other);
     }
 
     public interface ParamStage {
+        /**
+         * <p>This is the name of the parameter that you want to check.</p>
+         */
         ValueStage param(@NotNull String param);
     }
 
     public interface ValueStage {
+        /**
+         * <p>This is the value you want to compare against the parameter.</p>
+         */
         _FinalStage value(@NotNull String value);
     }
 
@@ -129,6 +138,7 @@ public final class Condition {
 
         /**
          * <p>This is the operator you want to use to compare the parameter and value.</p>
+         * <p>This is the operator you want to use to compare the parameter and value.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -140,6 +150,7 @@ public final class Condition {
 
         /**
          * <p>This is the name of the parameter that you want to check.</p>
+         * <p>This is the name of the parameter that you want to check.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -150,6 +161,7 @@ public final class Condition {
         }
 
         /**
+         * <p>This is the value you want to compare against the parameter.</p>
          * <p>This is the value you want to compare against the parameter.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

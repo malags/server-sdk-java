@@ -28,6 +28,11 @@ public final class AiEdgeCondition {
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("type")
+    public String getType() {
+        return "ai";
+    }
+
     /**
      * @return This is the prompt for the AI edge condition. It should evaluate to a boolean.
      */
@@ -66,6 +71,9 @@ public final class AiEdgeCondition {
     }
 
     public interface PromptStage {
+        /**
+         * <p>This is the prompt for the AI edge condition. It should evaluate to a boolean.</p>
+         */
         _FinalStage prompt(@NotNull String prompt);
 
         Builder from(AiEdgeCondition other);
@@ -91,6 +99,7 @@ public final class AiEdgeCondition {
         }
 
         /**
+         * <p>This is the prompt for the AI edge condition. It should evaluate to a boolean.</p>
          * <p>This is the prompt for the AI edge condition. It should evaluate to a boolean.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

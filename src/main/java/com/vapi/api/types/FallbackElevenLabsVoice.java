@@ -240,6 +240,9 @@ public final class FallbackElevenLabsVoice {
     }
 
     public interface VoiceIdStage {
+        /**
+         * <p>This is the provider-specific ID that will be used. Ensure the Voice is present in your 11Labs Voice Library.</p>
+         */
         _FinalStage voiceId(@NotNull FallbackElevenLabsVoiceId voiceId);
 
         Builder from(FallbackElevenLabsVoice other);
@@ -248,50 +251,87 @@ public final class FallbackElevenLabsVoice {
     public interface _FinalStage {
         FallbackElevenLabsVoice build();
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled);
 
         _FinalStage cachingEnabled(Boolean cachingEnabled);
 
+        /**
+         * <p>Defines the stability for voice settings.</p>
+         */
         _FinalStage stability(Optional<Double> stability);
 
         _FinalStage stability(Double stability);
 
+        /**
+         * <p>Defines the similarity boost for voice settings.</p>
+         */
         _FinalStage similarityBoost(Optional<Double> similarityBoost);
 
         _FinalStage similarityBoost(Double similarityBoost);
 
+        /**
+         * <p>Defines the style for voice settings.</p>
+         */
         _FinalStage style(Optional<Double> style);
 
         _FinalStage style(Double style);
 
+        /**
+         * <p>Defines the use speaker boost for voice settings.</p>
+         */
         _FinalStage useSpeakerBoost(Optional<Boolean> useSpeakerBoost);
 
         _FinalStage useSpeakerBoost(Boolean useSpeakerBoost);
 
+        /**
+         * <p>Defines the speed for voice settings.</p>
+         */
         _FinalStage speed(Optional<Double> speed);
 
         _FinalStage speed(Double speed);
 
+        /**
+         * <p>Defines the optimize streaming latency for voice settings. Defaults to 3.</p>
+         */
         _FinalStage optimizeStreamingLatency(Optional<Double> optimizeStreamingLatency);
 
         _FinalStage optimizeStreamingLatency(Double optimizeStreamingLatency);
 
+        /**
+         * <p>This enables the use of https://elevenlabs.io/docs/speech-synthesis/prompting#pronunciation. Defaults to false to save latency.</p>
+         * <p>@default false</p>
+         */
         _FinalStage enableSsmlParsing(Optional<Boolean> enableSsmlParsing);
 
         _FinalStage enableSsmlParsing(Boolean enableSsmlParsing);
 
+        /**
+         * <p>Defines the auto mode for voice settings. Defaults to false.</p>
+         */
         _FinalStage autoMode(Optional<Boolean> autoMode);
 
         _FinalStage autoMode(Boolean autoMode);
 
+        /**
+         * <p>This is the model that will be used. Defaults to 'eleven_turbo_v2' if not specified.</p>
+         */
         _FinalStage model(Optional<FallbackElevenLabsVoiceModel> model);
 
         _FinalStage model(FallbackElevenLabsVoiceModel model);
 
+        /**
+         * <p>This is the language (ISO 639-1) that is enforced for the model. Currently only Turbo v2.5 supports language enforcement. For other models, an error will be returned if language code is provided.</p>
+         */
         _FinalStage language(Optional<String> language);
 
         _FinalStage language(String language);
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan);
 
         _FinalStage chunkPlan(ChunkPlan chunkPlan);
@@ -350,6 +390,7 @@ public final class FallbackElevenLabsVoice {
 
         /**
          * <p>This is the provider-specific ID that will be used. Ensure the Voice is present in your 11Labs Voice Library.</p>
+         * <p>This is the provider-specific ID that will be used. Ensure the Voice is present in your 11Labs Voice Library.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -369,6 +410,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>This is the plan for chunking the model output before it is sent to the voice provider.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "chunkPlan", nulls = Nulls.SKIP)
         public _FinalStage chunkPlan(Optional<ChunkPlan> chunkPlan) {
@@ -386,6 +430,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>This is the language (ISO 639-1) that is enforced for the model. Currently only Turbo v2.5 supports language enforcement. For other models, an error will be returned if language code is provided.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "language", nulls = Nulls.SKIP)
         public _FinalStage language(Optional<String> language) {
@@ -403,6 +450,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used. Defaults to 'eleven_turbo_v2' if not specified.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public _FinalStage model(Optional<FallbackElevenLabsVoiceModel> model) {
@@ -420,6 +470,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>Defines the auto mode for voice settings. Defaults to false.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "autoMode", nulls = Nulls.SKIP)
         public _FinalStage autoMode(Optional<Boolean> autoMode) {
@@ -438,6 +491,10 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>This enables the use of https://elevenlabs.io/docs/speech-synthesis/prompting#pronunciation. Defaults to false to save latency.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "enableSsmlParsing", nulls = Nulls.SKIP)
         public _FinalStage enableSsmlParsing(Optional<Boolean> enableSsmlParsing) {
@@ -455,6 +512,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>Defines the optimize streaming latency for voice settings. Defaults to 3.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "optimizeStreamingLatency", nulls = Nulls.SKIP)
         public _FinalStage optimizeStreamingLatency(Optional<Double> optimizeStreamingLatency) {
@@ -472,6 +532,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>Defines the speed for voice settings.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "speed", nulls = Nulls.SKIP)
         public _FinalStage speed(Optional<Double> speed) {
@@ -489,6 +552,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>Defines the use speaker boost for voice settings.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "useSpeakerBoost", nulls = Nulls.SKIP)
         public _FinalStage useSpeakerBoost(Optional<Boolean> useSpeakerBoost) {
@@ -506,6 +572,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>Defines the style for voice settings.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "style", nulls = Nulls.SKIP)
         public _FinalStage style(Optional<Double> style) {
@@ -523,6 +592,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>Defines the similarity boost for voice settings.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "similarityBoost", nulls = Nulls.SKIP)
         public _FinalStage similarityBoost(Optional<Double> similarityBoost) {
@@ -540,6 +612,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>Defines the stability for voice settings.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "stability", nulls = Nulls.SKIP)
         public _FinalStage stability(Optional<Double> stability) {
@@ -557,6 +632,9 @@ public final class FallbackElevenLabsVoice {
             return this;
         }
 
+        /**
+         * <p>This is the flag to toggle voice caching for the assistant.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cachingEnabled", nulls = Nulls.SKIP)
         public _FinalStage cachingEnabled(Optional<Boolean> cachingEnabled) {

@@ -38,6 +38,8 @@ public final class ServerMessageKnowledgeBaseRequest {
 
     private final Optional<Call> call;
 
+    private final Optional<Chat> chat;
+
     private final Map<String, Object> additionalProperties;
 
     private ServerMessageKnowledgeBaseRequest(
@@ -49,6 +51,7 @@ public final class ServerMessageKnowledgeBaseRequest {
             Optional<CreateAssistantDto> assistant,
             Optional<CreateCustomerDto> customer,
             Optional<Call> call,
+            Optional<Chat> chat,
             Map<String, Object> additionalProperties) {
         this.phoneNumber = phoneNumber;
         this.messages = messages;
@@ -58,6 +61,7 @@ public final class ServerMessageKnowledgeBaseRequest {
         this.assistant = assistant;
         this.customer = customer;
         this.call = call;
+        this.chat = chat;
         this.additionalProperties = additionalProperties;
     }
 
@@ -134,6 +138,14 @@ public final class ServerMessageKnowledgeBaseRequest {
         return call;
     }
 
+    /**
+     * @return This is the chat object.
+     */
+    @JsonProperty("chat")
+    public Optional<Chat> getChat() {
+        return chat;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -153,7 +165,8 @@ public final class ServerMessageKnowledgeBaseRequest {
                 && artifact.equals(other.artifact)
                 && assistant.equals(other.assistant)
                 && customer.equals(other.customer)
-                && call.equals(other.call);
+                && call.equals(other.call)
+                && chat.equals(other.chat);
     }
 
     @java.lang.Override
@@ -166,7 +179,8 @@ public final class ServerMessageKnowledgeBaseRequest {
                 this.artifact,
                 this.assistant,
                 this.customer,
-                this.call);
+                this.call,
+                this.chat);
     }
 
     @java.lang.Override
@@ -196,6 +210,8 @@ public final class ServerMessageKnowledgeBaseRequest {
 
         private Optional<Call> call = Optional.empty();
 
+        private Optional<Chat> chat = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -210,9 +226,13 @@ public final class ServerMessageKnowledgeBaseRequest {
             assistant(other.getAssistant());
             customer(other.getCustomer());
             call(other.getCall());
+            chat(other.getChat());
             return this;
         }
 
+        /**
+         * <p>This is the phone number that the message is associated with.</p>
+         */
         @JsonSetter(value = "phoneNumber", nulls = Nulls.SKIP)
         public Builder phoneNumber(Optional<ServerMessageKnowledgeBaseRequestPhoneNumber> phoneNumber) {
             this.phoneNumber = phoneNumber;
@@ -224,6 +244,9 @@ public final class ServerMessageKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>These are the messages that are going to be sent to the <code>model</code> right after the <code>knowledge-base-request</code> webhook completes.</p>
+         */
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public Builder messages(Optional<List<ServerMessageKnowledgeBaseRequestMessagesItem>> messages) {
             this.messages = messages;
@@ -235,6 +258,9 @@ public final class ServerMessageKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>This is just <code>messages</code> formatted for OpenAI.</p>
+         */
         @JsonSetter(value = "messagesOpenAIFormatted", nulls = Nulls.SKIP)
         public Builder messagesOpenAiFormatted(List<OpenAiMessage> messagesOpenAiFormatted) {
             this.messagesOpenAiFormatted.clear();
@@ -252,6 +278,9 @@ public final class ServerMessageKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>This is the timestamp of the message.</p>
+         */
         @JsonSetter(value = "timestamp", nulls = Nulls.SKIP)
         public Builder timestamp(Optional<Double> timestamp) {
             this.timestamp = timestamp;
@@ -263,6 +292,10 @@ public final class ServerMessageKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>This is a live version of the <code>call.artifact</code>.</p>
+         * <p>This matches what is stored on <code>call.artifact</code> after the call.</p>
+         */
         @JsonSetter(value = "artifact", nulls = Nulls.SKIP)
         public Builder artifact(Optional<Artifact> artifact) {
             this.artifact = artifact;
@@ -274,6 +307,9 @@ public final class ServerMessageKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>This is the assistant that the message is associated with.</p>
+         */
         @JsonSetter(value = "assistant", nulls = Nulls.SKIP)
         public Builder assistant(Optional<CreateAssistantDto> assistant) {
             this.assistant = assistant;
@@ -285,6 +321,9 @@ public final class ServerMessageKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>This is the customer that the message is associated with.</p>
+         */
         @JsonSetter(value = "customer", nulls = Nulls.SKIP)
         public Builder customer(Optional<CreateCustomerDto> customer) {
             this.customer = customer;
@@ -296,6 +335,9 @@ public final class ServerMessageKnowledgeBaseRequest {
             return this;
         }
 
+        /**
+         * <p>This is the call that the message is associated with.</p>
+         */
         @JsonSetter(value = "call", nulls = Nulls.SKIP)
         public Builder call(Optional<Call> call) {
             this.call = call;
@@ -304,6 +346,20 @@ public final class ServerMessageKnowledgeBaseRequest {
 
         public Builder call(Call call) {
             this.call = Optional.ofNullable(call);
+            return this;
+        }
+
+        /**
+         * <p>This is the chat object.</p>
+         */
+        @JsonSetter(value = "chat", nulls = Nulls.SKIP)
+        public Builder chat(Optional<Chat> chat) {
+            this.chat = chat;
+            return this;
+        }
+
+        public Builder chat(Chat chat) {
+            this.chat = Optional.ofNullable(chat);
             return this;
         }
 
@@ -317,6 +373,7 @@ public final class ServerMessageKnowledgeBaseRequest {
                     assistant,
                     customer,
                     call,
+                    chat,
                     additionalProperties);
         }
     }

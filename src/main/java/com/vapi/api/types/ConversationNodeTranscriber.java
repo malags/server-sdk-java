@@ -66,6 +66,10 @@ public final class ConversationNodeTranscriber {
         return new ConversationNodeTranscriber(new OpenaiValue(value));
     }
 
+    public static ConversationNodeTranscriber cartesia(CartesiaTranscriber value) {
+        return new ConversationNodeTranscriber(new CartesiaValue(value));
+    }
+
     public boolean isAssemblyAi() {
         return value instanceof AssemblyAiValue;
     }
@@ -104,6 +108,10 @@ public final class ConversationNodeTranscriber {
 
     public boolean isOpenai() {
         return value instanceof OpenaiValue;
+    }
+
+    public boolean isCartesia() {
+        return value instanceof CartesiaValue;
     }
 
     public boolean _isUnknown() {
@@ -180,6 +188,13 @@ public final class ConversationNodeTranscriber {
         return Optional.empty();
     }
 
+    public Optional<CartesiaTranscriber> getCartesia() {
+        if (isCartesia()) {
+            return Optional.of(((CartesiaValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -213,6 +228,8 @@ public final class ConversationNodeTranscriber {
 
         T visitOpenai(OpenAiTranscriber openai);
 
+        T visitCartesia(CartesiaTranscriber cartesia);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -227,7 +244,8 @@ public final class ConversationNodeTranscriber {
         @JsonSubTypes.Type(GoogleValue.class),
         @JsonSubTypes.Type(SpeechmaticsValue.class),
         @JsonSubTypes.Type(TalkscriberValue.class),
-        @JsonSubTypes.Type(OpenaiValue.class)
+        @JsonSubTypes.Type(OpenaiValue.class),
+        @JsonSubTypes.Type(CartesiaValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -610,6 +628,45 @@ public final class ConversationNodeTranscriber {
         }
 
         private boolean equalTo(OpenaiValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationNodeTranscriber{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("cartesia")
+    @JsonIgnoreProperties("provider")
+    private static final class CartesiaValue implements Value {
+        @JsonUnwrapped
+        private CartesiaTranscriber value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private CartesiaValue() {}
+
+        private CartesiaValue(CartesiaTranscriber value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCartesia(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof CartesiaValue && equalTo((CartesiaValue) other);
+        }
+
+        private boolean equalTo(CartesiaValue other) {
             return value.equals(other.value);
         }
 

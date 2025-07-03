@@ -96,6 +96,9 @@ public final class CreateCustomLlmCredentialDto {
     }
 
     public interface ApiKeyStage {
+        /**
+         * <p>This is not returned in the API.</p>
+         */
         _FinalStage apiKey(@NotNull String apiKey);
 
         Builder from(CreateCustomLlmCredentialDto other);
@@ -104,10 +107,16 @@ public final class CreateCustomLlmCredentialDto {
     public interface _FinalStage {
         CreateCustomLlmCredentialDto build();
 
+        /**
+         * <p>This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey</p>
+         */
         _FinalStage authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan);
 
         _FinalStage authenticationPlan(OAuth2AuthenticationPlan authenticationPlan);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -136,6 +145,7 @@ public final class CreateCustomLlmCredentialDto {
 
         /**
          * <p>This is not returned in the API.</p>
+         * <p>This is not returned in the API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -155,6 +165,9 @@ public final class CreateCustomLlmCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -172,6 +185,9 @@ public final class CreateCustomLlmCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "authenticationPlan", nulls = Nulls.SKIP)
         public _FinalStage authenticationPlan(Optional<OAuth2AuthenticationPlan> authenticationPlan) {

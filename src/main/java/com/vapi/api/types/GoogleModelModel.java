@@ -6,7 +6,15 @@ package com.vapi.api.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum GoogleModelModel {
+    GEMINI_25_PRO("gemini-2.5-pro"),
+
+    GEMINI_25_FLASH("gemini-2.5-flash"),
+
+    GEMINI_25_FLASH_LITE("gemini-2.5-flash-lite"),
+
     GEMINI_25_PRO_PREVIEW_0506("gemini-2.5-pro-preview-05-06"),
+
+    GEMINI_25_FLASH_PREVIEW_0520("gemini-2.5-flash-preview-05-20"),
 
     GEMINI_25_FLASH_PREVIEW_0417("gemini-2.5-flash-preview-04-17"),
 

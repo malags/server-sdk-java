@@ -120,6 +120,11 @@ public final class TranscriptionEndpointingPlan {
             return this;
         }
 
+        /**
+         * <p>The minimum number of seconds to wait after transcription ending with punctuation before sending a request to the model. Defaults to 0.1.</p>
+         * <p>This setting exists because the transcriber punctuates the transcription when it's more confident that customer has completed a thought.</p>
+         * <p>@default 0.1</p>
+         */
         @JsonSetter(value = "onPunctuationSeconds", nulls = Nulls.SKIP)
         public Builder onPunctuationSeconds(Optional<Double> onPunctuationSeconds) {
             this.onPunctuationSeconds = onPunctuationSeconds;
@@ -131,6 +136,11 @@ public final class TranscriptionEndpointingPlan {
             return this;
         }
 
+        /**
+         * <p>The minimum number of seconds to wait after transcription ending without punctuation before sending a request to the model. Defaults to 1.5.</p>
+         * <p>This setting exists to catch the cases where the transcriber was not confident enough to punctuate the transcription, but the customer is done and has been silent for a long time.</p>
+         * <p>@default 1.5</p>
+         */
         @JsonSetter(value = "onNoPunctuationSeconds", nulls = Nulls.SKIP)
         public Builder onNoPunctuationSeconds(Optional<Double> onNoPunctuationSeconds) {
             this.onNoPunctuationSeconds = onNoPunctuationSeconds;
@@ -142,6 +152,11 @@ public final class TranscriptionEndpointingPlan {
             return this;
         }
 
+        /**
+         * <p>The minimum number of seconds to wait after transcription ending with a number before sending a request to the model. Defaults to 0.4.</p>
+         * <p>This setting exists because the transcriber will sometimes punctuate the transcription ending with a number, even though the customer hasn't uttered the full number. This happens commonly for long numbers when the customer reads the number in chunks.</p>
+         * <p>@default 0.5</p>
+         */
         @JsonSetter(value = "onNumberSeconds", nulls = Nulls.SKIP)
         public Builder onNumberSeconds(Optional<Double> onNumberSeconds) {
             this.onNumberSeconds = onNumberSeconds;

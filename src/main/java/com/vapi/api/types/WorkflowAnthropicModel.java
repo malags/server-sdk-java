@@ -113,6 +113,9 @@ public final class WorkflowAnthropicModel {
     }
 
     public interface ModelStage {
+        /**
+         * <p>This is the specific model that will be used.</p>
+         */
         _FinalStage model(@NotNull WorkflowAnthropicModelModel model);
 
         Builder from(WorkflowAnthropicModel other);
@@ -121,14 +124,27 @@ public final class WorkflowAnthropicModel {
     public interface _FinalStage {
         WorkflowAnthropicModel build();
 
+        /**
+         * <p>This is the optional configuration for Anthropic's thinking feature.</p>
+         * <ul>
+         * <li>Only applicable for <code>claude-3-7-sonnet-20250219</code> model.</li>
+         * <li>If provided, <code>maxTokens</code> must be greater than <code>thinking.budgetTokens</code>.</li>
+         * </ul>
+         */
         _FinalStage thinking(Optional<AnthropicThinkingConfig> thinking);
 
         _FinalStage thinking(AnthropicThinkingConfig thinking);
 
+        /**
+         * <p>This is the temperature of the model.</p>
+         */
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
 
+        /**
+         * <p>This is the max tokens of the model.</p>
+         */
         _FinalStage maxTokens(Optional<Double> maxTokens);
 
         _FinalStage maxTokens(Double maxTokens);
@@ -160,6 +176,7 @@ public final class WorkflowAnthropicModel {
 
         /**
          * <p>This is the specific model that will be used.</p>
+         * <p>This is the specific model that will be used.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -179,6 +196,9 @@ public final class WorkflowAnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This is the max tokens of the model.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "maxTokens", nulls = Nulls.SKIP)
         public _FinalStage maxTokens(Optional<Double> maxTokens) {
@@ -196,6 +216,9 @@ public final class WorkflowAnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This is the temperature of the model.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
@@ -217,6 +240,13 @@ public final class WorkflowAnthropicModel {
             return this;
         }
 
+        /**
+         * <p>This is the optional configuration for Anthropic's thinking feature.</p>
+         * <ul>
+         * <li>Only applicable for <code>claude-3-7-sonnet-20250219</code> model.</li>
+         * <li>If provided, <code>maxTokens</code> must be greater than <code>thinking.budgetTokens</code>.</li>
+         * </ul>
+         */
         @java.lang.Override
         @JsonSetter(value = "thinking", nulls = Nulls.SKIP)
         public _FinalStage thinking(Optional<AnthropicThinkingConfig> thinking) {

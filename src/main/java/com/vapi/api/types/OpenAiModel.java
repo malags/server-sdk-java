@@ -36,6 +36,8 @@ public final class OpenAiModel {
 
     private final Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels;
 
+    private final Optional<OpenAiModelToolStrictCompatibilityMode> toolStrictCompatibilityMode;
+
     private final Optional<Double> temperature;
 
     private final Optional<Double> maxTokens;
@@ -54,6 +56,7 @@ public final class OpenAiModel {
             Optional<String> knowledgeBaseId,
             OpenAiModelModel model,
             Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels,
+            Optional<OpenAiModelToolStrictCompatibilityMode> toolStrictCompatibilityMode,
             Optional<Double> temperature,
             Optional<Double> maxTokens,
             Optional<Boolean> emotionRecognitionEnabled,
@@ -66,6 +69,7 @@ public final class OpenAiModel {
         this.knowledgeBaseId = knowledgeBaseId;
         this.model = model;
         this.fallbackModels = fallbackModels;
+        this.toolStrictCompatibilityMode = toolStrictCompatibilityMode;
         this.temperature = temperature;
         this.maxTokens = maxTokens;
         this.emotionRecognitionEnabled = emotionRecognitionEnabled;
@@ -117,6 +121,9 @@ public final class OpenAiModel {
 
     /**
      * @return This is the OpenAI model that will be used.
+     * <p>When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
+     * This is helpful when you are required to comply with Data Residency rules. Learn more about Azure regions here https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/.</p>
+     * <p>@default undefined</p>
      */
     @JsonProperty("model")
     public OpenAiModelModel getModel() {
@@ -129,6 +136,19 @@ public final class OpenAiModel {
     @JsonProperty("fallbackModels")
     public Optional<List<OpenAiModelFallbackModelsItem>> getFallbackModels() {
         return fallbackModels;
+    }
+
+    /**
+     * @return Azure OpenAI doesn't support <code>maxLength</code> right now https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/structured-outputs?tabs=python-secure%2Cdotnet-entra-id&amp;pivots=programming-language-csharp#unsupported-type-specific-keywords. Need to strip.
+     * <ul>
+     * <li><code>strip-parameters-with-unsupported-validation</code> will strip parameters with unsupported validation.</li>
+     * <li><code>strip-unsupported-validation</code> will keep the parameters but strip unsupported validation.</li>
+     * </ul>
+     * <p>@default <code>strip-unsupported-validation</code></p>
+     */
+    @JsonProperty("toolStrictCompatibilityMode")
+    public Optional<OpenAiModelToolStrictCompatibilityMode> getToolStrictCompatibilityMode() {
+        return toolStrictCompatibilityMode;
     }
 
     /**
@@ -186,6 +206,7 @@ public final class OpenAiModel {
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && model.equals(other.model)
                 && fallbackModels.equals(other.fallbackModels)
+                && toolStrictCompatibilityMode.equals(other.toolStrictCompatibilityMode)
                 && temperature.equals(other.temperature)
                 && maxTokens.equals(other.maxTokens)
                 && emotionRecognitionEnabled.equals(other.emotionRecognitionEnabled)
@@ -202,6 +223,7 @@ public final class OpenAiModel {
                 this.knowledgeBaseId,
                 this.model,
                 this.fallbackModels,
+                this.toolStrictCompatibilityMode,
                 this.temperature,
                 this.maxTokens,
                 this.emotionRecognitionEnabled,
@@ -218,6 +240,12 @@ public final class OpenAiModel {
     }
 
     public interface ModelStage {
+        /**
+         * <p>This is the OpenAI model that will be used.</p>
+         * <p>When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
+         * This is helpful when you are required to comply with Data Residency rules. Learn more about Azure regions here https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/.</p>
+         * <p>@default undefined</p>
+         */
         _FinalStage model(@NotNull OpenAiModelModel model);
 
         Builder from(OpenAiModel other);
@@ -226,42 +254,91 @@ public final class OpenAiModel {
     public interface _FinalStage {
         OpenAiModel build();
 
+        /**
+         * <p>This is the starting state for the conversation.</p>
+         */
         _FinalStage messages(Optional<List<OpenAiMessage>> messages);
 
         _FinalStage messages(List<OpenAiMessage> messages);
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use existing tools, use <code>toolIds</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         _FinalStage tools(Optional<List<OpenAiModelToolsItem>> tools);
 
         _FinalStage tools(List<OpenAiModelToolsItem> tools);
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use transient tools, use <code>tools</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         _FinalStage toolIds(Optional<List<String>> toolIds);
 
         _FinalStage toolIds(List<String> toolIds);
 
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         */
         _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase);
 
         _FinalStage knowledgeBase(CreateCustomKnowledgeBaseDto knowledgeBase);
 
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         */
         _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId);
 
         _FinalStage knowledgeBaseId(String knowledgeBaseId);
 
+        /**
+         * <p>These are the fallback models that will be used if the primary model fails. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest fallbacks that make sense.</p>
+         */
         _FinalStage fallbackModels(Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels);
 
         _FinalStage fallbackModels(List<OpenAiModelFallbackModelsItem> fallbackModels);
 
+        /**
+         * <p>Azure OpenAI doesn't support <code>maxLength</code> right now https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/structured-outputs?tabs=python-secure%2Cdotnet-entra-id&amp;pivots=programming-language-csharp#unsupported-type-specific-keywords. Need to strip.</p>
+         * <ul>
+         * <li><code>strip-parameters-with-unsupported-validation</code> will strip parameters with unsupported validation.</li>
+         * <li><code>strip-unsupported-validation</code> will keep the parameters but strip unsupported validation.</li>
+         * </ul>
+         * <p>@default <code>strip-unsupported-validation</code></p>
+         */
+        _FinalStage toolStrictCompatibilityMode(
+                Optional<OpenAiModelToolStrictCompatibilityMode> toolStrictCompatibilityMode);
+
+        _FinalStage toolStrictCompatibilityMode(OpenAiModelToolStrictCompatibilityMode toolStrictCompatibilityMode);
+
+        /**
+         * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
+         */
         _FinalStage temperature(Optional<Double> temperature);
 
         _FinalStage temperature(Double temperature);
 
+        /**
+         * <p>This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.</p>
+         */
         _FinalStage maxTokens(Optional<Double> maxTokens);
 
         _FinalStage maxTokens(Double maxTokens);
 
+        /**
+         * <p>This determines whether we detect user's emotion while they speak and send it as an additional info to model.</p>
+         * <p>Default <code>false</code> because the model is usually are good at understanding the user's emotion from text.</p>
+         * <p>@default false</p>
+         */
         _FinalStage emotionRecognitionEnabled(Optional<Boolean> emotionRecognitionEnabled);
 
         _FinalStage emotionRecognitionEnabled(Boolean emotionRecognitionEnabled);
 
+        /**
+         * <p>This sets how many turns at the start of the conversation to use a smaller, faster model from the same provider before switching to the primary model. Example, gpt-3.5-turbo if provider is openai.</p>
+         * <p>Default is 0.</p>
+         * <p>@default 0</p>
+         */
         _FinalStage numFastTurns(Optional<Double> numFastTurns);
 
         _FinalStage numFastTurns(Double numFastTurns);
@@ -278,6 +355,8 @@ public final class OpenAiModel {
         private Optional<Double> maxTokens = Optional.empty();
 
         private Optional<Double> temperature = Optional.empty();
+
+        private Optional<OpenAiModelToolStrictCompatibilityMode> toolStrictCompatibilityMode = Optional.empty();
 
         private Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels = Optional.empty();
 
@@ -305,6 +384,7 @@ public final class OpenAiModel {
             knowledgeBaseId(other.getKnowledgeBaseId());
             model(other.getModel());
             fallbackModels(other.getFallbackModels());
+            toolStrictCompatibilityMode(other.getToolStrictCompatibilityMode());
             temperature(other.getTemperature());
             maxTokens(other.getMaxTokens());
             emotionRecognitionEnabled(other.getEmotionRecognitionEnabled());
@@ -314,6 +394,13 @@ public final class OpenAiModel {
 
         /**
          * <p>This is the OpenAI model that will be used.</p>
+         * <p>When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
+         * This is helpful when you are required to comply with Data Residency rules. Learn more about Azure regions here https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/.</p>
+         * <p>@default undefined</p>
+         * <p>This is the OpenAI model that will be used.</p>
+         * <p>When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
+         * This is helpful when you are required to comply with Data Residency rules. Learn more about Azure regions here https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/.</p>
+         * <p>@default undefined</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -335,6 +422,11 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>This sets how many turns at the start of the conversation to use a smaller, faster model from the same provider before switching to the primary model. Example, gpt-3.5-turbo if provider is openai.</p>
+         * <p>Default is 0.</p>
+         * <p>@default 0</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "numFastTurns", nulls = Nulls.SKIP)
         public _FinalStage numFastTurns(Optional<Double> numFastTurns) {
@@ -354,6 +446,11 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>This determines whether we detect user's emotion while they speak and send it as an additional info to model.</p>
+         * <p>Default <code>false</code> because the model is usually are good at understanding the user's emotion from text.</p>
+         * <p>@default false</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "emotionRecognitionEnabled", nulls = Nulls.SKIP)
         public _FinalStage emotionRecognitionEnabled(Optional<Boolean> emotionRecognitionEnabled) {
@@ -371,6 +468,9 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "maxTokens", nulls = Nulls.SKIP)
         public _FinalStage maxTokens(Optional<Double> maxTokens) {
@@ -388,10 +488,45 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "temperature", nulls = Nulls.SKIP)
         public _FinalStage temperature(Optional<Double> temperature) {
             this.temperature = temperature;
+            return this;
+        }
+
+        /**
+         * <p>Azure OpenAI doesn't support <code>maxLength</code> right now https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/structured-outputs?tabs=python-secure%2Cdotnet-entra-id&amp;pivots=programming-language-csharp#unsupported-type-specific-keywords. Need to strip.</p>
+         * <ul>
+         * <li><code>strip-parameters-with-unsupported-validation</code> will strip parameters with unsupported validation.</li>
+         * <li><code>strip-unsupported-validation</code> will keep the parameters but strip unsupported validation.</li>
+         * </ul>
+         * <p>@default <code>strip-unsupported-validation</code></p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage toolStrictCompatibilityMode(
+                OpenAiModelToolStrictCompatibilityMode toolStrictCompatibilityMode) {
+            this.toolStrictCompatibilityMode = Optional.ofNullable(toolStrictCompatibilityMode);
+            return this;
+        }
+
+        /**
+         * <p>Azure OpenAI doesn't support <code>maxLength</code> right now https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/structured-outputs?tabs=python-secure%2Cdotnet-entra-id&amp;pivots=programming-language-csharp#unsupported-type-specific-keywords. Need to strip.</p>
+         * <ul>
+         * <li><code>strip-parameters-with-unsupported-validation</code> will strip parameters with unsupported validation.</li>
+         * <li><code>strip-unsupported-validation</code> will keep the parameters but strip unsupported validation.</li>
+         * </ul>
+         * <p>@default <code>strip-unsupported-validation</code></p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "toolStrictCompatibilityMode", nulls = Nulls.SKIP)
+        public _FinalStage toolStrictCompatibilityMode(
+                Optional<OpenAiModelToolStrictCompatibilityMode> toolStrictCompatibilityMode) {
+            this.toolStrictCompatibilityMode = toolStrictCompatibilityMode;
             return this;
         }
 
@@ -405,6 +540,9 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>These are the fallback models that will be used if the primary model fails. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest fallbacks that make sense.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "fallbackModels", nulls = Nulls.SKIP)
         public _FinalStage fallbackModels(Optional<List<OpenAiModelFallbackModelsItem>> fallbackModels) {
@@ -422,6 +560,9 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the ID of the knowledge base the model will use.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "knowledgeBaseId", nulls = Nulls.SKIP)
         public _FinalStage knowledgeBaseId(Optional<String> knowledgeBaseId) {
@@ -439,6 +580,9 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>These are the options for the knowledge base.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "knowledgeBase", nulls = Nulls.SKIP)
         public _FinalStage knowledgeBase(Optional<CreateCustomKnowledgeBaseDto> knowledgeBase) {
@@ -457,6 +601,10 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use transient tools, use <code>tools</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "toolIds", nulls = Nulls.SKIP)
         public _FinalStage toolIds(Optional<List<String>> toolIds) {
@@ -475,6 +623,10 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>These are the tools that the assistant can use during the call. To use existing tools, use <code>toolIds</code>.</p>
+         * <p>Both <code>tools</code> and <code>toolIds</code> can be used together.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "tools", nulls = Nulls.SKIP)
         public _FinalStage tools(Optional<List<OpenAiModelToolsItem>> tools) {
@@ -492,6 +644,9 @@ public final class OpenAiModel {
             return this;
         }
 
+        /**
+         * <p>This is the starting state for the conversation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public _FinalStage messages(Optional<List<OpenAiMessage>> messages) {
@@ -509,6 +664,7 @@ public final class OpenAiModel {
                     knowledgeBaseId,
                     model,
                     fallbackModels,
+                    toolStrictCompatibilityMode,
                     temperature,
                     maxTokens,
                     emotionRecognitionEnabled,

@@ -94,6 +94,9 @@ public final class Monitor {
             return this;
         }
 
+        /**
+         * <p>This is the URL where the assistant's calls can be listened to in real-time. To enable, set <code>assistant.monitorPlan.listenEnabled</code> to <code>true</code>.</p>
+         */
         @JsonSetter(value = "listenUrl", nulls = Nulls.SKIP)
         public Builder listenUrl(Optional<String> listenUrl) {
             this.listenUrl = listenUrl;
@@ -105,6 +108,9 @@ public final class Monitor {
             return this;
         }
 
+        /**
+         * <p>This is the URL where the assistant's calls can be controlled in real-time. To enable, set <code>assistant.monitorPlan.controlEnabled</code> to <code>true</code>.</p>
+         */
         @JsonSetter(value = "controlUrl", nulls = Nulls.SKIP)
         public Builder controlUrl(Optional<String> controlUrl) {
             this.controlUrl = controlUrl;

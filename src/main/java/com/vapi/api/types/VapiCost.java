@@ -88,16 +88,25 @@ public final class VapiCost {
     }
 
     public interface SubTypeStage {
+        /**
+         * <p>This is the sub type of the cost.</p>
+         */
         MinutesStage subType(@NotNull VapiCostSubType subType);
 
         Builder from(VapiCost other);
     }
 
     public interface MinutesStage {
+        /**
+         * <p>This is the minutes of Vapi usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code>.</p>
+         */
         CostStage minutes(double minutes);
     }
 
     public interface CostStage {
+        /**
+         * <p>This is the cost of the component in USD.</p>
+         */
         _FinalStage cost(double cost);
     }
 
@@ -128,6 +137,7 @@ public final class VapiCost {
 
         /**
          * <p>This is the sub type of the cost.</p>
+         * <p>This is the sub type of the cost.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -139,6 +149,7 @@ public final class VapiCost {
 
         /**
          * <p>This is the minutes of Vapi usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code>.</p>
+         * <p>This is the minutes of Vapi usage. This should match <code>call.endedAt</code> - <code>call.startedAt</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -149,6 +160,7 @@ public final class VapiCost {
         }
 
         /**
+         * <p>This is the cost of the component in USD.</p>
          * <p>This is the cost of the component in USD.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */

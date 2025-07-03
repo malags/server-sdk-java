@@ -30,6 +30,8 @@ public final class UpdateS3CredentialDto {
 
     private final Optional<String> s3PathPrefix;
 
+    private final Optional<Double> fallbackIndex;
+
     private final Optional<String> name;
 
     private final Map<String, Object> additionalProperties;
@@ -40,6 +42,7 @@ public final class UpdateS3CredentialDto {
             Optional<String> region,
             Optional<String> s3BucketName,
             Optional<String> s3PathPrefix,
+            Optional<Double> fallbackIndex,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
         this.awsAccessKeyId = awsAccessKeyId;
@@ -47,6 +50,7 @@ public final class UpdateS3CredentialDto {
         this.region = region;
         this.s3BucketName = s3BucketName;
         this.s3PathPrefix = s3PathPrefix;
+        this.fallbackIndex = fallbackIndex;
         this.name = name;
         this.additionalProperties = additionalProperties;
     }
@@ -92,6 +96,14 @@ public final class UpdateS3CredentialDto {
     }
 
     /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
+    }
+
+    /**
      * @return This is the name of credential. This is just for your reference.
      */
     @JsonProperty("name")
@@ -116,6 +128,7 @@ public final class UpdateS3CredentialDto {
                 && region.equals(other.region)
                 && s3BucketName.equals(other.s3BucketName)
                 && s3PathPrefix.equals(other.s3PathPrefix)
+                && fallbackIndex.equals(other.fallbackIndex)
                 && name.equals(other.name);
     }
 
@@ -127,6 +140,7 @@ public final class UpdateS3CredentialDto {
                 this.region,
                 this.s3BucketName,
                 this.s3PathPrefix,
+                this.fallbackIndex,
                 this.name);
     }
 
@@ -151,6 +165,8 @@ public final class UpdateS3CredentialDto {
 
         private Optional<String> s3PathPrefix = Optional.empty();
 
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         private Optional<String> name = Optional.empty();
 
         @JsonAnySetter
@@ -164,10 +180,14 @@ public final class UpdateS3CredentialDto {
             region(other.getRegion());
             s3BucketName(other.getS3BucketName());
             s3PathPrefix(other.getS3PathPrefix());
+            fallbackIndex(other.getFallbackIndex());
             name(other.getName());
             return this;
         }
 
+        /**
+         * <p>AWS access key ID.</p>
+         */
         @JsonSetter(value = "awsAccessKeyId", nulls = Nulls.SKIP)
         public Builder awsAccessKeyId(Optional<String> awsAccessKeyId) {
             this.awsAccessKeyId = awsAccessKeyId;
@@ -179,6 +199,9 @@ public final class UpdateS3CredentialDto {
             return this;
         }
 
+        /**
+         * <p>AWS access key secret. This is not returned in the API.</p>
+         */
         @JsonSetter(value = "awsSecretAccessKey", nulls = Nulls.SKIP)
         public Builder awsSecretAccessKey(Optional<String> awsSecretAccessKey) {
             this.awsSecretAccessKey = awsSecretAccessKey;
@@ -190,6 +213,9 @@ public final class UpdateS3CredentialDto {
             return this;
         }
 
+        /**
+         * <p>AWS region in which the S3 bucket is located.</p>
+         */
         @JsonSetter(value = "region", nulls = Nulls.SKIP)
         public Builder region(Optional<String> region) {
             this.region = region;
@@ -201,6 +227,9 @@ public final class UpdateS3CredentialDto {
             return this;
         }
 
+        /**
+         * <p>AWS S3 bucket name.</p>
+         */
         @JsonSetter(value = "s3BucketName", nulls = Nulls.SKIP)
         public Builder s3BucketName(Optional<String> s3BucketName) {
             this.s3BucketName = s3BucketName;
@@ -212,6 +241,9 @@ public final class UpdateS3CredentialDto {
             return this;
         }
 
+        /**
+         * <p>The path prefix for the uploaded recording. Ex. &quot;recordings/&quot;</p>
+         */
         @JsonSetter(value = "s3PathPrefix", nulls = Nulls.SKIP)
         public Builder s3PathPrefix(Optional<String> s3PathPrefix) {
             this.s3PathPrefix = s3PathPrefix;
@@ -223,6 +255,23 @@ public final class UpdateS3CredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public Builder fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
+            return this;
+        }
+
+        public Builder fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -236,7 +285,14 @@ public final class UpdateS3CredentialDto {
 
         public UpdateS3CredentialDto build() {
             return new UpdateS3CredentialDto(
-                    awsAccessKeyId, awsSecretAccessKey, region, s3BucketName, s3PathPrefix, name, additionalProperties);
+                    awsAccessKeyId,
+                    awsSecretAccessKey,
+                    region,
+                    s3BucketName,
+                    s3PathPrefix,
+                    fallbackIndex,
+                    name,
+                    additionalProperties);
         }
     }
 }

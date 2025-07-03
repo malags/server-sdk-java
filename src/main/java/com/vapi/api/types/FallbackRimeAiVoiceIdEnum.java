@@ -170,7 +170,23 @@ public enum FallbackRimeAiVoiceIdEnum {
 
     GYPSUM("gypsum"),
 
-    ZEST("zest");
+    ZEST("zest"),
+
+    LUNA("luna"),
+
+    CELESTE("celeste"),
+
+    ORION("orion"),
+
+    URSA("ursa"),
+
+    ASTRA("astra"),
+
+    ESTHER("esther"),
+
+    ESTELLE("estelle"),
+
+    ANDROMEDA("andromeda");
 
     private final String value;
 

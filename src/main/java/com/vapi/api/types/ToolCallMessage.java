@@ -123,26 +123,41 @@ public final class ToolCallMessage {
     }
 
     public interface RoleStage {
+        /**
+         * <p>The role of the tool call in the conversation.</p>
+         */
         MessageStage role(@NotNull String role);
 
         Builder from(ToolCallMessage other);
     }
 
     public interface MessageStage {
+        /**
+         * <p>The message content for the tool call.</p>
+         */
         TimeStage message(@NotNull String message);
     }
 
     public interface TimeStage {
+        /**
+         * <p>The timestamp when the message was sent.</p>
+         */
         SecondsFromStartStage time(double time);
     }
 
     public interface SecondsFromStartStage {
+        /**
+         * <p>The number of seconds from the start of the conversation.</p>
+         */
         _FinalStage secondsFromStart(double secondsFromStart);
     }
 
     public interface _FinalStage {
         ToolCallMessage build();
 
+        /**
+         * <p>The list of tool calls made during the conversation.</p>
+         */
         _FinalStage toolCalls(List<Map<String, Object>> toolCalls);
 
         _FinalStage addToolCalls(Map<String, Object> toolCalls);
@@ -180,6 +195,7 @@ public final class ToolCallMessage {
 
         /**
          * <p>The role of the tool call in the conversation.</p>
+         * <p>The role of the tool call in the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -190,6 +206,7 @@ public final class ToolCallMessage {
         }
 
         /**
+         * <p>The message content for the tool call.</p>
          * <p>The message content for the tool call.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -202,6 +219,7 @@ public final class ToolCallMessage {
 
         /**
          * <p>The timestamp when the message was sent.</p>
+         * <p>The timestamp when the message was sent.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -212,6 +230,7 @@ public final class ToolCallMessage {
         }
 
         /**
+         * <p>The number of seconds from the start of the conversation.</p>
          * <p>The number of seconds from the start of the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -242,6 +261,9 @@ public final class ToolCallMessage {
             return this;
         }
 
+        /**
+         * <p>The list of tool calls made during the conversation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "toolCalls", nulls = Nulls.SKIP)
         public _FinalStage toolCalls(List<Map<String, Object>> toolCalls) {

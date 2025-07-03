@@ -81,6 +81,9 @@ public final class TestSuiteRunTestResult {
     }
 
     public interface TestStage {
+        /**
+         * <p>This is the test that was run.</p>
+         */
         _FinalStage test(@NotNull TestSuiteTestVoice test);
 
         Builder from(TestSuiteRunTestResult other);
@@ -89,6 +92,9 @@ public final class TestSuiteRunTestResult {
     public interface _FinalStage {
         TestSuiteRunTestResult build();
 
+        /**
+         * <p>These are the attempts made for this test.</p>
+         */
         _FinalStage attempts(List<TestSuiteRunTestAttempt> attempts);
 
         _FinalStage addAttempts(TestSuiteRunTestAttempt attempts);
@@ -115,6 +121,7 @@ public final class TestSuiteRunTestResult {
         }
 
         /**
+         * <p>This is the test that was run.</p>
          * <p>This is the test that was run.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -145,6 +152,9 @@ public final class TestSuiteRunTestResult {
             return this;
         }
 
+        /**
+         * <p>These are the attempts made for this test.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "attempts", nulls = Nulls.SKIP)
         public _FinalStage attempts(List<TestSuiteRunTestAttempt> attempts) {

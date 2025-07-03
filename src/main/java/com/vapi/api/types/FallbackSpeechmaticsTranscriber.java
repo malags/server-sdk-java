@@ -94,6 +94,9 @@ public final class FallbackSpeechmaticsTranscriber {
             return this;
         }
 
+        /**
+         * <p>This is the model that will be used for the transcription.</p>
+         */
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public Builder model(Optional<String> model) {
             this.model = model;

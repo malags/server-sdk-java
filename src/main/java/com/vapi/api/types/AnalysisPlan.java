@@ -21,6 +21,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AnalysisPlan.Builder.class)
 public final class AnalysisPlan {
+    private final Optional<Double> minMessagesThreshold;
+
     private final Optional<SummaryPlan> summaryPlan;
 
     private final Optional<StructuredDataPlan> structuredDataPlan;
@@ -32,16 +34,28 @@ public final class AnalysisPlan {
     private final Map<String, Object> additionalProperties;
 
     private AnalysisPlan(
+            Optional<Double> minMessagesThreshold,
             Optional<SummaryPlan> summaryPlan,
             Optional<StructuredDataPlan> structuredDataPlan,
             Optional<List<StructuredDataMultiPlan>> structuredDataMultiPlan,
             Optional<SuccessEvaluationPlan> successEvaluationPlan,
             Map<String, Object> additionalProperties) {
+        this.minMessagesThreshold = minMessagesThreshold;
         this.summaryPlan = summaryPlan;
         this.structuredDataPlan = structuredDataPlan;
         this.structuredDataMultiPlan = structuredDataMultiPlan;
         this.successEvaluationPlan = successEvaluationPlan;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The minimum number of messages required to run the analysis plan.
+     * If the number of messages is less than this, analysis will be skipped.
+     * @default 2
+     */
+    @JsonProperty("minMessagesThreshold")
+    public Optional<Double> getMinMessagesThreshold() {
+        return minMessagesThreshold;
     }
 
     /**
@@ -88,7 +102,8 @@ public final class AnalysisPlan {
     }
 
     private boolean equalTo(AnalysisPlan other) {
-        return summaryPlan.equals(other.summaryPlan)
+        return minMessagesThreshold.equals(other.minMessagesThreshold)
+                && summaryPlan.equals(other.summaryPlan)
                 && structuredDataPlan.equals(other.structuredDataPlan)
                 && structuredDataMultiPlan.equals(other.structuredDataMultiPlan)
                 && successEvaluationPlan.equals(other.successEvaluationPlan);
@@ -97,7 +112,11 @@ public final class AnalysisPlan {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.summaryPlan, this.structuredDataPlan, this.structuredDataMultiPlan, this.successEvaluationPlan);
+                this.minMessagesThreshold,
+                this.summaryPlan,
+                this.structuredDataPlan,
+                this.structuredDataMultiPlan,
+                this.successEvaluationPlan);
     }
 
     @java.lang.Override
@@ -111,6 +130,8 @@ public final class AnalysisPlan {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Double> minMessagesThreshold = Optional.empty();
+
         private Optional<SummaryPlan> summaryPlan = Optional.empty();
 
         private Optional<StructuredDataPlan> structuredDataPlan = Optional.empty();
@@ -125,6 +146,7 @@ public final class AnalysisPlan {
         private Builder() {}
 
         public Builder from(AnalysisPlan other) {
+            minMessagesThreshold(other.getMinMessagesThreshold());
             summaryPlan(other.getSummaryPlan());
             structuredDataPlan(other.getStructuredDataPlan());
             structuredDataMultiPlan(other.getStructuredDataMultiPlan());
@@ -132,6 +154,25 @@ public final class AnalysisPlan {
             return this;
         }
 
+        /**
+         * <p>The minimum number of messages required to run the analysis plan.
+         * If the number of messages is less than this, analysis will be skipped.
+         * @default 2</p>
+         */
+        @JsonSetter(value = "minMessagesThreshold", nulls = Nulls.SKIP)
+        public Builder minMessagesThreshold(Optional<Double> minMessagesThreshold) {
+            this.minMessagesThreshold = minMessagesThreshold;
+            return this;
+        }
+
+        public Builder minMessagesThreshold(Double minMessagesThreshold) {
+            this.minMessagesThreshold = Optional.ofNullable(minMessagesThreshold);
+            return this;
+        }
+
+        /**
+         * <p>This is the plan for generating the summary of the call. This outputs to <code>call.analysis.summary</code>.</p>
+         */
         @JsonSetter(value = "summaryPlan", nulls = Nulls.SKIP)
         public Builder summaryPlan(Optional<SummaryPlan> summaryPlan) {
             this.summaryPlan = summaryPlan;
@@ -143,6 +184,9 @@ public final class AnalysisPlan {
             return this;
         }
 
+        /**
+         * <p>This is the plan for generating the structured data from the call. This outputs to <code>call.analysis.structuredData</code>.</p>
+         */
         @JsonSetter(value = "structuredDataPlan", nulls = Nulls.SKIP)
         public Builder structuredDataPlan(Optional<StructuredDataPlan> structuredDataPlan) {
             this.structuredDataPlan = structuredDataPlan;
@@ -154,6 +198,9 @@ public final class AnalysisPlan {
             return this;
         }
 
+        /**
+         * <p>This is an array of structured data plan catalogs. Each entry includes a <code>key</code> and a <code>plan</code> for generating the structured data from the call. This outputs to <code>call.analysis.structuredDataMulti</code>.</p>
+         */
         @JsonSetter(value = "structuredDataMultiPlan", nulls = Nulls.SKIP)
         public Builder structuredDataMultiPlan(Optional<List<StructuredDataMultiPlan>> structuredDataMultiPlan) {
             this.structuredDataMultiPlan = structuredDataMultiPlan;
@@ -165,6 +212,9 @@ public final class AnalysisPlan {
             return this;
         }
 
+        /**
+         * <p>This is the plan for generating the success evaluation of the call. This outputs to <code>call.analysis.successEvaluation</code>.</p>
+         */
         @JsonSetter(value = "successEvaluationPlan", nulls = Nulls.SKIP)
         public Builder successEvaluationPlan(Optional<SuccessEvaluationPlan> successEvaluationPlan) {
             this.successEvaluationPlan = successEvaluationPlan;
@@ -178,6 +228,7 @@ public final class AnalysisPlan {
 
         public AnalysisPlan build() {
             return new AnalysisPlan(
+                    minMessagesThreshold,
                     summaryPlan,
                     structuredDataPlan,
                     structuredDataMultiPlan,

@@ -21,7 +21,11 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateGcpCredentialDto.Builder.class)
 public final class CreateGcpCredentialDto {
+    private final Optional<Double> fallbackIndex;
+
     private final GcpKey gcpKey;
+
+    private final Optional<String> region;
 
     private final Optional<BucketPlan> bucketPlan;
 
@@ -30,14 +34,26 @@ public final class CreateGcpCredentialDto {
     private final Map<String, Object> additionalProperties;
 
     private CreateGcpCredentialDto(
+            Optional<Double> fallbackIndex,
             GcpKey gcpKey,
+            Optional<String> region,
             Optional<BucketPlan> bucketPlan,
             Optional<String> name,
             Map<String, Object> additionalProperties) {
+        this.fallbackIndex = fallbackIndex;
         this.gcpKey = gcpKey;
+        this.region = region;
         this.bucketPlan = bucketPlan;
         this.name = name;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
+     */
+    @JsonProperty("fallbackIndex")
+    public Optional<Double> getFallbackIndex() {
+        return fallbackIndex;
     }
 
     /**
@@ -50,8 +66,13 @@ public final class CreateGcpCredentialDto {
     }
 
     /**
-     * @return This is the bucket plan that can be provided to store call artifacts in GCP.
+     * @return This is the region of the GCP resource.
      */
+    @JsonProperty("region")
+    public Optional<String> getRegion() {
+        return region;
+    }
+
     @JsonProperty("bucketPlan")
     public Optional<BucketPlan> getBucketPlan() {
         return bucketPlan;
@@ -77,12 +98,16 @@ public final class CreateGcpCredentialDto {
     }
 
     private boolean equalTo(CreateGcpCredentialDto other) {
-        return gcpKey.equals(other.gcpKey) && bucketPlan.equals(other.bucketPlan) && name.equals(other.name);
+        return fallbackIndex.equals(other.fallbackIndex)
+                && gcpKey.equals(other.gcpKey)
+                && region.equals(other.region)
+                && bucketPlan.equals(other.bucketPlan)
+                && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.gcpKey, this.bucketPlan, this.name);
+        return Objects.hash(this.fallbackIndex, this.gcpKey, this.region, this.bucketPlan, this.name);
     }
 
     @java.lang.Override
@@ -95,6 +120,10 @@ public final class CreateGcpCredentialDto {
     }
 
     public interface GcpKeyStage {
+        /**
+         * <p>This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.</p>
+         * <p>The schema is identical to the JSON that GCP outputs.</p>
+         */
         _FinalStage gcpKey(@NotNull GcpKey gcpKey);
 
         Builder from(CreateGcpCredentialDto other);
@@ -103,10 +132,27 @@ public final class CreateGcpCredentialDto {
     public interface _FinalStage {
         CreateGcpCredentialDto build();
 
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        _FinalStage fallbackIndex(Optional<Double> fallbackIndex);
+
+        _FinalStage fallbackIndex(Double fallbackIndex);
+
+        /**
+         * <p>This is the region of the GCP resource.</p>
+         */
+        _FinalStage region(Optional<String> region);
+
+        _FinalStage region(String region);
+
         _FinalStage bucketPlan(Optional<BucketPlan> bucketPlan);
 
         _FinalStage bucketPlan(BucketPlan bucketPlan);
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         _FinalStage name(Optional<String> name);
 
         _FinalStage name(String name);
@@ -120,6 +166,10 @@ public final class CreateGcpCredentialDto {
 
         private Optional<BucketPlan> bucketPlan = Optional.empty();
 
+        private Optional<String> region = Optional.empty();
+
+        private Optional<Double> fallbackIndex = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -127,13 +177,17 @@ public final class CreateGcpCredentialDto {
 
         @java.lang.Override
         public Builder from(CreateGcpCredentialDto other) {
+            fallbackIndex(other.getFallbackIndex());
             gcpKey(other.getGcpKey());
+            region(other.getRegion());
             bucketPlan(other.getBucketPlan());
             name(other.getName());
             return this;
         }
 
         /**
+         * <p>This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.</p>
+         * <p>The schema is identical to the JSON that GCP outputs.</p>
          * <p>This is the GCP key. This is the JSON that can be generated in the Google Cloud Console at https://console.cloud.google.com/iam-admin/serviceaccounts/details/&lt;service-account-id&gt;/keys.</p>
          * <p>The schema is identical to the JSON that GCP outputs.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -155,6 +209,9 @@ public final class CreateGcpCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the name of credential. This is just for your reference.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public _FinalStage name(Optional<String> name) {
@@ -162,10 +219,6 @@ public final class CreateGcpCredentialDto {
             return this;
         }
 
-        /**
-         * <p>This is the bucket plan that can be provided to store call artifacts in GCP.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
         public _FinalStage bucketPlan(BucketPlan bucketPlan) {
             this.bucketPlan = Optional.ofNullable(bucketPlan);
@@ -179,9 +232,49 @@ public final class CreateGcpCredentialDto {
             return this;
         }
 
+        /**
+         * <p>This is the region of the GCP resource.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage region(String region) {
+            this.region = Optional.ofNullable(region);
+            return this;
+        }
+
+        /**
+         * <p>This is the region of the GCP resource.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "region", nulls = Nulls.SKIP)
+        public _FinalStage region(Optional<String> region) {
+            this.region = region;
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fallbackIndex(Double fallbackIndex) {
+            this.fallbackIndex = Optional.ofNullable(fallbackIndex);
+            return this;
+        }
+
+        /**
+         * <p>This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fallbackIndex", nulls = Nulls.SKIP)
+        public _FinalStage fallbackIndex(Optional<Double> fallbackIndex) {
+            this.fallbackIndex = fallbackIndex;
+            return this;
+        }
+
         @java.lang.Override
         public CreateGcpCredentialDto build() {
-            return new CreateGcpCredentialDto(gcpKey, bucketPlan, name, additionalProperties);
+            return new CreateGcpCredentialDto(fallbackIndex, gcpKey, region, bucketPlan, name, additionalProperties);
         }
     }
 }
